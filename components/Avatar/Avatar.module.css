@@ -1,0 +1,51 @@
+.AvatarContainer {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.AvatarContainer:hover {
+  background-color: rgb(245, 243, 243);
+}
+
+.AvatarImgContainer {
+  position: relative;
+  margin-right: 5px;
+}
+
+.AvatarImg {
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.AvatarOnlineBadge {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  bottom: 0;
+  right: 0;
+  background-color: limegreen;
+  border-radius: 50%;
+}
+
+.AvatarOfflineBadge {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  bottom: 0;
+  right: 0;
+  background-color: gray;
+  border-radius: 50%;
+}
+
+.AvatarName {
+  font-weight: 500;
+}
+
+/* @media screen and (max-width: 768px) {
+  .AvatarName {
+    display: none;
+  }
+} */
