@@ -1,16 +1,11 @@
-import { useState, useLayoutEffect, useRef } from "react";
-import { Devices } from "../shared";
-
-const initialValue = (min, max) =>
-  (window.innerWidth >= max && Devices.pc) ||
-  (window.innerWidth >= min && Devices.tablet) ||
-  Devices.phone;
+import { useState, useEffect, useRef } from "react";
+import Devices from "../helpers/Devices";
 
 export default function useMedia(min = 768, max = 1023) {
-  const [device, setDevice] = useState(() => initialValue(min, max));
+  const [device, setDevice] = useState(Devices.pc);
   const matchMediaRef = useRef();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     matchMediaRef.current = window.matchMedia(
       `(min-width:${min}px) and (max-width:${max}px)`
     );

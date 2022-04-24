@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Avatar } from "..";
-import useAxiosLoad from "../../hooks/useAxiosLoad";
+import useFetchLoad from "../../hooks/useFetchLoad";
 
 export default function Comment({
   baseURL = `https://jsonplaceholder.typicode.com/comments`,
@@ -8,7 +8,7 @@ export default function Comment({
   const [page, setPage] = useState(1);
   const [datas, setData] = useState([]);
   const unique = useRef(0);
-  const [loading, axiosInstance] = useAxiosLoad(
+  const [loading, fetchInstance] = useFetchLoad(
     {
       headers: { "Content-Type": "application/json" },
       baseURL,
@@ -26,7 +26,7 @@ export default function Comment({
           return (
             <CommentSection.Tab
               data={data}
-              axiosInstance={axiosInstance}
+              fetchInstance={fetchInstance}
             ></CommentSection.Tab>
           );
         }
@@ -36,7 +36,7 @@ export default function Comment({
   );
 }
 
-Comment.Tab = function CommentTab({ data, axiosInstance, ...props }) {
+Comment.Tab = function CommentTab({ data, fetchInstance, ...props }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [editInput, setEditInput] = useState("");
   const [toggle, setToggle] = useState(false);
@@ -48,7 +48,7 @@ Comment.Tab = function CommentTab({ data, axiosInstance, ...props }) {
     const handleSetReply = async () => {
       try {
         setLoading(true);
-        const newData = await axiosInstance
+        const newData = await fetchInstance
           .get("", {
             params: { postId: data.postId },
           })

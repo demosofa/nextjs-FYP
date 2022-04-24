@@ -4,11 +4,11 @@ const Kits = createContext();
 
 export default function Checkbox({
   children,
-  setChecked = new Function(),
+  forParent = new Function(),
   ...props
 }) {
   const [checks, setChecks] = useState([]);
-  useEffect(() => setChecked(checks), [checks]);
+  useEffect(() => forParent(checks), [checks]);
   return (
     <Kits.Provider value={{ checks, setChecks }}>
       <div

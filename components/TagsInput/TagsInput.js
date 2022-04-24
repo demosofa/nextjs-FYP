@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { GrFormClose } from "react-icons/gr";
 import style from "./TagsInput.module.css";
 
-export default function TagsInput({ gridArea, filter, forParent }) {
+export default function TagsInput({ filter, forParent }) {
   const [text, setText] = useState("");
   const [tags, setTags] = useState([]);
   const [active, setActive] = useState(false);

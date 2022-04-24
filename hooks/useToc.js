@@ -1,8 +1,8 @@
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
-export default function useScroll() {
+export default function useToc() {
   const parent = useRef();
-  const handleScroll = (e) => {
+  const handleToc = useCallback((e) => {
     if (!parent.current) parent.current = window;
     const parentDiv = parent.current;
     const { scrollWidth, scrollHeight, clientHeight, clientWidth } = parentDiv;
@@ -13,6 +13,6 @@ export default function useScroll() {
     let left = e.target.offsetLeft;
     parentDiv.scrollTop = top - clientHeight / 2;
     parentDiv.scrollLeft = left - clientWidth / 2;
-  };
-  return [handleScroll, parent];
+  }, []);
+  return [handleToc, parent];
 }
