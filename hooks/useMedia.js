@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useInsertionEffect } from "react";
 import Devices from "../helpers/Devices";
 
 export default function useMedia(min = 768, max = 1023) {
   const [device, setDevice] = useState();
-  const matchMediaRef = useRef();
 
   useEffect(() => {
     const initialValue = () =>
@@ -16,23 +15,21 @@ export default function useMedia(min = 768, max = 1023) {
   }, [min, max]);
 
   useEffect(() => {
-    matchMediaRef.current = window.matchMedia(
+    const checkMedia = window.matchMedia(
       `(min-width:${min}px) and (max-width:${max}px)`
     );
 
-    const handleSetDevice = () => {
-      setDevice(() => {
-        if (matchMediaRef.current.matches) return Devices.tablet;
-        else if (!matchMediaRef.current.matches && window.innerWidth <= min - 1)
-          return Devices.phone;
-        else if (!matchMediaRef.current.matches && window.innerWidth >= max + 1)
-          return Devices.pc;
-      });
+    const handleSetDevice = (e) => {
+      if (e.matches) setDevice(Devices.tablet);
+      else if (!e.matches && window.innerWidth <= min - 1)
+        setDevice(Devices.phone);
+      else if (!e.matches && window.innerWidth >= max + 1)
+        setDevice(Devices.pc);
     };
 
-    matchMediaRef.current.addEventListener("change", handleSetDevice);
+    checkMedia.addEventListener("change", handleSetDevice);
     return () => {
-      matchMediaRef.current.removeEventListener("change", handleSetDevice);
+      checkMedia.removeEventListener("change", handleSetDevice);
     };
   }, [min, max]);
   return device;
