@@ -1,0 +1,81 @@
+@mixin block ($width, $height: auto, $radius:false, $padding:false, $margin:false){
+  width: $width;
+  height: $height;
+  @if $radius {
+    border-radius: $radius;
+  }
+  @if $padding {
+    padding: $padding;
+  }
+  @if $margin{
+    margin: $margin;
+  }
+}
+
+@mixin flex ($gap: 0, $direction: row, $center: false){
+  display: flex;
+  flex-direction: $direction;
+  @if $center{
+    align-items: center;
+    justify-content: center;
+  }
+  gap: $gap
+}
+
+@mixin grid ( $gap: 0, $col: repeat(auto-fit, minmax(240px, 1fr)), $row: false) {
+  display: grid;
+  grid-template-columns: $col;
+  @if $row {
+    grid-template-rows: $row;
+  }
+  gap: $gap;
+}
+
+@mixin center($position) {
+  position: absolute;
+
+  @if $position == 'vertical' {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  @else if $position == 'horizontal' {
+    left: 50%;
+    transform: translate(-50%);
+  }
+
+  @else if $position == 'both' {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+}
+
+@mixin ellipse() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+$breakpoints: (
+    "phone":        400px,
+    "phone-wide":   480px,
+    "phablet":      560px,
+    "tablet-small": 640px,
+    "tablet":       768px,
+    "tablet-wide":  1024px,
+    "desktop":      1248px,
+    "desktop-wide": 1440px
+);
+@mixin mq($width, $type: min) {
+    @if map_has_key($breakpoints, $width) {
+        $width: map_get($breakpoints, $width);
+        @if $type == max {
+            $width: $width - 1px;
+        }
+        @media only screen and (#{$type}-width: $width) {
+            @content;
+        }
+    }
+}

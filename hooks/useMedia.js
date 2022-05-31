@@ -1,4 +1,4 @@
-import { useState, useInsertionEffect } from "react";
+import { useState, useEffect } from "react";
 import Devices from "../helpers/Devices";
 
 export default function useMedia(min = 768, max = 1023) {

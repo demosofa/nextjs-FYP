@@ -1,3 +1,13 @@
+@import "./productcrud.scss";
+@import "./layout";
+:root {
+  --grey-one: #eaeaf0;
+  --grey-two: #2e3f59;
+  --white: #fff;
+  --blue-shade-one: #548bcf;
+  --blue-shade-two: #e5f1ff;
+  --blue-shade-three: #2e8eff;
+}
 html,
 body {
   padding: 0;

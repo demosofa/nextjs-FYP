@@ -1,0 +1,33 @@
+
+.container_content {
+  position: relative;
+  width: 100%;
+  overflow-y: hidden;
+  transition: height 0.4s ease-in;
+  & .hidden_content {
+    width: 100%;
+  }
+  & .read{
+    position: absolute; 
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    text-align: center; 
+    margin: 0; 
+    padding: 10px 0;
+    &.more {
+      background-image: linear-gradient(to bottom, transparent, white);
+    }
+
+    &.less {
+      background-image: none
+    }
+
+    & button {
+      color: orangered;
+      &:hover {
+        color: burlywood
+      }
+    }
+  }
+}

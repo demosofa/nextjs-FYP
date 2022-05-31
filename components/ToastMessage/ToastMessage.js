@@ -2,7 +2,7 @@ import { useRef, useEffect, forwardRef } from "react";
 // import { useSearchParams } from "react-router-dom";
 import styles from "./ToastMessage.module.css";
 
-const ToastMessage = forwardRef(({ type, message, timeout }) => {
+const ToastMessage = forwardRef(({ type, message, timeout }, ref) => {
   // const [query, setQuery] = useSearchParams();
   const ToastRef = useRef();
   // useEffect(() => {

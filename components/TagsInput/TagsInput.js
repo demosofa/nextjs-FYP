@@ -2,16 +2,21 @@ import { useState, useEffect, useRef } from "react";
 import { GrFormClose } from "react-icons/gr";
 import style from "./TagsInput.module.css";
 
-export default function TagsInput({ filter, forParent }) {
+export default function TagsInput({
+  prevTags = [],
+  setPrevTags = new Function(),
+  filter = [],
+  ...props
+}) {
   const [text, setText] = useState("");
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(prevTags);
   const [active, setActive] = useState(false);
   const filtered = useRef([...filter]);
   let inputDiv;
 
   useEffect(() => {
-    forParent(tags);
-  }, [tags, forParent]);
+    setPrevTags(tags);
+  }, [tags]);
 
   const handleDelete = (index) => {
     setTags(tags.filter((tag) => tag !== tags[index]));
@@ -25,10 +30,10 @@ export default function TagsInput({ filter, forParent }) {
   };
 
   const handleInput = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "," && text !== "" && text !== ",") {
       if (!tags.includes(text))
         setTags((prev) => {
-          return [...prev, text];
+          return [...prev, text.trim().replaceAll(",", "")];
         });
       handleFilter("");
       e.target.focus();
@@ -39,9 +44,12 @@ export default function TagsInput({ filter, forParent }) {
     <div className={style.container}>
       {tags.map((tag, index) => {
         return (
-          <div key={index} className={style.tag}>
+          <div key={index} className={style.tag} {...props}>
             {tag}
-            <GrFormClose onClick={() => handleDelete(index)}></GrFormClose>
+            <GrFormClose
+              className={style.icon}
+              onClick={() => handleDelete(index)}
+            ></GrFormClose>
           </div>
         );
       })}
@@ -56,14 +64,16 @@ export default function TagsInput({ filter, forParent }) {
             handleFilter(e.target.value);
             setActive(true);
           }}
-          onKeyDown={handleInput}
+          onKeyUp={handleInput}
         ></input>
-        <button
-          onClick={() => {
-            handleFilter("");
-            setActive((prev) => !prev);
-          }}
-        ></button>
+        {filter.length !== 0 && (
+          <button
+            onClick={() => {
+              handleFilter("");
+              setActive((prev) => !prev);
+            }}
+          ></button>
+        )}
         {active && (
           <div className={style.dropdown}>
             {filtered.current.map((target, index) => (

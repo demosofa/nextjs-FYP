@@ -4,38 +4,25 @@ const Kits = createContext();
 
 export default function Checkbox({
   children,
-  forParent = new Function(),
+  checked = [],
+  setChecked = new Function(),
+  type = "checkbox",
+  name = "",
   ...props
 }) {
-  const [checks, setChecks] = useState([]);
-  useEffect(() => forParent(checks), [checks]);
+  const [checks, setChecks] = useState(checked);
+  useEffect(() => setChecked(checks), [checks]);
   return (
-    <Kits.Provider value={{ checks, setChecks }}>
-      <div
-        style={{
-          width: "300px",
-          height: "500px",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "10px",
-          border: "1px dotted",
-        }}
-        {...props}
-      >
+    <Kits.Provider value={{ checks, setChecks, type, name }}>
+      <fieldset style={{ border: "none" }} {...props}>
         {children}
-      </div>
+      </fieldset>
     </Kits.Provider>
   );
 }
 
-Checkbox.Item = function Item({
-  children,
-  type = "checkbox",
-  name = "",
-  value = children,
-  ...props
-}) {
-  const { checks, setChecks } = useContext(Kits);
+Checkbox.Item = function Item({ children, value = children, ...props }) {
+  const { checks, setChecks, type, name } = useContext(Kits);
   const handleCheck = () => {
     if (type === "checkbox")
       setChecks((prev) =>
@@ -46,15 +33,16 @@ Checkbox.Item = function Item({
     else if (type === "radio") setChecks([value]);
   };
   return (
-    <div {...props}>
-      {children}
+    <>
       <input
+        {...props}
         type={type}
         name={name}
         value={value}
         onChange={handleCheck}
         checked={checks.includes(value)}
       ></input>
-    </div>
+      {children}
+    </>
   );
 };

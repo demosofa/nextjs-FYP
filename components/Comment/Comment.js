@@ -1,165 +1,220 @@
-import { useState, useEffect, useRef } from "react";
-import { Avatar } from "..";
-import useFetchLoad from "../../hooks/useFetchLoad";
+import { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import { BiDotsVertical } from "react-icons/bi";
+import { Avatar, Dropdown, Loading } from "../";
+import { useAxiosLoad } from "../../hooks";
+// import "./CommentSection.scss";
 
 export default function Comment({
-  baseURL = `https://jsonplaceholder.typicode.com/comments`,
+  url = `https://jsonplaceholder.typicode.com/comments`,
+  params = ["postId", "id"],
 }) {
-  const [page, setPage] = useState(1);
-  const [datas, setData] = useState([]);
-  const unique = useRef(0);
-  const [loading, fetchInstance] = useFetchLoad(
+  const datas = useRef();
+  const unique = useRef();
+  const [loading] = useAxiosLoad(
     {
       headers: { "Content-Type": "application/json" },
-      baseURL,
+      baseURL: url,
       method: "GET",
     },
-    (data) => setData((prev) => [...prev, ...data]),
-    [page]
+    (item) => (datas.current = item),
+    []
   );
 
+  if (loading) return <Loading.Text />;
   return (
-    <div className={styles.commentsContainer}>
-      {datas.map((data) => {
+    <div className="comment-section">
+      {datas.current.map((data, index) => {
         if (data.postId !== unique.current) {
           unique.current = data.postId;
           return (
-            <CommentSection.Tab
-              data={data}
-              fetchInstance={fetchInstance}
-            ></CommentSection.Tab>
+            <CommentTab
+              value={data}
+              key={index}
+              url={`${url}?${params[0]}=${data[params[0]]}`}
+              params={params.slice(1)}
+            />
           );
         }
+        return undefined;
       })}
-      {loading && <div>Loading...</div>}
     </div>
   );
 }
 
-Comment.Tab = function CommentTab({ data, fetchInstance, ...props }) {
-  const [openEdit, setOpenEdit] = useState(false);
-  const [editInput, setEditInput] = useState("");
-  const [toggle, setToggle] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [displayReply, setDisplayReply] = useState(false);
-  const [replys, setReply] = useState([]);
+function CommentTab({ value, url, params, ...props }) {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(value);
+  const [toggle, setToggle] = useState({
+    edit: false,
+    reply: false,
+    more: false,
+  });
+  const [offDropdown, setOffDropdown] = useState(false);
+  const comments = useRef([]);
+  const controller = useRef();
 
   useEffect(() => {
-    const handleSetReply = async () => {
-      try {
-        setLoading(true);
-        const newData = await fetchInstance
-          .get("", {
-            params: { postId: data.postId },
+    const abort = new AbortController();
+    if (toggle.more) {
+      setLoading(true);
+      axios
+        .get(url, { signal: abort.signal })
+        .then((res) => (comments.current = res.data))
+        .then(() => setLoading(false))
+        .catch((error) => alert(error));
+    }
+    return () => abort.abort();
+  }, [toggle.more]);
+
+  const handleSave = (value) => {
+    if (controller.current) controller.current.abort();
+    else {
+      controller.current = new AbortController();
+      axios
+        .put(url, { signal: controller.current.signal })
+        .then(() =>
+          setData((prev) => {
+            return { ...prev, body: value };
           })
-          .then((response) => response.data);
-        setReply(newData);
-        setLoading(false);
-      } catch (err) {
-        return;
-      }
-    };
-    if (toggle) handleSetReply();
-  }, [toggle]);
+        )
+        .then(() =>
+          setToggle((prev) => {
+            return { ...prev, edit: false };
+          })
+        )
+        .catch((error) => alert(error));
+    }
+  };
 
   return (
-    <div className={`${styles.tabContainer}`} {...props}>
-      <Avatar
-        size="40px"
-        src="https://mkpcdn.com/1000x/d60c41360dca1d1aea52bae449c2b0ec_503970.jpg"
-      ></Avatar>
-      <button
-        className={styles.toggle}
-        onClick={() => setToggle((prev) => !prev)}
-      >
-        More
-      </button>
-      <div className={styles.tab}>
-        {!openEdit ? (
-          data.email
-        ) : (
-          <Comment.Input
-            setDisplayInput={setOpenEdit}
-            setInput={setEditInput}
-          ></Comment.Input>
-        )}
-        <div className={styles.btnContainer}>
-          <button
-            className={styles.btnEdit}
-            onClick={() => setOpenEdit((prev) => !prev)}
+    <div className="comments-container" {...props}>
+      <div className="tab-container">
+        <Avatar></Avatar>
+        {!toggle.edit && (
+          <Dropdown
+            icon={<BiDotsVertical />}
+            toggle={offDropdown}
+            setToggle={setOffDropdown}
+            onMouseLeave={() => setOffDropdown(false)}
           >
-            Edit
-          </button>
-          {displayReply || (
-            <button
-              className={styles.btnReply}
-              onClick={() => setDisplayReply((prev) => !prev)}
+            <div
+              onClick={() =>
+                setToggle((prev) => {
+                  return { ...prev, edit: !prev.edit };
+                })
+              }
             >
-              Reply
-            </button>
-          )}
-        </div>
+              Edit
+            </div>
+            <div>Delete</div>
+          </Dropdown>
+        )}
       </div>
-      {displayReply && (
-        <Comment.Reply
-          setDisplayReply={setDisplayReply}
-          setReply={setReply}
-          style={{ width: `calc(100% - 25px)`, marginLeft: "20px" }}
-        ></Comment.Reply>
-      )}
-      {toggle && (
-        <div className={styles.replysContainer}>
-          {replys.map((reply) => {
+      <div className="comment-tab">
+        {(toggle.edit && (
+          <CommentInput
+            data={data.body}
+            callback={handleSave}
+            setToggle={(boolean) =>
+              setToggle((prev) => {
+                return { ...prev, edit: boolean };
+              })
+            }
+          />
+        )) ||
+          data.body}
+      </div>
+      <div className="btn-container">
+        <button
+          onClick={() =>
+            setToggle((prev) => {
+              if (params.length > 0)
+                return { ...prev, reply: !prev.reply, more: true };
+              return { ...prev, reply: !prev.reply };
+            })
+          }
+        >
+          Reply
+        </button>
+        {params.length > 0 && (
+          <button
+            onClick={() =>
+              setToggle((prev) => {
+                return { ...prev, more: !prev.more };
+              })
+            }
+          >
+            More
+          </button>
+        )}
+      </div>
+      {loading && <Loading.Text />}
+      {comments.current.length > 0 && toggle.more && (
+        <div className="replys-container">
+          {comments.current.map((comment, index) => {
             return (
-              <Comment.Tab
-                data={reply}
-                style={{ width: `calc(100% - 25px)`, marginLeft: "30px" }}
-              ></Comment.Tab>
+              <CommentTab
+                key={index}
+                value={comment}
+                url={`${url}&${params[0]}=${comment[params[0]]}`}
+                params={params.slice(1)}
+              />
             );
           })}
-          {loading && <div>Loading...</div>}
         </div>
+      )}
+      {toggle.reply && (
+        <CommentReply
+          url={url}
+          setToggle={(boolean) =>
+            setToggle((prev) => {
+              return { ...prev, reply: boolean };
+            })
+          }
+        />
       )}
     </div>
   );
-};
+}
 
-Comment.Input = function CommentInput({ setDisplayInput, setInput, ...props }) {
-  const [value, setValue] = useState(``);
+function CommentInput({ data, callback, setToggle }) {
+  const [input, setInput] = useState(data);
 
-  const handleSubmit = () => {
-    setInput((prev) => [...prev, value]);
-    setDisplayInput((prev) => !prev);
+  return (
+    <div className="edit-container">
+      <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      ></textarea>
+      <div>
+        <button onClick={() => callback(input)}>Save</button>
+        <button onClick={() => setToggle(false)}>Cancel</button>
+      </div>
+    </div>
+  );
+}
+
+function CommentReply({ url, setToggle }) {
+  const [reply, setReply] = useState();
+  const controller = useRef();
+
+  const handleReply = (value) => {
+    if (controller.current) controller.current.abort();
+    else {
+      controller.current = new AbortController();
+      axios
+        .post(url, { signal: controller.current.signal })
+        .then(() => setReply(value))
+        .then(() => setToggle(false))
+        .catch((error) => alert(error));
+    }
   };
-  return (
-    <div className="comment-Input" {...props}>
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      ></input>
-      <button className="btn submit" onClick={handleSubmit}></button>
-      <button
-        className="btn cancel"
-        onClick={() => setDisplayInput((prev) => !prev)}
-      >
-        Cancel
-      </button>
-    </div>
-  );
-};
 
-Comment.Reply = function CommentReply({ setDisplayReply, setReply, ...props }) {
   return (
-    <div className="Reply" {...props}>
-      <Avatar
-        size="40px"
-        src="https://mkpcdn.com/1000x/d60c41360dca1d1aea52bae449c2b0ec_503970.jpg"
-      ></Avatar>
-      <Comment.Input
-        setDisplayInput={setDisplayReply}
-        setInput={setReply}
-      ></Comment.Input>
+    <div className="reply-comment">
+      <Avatar></Avatar>
+      <CommentInput data={reply} callback={handleReply} setToggle={setToggle} />
     </div>
   );
-};
+}

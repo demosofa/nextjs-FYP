@@ -1,60 +1,70 @@
-import React, { useRef, useCallback, useLayoutEffect } from "react";
+import { useState, useRef, useCallback } from "react";
+import { useResize } from "../../hooks";
+import { compareToRange } from "../../utils";
 
-function ImageMagnifier({ children, zoom }) {
-  let { current } = useRef(children.props.style);
-  let ref;
-  let offset = useRef();
+export default function ImageMagnifier({ zoom = 2, src, style, ...props }) {
+  const maginfier = useRef();
+  const [offset, setOffset] = useState();
+  const [track, setTrack] = useState(false);
+  const [resize, setResize] = useState(false);
 
-  useLayoutEffect(() => {
-    offset.current = ref.getBoundingClientRect();
-  }, [ref]);
+  useResize(() => setResize((prev) => !prev), []);
 
-  const handleMouse = useCallback(
-    ({ clientX, clientY }) => {
-      ref.style.left = `${clientX - offset.current.left}px`;
-      ref.style.top = `${clientY - offset.current.top}px`;
-      ref.style.backgroundPosition = `-${ref.offsetLeft * zoom}px
-                                    -${ref.offsetTop * zoom}px`;
+  const target = useCallback(
+    (node) => {
+      node && setOffset(node.getBoundingClientRect());
     },
-    [ref.offsetLeft, ref.offsetTop, ref.style, zoom]
+    [resize]
   );
+
+  const handleMaginfier = ({ pageX, pageY }) => {
+    const mag = maginfier.current;
+    const left = compareToRange(
+      pageX - mag.offsetWidth / 2 - offset.left,
+      0,
+      offset.width - mag.offsetWidth
+    );
+    const top = compareToRange(
+      pageY - mag.offsetHeight / 2 - offset.top,
+      0,
+      offset.height - mag.offsetHeight
+    );
+    mag.style.left = `${left}px`;
+    mag.style.top = `${top}px`;
+    mag.style.backgroundPosition = `-${
+      mag.offsetLeft * zoom + mag.offsetWidth / 2
+    }px
+    -${mag.offsetTop * zoom + mag.offsetHeight / 2}px`;
+  };
 
   return (
-    <>
-      {React.cloneElement(children, {
-        children: (
-          <div
-            ref={(node) => {
-              if (node) ref = node;
-            }}
-            className="magnifier"
-            style={{
-              ...styles.magnifier,
-              backgroundImage: `${current.backgroundImage}`,
-              backgroundRepeat: `no-repeat`,
-              backgroundSize: `calc(${current.width} * ${zoom}px)
-                              calc(${current.height} * ${zoom}px)`,
-            }}
-          ></div>
-        ),
-        style: current,
-        onMouseMove: (e) => {
-          handleMouse(e);
-        },
-      })}
-    </>
+    <div
+      className="image__magnifier"
+      style={{ ...style, position: "relative" }}
+      onMouseEnter={() => setTrack(true)}
+      onMouseMove={(e) => track && handleMaginfier(e)}
+      onMouseLeave={() => setTrack(false)}
+    >
+      <img ref={target} src={src} {...props}></img>
+      {track && (
+        <div
+          ref={maginfier}
+          className="maginfier"
+          style={{
+            position: "absolute",
+            width: "80px",
+            height: "80px",
+            top: 0,
+            cursor: "none",
+            border: "1px solid white",
+            borderRadius: "50%",
+            backgroundImage: `url(${src})`,
+            backgroundRepeat: `no-repeat`,
+            backgroundSize: `calc(${offset.width} * ${zoom}px)
+                              calc(${offset.height} * ${zoom}px)`,
+          }}
+        ></div>
+      )}
+    </div>
   );
 }
-
-const styles = {
-  magnifier: {
-    width: "80px",
-    height: "80px",
-    position: "absolute",
-    borderRadius: "50%",
-    border: "1px solid",
-    cursor: "none",
-  },
-};
-
-export default ImageMagnifier;

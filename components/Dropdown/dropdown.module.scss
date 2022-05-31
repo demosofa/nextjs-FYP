@@ -1,0 +1,25 @@
+@import "../../styles/mixin.scss";
+.dropdown {
+  & .btn_dropdown{
+    position: relative;
+  }
+  & .dropdown_content{
+    position: absolute;
+    background-color: aquamarine;
+    border-radius: 7px;
+    padding: 5px;
+    @include flex(0, column, center);
+
+    & div{
+      width: 100%;
+      border-radius: inherit;
+      background-color: transparent;
+      padding: 2px 4px;
+      @include flex(0, row, center);
+
+      &:hover {
+        background-color: aqua;
+      }
+    }
+  }
+}

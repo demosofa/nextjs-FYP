@@ -1,16 +1,22 @@
 .container {
   width: inherit;
-  margin: 50px auto;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   flex-wrap: wrap;
+  background-color: azure;
+  padding: 10px;
+  border-radius: 15px;
 }
 
 .searchbox {
-  border: 1px solid black;
 }
-
+.searchbox > input {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  background: transparent;
+}
 .tag {
   padding: 5px;
   background: var(--grey-two);
@@ -24,7 +30,7 @@
   white-space: nowrap;
 }
 
-svg {
+.icon {
   width: inherit;
   height: inherit;
   margin-left: 10px;

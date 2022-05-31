@@ -1,10 +1,4 @@
-import {
-  useState,
-  useCallback,
-  useRef,
-  useLayoutEffect,
-  cloneElement,
-} from "react";
+import { useState, useCallback, useRef, useEffect, cloneElement } from "react";
 import styles from "./Carousel.module.css";
 
 function Carousel({
@@ -20,13 +14,13 @@ function Carousel({
   const slideWidth = useRef(0);
   const carousel = useRef();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.onresize = () => {
       setCheck((prev) => !prev);
     };
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     slideWidth.current = Math.floor(carousel.current.offsetWidth / slidesDs);
     let initialPos = numSlidesAni * slideWidth.current;
     [...carousel.current.children].forEach((child) => {

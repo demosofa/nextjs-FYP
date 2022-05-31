@@ -8,17 +8,6 @@
   vertical-align: middle;
 }
 
-.input_file {
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
 .drop_zone .preview {
   position: relative;
   display: inline-block;
@@ -27,6 +16,31 @@
   vertical-align: text-bottom;
   margin: 2px;
   word-wrap: break-word;
+}
+
+.input_file {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.drag_file {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1
+}
+
+.show_file {
+  width: 100%;
+  min-height: 150px;
+  max-height: 200px;
+  overflow: auto;
 }
 
 .preview svg {
@@ -39,18 +53,23 @@
   right: 5%;
 }
 
-.preview > img {
-  width: 100%;
-  height: 100%;
-  opacity: 0.5;
-}
-
-.preview > img + svg {
-  display: inline-block;
-}
-
 .img_container {
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.img_container img {
+  width: 100%;
+  height: 100%;
+}
+
+.img_container img + svg {
+  display: inline-block;
+}
+
+.preview:hover .img_container {
+  border: 2px solid aquamarine
 }

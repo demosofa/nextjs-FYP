@@ -1,0 +1,77 @@
+.form {
+  background-color: #fff;
+  color: #333;
+  width: 100%;
+  min-width: 320px;
+  max-width: 500px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  &__item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 20px;
+  }
+  &__logo {
+    text-align: center;
+  }
+  &__input {
+    font-size: 13px;
+    border-radius: 20px;
+    padding: 8px 12px;
+    width: 100%;
+    max-width: 360px;
+  }
+  &__link {
+    text-align: left;
+    text-decoration: none;
+    color: #444;
+    &:hover {
+      color: #ffb400;
+    }
+  }
+  &__button {
+    text-transform: capitalize;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #e8eced;
+    border-radius: 15px;
+    text-align: center;
+    padding: 7px;
+    &:hover {
+      background-color: #ffb400 !important;
+      transition: all 0.15s linear;
+    }
+  }
+  &__title {
+    white-space: nowrap;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 28px;
+    margin-bottom: 10px;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    text-align: center;
+  }
+  &__image {
+    margin: 0;
+  }
+  &__textarea {
+    margin-left: 15px;
+    width: 100%;
+    font-size: 13px;
+    padding: 15px 10px;
+    border-radius: 10px;
+    resize: none;
+  }
+  &__select {
+    color: #444;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+  &__option {
+    font-size: 10px;
+  }
+}

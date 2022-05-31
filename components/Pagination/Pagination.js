@@ -1,6 +1,8 @@
 import { useState, useContext, useEffect, createContext } from "react";
 import { FaGreaterThan, FaLessThan } from "react-icons/fa";
+import { Icon } from "../";
 import { usePagination } from "../../hooks";
+import styles from "./Pagination.module.css";
 
 const Kits = createContext();
 
@@ -19,18 +21,7 @@ export default function Pagination({
         totalPageCount,
       }}
     >
-      <div
-        className={`pageContainer`}
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "10px",
-          padding: `0px 10px`,
-        }}
-        {...props}
-      >
+      <div className={styles.pagination__container} {...props}>
         {children}
       </div>
     </Kits.Provider>
@@ -40,26 +31,28 @@ export default function Pagination({
 Pagination.Arrow = function ArrowPagination({ children, ...props }) {
   const { currentPage, setCurrentPage, totalPageCount } = useContext(Kits);
   return (
-    <div {...props}>
-      <FaLessThan
-        style={{ width: `20px`, height: `20px`, margin: 0 }}
+    <div className={styles.arrow_nav} {...props}>
+      <Icon
         onClick={() => {
           if (currentPage > 1) {
             setCurrentPage((prev) => prev - 1);
           }
         }}
-      ></FaLessThan>
+      >
+        <FaLessThan />
+      </Icon>
 
       {children}
 
-      <FaGreaterThan
-        style={{ width: `20px`, height: `20px`, margin: 0 }}
+      <Icon
         onClick={() => {
           if (currentPage < totalPageCount) {
             setCurrentPage((prev) => prev + 1);
           }
         }}
-      ></FaGreaterThan>
+      >
+        <FaGreaterThan />
+      </Icon>
     </div>
   );
 };
@@ -109,14 +102,26 @@ Pagination.Number = function NumberPagination({
   }
 
   return (
-    <div>
+    <div className={styles.pagination}>
       {paginationRange.length &&
-        paginationRange.map((page) => {
-          if (page === "...") return <span>...</span>;
+        paginationRange.map((page, index) => {
+          if (page === "...")
+            return (
+              <span
+                className={`${styles.pagination__item} ${styles.dots}`}
+                key={index}
+              >
+                ...
+              </span>
+            );
           return (
             <button
+              className={styles.pagination__item}
+              key={index}
               {...props}
-              style={{ backgroundColor: page === currentPage && "green" }}
+              style={{
+                backgroundColor: page === currentPage ? "green" : "white",
+              }}
               onClick={(e) => setCurrentPage(parseInt(e.target.innerText))}
             >
               {page}

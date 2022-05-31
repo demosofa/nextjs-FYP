@@ -1,8 +1,8 @@
-import Link from "next/link";
-
-export const UserRole = [
+const ManagerRole = [
   {
-    title: "Category",
-    link: <Link href="/Category"></Link>,
+    title: "Product Management",
+    link: "/manager/product",
   },
 ];
+
+export { ManagerRole };

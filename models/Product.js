@@ -4,8 +4,9 @@ const Schema = mongoose.Schema;
 const Product = new Schema(
   {
     title: { type: String, required: true, unique: true, maxlength: 225 },
-    desc: { type: String, required: true, maxlength: 255 },
+    description: { type: String, required: true, maxlength: 255 },
     img: { type: String, required: true },
+    tags: [{ type: String }],
     categories: [
       {
         type: Schema.Types.ObjectId,

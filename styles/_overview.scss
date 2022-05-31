@@ -1,0 +1,73 @@
+@import "./mixin.scss";
+
+.page-overview{
+  @include block(100%, 100%, 0, 15px);
+  @include flex(10px, column, true);
+
+  .container-info {
+    width: 100%;
+    padding: 15px;
+    @include flex(30px, row, true);
+
+    .preview-product {
+      flex: 1;
+      @include flex(10px, row-reverse);
+      @include mq("tablet", max){
+        @include flex(10px, column)
+      }
+      .image__magnifier{
+        flex: 4
+      }
+      // .Carousel {
+      //   flex: 1;
+      //   @include mq("phablet"){
+      //     > button{
+      //       bottom: -10px;
+      //       left: 42%;
+      //       top: 0;
+
+      //       &:nth-child(1){
+      //         top: -10px
+      //       }
+      //     }
+      //   }
+      // }
+      .slider{
+        width: 60px; height: 180px;
+        @include mq("tablet", max){
+          flex-direction: row;
+          width: 180px;
+          height: 60px;
+        }
+      }
+    }
+
+    .product-img {
+      height: inherit;
+      width: 100%;
+      flex: 1;
+    }
+    > .product-info {
+      @include flex(10px, column);
+      flex: 1;
+
+      & .btn-add-to-cart{
+        flex: 1;
+        height: 50px;
+        border-radius: 7px;
+        background-color: orangered;
+        color: hsl(0, 0%, 90%);
+        font-family: "Open Sans", sans-serif;
+        font-size: larger;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .rating {
+    @include block(100%, 200px, 0, 15px);
+    @include flex(10px, row, true);
+    flex: 1
+  }
+}
+
