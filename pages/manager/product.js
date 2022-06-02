@@ -23,7 +23,7 @@ export default function ProductCRUD({ datas }) {
   const [products, setProducts] = useState([
     {
       id: "",
-      productName: "T-shirt",
+      title: "T-shirt",
       description: "its type of shirt",
       tags: ["shirt"],
       files: [],
@@ -46,7 +46,7 @@ export default function ProductCRUD({ datas }) {
           <thead>
             <tr>
               <th>No.</th>
-              <th>Product Name</th>
+              <th>Title</th>
               <th>Description</th>
               <th>Tags</th>
               <th>Files</th>
@@ -60,7 +60,7 @@ export default function ProductCRUD({ datas }) {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{product.productName}</td>
+                  <td>{product.title}</td>
                   <td className="ellipse">{product.description}</td>
                   <td className="ellipse">{product.tags.join(", ")}</td>
                   <td>{product.files.length}</td>
@@ -118,7 +118,7 @@ function CreateEditForm({ product, setProducts, index = null, setToggle }) {
     if (index !== null) return product;
     return {
       id: "",
-      productName: "",
+      title: "",
       description: "",
       tags: [],
       files: [],
@@ -131,44 +131,49 @@ function CreateEditForm({ product, setProducts, index = null, setToggle }) {
     e.preventDefault();
     const formdata = new FormData();
     Object.entries(input).forEach((field) => {
-      const key = field[0];
+      let key = field[0];
       const value = field[1];
-      formdata.append(key, value);
+      if (value instanceof Array) {
+        key = key + "[]";
+        for (var i = 0; i < value.length; i++) {
+          formdata.append(key, value[i]);
+        }
+      } else formdata.append(key, value);
     });
+    // for (var pair of formdata.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
     try {
       if (index === null) {
         axios
-          .post(`${process.env.MONGO_URL_LOCAL}/api/productcrud`, formdata, {
+          .post(`http://localhost:3000/api/productcrud`, formdata, {
             headers: {
               // Authorization: `Bearer`,
               "Content-type": "multipart/form-data",
             },
           })
           .then((res) => {
-            res.data.successMessage && setProducts((prev) => [...prev, input]);
+            setProducts((prev) => [...prev, input]);
           });
       } else {
         axios
-          .put(
-            `${process.env.MONGO_URL_LOCAL}/api/productcrud/${input.id}`,
-            formdata,
-            {
-              headers: {
-                // Authorization: `Bearer`,
-                "Content-type": "multipart/form-data",
-              },
-            }
-          )
+          .put(`http://localhost:3000/api/productcrud/${input.id}`, formdata, {
+            headers: {
+              // Authorization: `Bearer`,
+              "Content-type": "multipart/form-data",
+            },
+          })
           .then((res) => {
-            res.data.successMessage &&
-              setProducts((prev) => {
-                const newArr = prev.concat();
-                newArr[index] = input;
-                return [...newArr];
-              });
+            setProducts((prev) => {
+              const newArr = prev.concat();
+              newArr[index] = input;
+              return [...newArr];
+            });
           });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
     setToggle(null);
   };
   return (
@@ -191,12 +196,12 @@ function CreateEditForm({ product, setProducts, index = null, setToggle }) {
           {index === null ? "Create Product" : `Edit Prodcut`}
         </Form.Title>
         <Form.Item>
-          <Form.Title>Product Name</Form.Title>
+          <Form.Title>Title</Form.Title>
           <Form.Input
-            value={input.productName}
+            value={input.title}
             onChange={(e) =>
               setInput((prev) => {
-                return { ...prev, productName: e.target.value };
+                return { ...prev, title: e.target.value };
               })
             }
           />
@@ -204,10 +209,10 @@ function CreateEditForm({ product, setProducts, index = null, setToggle }) {
         <Form.Item>
           <Form.Title>Description</Form.Title>
           <Form.TextArea
-            value={input.desc}
+            value={input.description}
             onChange={(e) =>
               setInput((prev) => {
-                return { ...prev, desc: e.target.value };
+                return { ...prev, description: e.target.value };
               })
             }
           />
@@ -287,7 +292,7 @@ function Remove({ index, product, setProducts, setRemove }) {
           gap: "15px",
         }}
       >
-        <label>{`Are you sure to Remove ${product.productName}?`}</label>
+        <label>{`Are you sure to Remove ${product.title}?`}</label>
         <Container.Flex style={{ gap: "10px" }}>
           <button onClick={handleRemove}>Yes</button>
           <button onClick={() => setRemove(null)}>No</button>

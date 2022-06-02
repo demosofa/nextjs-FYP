@@ -18,4 +18,4 @@ const Order = new Schema(
   { timestamps: true }
 );
 
-module.exports = Order;
+module.exports = mongoose.models.Order || mongoose.model("Order", Order);

@@ -22,4 +22,4 @@ const Account = new Schema(
 Account.pre("deleteOne", (next) => {
   User.deleteOne({ account: this._id }, next);
 });
-module.exports = mongoose.model("Account", Account);
+module.exports = mongoose.models.Account || mongoose.model("Account", Account);

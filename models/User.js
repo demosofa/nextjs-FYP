@@ -10,4 +10,4 @@ const User = new Schema({
   account: { type: Schema.Types.ObjectId, ref: "Account", unique: true },
 });
 
-module.exports = mongoose.model("User", User);
+module.exports = mongoose.models.User || mongoose.model("User", User);

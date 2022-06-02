@@ -5,6 +5,7 @@ import {
   useContext,
   useRef,
   Children,
+  useCallback,
 } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { Animation } from "../";
@@ -15,13 +16,44 @@ const Kits = createContext();
 export default function FileUpload({
   prevFiles = [],
   setPrevFiles = new Function(),
+  maxByMB = 5,
   children,
   ...props
 }) {
   const [files, setFiles] = useState(prevFiles);
 
+  const isOverSize = (currentFiles, newFile) => {
+    const maxMB = maxByMB * 1024 * 1024;
+    let futureSize = currentFiles.reduce(
+      (prev, curr) => prev + curr.size,
+      newFile.size
+    );
+    if (maxMB >= futureSize) return false;
+    return true;
+  };
+
+  const isExist = (currentFiles, newFile) => {
+    const index = currentFiles.findIndex((file) => file.name === newFile.name);
+    if (index === -1) return false;
+    return true;
+  };
+
+  const getFiles = useCallback(
+    (newFiles) => {
+      for (var i = 0; i < newFiles.length; i++) {
+        setFiles((prev) => {
+          let currentFile = newFiles[i];
+          if (!isOverSize(prev, currentFile) && !isExist(prev, currentFile))
+            return [...prev, currentFile];
+          return prev;
+        });
+      }
+    },
+    [files]
+  );
+
   return (
-    <Kits.Provider value={{ files, setFiles, setPrevFiles }}>
+    <Kits.Provider value={{ files, setFiles, setPrevFiles, getFiles }}>
       <div className={styles.drop_zone} {...props}>
         {Children.toArray(children).map((child) => child)}
       </div>
@@ -30,9 +62,9 @@ export default function FileUpload({
 }
 
 FileUpload.Input = function InputUpload({ children, ...props }) {
-  const { setFiles } = useContext(Kits);
+  const { getFiles } = useContext(Kits);
   const handleInput = (e) => {
-    setFiles((prev) => [...prev, ...e.target.files]);
+    getFiles(e.target.files);
   };
   return (
     <div className={styles.input_file}>
@@ -51,11 +83,11 @@ FileUpload.Input = function InputUpload({ children, ...props }) {
 };
 
 FileUpload.Drag = function DragUpload({ children, ...props }) {
-  const { setFiles } = useContext(Kits);
+  const { getFiles } = useContext(Kits);
   const handleDrop = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    setFiles((prev) => [...prev, ...e.dataTransfer.files]);
+    getFiles(e.dataTransfer.files);
   };
 
   const allowDrop = (e) => {

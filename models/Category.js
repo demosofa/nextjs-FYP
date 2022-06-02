@@ -12,4 +12,5 @@ Category.pre(["deleteOne", "deleteMany"], function (next) {
   Product.remove({ categories: this._id }, next);
 });
 
-module.exports = Category;
+module.exports =
+  mongoose.models.Category || mongoose.model("Category", Category);
