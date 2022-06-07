@@ -1,0 +1,30 @@
+@import "../../scss/mixin.scss";
+.login-page{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  > .background{
+    flex: 1.7;
+    height: 100%;
+    background-color: orangered
+  }
+
+  > .login-container {
+    padding: 0 20px;
+    height: 100vh;
+    @include flex(0, column, center);
+    @include mq("tablet-wide"){
+      flex: 1;
+    }
+
+    @include mq("phablet", max){
+      position: relative;
+      width: 100vw;
+    }
+
+    > .form{
+      border-radius: 14px;
+    }
+  }
+  
+}

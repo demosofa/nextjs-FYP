@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import {
   FileUpload,
   TagsInput,
@@ -10,12 +11,14 @@ import {
 } from "../../components";
 import { Validate } from "../../utils";
 
-function getServerSideProp() {
+export function getServerSideProp() {
   const datas = fetch(`${process.env.MONGO_URL_LOCAL}/api/productcrud`).then(
-    (data) => data.json
+    (data) => data.json()
   );
   return {
-    datas,
+    props: {
+      datas,
+    },
   };
 }
 
@@ -35,6 +38,7 @@ export default function ProductCRUD({ datas }) {
   const [edit, setEdit] = useState(null);
   const [remove, setRemove] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
   return (
     <div className="product-crud__container">
       <Container.Flex>
@@ -67,7 +71,9 @@ export default function ProductCRUD({ datas }) {
                   <td>{product.price}</td>
                   <td>{product.quantity}</td>
                   <td>
-                    <button>Preview</button>
+                    <button onClick={() => router.push("/overview")}>
+                      Preview
+                    </button>
                     <button onClick={() => setEdit(index)}>Edit</button>
                     <button onClick={() => setRemove(index)}>Remove</button>
                   </td>

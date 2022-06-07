@@ -16,7 +16,7 @@ Animation.Fade = function AnimateFade({ children, style, ...props }) {
   return transition(
     (prop, item) =>
       item && (
-        <animated.div style={prop} {...props}>
+        <animated.div style={{ ...style, ...prop }} {...props}>
           {item}
         </animated.div>
       )

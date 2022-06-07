@@ -14,7 +14,7 @@ Loading.Text = function LoadingText({
   ...props
 }) {
   return (
-    <div className={styles.letter - holder + ` ${className}`} {...props}>
+    <div className={styles.letter_holder + ` ${className}`} {...props}>
       {[...text].map((char, index) => (
         <div
           key={index}

@@ -1,5 +1,8 @@
-@import "./productcrud.scss";
+@import "./productcrud";
 @import "./layout";
+@import "./cart";
+@import "./home";
+@import "./overview";
 :root {
   --grey-one: #eaeaf0;
   --grey-two: #2e3f59;

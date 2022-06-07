@@ -18,20 +18,6 @@
       .image__magnifier{
         flex: 4
       }
-      // .Carousel {
-      //   flex: 1;
-      //   @include mq("phablet"){
-      //     > button{
-      //       bottom: -10px;
-      //       left: 42%;
-      //       top: 0;
-
-      //       &:nth-child(1){
-      //         top: -10px
-      //       }
-      //     }
-      //   }
-      // }
       .slider{
         width: 60px; height: 180px;
         @include mq("tablet", max){

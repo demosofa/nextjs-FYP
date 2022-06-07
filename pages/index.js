@@ -1,9 +1,20 @@
 import Head from "next/head";
 import Image from "next/image";
-import { FileUpload } from "../components";
+import { useRouter } from "next/router";
+import { Animation } from "../components";
 import styles from "../styles/Home.module.scss";
 
-export default function Home() {
+export async function getServerSideProps() {
+  const data = await fetch("https://fakestoreapi.com/products");
+  const products = await data.json();
+  console.log(JSON.stringify(products));
+  return {
+    props: { products },
+  };
+}
+
+export default function Home({ products }) {
+  const router = useRouter();
   return (
     <div className={styles.container}>
       <Head>
@@ -13,7 +24,20 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <div className={styles.grid}></div>
+        <div className="trending"></div>
+        <div className={styles.grid}>
+          {[...products].map((item) => {
+            return (
+              <Animation.Fade
+                key={item.title}
+                className={styles.card}
+                onClick={() => router.push(`/${item.id}`)}
+              >
+                <img src={item.image}></img>
+              </Animation.Fade>
+            );
+          })}
+        </div>
       </main>
 
       <footer className={styles.footer}>

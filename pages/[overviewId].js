@@ -1,31 +1,32 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../../redux/reducer/CartSlice";
+import { addProduct } from "../redux/reducer/CartSlice";
 import {
   ImageMagnifier,
-  CommentSection,
+  Comment,
   Checkbox,
   Container,
   ReadMoreLess,
   Rating,
   Increment,
-  Loading,
   Slider,
+  Timer,
 } from "../components";
 import { Media } from "../Layout";
-import "../styles/_overview.scss";
 
-const arrayLink = [
-  "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg",
-  "https://fakestoreapi.com/img/71pWzhdJNwL._AC_UL640_QL65_ML3_.jpg",
-  "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_.jpg",
-];
+export async function getServerSideProps({ params }) {
+  const data = await fetch(
+    `https://fakestoreapi.com/products/${params.overviewId}`
+  );
+  const product = await data.json();
+  return {
+    props: {
+      product,
+    },
+  };
+}
 
-function getServerSideProp() {}
-
-export default function Overview() {
-  const navigate = useNavigate();
+export default function Overview({ product }) {
   const [image, setImage] = useState();
   const [quantity, setQuantity] = useState(1);
   const [option, setOption] = useState();
@@ -34,31 +35,18 @@ export default function Overview() {
 
   const dispatch = useDispatch();
   const handleOrder = () => {
+    const { id, title, image, price } = product;
     dispatch(
       addProduct({
-        ...product,
+        id,
+        title,
+        image,
         quantity,
-        total: quantity * product.price,
+        price,
+        total: quantity * price,
       })
     );
-    navigate("/cart");
   };
-
-  if (loading)
-    return (
-      <>
-        <Loading
-          style={{
-            zIndex: 1000,
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: `translate(-50%,-50%)`,
-          }}
-        />
-        <Container.BackDrop />
-      </>
-    );
 
   return (
     <div className="page-overview">
@@ -69,24 +57,25 @@ export default function Overview() {
             style={{ maxWidth: "300px", height: "350px" }}
             className="product-img"
           ></ImageMagnifier>
-          <Slider
+          {/* <Slider
             config={{
               vertical: device !== Devices.phone ? true : false,
               slides: { perView: 3 },
             }}
           >
             <Slider.Content className="slider">
-              {arrayLink.map((src) => (
-                <img src={src}></img>
+              {[].map((src, index) => (
+                <img key={index} src={src}></img>
               ))}
             </Slider.Content>
-          </Slider>
+          </Slider> */}
         </div>
         <div className="product-info">
           <label>{product.title}</label>
+          <Timer value={new Date(2022, 6, 22, 4).getTime()} />
           <Container.Flex style={{ gap: "10px" }}>
             <label>Price: </label>
-            <div>{product.price}</div>
+            <div>{product.price} $</div>
           </Container.Flex>
           <Container.Flex style={{ gap: "10px" }}>
             <label>Category: </label>
@@ -96,7 +85,7 @@ export default function Overview() {
             type="radio"
             name="size"
             style={{ display: "flex", justifyContent: "space-between" }}
-            setChecked={setOption}
+            setChecked={(value) => setOption(value.join(""))}
           >
             Size:
             {["M", "L", "XL", "XXL"].map((item) => {
@@ -107,9 +96,23 @@ export default function Overview() {
               );
             })}
           </Checkbox>
-          <Container.Flex style={{ alignItems: "center", gap: "10px" }}>
-            <Increment value={quantity} setValue={setQuantity} />
-            <button className="btn-add-to-cart" onClick={handleOrder}>
+          <Container.Flex
+            style={{
+              alignItems: "center",
+              gap: "10px",
+              justifyContent: "center",
+            }}
+          >
+            <Increment
+              value={quantity}
+              setValue={setQuantity}
+              style={{ flex: 1 }}
+            />
+            <button
+              style={{ flex: 2 }}
+              className="btn-add-to-cart"
+              onClick={handleOrder}
+            >
               Order
             </button>
           </Container.Flex>
@@ -119,19 +122,7 @@ export default function Overview() {
         <Container.Flex>
           <label>Description: </label>
           <ReadMoreLess style={{ height: "150px" }}>
-            <p>
-              {product.description}
-              As we said in Part 4, a Redux middleware can do anything when it
-              sees a dispatched action: log something, modify the action, delay
-              the action, make an async call, and more. Also, since middleware
-              form a pipeline around the real store.dispatch function, this also
-              means that we could actually pass something that isn't a plain
-              action object to dispatch, as long as a middleware intercepts that
-              value and doesn't let it reach the reducers. Middleware also have
-              access to dispatch and getState. That means you could write some
-              async logic in a middleware, and still have the ability to
-              interact with the Redux store by dispatching actions.
-            </p>
+            <p>{product.description}</p>
           </ReadMoreLess>
         </Container.Flex>
       </div>
@@ -139,7 +130,7 @@ export default function Overview() {
         <Rating rated={4} />
         <div className="count">{product.rating.count}</div>
       </div>
-      <CommentSection url={"https://jsonplaceholder.typicode.com/comments"} />
+      <Comment url={"https://jsonplaceholder.typicode.com/comments"} />
     </div>
   );
 }

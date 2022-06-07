@@ -1,0 +1,15 @@
+.wrapper{
+  display: flex;
+  gap: 6px;
+  > .unit{
+    padding: 4px;
+    border-radius: 6px;
+    background-color: orangered;
+    color: white;
+  }
+  > .seperate{
+    padding: 3px;
+    border-radius: 6px;
+    background-color: grey;
+  }
+}
