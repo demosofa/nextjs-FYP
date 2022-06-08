@@ -1,5 +1,5 @@
 @import "../../styles/mixin.scss";
-.set-quantity {
+.set_quantity {
   @include flex(0, row, center);
   & > .quantity{
     width: 60px;

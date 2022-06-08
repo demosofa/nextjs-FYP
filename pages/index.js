@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { Animation } from "../components";
 import styles from "../styles/Home.module.scss";
 
@@ -14,7 +14,6 @@ export async function getServerSideProps() {
 }
 
 export default function Home({ products }) {
-  const router = useRouter();
   return (
     <div className={styles.container}>
       <Head>
@@ -28,13 +27,14 @@ export default function Home({ products }) {
         <div className={styles.grid}>
           {[...products].map((item) => {
             return (
-              <Animation.Fade
-                key={item.title}
-                className={styles.card}
-                onClick={() => router.push(`/${item.id}`)}
-              >
-                <img src={item.image}></img>
-              </Animation.Fade>
+              <Link href={`overview/${item.id}`}>
+                <Animation.Fade key={item.title} className={styles.card}>
+                  <div>
+                    <img src={item.image}></img>
+                    <span>{item.title}</span>
+                  </div>
+                </Animation.Fade>
+              </Link>
             );
           })}
         </div>

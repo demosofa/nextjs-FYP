@@ -12,16 +12,19 @@ export default function Navbar({ apis = [{ title: "", link: "" }] }) {
         <Search />
       </div>
       <div className={styles.bar}>
-        {apis.map((api, index) => (
-          <Link key={index} href={api.link}>
-            {api.title}
-          </Link>
-        ))}
+        {apis.map(
+          (api, index) =>
+            api.title && (
+              <Link key={index} href={api.link}>
+                {api.title}
+              </Link>
+            )
+        )}
       </div>
       <div className={styles.bar}>
         <Link href="/login">Login</Link>
         <Link href="/register">Register</Link>
-        <Link href="/customer/cart">
+        <Link href="/overview/cart">
           <Badge value={cart.products.length}>
             <AiOutlineShoppingCart />
           </Badge>

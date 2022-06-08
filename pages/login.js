@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Form } from "../components";
 import { Validate } from "../utils";
-import "../styles/login.scss";
 
 export default function Login() {
   const [input, setInput] = useState({

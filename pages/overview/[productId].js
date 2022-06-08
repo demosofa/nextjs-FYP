@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../redux/reducer/CartSlice";
+import { addProduct } from "../../redux/reducer/CartSlice";
 import {
   ImageMagnifier,
   Comment,
@@ -11,12 +11,12 @@ import {
   Increment,
   Slider,
   Timer,
-} from "../components";
-import { Media } from "../Layout";
+} from "../../components";
+import { Media } from "../../Layout";
 
 export async function getServerSideProps({ params }) {
   const data = await fetch(
-    `https://fakestoreapi.com/products/${params.overviewId}`
+    `https://fakestoreapi.com/products/${params.productId}`
   );
   const product = await data.json();
   return {

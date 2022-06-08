@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AiOutlinePlusSquare, AiOutlineMinusSquare } from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { Icon } from "../";
 import styles from "./increment.module.scss";
 
@@ -15,7 +15,7 @@ export default function Increment({
   return (
     <div className={styles.set_quantity} {...props}>
       <Icon style={{ width: "50px", height: "50px" }}>
-        <AiOutlineMinusSquare
+        <AiOutlineMinus
           className={`${styles.btn} ${styles.descrease}`}
           onClick={() =>
             setQuantity((prev) => {
@@ -23,20 +23,16 @@ export default function Increment({
               return prev;
             })
           }
-        >
-          -
-        </AiOutlineMinusSquare>
+        />
       </Icon>
 
       <div className={styles.quantity}>{quantity}</div>
 
       <Icon style={{ width: "50px", height: "50px" }}>
-        <AiOutlinePlusSquare
+        <AiOutlinePlus
           className={`${styles.btn} ${styles.increase}`}
           onClick={() => setQuantity(quantity + 1)}
-        >
-          +
-        </AiOutlinePlusSquare>
+        />
       </Icon>
     </div>
   );

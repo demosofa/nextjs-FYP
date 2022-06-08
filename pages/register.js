@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Checkbox, Form, Slider } from "../components";
 import { Validate } from "../utils";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "./styles/login.scss";
+import { useRouter } from "next/router";
 
 export default function Register() {
   const [info, setInfo] = useState({
@@ -99,6 +98,8 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
       >
         <Form.Title>Gender</Form.Title>
         <Checkbox
+          type="radio"
+          name="gender"
           style={{
             display: "flex",
             border: "none",
@@ -112,14 +113,10 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           }
         >
           <div>
-            <Checkbox.Item type="radio" name="gender" value="male">
-              Male
-            </Checkbox.Item>
+            <Checkbox.Item value="male">Male</Checkbox.Item>
           </div>
           <div>
-            <Checkbox.Item type="radio" name="gender" value="female">
-              Female
-            </Checkbox.Item>
+            <Checkbox.Item value="female">Female</Checkbox.Item>
           </div>
         </Checkbox>
       </Form.Item>

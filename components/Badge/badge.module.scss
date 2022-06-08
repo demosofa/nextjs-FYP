@@ -1,4 +1,4 @@
-.badge-container {
+.badge_container {
   position: relative;
 
   > .badge{
@@ -13,5 +13,8 @@
     background-color: blue;
     border-radius: 50%;
     font-size: 13px;
+  }
+  &:hover {
+    cursor: pointer;
   }
 }
