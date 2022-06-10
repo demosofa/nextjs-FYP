@@ -25,9 +25,11 @@ export default function Navbar({ apis = [{ title: "", link: "" }] }) {
         <Link href="/login">Login</Link>
         <Link href="/register">Register</Link>
         <Link href="/overview/cart">
-          <Badge value={cart.products.length}>
-            <AiOutlineShoppingCart />
-          </Badge>
+          <a>
+            <Badge value={cart.products.length}>
+              <AiOutlineShoppingCart />
+            </Badge>
+          </a>
         </Link>
       </div>
     </div>

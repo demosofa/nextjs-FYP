@@ -1,4 +1,4 @@
-const { Role } = require("../helpers");
+const Role = require("../helpers/Role");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -13,7 +13,7 @@ const Account = new Schema(
     role: {
       type: String,
       default: "user",
-      enum: [Role.admin, Role.seller, Role.shipper, Role.user],
+      enum: [Role.admin, Role.vendor, Role.shipper, Role.guest, Role.manager],
     },
   },
   { timestamps: true }

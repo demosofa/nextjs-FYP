@@ -27,13 +27,15 @@ export default function Home({ products }) {
         <div className={styles.grid}>
           {[...products].map((item) => {
             return (
-              <Link href={`overview/${item.id}`}>
-                <Animation.Fade key={item.title} className={styles.card}>
-                  <div>
-                    <img src={item.image}></img>
-                    <span>{item.title}</span>
-                  </div>
-                </Animation.Fade>
+              <Link href={`/overview/${item.id}`}>
+                <a>
+                  <Animation.Fade key={item.title} className={styles.card}>
+                    <div>
+                      <img src={item.image}></img>
+                      <span>{item.title}</span>
+                    </div>
+                  </Animation.Fade>
+                </a>
               </Link>
             );
           })}

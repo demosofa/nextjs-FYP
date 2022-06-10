@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
 import { Animation, Icon, Increment } from "../../components";
-import { addProduct, removeProduct } from "../../redux/reducer/CartSlice";
+import { addProduct, removeProduct } from "../../redux/reducer/cartSlice";
 
 export default function Cart() {
   const cartState = useSelector((state) => {

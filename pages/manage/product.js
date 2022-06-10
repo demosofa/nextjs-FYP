@@ -11,7 +11,7 @@ import {
 } from "../../components";
 import { Validate } from "../../utils";
 
-export function getServerSideProp() {
+export function getStaticProps() {
   const datas = fetch(`${process.env.MONGO_URL_LOCAL}/api/productcrud`).then(
     (data) => data.json()
   );
