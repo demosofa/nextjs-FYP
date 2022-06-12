@@ -11,18 +11,17 @@ import {
 } from "../../components";
 import { Validate } from "../../utils";
 
-export function getStaticProps() {
-  const datas = fetch(`${process.env.MONGO_URL_LOCAL}/api/productcrud`).then(
-    (data) => data.json()
-  );
+export async function getServerSideProps() {
+  const datas = await fetch(`http://localhost:3000/api/productcrud`);
+  const value = await datas.json();
   return {
     props: {
-      datas,
+      value,
     },
   };
 }
 
-export default function ProductCRUD({ datas }) {
+export default function ProductCRUD({ value }) {
   const [products, setProducts] = useState([
     {
       id: "",

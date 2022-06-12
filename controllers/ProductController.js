@@ -2,12 +2,6 @@ const Product = require("../models/Product");
 import getProduct from "./actions/getProduct";
 import parseForm from "./actions/parseForm";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 const read = async (req, res) => {
   const product = await getProduct(req.query.id);
   if (!product) res.status(404).json({ errorMessage: "Not Found" });
@@ -15,7 +9,9 @@ const read = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const result = await parseForm(req); //Get Warning
+  let result;
+  parseForm(req).then((obj) => (result = obj));
+  console.log(result); //Get Warning
   // const check = await getProduct(result.fields.title, "title");
   // if (!check) {
   //   res
@@ -27,7 +23,6 @@ const create = async (req, res) => {
   //   res.status(200).json({ message: `Success create ${value}` });
   // }
   res.status(200).json({ message: "Success Create Product" });
-  return;
 };
 
 const update = async (req, res) => {
