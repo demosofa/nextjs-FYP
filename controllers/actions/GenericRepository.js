@@ -1,27 +1,27 @@
 const mongoose = require("mongoose");
 
-export default class IItemData {
+export default class GenericRepository {
   constructor(type) {
-    this.ItemData = mongoose.models[type];
+    this.entity = mongoose.models[type];
   }
   async getOne(value, prop = "id") {
-    return await this.ItemData.findOne({ [prop]: value }).exec();
+    return await this.entity.findOne({ [prop]: value }).exec();
   }
   async getAll(aggregate = []) {
     return new Promise(async (resolve, reject) => {
-      const itemdata = await this.ItemData.aggregate(aggregate).exec();
+      const itemdata = await this.entity.aggregate(aggregate).exec();
       if (!itemdata) reject(null);
       resolve(itemdata);
     });
   }
   async create(data) {
     const check = await this.get(data.id);
-    if (!check) await this.ItemData.create(data);
+    if (!check) await this.entity.create(data).exec();
   }
   async updateOne(condition, data) {
-    await this.ItemData.updateOne(condition, data);
+    await this.entity.updateOne(condition, data).exec();
   }
   async deleteOne(value, prop = "id") {
-    await this.ItemData.deleteOne({ [prop]: value });
+    await this.entity.deleteOne({ [prop]: value }).exec();
   }
 }
