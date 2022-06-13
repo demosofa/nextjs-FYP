@@ -8,7 +8,6 @@ export default function parseForm(req) {
   });
   return new Promise((resolve, reject) => {
     form.parse(req, (error, fields, files) => {
-      console.log(fields);
       if (error) reject(error);
       resolve({ fields, files });
     });

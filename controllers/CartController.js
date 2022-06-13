@@ -1,11 +1,11 @@
 import UnitOfWork from "./actions/UnitOfWork";
 
-class CartController extends UnitOfWork {
+class CartController {
   constructor() {
-    super();
+    this.unit = new UnitOfWork();
   }
 
   get() {
-    this.Cart.getOne();
+    this.unit.Cart.getOne();
   }
 }

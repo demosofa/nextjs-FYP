@@ -15,7 +15,7 @@ export default class GenericRepository {
     });
   }
   async create(data) {
-    const check = await this.get(data.id);
+    const check = await this.getOne(data.id);
     if (!check) await this.entity.create(data).exec();
   }
   async updateOne(condition, data) {

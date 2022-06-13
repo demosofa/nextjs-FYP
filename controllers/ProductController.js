@@ -1,43 +1,69 @@
-const Product = require("../models/Product");
-import getProduct from "./actions/getProduct";
 import parseForm from "./actions/parseForm";
+import UnitOfWork from "./actions/UnitOfWork";
 
-const read = async (req, res) => {
-  const product = await getProduct(req.query.id);
-  if (!product) res.status(404).json({ errorMessage: "Not Found" });
-  res.status(200).json({ ...product });
-};
-
-const create = async (req, res) => {
-  let result;
-  parseForm(req).then((obj) => (result = obj));
-  console.log(result); //Get Warning
-  // const check = await getProduct(result.fields.title, "title");
-  // if (!check) {
-  //   res
-  //     .status(500)
-  //     .json({ errorMessage: `Product already has ${result.fields.title}` });
-  // }
-  // const product = Product.create({ ...result.fields, files: result.files });
-  // if (!product) {
-  //   res.status(200).json({ message: `Success create ${value}` });
-  // }
-  res.status(200).json({ message: "Success Create Product" });
-};
-
-const update = async (req, res) => {
-  const result = parseForm(req);
-  const check = await getProduct(result.fields.title, "title");
-  if (!check) {
-    res.status(404).json({ errorMessage: "Not found" });
+class ProductController {
+  constructor() {
+    this.unit = new UnitOfWork();
   }
-  const updated = await Product.updateOne(
-    { _id: req.query.id },
-    { ...result.fields, files: result.files }
-  );
-  res.status(200).json({ successMessage: "Success Update" });
-};
 
-const remove = (req, res) => {};
+  async read(req, res) {
+    const product = await this.unit.Product.getOne(req.query.id);
+    if (!product) res.status(404).json({ errorMessage: "Not Found" });
+    res.status(200).json({ ...product });
+  }
 
-export default { read, create, update, remove };
+  async create(req, res) {
+    let result;
+    await parseForm(req).then((obj) => (result = obj));
+    if (!result) {
+      res.status(500).json({ errorMessage: `Fail to load file` });
+      return;
+    }
+    const check = await this.unit.Product.getOne(result.fields.title, "title");
+    if (check) {
+      res
+        .status(500)
+        .json({ errorMessage: `Product already has ${result.fields.title}` });
+      return;
+    }
+    const product = await this.unit.Product.create({
+      ...result.fields,
+      files: result.files.files.map((file) => file.name),
+    });
+    if (!product) {
+      res.status(500).json({ message: `Fail to create collection` });
+      return;
+    }
+    res.status(200).json({ message: "Success Create Product" });
+  }
+
+  async update(req, res) {
+    let result;
+    await parseForm(req).then((obj) => (result = obj));
+    if (!result) {
+      res.status(500).json({ errorMessage: `Fail to load file` });
+      return;
+    }
+    const check = await this.unit.Product.getOne(result.fields.title, "title");
+    if (check) {
+      res
+        .status(500)
+        .json({ errorMessage: `Product already has ${result.fields.title}` });
+      return;
+    }
+    const product = await this.unit.Product.updateOne(
+      { id: result.fields.id },
+      {
+        ...result.fields,
+        files: result.files.files.map((file) => file.name),
+      }
+    );
+    if (!product) {
+      res.status(500).json({ message: `Fail to update collection` });
+      return;
+    }
+    res.status(200).json({ message: "Success update Product" });
+  }
+}
+
+export default new ProductController();

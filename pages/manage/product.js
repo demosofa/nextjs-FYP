@@ -139,7 +139,6 @@ function CreateEditForm({ product, setProducts, index = null, setToggle }) {
       let key = field[0];
       const value = field[1];
       if (value instanceof Array) {
-        key = key + "[]";
         for (var i = 0; i < value.length; i++) {
           formdata.append(key, value[i]);
         }
