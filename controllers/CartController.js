@@ -1,4 +1,4 @@
-import UnitOfWork from "./actions/UnitOfWork";
+import UnitOfWork from "./services/UnitOfWork";
 
 class CartController {
   constructor() {

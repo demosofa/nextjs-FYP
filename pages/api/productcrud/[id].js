@@ -3,9 +3,7 @@ import dbConnect from "../../../helpers/dbConnect";
 
 export const config = {
   api: {
-    bodyParser: {
-      sizeLimit: "5mb",
-    },
+    bodyParser: false,
   },
 };
 

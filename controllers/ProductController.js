@@ -1,5 +1,5 @@
-import parseForm from "./actions/parseForm";
-import UnitOfWork from "./actions/UnitOfWork";
+import parseForm from "./services/parseForm";
+import UnitOfWork from "./services/UnitOfWork";
 
 class ProductController {
   constructor() {
