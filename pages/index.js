@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Animation } from "../components";
 import styles from "../styles/Home.module.scss";
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const data = await fetch("https://fakestoreapi.com/products");
   const products = await data.json();
-  console.log(JSON.stringify(products));
+  console.log(process.env.MONGO_URL_LOCAL);
   return {
     props: { products },
   };

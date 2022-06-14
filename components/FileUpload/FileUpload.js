@@ -8,7 +8,7 @@ import {
   useCallback,
 } from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { Animation } from "../";
+import { Animation, Loading } from "../";
 import styles from "./FileUpload.module.css";
 
 const Kits = createContext();
@@ -64,21 +64,21 @@ export default function FileUpload({
 FileUpload.Input = function InputUpload({ children, ...props }) {
   const { getFiles } = useContext(Kits);
   const handleInput = (e) => {
+    e.stopPropagation();
     getFiles(e.target.files);
   };
   return (
-    <div className={styles.input_file}>
+    <>
       <input
         type="file"
         onChange={handleInput}
         onClick={(event) => {
           event.target.value = null;
         }}
-        multiple
         {...props}
       ></input>
       {children}
-    </div>
+    </>
   );
 };
 
@@ -114,9 +114,12 @@ FileUpload.Show = function ShowFiles({ children, ...props }) {
   const [loading, setLoading] = useState(false);
 
   const handleOpenPreview = (e, index) => {
+    e.stopPropagation();
     if (e.detail > 1) {
       const popup = window.open("", files[index].name);
-      popup.document.write(`<iframe src="${previews[index]}"/>`);
+      popup.document.write(
+        `<iframe src="${previews[index]}" frameborder="0" style="overflow:hidden;height:100%;width:100%" height="100%" width="100%"/>`
+      );
       popup.document.close();
     }
   };
@@ -151,14 +154,18 @@ FileUpload.Show = function ShowFiles({ children, ...props }) {
   }, [files]);
 
   return (
-    <div className={styles.show_file} {...props}>
-      {loading && <div>Loading....</div>}
-      <Animation.Fade>
+    <>
+      {loading && (
+        <div className={styles.hero}>
+          <Loading />
+        </div>
+      )}
+      <Animation.Fade className={styles.preview} {...props}>
         {previews.map((preview, index) => {
           return (
             <div
               key={files[index].name}
-              className={styles.preview}
+              style={{ width: "100%", height: "100%" }}
               onClick={(e) => handleOpenPreview(e, index)}
             >
               <span>{files[index].name}</span>
@@ -181,6 +188,7 @@ FileUpload.Show = function ShowFiles({ children, ...props }) {
           );
         })}
       </Animation.Fade>
-    </div>
+      {children}
+    </>
   );
 };

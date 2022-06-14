@@ -12,6 +12,11 @@
   --blue-shade-two: #e5f1ff;
   --blue-shade-three: #2e8eff;
 }
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   padding: 0;
@@ -25,6 +30,14 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+.add_file__btn{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: var(--blue-shade-one);
+  border: 2px solid var(--blue-shade-one);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
