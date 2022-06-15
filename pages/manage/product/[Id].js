@@ -11,6 +11,8 @@ import {
 } from "../../../components";
 import { Validate } from "../../../utils";
 
+const Api = process.env.LOCAL_API;
+
 export async function getServerSideProps({ params }) {
   let product = null;
   const id = params.Id;
@@ -20,7 +22,7 @@ export async function getServerSideProps({ params }) {
         product,
       },
     };
-  const data = await fetch(`http://localhost/api/productcrud/${id}`);
+  const data = await fetch(`${Api}/productcrud/${id}`);
   product = await data.json();
   return {
     props: {
@@ -65,7 +67,7 @@ export default function CreateEditForm({ product }) {
     try {
       if (product === null) {
         axios
-          .post(`http://localhost:3000/api/productcrud`, formdata, {
+          .post(`${Api}/productcrud`, formdata, {
             headers: {
               // Authorization: `Bearer`,
               "Content-type": "multipart/form-data",
@@ -76,7 +78,7 @@ export default function CreateEditForm({ product }) {
           });
       } else {
         axios
-          .put(`http://localhost:3000/api/productcrud/${input.id}`, formdata, {
+          .put(`${Api}/productcrud/${input.id}`, formdata, {
             headers: {
               // Authorization: `Bearer`,
               "Content-type": "multipart/form-data",
@@ -93,11 +95,12 @@ export default function CreateEditForm({ product }) {
       className="create_edit"
       onSubmit={handleSubmit}
       onClick={(e) => e.stopPropagation()}
-      style={{ maxWidth: "none" }}
+      style={{ "max-width": "none", width: "auto", margin: "0 20%" }}
     >
       <Form.Title style={{ fontSize: "20px" }}>
         {product === null ? "Create Product" : `Edit Prodcut`}
       </Form.Title>
+
       <Form.Item>
         <Form.Title>Title</Form.Title>
         <Form.Input
@@ -109,6 +112,7 @@ export default function CreateEditForm({ product }) {
           }
         />
       </Form.Item>
+
       <Form.Item>
         <Form.Title>Description</Form.Title>
         <Form.TextArea
@@ -120,6 +124,22 @@ export default function CreateEditForm({ product }) {
           }
         />
       </Form.Item>
+
+      <Form.Item>
+        <Form.Title>Status</Form.Title>
+        <Form.Select
+          onChange={(e) =>
+            setInput((prev) => {
+              return { ...prev, status: e.target.value };
+            })
+          }
+        >
+          <Form.Option value="active">active</Form.Option>
+          <Form.Option value="non-active">non-active</Form.Option>
+          <Form.Option value="out">out</Form.Option>
+        </Form.Select>
+      </Form.Item>
+
       <Form.Item style={{ justifyContent: "flex-start" }}>
         <Form.Title style={{ marginBottom: 0 }}>Tags</Form.Title>
         <TagsInput
@@ -131,6 +151,7 @@ export default function CreateEditForm({ product }) {
           }
         />
       </Form.Item>
+
       <FileUpload
         prevFiles={input.files}
         setPrevFiles={(files) =>
@@ -152,6 +173,7 @@ export default function CreateEditForm({ product }) {
           </label>
         </FileUpload.Input>
       </FileUpload>
+
       <Form.Item>
         <Form.Item>
           <Form.Title>Price</Form.Title>
@@ -164,6 +186,7 @@ export default function CreateEditForm({ product }) {
             }
           />
         </Form.Item>
+
         <Form.Item>
           <Form.Title>Quantity</Form.Title>
           <Form.Input
@@ -176,6 +199,7 @@ export default function CreateEditForm({ product }) {
           />
         </Form.Item>
       </Form.Item>
+
       <Form.Item style={{ justifyContent: "flex-start" }}>
         <Form.Submit>Submit</Form.Submit>
         <Form.Button onClick={() => setToggle(null)}>Cancel</Form.Button>

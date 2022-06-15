@@ -2,14 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import { cart } from "./reducer";
 import CartStorage from "./middleware/CartStorage";
 import AuthStorage from "./middleware/AuthStorage";
+import { expireStorage } from "../utils";
 
 function loadState(name) {
   try {
-    const serializedState = localStorage.getItem(name);
+    const serializedState = expireStorage.getItem(name);
     if (serializedState === null) {
       return undefined;
     }
-    return JSON.parse(serializedState);
+    return serializedState;
   } catch (err) {
     return undefined;
   }

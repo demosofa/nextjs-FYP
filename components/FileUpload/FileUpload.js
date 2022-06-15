@@ -168,7 +168,6 @@ FileUpload.Show = function ShowFiles({ children, ...props }) {
               style={{ width: "100%", height: "100%" }}
               onClick={(e) => handleOpenPreview(e, index)}
             >
-              <span>{files[index].name}</span>
               <div className={styles.img_container}>
                 <img
                   alt="Preview"
@@ -184,6 +183,7 @@ FileUpload.Show = function ShowFiles({ children, ...props }) {
                   }
                 ></AiOutlineClose>
               </div>
+              <span>{files[index].name}</span>
             </div>
           );
         })}

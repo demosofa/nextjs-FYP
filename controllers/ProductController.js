@@ -8,8 +8,20 @@ class ProductController {
 
   async read(req, res) {
     const product = await this.unit.Product.getOne(req.query.id);
-    if (!product) res.status(404).json({ errorMessage: "Not Found" });
+    if (!product) {
+      res.status(404).json({ errorMessage: "Not Found" });
+      return;
+    }
     res.status(200).json({ ...product });
+  }
+
+  async readAll(req, res) {
+    const products = await this.unit.Product.getAll();
+    if (!products) {
+      res.status(404).json({ errorMessage: "Not Found" });
+      return;
+    }
+    res.status(200).json({ ...products });
   }
 
   async create(req, res) {
