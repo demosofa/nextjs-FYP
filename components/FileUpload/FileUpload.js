@@ -16,6 +16,7 @@ const Kits = createContext();
 export default function FileUpload({
   prevFiles = [],
   setPrevFiles = new Function(),
+  limitFiles = 10,
   maxByMB = 5,
   children,
   ...props
@@ -40,7 +41,9 @@ export default function FileUpload({
 
   const getFiles = useCallback(
     (newFiles) => {
-      for (var i = 0; i < newFiles.length; i++) {
+      let length = Math.min(limitFiles - files.length, newFiles.length);
+      console.log(length);
+      for (var i = 0; i < length; i++) {
         setFiles((prev) => {
           let currentFile = newFiles[i];
           if (!isOverSize(prev, currentFile) && !isExist(prev, currentFile))
@@ -52,8 +55,10 @@ export default function FileUpload({
     [files]
   );
 
+  useEffect(() => setPrevFiles(files), [files]);
+
   return (
-    <Kits.Provider value={{ files, setFiles, setPrevFiles, getFiles }}>
+    <Kits.Provider value={{ files, setFiles, getFiles }}>
       <div className={styles.drop_zone} {...props}>
         {Children.toArray(children).map((child) => child)}
       </div>
@@ -107,9 +112,10 @@ FileUpload.Drag = function DragUpload({ children, ...props }) {
   );
 };
 
-FileUpload.Show = function ShowFiles({ children, ...props }) {
-  const { files, setFiles, setPrevFiles } = useContext(Kits);
+FileUpload.Show = function ShowFiles({ children, animate = "Fade", ...props }) {
+  const { files, setFiles } = useContext(Kits);
   const run = useRef(true);
+  const Animate = useRef(Animation[animate]);
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -150,7 +156,6 @@ FileUpload.Show = function ShowFiles({ children, ...props }) {
       .then((files) => run.current && setPreviews(files))
       .then(() => setLoading(false))
       .then(() => (run.current = true));
-    setPrevFiles(files);
   }, [files]);
 
   return (
@@ -160,7 +165,7 @@ FileUpload.Show = function ShowFiles({ children, ...props }) {
           <Loading />
         </div>
       )}
-      <Animation.Fade className={styles.preview} {...props}>
+      <Animate.current className={styles.preview} {...props}>
         {previews.map((preview, index) => {
           return (
             <div
@@ -187,7 +192,7 @@ FileUpload.Show = function ShowFiles({ children, ...props }) {
             </div>
           );
         })}
-      </Animation.Fade>
+      </Animate.current>
       {children}
     </>
   );

@@ -16,7 +16,7 @@ const Product = new Schema(
         required: true,
       },
     ],
-    inventory: { type: Number, required: true },
+    quantity: { type: Number, required: true },
     option: { type: String, required: true },
     price: { type: Number, required: true },
   },
