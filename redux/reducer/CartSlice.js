@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import pushCart from "../async/pushCart";
 
 const initialState = {
   products: [],
@@ -36,6 +37,10 @@ const cart = createSlice({
         state.products.reduce((prev, curr) => prev + curr.total, 0)
       );
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(pushCart.fulfilled, (state, action) => {});
+    builder.addCase(pushCart.rejected, (state, action) => {});
   },
 });
 

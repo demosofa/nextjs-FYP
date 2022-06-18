@@ -12,7 +12,7 @@ import {
 import { Validate } from "../../../utils";
 import { useUpload } from "../../../hooks";
 
-const Api = process.env.LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export async function getServerSideProps({ params }) {
   let product = null;
@@ -23,7 +23,7 @@ export async function getServerSideProps({ params }) {
         product,
       },
     };
-  const data = await fetch(`${Api}/productcrud/${id}`);
+  const data = await fetch(`${LocalApi}/productcrud/${id}`);
   product = await data.json();
   return {
     props: {
@@ -39,8 +39,9 @@ export default function CreateEditForm({ product }) {
       id: "",
       title: "",
       description: "",
+      variants: [{ name: "", options: [] }],
       thumbnail: [],
-      category: "",
+      categories: "",
       tags: [],
       files: [],
       price: 0,
@@ -74,14 +75,13 @@ export default function CreateEditForm({ product }) {
         }
       } else formdata.append(key, value);
     });
-    formdata.append("status", "non-active");
     // for (var pair of formdata.entries()) {
     //   console.log(pair[0] + ", " + pair[1]);
     // }
     try {
       if (product === null) {
         axios
-          .post(`${Api}/productcrud`, formdata, {
+          .post(`${LocalApi}/productcrud`, formdata, {
             headers: {
               // Authorization: `Bearer`,
               "Content-type": "multipart/form-data",
@@ -92,7 +92,7 @@ export default function CreateEditForm({ product }) {
           });
       } else {
         axios
-          .put(`${Api}/productcrud/${input.id}`, formdata, {
+          .put(`${LocalApi}/productcrud/${input.id}`, formdata, {
             headers: {
               // Authorization: `Bearer`,
               "Content-type": "multipart/form-data",
@@ -162,9 +162,7 @@ export default function CreateEditForm({ product }) {
               <Form.Input
                 value={input.title}
                 onChange={(e) =>
-                  setInput((prev) => {
-                    return { ...prev, title: e.target.value };
-                  })
+                  setInput((prev) => ({ ...prev, title: e.target.value }))
                 }
               />
             </Form.Item>
@@ -175,9 +173,7 @@ export default function CreateEditForm({ product }) {
             <Form.TextArea
               value={input.description}
               onChange={(e) =>
-                setInput((prev) => {
-                  return { ...prev, description: e.target.value };
-                })
+                setInput((prev) => ({ ...prev, description: e.target.value }))
               }
             />
           </Form.Item>
@@ -185,9 +181,7 @@ export default function CreateEditForm({ product }) {
           <FileUpload
             prevFiles={input.files}
             setPrevFiles={(files) =>
-              setInput((prev) => {
-                return { ...prev, files: files };
-              })
+              setInput((prev) => ({ ...prev, files: files }))
             }
             style={{ maxWidth: "500px", height: "200px" }}
           >
@@ -213,9 +207,7 @@ export default function CreateEditForm({ product }) {
             <Form.Title>Status</Form.Title>
             <Form.Select
               onChange={(e) =>
-                setInput((prev) => {
-                  return { ...prev, status: e.target.value };
-                })
+                setInput((prev) => ({ ...prev, status: e.target.value }))
               }
             >
               <Form.Option value="active">active</Form.Option>
@@ -229,9 +221,7 @@ export default function CreateEditForm({ product }) {
             <Form.Input
               value={input.price}
               onChange={(e) =>
-                setInput((prev) => {
-                  return { ...prev, price: e.target.value };
-                })
+                setInput((prev) => ({ ...prev, price: e.target.value }))
               }
             />
           </Form.Item>
@@ -241,9 +231,7 @@ export default function CreateEditForm({ product }) {
             <Form.Input
               value={input.quantity}
               onChange={(e) =>
-                setInput((prev) => {
-                  return { ...prev, quantity: e.target.value };
-                })
+                setInput((prev) => ({ ...prev, quantity: e.target.value }))
               }
             />
           </Form.Item>
@@ -253,9 +241,7 @@ export default function CreateEditForm({ product }) {
             <TagsInput
               prevTags={input.tags}
               setPrevTags={(tags) =>
-                setInput((prev) => {
-                  return { ...prev, tags: tags };
-                })
+                setInput((prev) => ({ ...prev, tags: tags }))
               }
             />
           </Form.Item>

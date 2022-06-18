@@ -17,7 +17,7 @@ export default class GenericRepository<T> implements IGenericRepository<T> {
   }
   async create(data: any) {
     const check = await this.getOne(data.id);
-    if (!check) await this.context.create(data).exec();
+    if (!check) await this.context.create(data);
   }
   async updateOne(data: T, condition: Object) {
     await this.context.updateOne(condition, data).exec();

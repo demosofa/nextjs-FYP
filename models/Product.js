@@ -17,7 +17,7 @@ const Product = new Schema(
       },
     ],
     quantity: { type: Number, required: true },
-    option: { type: String, required: true },
+    variants: [{ type: Schema.Types.ObjectId, ref: "Variant", required: true }],
     price: { type: Number, required: true },
   },
   { timestamps: true }

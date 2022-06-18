@@ -42,6 +42,7 @@ class ProductController {
       ...result.fields,
       files: result.files.files.map((file) => file.name),
     });
+    console.log(product);
     if (!product) {
       res.status(500).json({ message: `Fail to create collection` });
       return;

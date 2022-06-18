@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { cart } from "./reducer";
+import { productApi } from "./api";
 import CartStorage from "./middleware/CartStorage";
 import AuthStorage from "./middleware/AuthStorage";
 import { expireStorage } from "../utils";
@@ -18,8 +19,12 @@ function loadState(name) {
 
 export const store = configureStore({
   devTools: true,
-  reducer: { cart },
+  reducer: { cart, [productApi.reducerPath]: productApi.reducer },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([CartStorage, AuthStorage]),
+    getDefaultMiddleware().concat([
+      CartStorage,
+      AuthStorage,
+      productApi.middleware,
+    ]),
   preloadedState: { cart: loadState("CartStorage") },
 });

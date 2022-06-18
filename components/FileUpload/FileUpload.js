@@ -42,7 +42,6 @@ export default function FileUpload({
   const getFiles = useCallback(
     (newFiles) => {
       let length = Math.min(limitFiles - files.length, newFiles.length);
-      console.log(length);
       for (var i = 0; i < length; i++) {
         setFiles((prev) => {
           let currentFile = newFiles[i];
