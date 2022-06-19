@@ -16,8 +16,12 @@ export default async function (req, res) {
     case "put":
       product.update(req, res);
       break;
+    case "patch":
+      product.update(req, res);
+      break;
     case "delete":
       product.remove(req, res);
       break;
   }
+  res.end();
 }

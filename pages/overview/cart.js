@@ -3,16 +3,30 @@ import { IoIosClose } from "react-icons/io";
 import { Animation, Icon, Increment } from "../../components";
 import { addProduct, removeProduct } from "../../redux/reducer/cartSlice";
 
+const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+
+export async function getServerSideProps() {
+  const response = await fetch(`${LocalApi}/cart/2`, {
+    method: "GET",
+  });
+  const data = await response.json();
+  return {
+    props: data,
+  };
+}
+
 export default function Cart() {
   const cartState = useSelector((state) => {
     // console.log(state);
     return state.cart;
   });
+  const check = typeof window !== "undefined" ? cartState : cartState;
+  console.log(check);
   const dispatch = useDispatch();
   return (
     <div className="cart__container">
       <div className="cart__lst">
-        {cartState.products.map((item) => (
+        {cartState?.products.map((item) => (
           <Animation.Zoom key={item.title}>
             <div className="cart__product">
               <div className="cart__product__info">

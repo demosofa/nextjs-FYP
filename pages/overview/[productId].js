@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../../redux/reducer/CartSlice";
+import { addProduct } from "../../redux/reducer/cartSlice";
 import {
   ImageMagnifier,
   Comment,

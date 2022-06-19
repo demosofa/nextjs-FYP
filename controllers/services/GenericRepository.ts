@@ -15,14 +15,13 @@ export default class GenericRepository<T> implements IGenericRepository<T> {
       resolve(itemdata);
     });
   }
-  async create(data: any) {
-    const check = await this.getOne(data.id);
-    if (!check) await this.context.create(data);
+  async create(data: T) {
+    return this.context.create(data);
   }
-  async updateOne(data: T, condition: Object) {
-    await this.context.updateOne(condition, data).exec();
+  async updateById(id: string, data: T) {
+    return this.context.updateOne({_id: id}, data).exec();
   }
   async deleteOne(value: string, prop = "id") {
-    await this.context.deleteOne({ [prop]: value }).exec();
+    return this.context.deleteOne({ [prop]: value }).exec();
   }
 }

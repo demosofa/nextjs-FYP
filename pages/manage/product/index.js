@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { Pagination, Container, Search } from "../../../components";
 
+const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+
 export async function getServerSideProps() {
   const datas = await fetch(`http://localhost:3000/api/productcrud`);
   const value = await datas.json();
@@ -17,16 +19,27 @@ export default function ProductCRUD({ value }) {
   const [products, setProducts] = useState([
     {
       id: "",
+      thumbnail: [],
       title: "T-shirt",
-      description: "its type of shirt",
-      tags: ["shirt"],
-      files: [],
+      status: "active",
       price: 2000,
       quantity: 40,
     },
   ]);
   const [remove, setRemove] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const handleStatus = async (e, index) => {
+    setProducts((prev) => {
+      let target = prev.concat();
+      target[index].status = e.target.value;
+      return target;
+    });
+    await axios.patch(`${LocalApi}/cart/${products[index].id}`, {
+      status: e.target.value,
+    });
+  };
+
   const router = useRouter();
   return (
     <div className="product-crud__container">
@@ -39,10 +52,9 @@ export default function ProductCRUD({ value }) {
           <thead>
             <tr>
               <th>No.</th>
+              <th>Thumbnail</th>
               <th>Title</th>
-              <th>Description</th>
-              <th>Tags</th>
-              <th>Files</th>
+              <th>Status</th>
               <th>Price</th>
               <th>Quantity</th>
               <th>Actions</th>
@@ -53,10 +65,18 @@ export default function ProductCRUD({ value }) {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
+                  <td>{product.thumbnail}</td>
                   <td>{product.title}</td>
-                  <td className="ellipse">{product.description}</td>
-                  <td className="ellipse">{product.tags.join(", ")}</td>
-                  <td>{product.files.length}</td>
+                  <td>
+                    <select
+                      value={product.status}
+                      onChange={(e) => handleStatus(e, index)}
+                    >
+                      <option value="active">active</option>
+                      <option value="non-active">non-active</option>
+                      <option value="out">out</option>
+                    </select>
+                  </td>
                   <td>{product.price}</td>
                   <td>{product.quantity}</td>
                   <td>
