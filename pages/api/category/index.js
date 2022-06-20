@@ -5,7 +5,7 @@ export default async function (req, res) {
   await dbConnect();
   switch (req.method.toLowerCase()) {
     case "get":
-      await category.read(req, res);
+      await category.readAll(req, res);
       break;
     case "post":
       await category.create(req, res);

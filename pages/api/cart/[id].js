@@ -5,16 +5,17 @@ export default async function (req, res) {
   await dbConnect();
   switch (req.method.toLowerCase()) {
     case "get":
-      cart.read(req, res);
+      await cart.read(req, res);
       break;
     case "put":
-      cart.update(req, res);
+      await cart.update(req, res);
       break;
     case "patch":
-      cart.update(req, res);
+      await cart.update(req, res);
       break;
     case "delete":
-      cart.remove(req, res);
+      await cart.remove(req, res);
       break;
   }
+  res.end();
 }

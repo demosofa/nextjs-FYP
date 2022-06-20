@@ -5,23 +5,19 @@ export default class GenericRepository<T> implements IGenericRepository<T> {
   constructor(context: any) {
     this.context = context;
   }
-  async getOne(value: string, prop = "id") {
-    return await this.context.findOne({ [prop]: value }).exec();
+  getOne(value: string, prop = "id") {
+    return this.context.findOne({ [prop]: value }).exec();
   }
-  async getAll(aggregate: Array<any>) {
-    return new Promise(async (resolve, reject) => {
-      const itemdata = await this.context.aggregate(aggregate).exec();
-      if (!itemdata) reject(null);
-      resolve(itemdata);
-    });
+  getAll(condition: Object) {
+    return this.context.find(condition).exec();
   }
-  async create(data: T) {
+  create(data: T) {
     return this.context.create(data);
   }
-  async updateById(id: string, data: T) {
+  updateById(id: string, data: T) {
     return this.context.updateOne({_id: id}, data).exec();
   }
-  async deleteOne(value: string, prop = "id") {
+  deleteOne(value: string, prop = "id") {
     return this.context.deleteOne({ [prop]: value }).exec();
   }
 }
