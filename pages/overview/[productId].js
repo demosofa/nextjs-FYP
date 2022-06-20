@@ -41,6 +41,7 @@ export default function Overview({ product }) {
         id,
         title,
         image,
+        option,
         quantity,
         price,
         total: quantity * price,

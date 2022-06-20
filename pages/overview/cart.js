@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
 import { Animation, Icon, Increment } from "../../components";
 import { addProduct, removeProduct } from "../../redux/reducer/cartSlice";
+import { useState, useEffect } from "react";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -20,13 +21,31 @@ export default function Cart() {
     // console.log(state);
     return state.cart;
   });
-  const check = typeof window !== "undefined" ? cartState : cartState;
-  console.log(check);
+
+  const [cart, setCart] = useState({
+    products: [
+      {
+        title: "",
+        image: "",
+        option: "",
+        quantity: 0,
+        price: 0,
+        total: 0,
+      },
+    ],
+    quantity: 0,
+    total: 0,
+  });
+
+  useEffect(() => {
+    setCart(cartState);
+  }, [cartState]);
+
   const dispatch = useDispatch();
   return (
     <div className="cart__container">
       <div className="cart__lst">
-        {cartState?.products.map((item) => (
+        {cart.products.map((item) => (
           <Animation.Zoom key={item.title}>
             <div className="cart__product">
               <div className="cart__product__info">
@@ -50,15 +69,16 @@ export default function Cart() {
               <div className="change__quantity">
                 <Increment
                   value={item.quantity}
-                  setValue={(value) =>
-                    dispatch(
-                      addProduct({
-                        ...item,
-                        quantity: value,
-                        total: Math.round(value * item.price),
-                      })
-                    )
-                  }
+                  setValue={(value) => {
+                    if (item.title)
+                      dispatch(
+                        addProduct({
+                          ...item,
+                          quantity: value,
+                          total: Math.round(value * item.price),
+                        })
+                      );
+                  }}
                   style={{ width: "100px" }}
                 />
                 <div className="info">

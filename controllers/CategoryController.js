@@ -1,4 +1,3 @@
-import parseForm from "./services/parseForm";
 import UnitOfWork from "./services/UnitOfWork";
 
 class CategoryController {
@@ -6,7 +5,7 @@ class CategoryController {
     this.unit = new UnitOfWork();
   }
   async read(req, res) {
-    const categories = await this.unit.Category.getAll();
+    const categories = await this.unit.Category.getOne(req.query.id);
     return res.status(200).json({ categories });
   }
   async create(req, res) {
