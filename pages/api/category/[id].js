@@ -4,14 +4,8 @@ import category from "../../../controllers/CategoryController";
 export default async function (req, res) {
   await dbConnect();
   switch (req.method.toLowerCase()) {
-    case "get":
-      await category.readAll(req, res);
-      break;
-    case "post":
-      await category.create(req, res);
-      break;
-    case "put":
-      await category.update(req, res);
+    case "delete":
+      await category.delete(req, res);
       break;
   }
 }

@@ -19,8 +19,7 @@ class ProductController {
   }
 
   async create(req, res) {
-    let result;
-    await parseForm(req).then((obj) => (result = obj));
+    const result = await parseForm(req).then((obj) => obj);
     if (!result)
       return res.status(500).json({ errorMessage: `Fail to load file` });
     const check = await this.unit.Product.getOne(result.fields.title, "title");
@@ -39,8 +38,7 @@ class ProductController {
   }
 
   async update(req, res) {
-    let result;
-    await parseForm(req).then((obj) => (result = obj));
+    const result = await parseForm(req).then((obj) => obj);
     if (!result)
       return res.status(500).json({ errorMessage: `Fail to load file` });
     const check = await this.unit.Product.getOne(result.fields.title, "title");

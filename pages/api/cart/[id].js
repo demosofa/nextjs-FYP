@@ -17,5 +17,4 @@ export default async function (req, res) {
       await cart.remove(req, res);
       break;
   }
-  res.end();
 }

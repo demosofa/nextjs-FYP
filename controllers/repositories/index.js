@@ -3,6 +3,7 @@ import CartRepository from "./CartRepository";
 import OrderRepository from "./OrderRepository";
 import AccountRepository from "./AccountRepository";
 import CategoryRepository from "./CategoryRepository";
+import UserRepository from "./UserRepository";
 
 export {
   ProdcutRepository,
@@ -10,4 +11,5 @@ export {
   OrderRepository,
   AccountRepository,
   CategoryRepository,
+  UserRepository,
 };

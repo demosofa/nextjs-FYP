@@ -17,5 +17,4 @@ export default async function Index(req, res) {
       await product.create(req, res);
       break;
   }
-  res.end();
 }

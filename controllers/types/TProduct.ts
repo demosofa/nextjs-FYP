@@ -4,6 +4,7 @@ type TProduct = {
   description: string,
   status: string,
   thumbnail: File,
+  variants: object[],
   tags: string[],
   files: Array<File>,
   price: number,

@@ -1,4 +1,6 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
+import { RiEye2Line, RiEyeCloseLine } from "react-icons/ri";
+import Icon from "../Icon/Icon";
 import styles from "./_form.module.scss";
 
 export default function Form({
@@ -57,6 +59,26 @@ Form.Input = forwardRef(function ({ children, ...restProp }, ref) {
         ref={ref}
         {...restProp}
       />
+    </>
+  );
+});
+
+Form.Password = forwardRef(function ({ children, ...restProp }, ref) {
+  const [show, setShow] = useState(false);
+  return (
+    <>
+      <div className={styles.form__input} style={{ display: "flex" }}>
+        <input
+          className={styles.form__password}
+          type={show ? "text" : "password"}
+          {...restProp}
+          onCopy={(e) => e.preventDefault()}
+        ></input>
+        <Icon onClick={() => setShow(!show)} style={{ marginLeft: "-30px" }}>
+          {show ? <RiEye2Line /> : <RiEyeCloseLine />}
+        </Icon>
+      </div>
+      {children}
     </>
   );
 });

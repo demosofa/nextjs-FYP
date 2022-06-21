@@ -23,5 +23,4 @@ export default async function (req, res) {
       await product.remove(req, res);
       break;
   }
-  res.end();
 }

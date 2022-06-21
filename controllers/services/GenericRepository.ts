@@ -5,10 +5,10 @@ export default class GenericRepository<T> implements IGenericRepository<T> {
   constructor(context: any) {
     this.context = context;
   }
-  getOne(value: string, prop = "id") {
+  getOne(value: string, prop = "_id") {
     return this.context.findOne({ [prop]: value }).exec();
   }
-  getAll(condition: Object) {
+  getAll(condition: object) {
     return this.context.find(condition).exec();
   }
   create(data: T) {
@@ -17,7 +17,7 @@ export default class GenericRepository<T> implements IGenericRepository<T> {
   updateById(id: string, data: T) {
     return this.context.updateOne({_id: id}, data).exec();
   }
-  deleteOne(value: string, prop = "id") {
+  deleteOne(value: string, prop = "_id") {
     return this.context.deleteOne({ [prop]: value }).exec();
   }
 }

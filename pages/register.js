@@ -4,6 +4,8 @@ import { Validate } from "../utils";
 import axios from "axios";
 import { useRouter } from "next/router";
 
+const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+
 export default function Register() {
   const [info, setInfo] = useState({
     fullname: "",
@@ -20,16 +22,21 @@ export default function Register() {
       <div className="background"></div>
       <div className="login-container">
         <Slider
-          config={{ slides: { preView: 1 } }}
+          config={{ slides: { preView: 1 }, drag: false }}
           setInstance={setInstance}
           style={{ maxWidth: "500px", borderRadius: "8px" }}
         >
           <FormInfo
+            key={0}
             info={info}
             setInfo={setInfo}
             moveTo={() => instanceRef?.current.next()}
           />
-          <FormAccount info={info} moveTo={() => instanceRef?.current.prev()} />
+          <FormAccount
+            key={1}
+            info={info}
+            moveTo={() => instanceRef?.current.prev()}
+          />
         </Slider>
       </div>
     </div>
@@ -37,20 +44,26 @@ export default function Register() {
 }
 
 function FormInfo({ info, setInfo, moveTo, ...props }) {
-  const handleContinue = () => {
+  const handleContinue = (e) => {
+    e.preventDefault();
     try {
       Object.entries(info).forEach((entry) => {
         switch (entry[0]) {
           case "fullname":
             new Validate(entry[1]).isEmpty().isNotSpecial();
+            break;
           case "email":
             new Validate(entry[1]).isEmpty().isEmail();
+            break;
           case "phoneNumber":
-            new Validate(entry[1]).isEmpty().isNumber().isPhone();
+            new Validate(entry[1]).isEmpty().isPhone();
+            break;
         }
       });
-      moveTo(1);
-    } catch (error) {}
+      moveTo();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <Form onSubmit={handleContinue} {...props}>
@@ -153,7 +166,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           <Form.Input></Form.Input>
         </Form.Item>
       </Form.Item>
-      <Form.Button onClick={() => moveTo()}>Next</Form.Button>
+      <Form.Submit>Next</Form.Submit>
     </Form>
   );
 }
@@ -164,21 +177,31 @@ function FormAccount({ info, moveTo, ...props }) {
     password: "",
     passwordAgain: "",
   });
-  const handleSubmit = () => {
+  const router = useRouter();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       Object.entries(input).forEach((entry) => {
         switch (entry[0]) {
           case "username":
             new Validate(entry[1]).isEmpty();
+            break;
           case "password":
             new Validate(entry[1]).isEmpty().isPassWord();
-          case "passwordAgain": {
+            break;
+          case "passwordAgain":
             if (input.password === entry[1]) break;
             throw new Error();
-          }
         }
       });
-    } catch (error) {}
+      await axios.post(`${LocalApi}/register`, {
+        account: input,
+        userInfo: info,
+      });
+      router.back();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
     <Form onSubmit={handleSubmit} {...props}>
@@ -198,25 +221,25 @@ function FormAccount({ info, moveTo, ...props }) {
       </Form.Item>
       <Form.Item>
         <Form.Title>Password</Form.Title>
-        <Form.Input
+        <Form.Password
           value={input.password}
           onChange={(e) =>
             setInput((prev) => {
               return { ...prev, password: e.target.value };
             })
           }
-        ></Form.Input>
+        ></Form.Password>
       </Form.Item>
       <Form.Item>
         <Form.Title>Password Again</Form.Title>
-        <Form.Input
+        <Form.Password
           value={input.passwordAgain}
           onChange={(e) =>
             setInput((prev) => {
               return { ...prev, passwordAgain: e.target.value };
             })
           }
-        ></Form.Input>
+        ></Form.Password>
       </Form.Item>
       <Form.Button onClick={() => moveTo()}>Back</Form.Button>
       <Form.Submit>Register</Form.Submit>
