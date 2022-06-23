@@ -1,8 +1,8 @@
 import UnitOfWork from "./services/UnitOfWork";
 
 class CategoryController {
-  constructor() {
-    this.unit = new UnitOfWork();
+  constructor(context = UnitOfWork) {
+    this.unit = new context();
   }
   async read(req, res) {
     const category = await this.unit.Category.getOne(req.query.id);

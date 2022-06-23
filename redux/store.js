@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { cart } from "./reducer";
+import { cart, notification } from "./reducer";
 import { productApi } from "./api";
 import CartStorage from "./middleware/CartStorage";
 import AuthStorage from "./middleware/AuthStorage";
@@ -19,7 +19,7 @@ function loadState(name) {
 
 export const store = configureStore({
   devTools: true,
-  reducer: { cart, [productApi.reducerPath]: productApi.reducer },
+  reducer: { cart, notification, [productApi.reducerPath]: productApi.reducer },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
       CartStorage,

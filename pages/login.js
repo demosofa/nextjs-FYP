@@ -13,11 +13,15 @@ export default function Login() {
         switch (entry[0]) {
           case "username":
             new Validate(entry[1]).isEmpty();
+            break;
           case "password":
             new Validate(entry[1]).isEmpty().isPassWord();
+            break;
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="login-page">
@@ -40,14 +44,14 @@ export default function Login() {
           </Form.Item>
           <Form.Item>
             <Form.Title>Password</Form.Title>
-            <Form.Input
+            <Form.Password
               value={input.password}
               onChange={(e) =>
                 setInput((prev) => {
                   return { ...prev, password: e.target.value };
                 })
               }
-            ></Form.Input>
+            ></Form.Password>
           </Form.Item>
           <Form.Submit>Login</Form.Submit>
         </Form>

@@ -22,10 +22,9 @@
   gap: $gap
 }
 
-@mixin grid ( $gap: 0, $col: repeat(auto-fit, minmax(140px, 1fr)), $row: 200px) {
+@mixin grid ( $gap: 0, $col: repeat(auto-fit, minmax(140px, 1fr))) {
   display: grid;
   grid-template-columns: $col;
-  grid-auto-rows: $row;
   gap: $gap;
 }
 

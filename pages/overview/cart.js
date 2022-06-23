@@ -6,15 +6,15 @@ import { useState, useEffect } from "react";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export async function getServerSideProps() {
-  const response = await fetch(`${LocalApi}/cart/2`, {
-    method: "GET",
-  });
-  const data = await response.json();
-  return {
-    props: data,
-  };
-}
+// export async function getServerSideProps() {
+//   const response = await fetch(`${LocalApi}/cart/2`, {
+//     method: "GET",
+//   });
+//   const data = await response.json();
+//   return {
+//     props: data,
+//   };
+// }
 
 export default function Cart() {
   const cartState = useSelector((state) => {

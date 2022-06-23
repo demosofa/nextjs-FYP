@@ -1,20 +1,19 @@
 import Navbar from "./Navbar/Navbar";
 import Sidebar from "./Sidebar/Sidebar";
 import Footer from "./Footer/Footer";
-import { useMedia } from "../hooks";
-import Devices from "../helpers/Devices";
-import { createContext } from "react";
+import Notification from "./Notification/Notification";
 import { ManagerRole } from "../helpers/routes";
-
-export const Media = createContext();
+import { useContext } from "react";
+import { Media } from "../pages/_app";
 
 export default function Layout({ children }) {
-  const device = useMedia();
+  const { device, Devices } = useContext(Media);
   return (
-    <Media.Provider value={{ device, Devices }}>
+    <>
       {device === Devices.pc ? <Navbar apis={ManagerRole} /> : <Sidebar />}
       <div className="body">{children}</div>
       <Footer />
-    </Media.Provider>
+      <Notification />
+    </>
   );
 }

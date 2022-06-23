@@ -10,11 +10,13 @@ export default function ReadMoreLess({ children, style, ...props }) {
     (node) => {
       if (!node) return;
       const childHeight = node.children[0].offsetHeight;
-      if (childHeight < style.height) setDisplay(false);
+      if (childHeight > parseInt(style.height.replace("px", "")))
+        setDisplay(true);
+      else setDisplay(false);
       if (!isMore) node.style.height = childHeight + 50 + "px";
       else node.style.height = style.height;
     },
-    [isMore, resize]
+    [isMore, resize, style.height]
   );
 
   useResize(() => setResize((prev) => !prev));
