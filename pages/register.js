@@ -75,9 +75,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
         <Form.Input
           value={info.fullname}
           onChange={(e) =>
-            setInfo((prev) => {
-              return { ...prev, fullname: e.target.value };
-            })
+            setInfo((prev) => ({ ...prev, fullname: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>
@@ -86,9 +84,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
         <Form.Input
           value={info.phoneNumber}
           onChange={(e) =>
-            setInfo((prev) => {
-              return { ...prev, phoneNumber: e.target.value };
-            })
+            setInfo((prev) => ({ ...prev, phoneNumber: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>
@@ -97,9 +93,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
         <Form.Input
           value={info.email}
           onChange={(e) =>
-            setInfo((prev) => {
-              return { ...prev, email: e.target.value };
-            })
+            setInfo((prev) => ({ ...prev, email: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>
@@ -119,11 +113,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
             justifyContent: "space-between",
             gap: "20px",
           }}
-          setChecked={(gender) =>
-            setInfo((prev) => {
-              return { ...prev, gender };
-            })
-          }
+          setChecked={(gender) => setInfo((prev) => ({ ...prev, gender }))}
         >
           <div>
             <Checkbox.Item value="male">Male</Checkbox.Item>
@@ -213,9 +203,7 @@ function FormAccount({ info, moveTo, ...props }) {
         <Form.Input
           value={input.username}
           onChange={(e) =>
-            setInput((prev) => {
-              return { ...prev, username: e.target.value };
-            })
+            setInput((prev) => ({ ...prev, username: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>
@@ -224,9 +212,7 @@ function FormAccount({ info, moveTo, ...props }) {
         <Form.Password
           value={input.password}
           onChange={(e) =>
-            setInput((prev) => {
-              return { ...prev, password: e.target.value };
-            })
+            setInput((prev) => ({ ...prev, password: e.target.value }))
           }
         ></Form.Password>
       </Form.Item>
@@ -235,9 +221,7 @@ function FormAccount({ info, moveTo, ...props }) {
         <Form.Password
           value={input.passwordAgain}
           onChange={(e) =>
-            setInput((prev) => {
-              return { ...prev, passwordAgain: e.target.value };
-            })
+            setInput((prev) => ({ ...prev, passwordAgain: e.target.value }))
           }
         ></Form.Password>
       </Form.Item>

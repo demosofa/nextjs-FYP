@@ -1,9 +1,10 @@
 .container{
   position: fixed;
-  bottom: 0;
-  right: 0;
+  bottom: 15px;
+  right: 15px;
   width: 300px;
   display: flex;
   flex-direction: column;
-  gap: 10px
+  gap: 10px;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)
 }

@@ -16,8 +16,7 @@ const notification = createSlice({
       state.push(payload);
     },
     removeNotification(state, { payload }) {
-      let getIndex = state.findIndex((item) => item.id === payload);
-      state.splice(getIndex, 1);
+      return state.filter((item) => item.id !== payload);
     },
   },
 });

@@ -17,9 +17,7 @@ class AccountController {
     const validPass = await bcrypt.compare(password, check.hashPassword);
     if (!validPass)
       return res.status(300).json({ message: "Invalid password" });
-    const prepare = new Token({ userId: check._id });
-    const token = prepare.createToken();
-    const refeshToken = prepare.createRefeshToken();
+    const { token, refeshToken } = new Token({ userId: check._id });
     return res.status(200).json({ token, refeshToken });
   }
 
@@ -45,7 +43,8 @@ class AccountController {
       account: created._id,
     });
     if (!user) return res.status(500).json({ message: "Fail to Register" });
-    return res.status(200).json({ message: "Succes Register" });
+    const { token, refeshToken } = new Token({ userId: user._id });
+    return res.status(200).json({ token, refeshToken });
   }
 }
 

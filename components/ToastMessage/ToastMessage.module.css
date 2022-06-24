@@ -1,30 +1,32 @@
-.ToastMessage {
-  height: 50px;
+.toast_message {
   width: 100%;
-  border-radius: 20px;
+  border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  white-space: wrap;
   padding-left: 8px;
   padding-right: 8px;
   transition: opacity 0.5s ease-in;
   opacity: 0;
-  background-color: azure;
+  background-color: orangered;
 }
 
-.ToastMessage.warning {
+.toast_message.warning {
   background-color: yellow;
 }
 
-.ToastMessage > span {
+.toast_message > span {
   flex: 2;
   font-size: 12px;
   font-weight: 500;
   font-style: italic;
   margin: 2px auto;
+  color: white
 }
 
-.ToastMessage > .Loader {
+.toast_message > .loader {
   flex: 8;
   height: 25px;
   border-radius: 20px;
@@ -34,17 +36,17 @@
   padding-left: 8px;
 }
 
-.Loader > .Bar {
+.Loader > .bar {
   width: 100%;
   height: 100%;
   border-radius: 20px;
-  animation-name: Loading;
+  animation-name: loading;
   animation-duration: var(--timeout);
   animation-timing-function: linear;
 }
 
 @media (min-width: 480px) {
-  .ToastMessage {
+  .toast_message {
     bottom: 20px;
     right: 20px;
   }

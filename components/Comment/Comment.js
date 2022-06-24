@@ -17,8 +17,7 @@ export default function Comment({
       baseURL: url,
       method: "GET",
     },
-    (item) => (datas.current = item),
-    []
+    (item) => (datas.current = item)
   );
 
   if (loading) return <Loading.Text />;
@@ -78,11 +77,7 @@ function CommentTab({ value, url, params, ...props }) {
             return { ...prev, body: value };
           })
         )
-        .then(() =>
-          setToggle((prev) => {
-            return { ...prev, edit: false };
-          })
-        )
+        .then(() => setToggle((prev) => ({ ...prev, edit: false })))
         .catch((error) => alert(error));
     }
   };
@@ -100,9 +95,7 @@ function CommentTab({ value, url, params, ...props }) {
           >
             <div
               onClick={() =>
-                setToggle((prev) => {
-                  return { ...prev, edit: !prev.edit };
-                })
+                setToggle((prev) => ({ ...prev, edit: !prev.edit }))
               }
             >
               Edit
@@ -117,9 +110,7 @@ function CommentTab({ value, url, params, ...props }) {
             data={data.body}
             callback={handleSave}
             setToggle={(boolean) =>
-              setToggle((prev) => {
-                return { ...prev, edit: boolean };
-              })
+              setToggle((prev) => ({ ...prev, edit: boolean }))
             }
           />
         )) ||
@@ -139,11 +130,7 @@ function CommentTab({ value, url, params, ...props }) {
         </button>
         {params.length > 0 && (
           <button
-            onClick={() =>
-              setToggle((prev) => {
-                return { ...prev, more: !prev.more };
-              })
-            }
+            onClick={() => setToggle((prev) => ({ ...prev, more: !prev.more }))}
           >
             More
           </button>
@@ -168,9 +155,7 @@ function CommentTab({ value, url, params, ...props }) {
         <CommentReply
           url={url}
           setToggle={(boolean) =>
-            setToggle((prev) => {
-              return { ...prev, reply: boolean };
-            })
+            setToggle((prev) => ({ ...prev, reply: boolean }))
           }
         />
       )}

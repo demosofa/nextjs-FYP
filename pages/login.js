@@ -36,9 +36,7 @@ export default function Login() {
             <Form.Input
               value={input.username}
               onChange={(e) =>
-                setInput((prev) => {
-                  return { ...prev, username: e.target.value };
-                })
+                setInput((prev) => ({ ...prev, username: e.target.value }))
               }
             ></Form.Input>
           </Form.Item>
@@ -47,9 +45,7 @@ export default function Login() {
             <Form.Password
               value={input.password}
               onChange={(e) =>
-                setInput((prev) => {
-                  return { ...prev, password: e.target.value };
-                })
+                setInput((prev) => ({ ...prev, password: e.target.value }))
               }
             ></Form.Password>
           </Form.Item>
