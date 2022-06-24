@@ -30,12 +30,12 @@ export default function Home({ products }) {
               return (
                 <Link href={`/overview/${item.id}`} key={item.title}>
                   <a>
-                    <Animation.Fade key={item.title} className={styles.card}>
+                    <Animation.Zoom key={item.title} className={styles.card}>
                       <div>
                         <img src={item.image}></img>
                         <span>{item.title}</span>
                       </div>
-                    </Animation.Fade>
+                    </Animation.Zoom>
                   </a>
                 </Link>
               );

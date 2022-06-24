@@ -1,6 +1,7 @@
 import UnitOfWork from "./services/UnitOfWork";
 import bcrypt from "bcrypt";
 import { Token } from "../utils";
+import setCookie from "./services/setCookie";
 
 class AccountController {
   constructor() {
@@ -14,11 +15,15 @@ class AccountController {
       return res
         .status(300)
         .json({ message: "there is no account with this username" });
-    const validPass = await bcrypt.compare(password, check.hashPassword);
+    const validPass = await bcrypt.compare(password, check.hashpassword);
     if (!validPass)
       return res.status(300).json({ message: "Invalid password" });
-    const { token, refeshToken } = new Token({ userId: check._id });
-    return res.status(200).json({ token, refeshToken });
+    const { accessToken, refeshToken } = new Token({
+      userId: check._id,
+      role: check.role,
+    });
+    setCookie(res, "refeshToken", refeshToken, { httpOnly: true });
+    return res.status(200).json({ accessToken });
   }
 
   async register(req, res) {
@@ -34,7 +39,8 @@ class AccountController {
     let hashPassword = await bcrypt.hash(account.password, 10);
     const created = await this.unit.Account.create({
       username: account.username,
-      password: hashPassword,
+      hashpassword: hashPassword,
+      email: userInfo.email,
     });
     if (!created)
       return res.status(500).json({ message: "Fail to Create Account" });
@@ -43,8 +49,12 @@ class AccountController {
       account: created._id,
     });
     if (!user) return res.status(500).json({ message: "Fail to Register" });
-    const { token, refeshToken } = new Token({ userId: user._id });
-    return res.status(200).json({ token, refeshToken });
+    const { accessToken, refeshToken } = new Token({
+      userId: user._id,
+      role: user.role,
+    });
+    setCookie(res, "refeshToken", refeshToken, { httpOnly: true });
+    return res.status(200).json({ accessToken });
   }
 }
 

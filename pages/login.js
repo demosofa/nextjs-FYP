@@ -1,13 +1,19 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { Form } from "../components";
-import { Validate } from "../utils";
+import { expireStorage, Validate } from "../utils";
+import axios from "axios";
+
+const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function Login() {
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
-  const handleSubmit = () => {
+  const router = useRouter();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       Object.entries(input).forEach((entry) => {
         switch (entry[0]) {
@@ -19,6 +25,11 @@ export default function Login() {
             break;
         }
       });
+      const data = await axios
+        .post(`${LocalApi}/login`, input)
+        .then((response) => response.data);
+      expireStorage.setItem("accessToken", data.accessToken);
+      router.back();
     } catch (error) {
       console.log(error);
     }

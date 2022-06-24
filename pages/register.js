@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Checkbox, Form, Slider } from "../components";
-import { Validate } from "../utils";
+import { expireStorage, Validate } from "../utils";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -113,7 +113,9 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
             justifyContent: "space-between",
             gap: "20px",
           }}
-          setChecked={(gender) => setInfo((prev) => ({ ...prev, gender }))}
+          setChecked={(gender) =>
+            setInfo((prev) => ({ ...prev, gender: gender.join("") }))
+          }
         >
           <div>
             <Checkbox.Item value="male">Male</Checkbox.Item>
@@ -184,10 +186,13 @@ function FormAccount({ info, moveTo, ...props }) {
             throw new Error();
         }
       });
-      await axios.post(`${LocalApi}/register`, {
-        account: input,
-        userInfo: info,
-      });
+      const data = await axios
+        .post(`${LocalApi}/register`, {
+          account: input,
+          userInfo: info,
+        })
+        .then((response) => response.data);
+      expireStorage.setItem("accessToken", data.accessToken);
       router.back();
     } catch (error) {
       console.log(error.message);
