@@ -8,6 +8,7 @@ import {
   Form,
   Container,
   Icon,
+  Variants,
 } from "../../../components";
 import { Validate } from "../../../utils";
 import { useUpload } from "../../../hooks";
@@ -198,10 +199,22 @@ export default function CreateEditForm({ product }) {
               </label>
             </FileUpload.Input>
           </FileUpload>
+          <Variants
+            oldVariants={input.variants}
+            setNewVariants={(values) =>
+              setInput((prev) => ({ ...prev, variants: values }))
+            }
+          />
         </Container.Flex>
 
         <Container.Flex
-          style={{ flex: 1, flexDirection: "column", gap: "25px" }}
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            gap: "25px",
+            position: "sticky",
+            top: 0,
+          }}
         >
           <Form.Item>
             <Form.Title>Status</Form.Title>

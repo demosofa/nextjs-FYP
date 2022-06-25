@@ -18,12 +18,17 @@ class AccountController {
     const validPass = await bcrypt.compare(password, check.hashpassword);
     if (!validPass)
       return res.status(300).json({ message: "Invalid password" });
-    const { accessToken, refeshToken } = new Token({
+    const { accessToken, refreshToken } = new Token({
       userId: check._id,
       role: check.role,
     });
-    setCookie(res, "refeshToken", refeshToken, { httpOnly: true });
+    setCookie(res, "refreshToken", refreshToken, { httpOnly: true });
     return res.status(200).json({ accessToken });
+  }
+
+  async logout(req, res) {
+    setCookie(res, "refreshToken", "deleted", { httpOnly: true, maxAge: -1 });
+    return res.status(200).end();
   }
 
   async register(req, res) {
@@ -49,11 +54,11 @@ class AccountController {
       account: created._id,
     });
     if (!user) return res.status(500).json({ message: "Fail to Register" });
-    const { accessToken, refeshToken } = new Token({
+    const { accessToken, refreshToken } = new Token({
       userId: user._id,
       role: user.role,
     });
-    setCookie(res, "refeshToken", refeshToken, { httpOnly: true });
+    setCookie(res, "refreshToken", refreshToken, { httpOnly: true });
     return res.status(200).json({ accessToken });
   }
 }

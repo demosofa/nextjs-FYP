@@ -5,14 +5,14 @@ export default class Token {
     this.accessToken = jwt.sign(payload, process.env.ACCESS_TOKKEN_SECRET, {
       expiresIn: "2h",
     });
-    this.refeshToken = jwt.sign(payload, process.env.ACCESS_REFESH_TOKKEN, {
+    this.refreshToken = jwt.sign(payload, process.env.ACCESS_REFESH_TOKKEN, {
       expiresIn: "15h",
     });
   }
   static verifyToken(tokken) {
     return jwt.verify(tokken, process.env.ACCESS_TOKKEN_SECRET);
   }
-  static verifyRefeshToken(token) {
+  static verifyRefreshToken(token) {
     return jwt.verify(token, process.env.ACCESS_REFESH_TOKKEN);
   }
 }
