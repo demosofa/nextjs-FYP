@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Form } from "../components";
 import { expireStorage, Validate } from "../utils";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../redux/reducer/notificationSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -11,6 +13,7 @@ export default function Login() {
     username: "",
     password: "",
   });
+  const dispatch = useDispatch();
   const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +32,7 @@ export default function Login() {
         .post(`${LocalApi}/login`, input)
         .then((response) => response.data);
       expireStorage.setItem("accessToken", data.accessToken);
+      dispatch(addNotification({ message: "Success Login" }));
       router.back();
     } catch (error) {
       console.log(error);

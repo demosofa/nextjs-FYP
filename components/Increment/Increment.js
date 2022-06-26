@@ -9,9 +9,10 @@ export default function Increment({
   ...props
 }) {
   const [quantity, setQuantity] = useState(value);
-  useEffect(() => {
-    setValue(quantity);
-  }, [quantity]);
+
+  useEffect(() => setValue(quantity), [quantity]);
+  useEffect(() => setQuantity(value), [value]);
+
   return (
     <div className={styles.set_quantity} {...props}>
       <Icon style={{ width: "50px", height: "50px" }}>

@@ -14,9 +14,8 @@ export default function TagsInput({
   const filtered = useRef([...filter]);
   let inputDiv;
 
-  useEffect(() => {
-    setPrevTags(tags);
-  }, [tags]);
+  useEffect(() => setPrevTags(tags), [tags]);
+  useEffect(() => setTags(prevTags), [prevTags]);
 
   const handleDelete = (index) => {
     setTags(tags.filter((tag) => tag !== tags[index]));
@@ -32,9 +31,7 @@ export default function TagsInput({
   const handleInput = (e) => {
     if (e.key === "," && text !== "" && text !== ",") {
       if (!tags.includes(text))
-        setTags((prev) => {
-          return [...prev, text.trim().replaceAll(",", "")];
-        });
+        setTags([...tags, text.trim().replaceAll(",", "")]);
       handleFilter("");
       e.target.focus();
     }
@@ -42,6 +39,7 @@ export default function TagsInput({
 
   return (
     <div className={style.container}>
+      {JSON.stringify(tags)}
       {tags.map((tag, index) => {
         return (
           <div key={index} className={style.tag} {...props}>

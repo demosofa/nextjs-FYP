@@ -31,8 +31,11 @@ export default function Home({ products }) {
                 <Link href={`/overview/${item.id}`} key={item.title}>
                   <a>
                     <Animation.Zoom key={item.title} className={styles.card}>
-                      <div>
-                        <img src={item.image}></img>
+                      <div style={{ padding: "5px", fontSize: "13px" }}>
+                        <img
+                          src={item.image}
+                          style={{ height: "200px", borderRadius: "10px" }}
+                        ></img>
                         <span>{item.title}</span>
                       </div>
                     </Animation.Zoom>

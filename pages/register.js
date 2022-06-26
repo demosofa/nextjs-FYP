@@ -3,6 +3,8 @@ import { Checkbox, Form, Slider } from "../components";
 import { expireStorage, Validate } from "../utils";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../redux/reducer/notificationSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -169,6 +171,7 @@ function FormAccount({ info, moveTo, ...props }) {
     password: "",
     passwordAgain: "",
   });
+  const dispatch = useDispatch();
   const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -193,6 +196,7 @@ function FormAccount({ info, moveTo, ...props }) {
         })
         .then((response) => response.data);
       expireStorage.setItem("accessToken", data.accessToken);
+      dispatch(addNotification({ message: "Success Register" }));
       router.back();
     } catch (error) {
       console.log(error.message);

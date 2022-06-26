@@ -13,7 +13,6 @@ export default function ToastMessage({ id, type, message, timeout, ...props }) {
     const timeInterVal = setInterval(() => {
       if (Progress.value <= 0) {
         clearInterval(timeInterVal);
-        // ToastRef.current.parentElement?.removeChild(ToastRef.current);
         dispatch(removeNotification(id));
       }
       Progress.value -= 0.25;

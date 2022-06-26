@@ -55,6 +55,7 @@ export default function FileUpload({
   );
 
   useEffect(() => setPrevFiles(files), [files]);
+  useEffect(() => setFiles(prevFiles), [prevFiles]);
 
   return (
     <Kits.Provider value={{ files, setFiles, getFiles }}>

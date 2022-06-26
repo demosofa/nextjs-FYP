@@ -82,15 +82,19 @@ export default function Overview({ product }) {
           </div>
           <div className="product-info">
             <label>{product.title}</label>
+
             <Timer value={new Date(2022, 6, 22, 4).getTime()} />
+
             <Container.Flex style={{ gap: "10px" }}>
               <label>Price: </label>
               <div>{product.price} $</div>
             </Container.Flex>
+
             <Container.Flex style={{ gap: "10px" }}>
               <label>Category: </label>
               <div className="categrory">{product.category}</div>
             </Container.Flex>
+
             <Checkbox
               type="radio"
               name="size"
@@ -106,6 +110,7 @@ export default function Overview({ product }) {
                 );
               })}
             </Checkbox>
+
             <Container.Flex
               style={{
                 alignItems: "center",
@@ -128,6 +133,7 @@ export default function Overview({ product }) {
             </Container.Flex>
           </div>
         </div>
+
         <div>
           <Container.Flex>
             <label>Description: </label>
@@ -136,10 +142,12 @@ export default function Overview({ product }) {
             </ReadMoreLess>
           </Container.Flex>
         </div>
+
         <div className="rating">
           <Rating rated={4} />
           <div className="count">{product.rating.count}</div>
         </div>
+
         <Comment url={"https://jsonplaceholder.typicode.com/comments"} />
       </div>
     </Layout>

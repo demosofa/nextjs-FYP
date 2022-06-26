@@ -40,7 +40,7 @@ export default function CreateEditForm({ product }) {
       id: "",
       title: "",
       description: "",
-      variants: [{ name: "", options: [] }],
+      variants: [],
       thumbnail: [],
       categories: "",
       tags: [],
@@ -110,7 +110,7 @@ export default function CreateEditForm({ product }) {
       className="create_edit"
       onSubmit={handleSubmit}
       onClick={(e) => e.stopPropagation()}
-      style={{ "max-width": "none", width: "auto", margin: "0 10%" }}
+      style={{ maxWidth: "none", width: "auto", margin: "0 10%" }}
     >
       <Form.Title style={{ fontSize: "20px" }}>
         {product === null ? "Create Product" : `Edit Prodcut`}
@@ -137,24 +137,22 @@ export default function CreateEditForm({ product }) {
                     ></input>
                   </label>
                 )}
-                {previews.map((preview, index) => {
-                  return (
-                    <div
-                      key={index}
-                      style={{ width: "100%", height: "100%" }}
-                      onClick={(e) => deleteFile(e, index)}
-                    >
-                      <img
-                        src={preview}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: "6px",
-                        }}
-                      ></img>
-                    </div>
-                  );
-                })}
+                {previews.map((preview, index) => (
+                  <div
+                    key={index}
+                    style={{ width: "100%", height: "100%" }}
+                    onClick={(e) => deleteFile(e, index)}
+                  >
+                    <img
+                      src={preview}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "6px",
+                      }}
+                    ></img>
+                  </div>
+                ))}
               </div>
             </Form.Item>
 
@@ -260,6 +258,7 @@ export default function CreateEditForm({ product }) {
           </Form.Item>
         </Container.Flex>
       </Container.Flex>
+
       <Form.Item style={{ justifyContent: "flex-start" }}>
         <Form.Submit>Submit</Form.Submit>
         <Form.Button onClick={() => setInput(null)}>Cancel</Form.Button>

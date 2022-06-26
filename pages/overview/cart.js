@@ -18,7 +18,7 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function Cart() {
   const cartState = useSelector((state) => {
-    // console.log(state);
+    console.log(state);
     return state.cart;
   });
 

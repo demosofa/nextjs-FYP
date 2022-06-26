@@ -11,7 +11,10 @@ export default function Checkbox({
   ...props
 }) {
   const [checks, setChecks] = useState(checked);
+
   useEffect(() => setChecked(checks), [checks]);
+  useEffect(() => setChecks(checks), [checked]);
+
   return (
     <Kits.Provider value={{ checks, setChecks, type, name }}>
       <fieldset style={{ border: "none" }} {...props}>
