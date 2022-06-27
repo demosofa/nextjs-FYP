@@ -34,7 +34,7 @@ export default function Home({ products }) {
                       <div style={{ padding: "5px", fontSize: "13px" }}>
                         <img
                           src={item.image}
-                          style={{ height: "200px", borderRadius: "10px" }}
+                          style={{ height: "175px", borderRadius: "10px" }}
                         ></img>
                         <span>{item.title}</span>
                       </div>

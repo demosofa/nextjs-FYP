@@ -24,9 +24,9 @@ export default function Variants({
         return (
           <div className={styles.variant} key={index}>
             <input
-              value={variant.title}
+              value={variant.name}
               onChange={(e) =>
-                dispatch(editVariant({ index, title: e.target.value }))
+                dispatch(editVariant({ index, name: e.target.value }))
               }
             ></input>
 
@@ -37,7 +37,7 @@ export default function Variants({
               }}
             ></TagsInput>
 
-            {JSON.stringify(variant.options)}
+            {/* {JSON.stringify(variant.options)} */}
             <Icon onClick={() => dispatch(deleteVariant(index))}>
               <GiTrashCan />
             </Icon>

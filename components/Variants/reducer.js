@@ -1,6 +1,6 @@
 import { ADD_VARIANT, DELETE_VARIANT, EDIT_VARIANT } from "./constants";
 
-export let initialState = [{ title: "", options: [] }];
+export let initialState = [{ name: "", options: [] }];
 
 export default function reducer(state, action) {
   let copy;

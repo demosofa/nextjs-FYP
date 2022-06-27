@@ -39,7 +39,7 @@ export default function TagsInput({
 
   return (
     <div className={style.container}>
-      {JSON.stringify(tags)}
+      {/* {JSON.stringify(tags)} */}
       {tags.map((tag, index) => {
         return (
           <div key={index} className={style.tag} {...props}>

@@ -5,6 +5,7 @@ import {
   AccountRepository,
   CategoryRepository,
   UserRepository,
+  VariantRepository,
 } from "../repositories";
 
 class UnitOfWork {
@@ -15,6 +16,7 @@ class UnitOfWork {
     this.Cart = new CartRepository();
     this.Order = new OrderRepository();
     this.Category = new CategoryRepository();
+    this.Variant = new VariantRepository();
   }
 }
 

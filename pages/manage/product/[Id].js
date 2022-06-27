@@ -43,6 +43,7 @@ export default function CreateEditForm({ product }) {
       variants: [],
       thumbnail: [],
       categories: "",
+      status: "",
       tags: [],
       files: [],
       price: 0,
@@ -197,10 +198,14 @@ export default function CreateEditForm({ product }) {
               </label>
             </FileUpload.Input>
           </FileUpload>
+
           <Variants
             oldVariants={input.variants}
             setNewVariants={(values) =>
-              setInput((prev) => ({ ...prev, variants: values }))
+              setInput((prev) => ({
+                ...prev,
+                variants: values.map((item) => JSON.stringify(item)),
+              }))
             }
           />
         </Container.Flex>
@@ -217,6 +222,7 @@ export default function CreateEditForm({ product }) {
           <Form.Item>
             <Form.Title>Status</Form.Title>
             <Form.Select
+              value={input.status}
               onChange={(e) =>
                 setInput((prev) => ({ ...prev, status: e.target.value }))
               }

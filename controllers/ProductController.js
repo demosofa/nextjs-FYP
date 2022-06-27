@@ -27,11 +27,18 @@ class ProductController {
       return res
         .status(500)
         .json({ errorMessage: `Product already has ${result.fields.title}` });
+    const { variants, ...others } = result.fields;
+    const arrVariant = await Promise.all(
+      variants.map((item) => {
+        let parsed = JSON.parse(item);
+        return this.unit.Variant.create({ ...parsed });
+      })
+    );
     const product = await this.unit.Product.create({
-      ...result.fields,
+      ...others,
       files: result.files.files.map((file) => file.name),
+      variants: arrVariant.map((item) => item._id),
     });
-    console.log(product);
     if (!product)
       return res.status(500).json({ message: `Fail to create collection` });
     return res.status(200).json({ message: "Success Create Product" });
