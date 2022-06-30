@@ -1,8 +1,8 @@
-import dbConnect from "../../../helpers/dbConnect";
-import category from "../../../controllers/CategoryController";
+import { db } from "../../../helpers";
+import { category } from "../../../controllers";
 
 export default async function (req, res) {
-  await dbConnect();
+  await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":
       await category.readAll(req, res);

@@ -1,8 +1,8 @@
-import cart from "../../../controllers/CartController";
-import dbConnect from "../../../helpers/dbConnect";
+import { cart } from "../../../controllers";
+import { db } from "../../../helpers";
 
 export default async function (req, res) {
-  await dbConnect();
+  await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":
       await cart.read(req, res);

@@ -2,8 +2,8 @@ import parseForm from "./services/parseForm";
 import UnitOfWork from "./services/UnitOfWork";
 
 class ProductController {
-  constructor() {
-    this.unit = new UnitOfWork();
+  constructor(unit = UnitOfWork) {
+    this.unit = new unit();
   }
 
   async read(req, res) {

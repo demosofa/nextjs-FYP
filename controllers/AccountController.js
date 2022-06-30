@@ -4,8 +4,8 @@ import { Token } from "../utils";
 import setCookie from "./services/setCookie";
 
 class AccountController {
-  constructor() {
-    this.unit = new UnitOfWork();
+  constructor(unit = UnitOfWork) {
+    this.unit = new unit();
   }
 
   async login(req, res) {

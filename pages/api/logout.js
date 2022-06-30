@@ -1,11 +1,13 @@
-import dbConnect from "../../helpers/dbConnect";
-import account from "../../controllers/AccountController";
+import { db, isAuthetication, isAuthorization, Role } from "../../helpers";
+import { account } from "../../controllers";
 
-export default async function (req, res) {
-  await dbConnect();
+async function logout(req, res) {
+  await db.connect();
   switch (req.method.toLowerCase()) {
     case "post":
       await account.logout(req, res);
       break;
   }
 }
+
+export default isAuthetication(isAuthorization(logout, [Role.guest]));

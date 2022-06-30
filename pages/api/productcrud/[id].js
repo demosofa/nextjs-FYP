@@ -1,5 +1,5 @@
-import product from "../../../controllers/ProductController";
-import dbConnect from "../../../helpers/dbConnect";
+import { product } from "../../../controllers";
+import { db } from "../../../helpers";
 
 export const config = {
   api: {
@@ -8,7 +8,7 @@ export const config = {
 };
 
 export default async function (req, res) {
-  await dbConnect();
+  await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":
       await product.read(req, res);

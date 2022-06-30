@@ -217,6 +217,7 @@ export default function CreateEditForm({ product }) {
             gap: "25px",
             position: "sticky",
             top: 0,
+            maxHeight: "300px",
           }}
         >
           <Form.Item>

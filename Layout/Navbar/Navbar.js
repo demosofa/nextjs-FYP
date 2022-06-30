@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {useRouter} from "next/router"
+import { useRouter } from "next/router";
 import { Badge, Search } from "../../components";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useSelector } from "react-redux";
@@ -10,12 +10,18 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function Navbar({ apis = [{ title: "", link: "" }] }) {
   const cart = useSelector((state) => state.cart);
-  const router = useRouter()
+  const router = useRouter();
   const handleLogout = async () => {
     try {
-      await axios.post(`${LocalApi}/logout`);
+      await axios.post(`${LocalApi}/logout`, "", {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("accessToken")
+          )}`,
+        },
+      });
       localStorage.clear();
-      router.reload()
+      router.reload();
     } catch (error) {
       console.log(error);
     }
