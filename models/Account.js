@@ -15,6 +15,7 @@ const Account = new Schema(
       default: "guest",
       enum: [Role.admin, Role.vendor, Role.shipper, Role.guest, Role.manager],
     },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }
 );

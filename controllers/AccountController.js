@@ -41,19 +41,17 @@ class AccountController {
       return res.status(300).json({
         message: "There is already existed account with this username",
       });
+    const user = await this.unit.User.create({ ...userInfo });
+    if (!user) return res.status(500).json({ message: "Fail to Register" });
     let hashPassword = await bcrypt.hash(account.password, 10);
     const created = await this.unit.Account.create({
       username: account.username,
       hashpassword: hashPassword,
       email: userInfo.email,
+      userId: user._id,
     });
     if (!created)
       return res.status(500).json({ message: "Fail to Create Account" });
-    const user = await this.unit.User.create({
-      ...userInfo,
-      account: created._id,
-    });
-    if (!user) return res.status(500).json({ message: "Fail to Register" });
     const { accessToken, refreshToken } = new Token({
       userId: user._id,
       role: user.role,

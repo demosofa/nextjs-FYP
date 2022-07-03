@@ -13,7 +13,6 @@ export default function Register() {
     fullname: "",
     gender: "",
     dateOfBirth: "",
-    address: {},
     phoneNumber: "",
     email: "",
   });
@@ -72,8 +71,9 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
       <Form.Title style={{ fontSize: "large", fontWeight: "600" }}>
         Register
       </Form.Title>
+
       <Form.Item>
-        <Form.Title>fullName</Form.Title>
+        <Form.Title>Full Name</Form.Title>
         <Form.Input
           value={info.fullname}
           onChange={(e) =>
@@ -81,8 +81,19 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           }
         ></Form.Input>
       </Form.Item>
+
       <Form.Item>
-        <Form.Title>phoneNumber</Form.Title>
+        <Form.Title>Date of Birth</Form.Title>
+        <Form.Input
+          type="date"
+          onChange={(e) =>
+            setInfo((prev) => ({ ...prev, dateOfBirth: e.target.value }))
+          }
+        ></Form.Input>
+      </Form.Item>
+
+      <Form.Item>
+        <Form.Title>Phone Number</Form.Title>
         <Form.Input
           value={info.phoneNumber}
           onChange={(e) =>
@@ -90,8 +101,9 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           }
         ></Form.Input>
       </Form.Item>
+
       <Form.Item>
-        <Form.Title>email</Form.Title>
+        <Form.Title>Email</Form.Title>
         <Form.Input
           value={info.email}
           onChange={(e) =>
@@ -99,6 +111,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           }
         ></Form.Input>
       </Form.Item>
+
       <Form.Item
         style={{
           justifyContent: "normal",
@@ -120,46 +133,14 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           }
         >
           <div>
-            <Checkbox.Item value="male">Male</Checkbox.Item>
+            <Checkbox.Item value="Male">Male</Checkbox.Item>
           </div>
           <div>
-            <Checkbox.Item value="female">Female</Checkbox.Item>
+            <Checkbox.Item value="Female">Female</Checkbox.Item>
           </div>
         </Checkbox>
       </Form.Item>
-      <Form.Item>
-        <Form.Title>Address</Form.Title>
-        <Form.Item
-          style={{
-            flexDirection: "column",
-            justifyContent: "normal",
-            gap: 0,
-          }}
-        >
-          <Form.Title style={{ margin: 0 }}>Street</Form.Title>
-          <Form.Input></Form.Input>
-        </Form.Item>
-        <Form.Item
-          style={{
-            flexDirection: "column",
-            justifyContent: "normal",
-            gap: 0,
-          }}
-        >
-          <Form.Title style={{ margin: 0 }}>District</Form.Title>
-          <Form.Input></Form.Input>
-        </Form.Item>
-        <Form.Item
-          style={{
-            flexDirection: "column",
-            justifyContent: "normal",
-            gap: 0,
-          }}
-        >
-          <Form.Title style={{ margin: 0 }}>Ward</Form.Title>
-          <Form.Input></Form.Input>
-        </Form.Item>
-      </Form.Item>
+
       <Form.Submit>Next</Form.Submit>
     </Form>
   );

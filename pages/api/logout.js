@@ -1,4 +1,4 @@
-import { db, isAuthetication, isAuthorization, Role } from "../../helpers";
+import { db, isAuthentication, isAuthorization, Role } from "../../helpers";
 import { account } from "../../controllers";
 
 async function logout(req, res) {
@@ -10,4 +10,4 @@ async function logout(req, res) {
   }
 }
 
-export default isAuthetication(isAuthorization(logout, [Role.guest]));
+export default logout;
