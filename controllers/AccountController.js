@@ -1,6 +1,6 @@
 import UnitOfWork from "./services/UnitOfWork";
 import bcrypt from "bcrypt";
-import { Token } from "../utils";
+import { Token } from "../helpers";
 import setCookie from "./services/setCookie";
 
 class AccountController {
