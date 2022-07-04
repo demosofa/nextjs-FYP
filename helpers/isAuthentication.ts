@@ -1,6 +1,6 @@
 import Request from "./type"
 import type { NextApiHandler, NextApiResponse } from "next";
-import { Token } from "../utils"
+import { Token } from "../helpers"
 
 export default function isAuthentication(handler: NextApiHandler) : NextApiHandler{
   return (req: Request, res: NextApiResponse) : unknown => {
