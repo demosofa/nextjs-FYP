@@ -19,7 +19,8 @@ class AccountController {
     if (!validPass)
       return res.status(300).json({ message: "Invalid password" });
     const { accessToken, refreshToken } = new Token({
-      userId: check._id,
+      accountId: check._id,
+      userId: check.userId,
       role: check.role,
     });
     setCookie(res, "refreshToken", refreshToken, { httpOnly: true });
@@ -53,8 +54,9 @@ class AccountController {
     if (!created)
       return res.status(500).json({ message: "Fail to Create Account" });
     const { accessToken, refreshToken } = new Token({
+      accountId: created._id,
       userId: user._id,
-      role: user.role,
+      role: created.role,
     });
     setCookie(res, "refreshToken", refreshToken, { httpOnly: true });
     return res.status(200).json({ accessToken });
