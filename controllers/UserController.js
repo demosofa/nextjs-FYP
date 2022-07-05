@@ -5,7 +5,7 @@ class UserController {
     this.unit = new unit();
   }
   async getProfile(req, res) {
-    const profile = await this.unit.User.getOne(req.userId);
+    const profile = await this.unit.User.getOne(req.user.id);
     if (!profile) return res.status(404).end();
     return res.status(200).json({ profile });
   }
