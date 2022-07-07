@@ -1,5 +1,5 @@
-import { db } from "../../helpers";
-import { account } from "../../controllers";
+import { db } from "../../../helpers";
+import { account } from "../../../controllers";
 
 export default async function (req, res) {
   await db.connect();

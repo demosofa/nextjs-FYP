@@ -1,5 +1,5 @@
-import { db, isAuthentication, isAuthorization, Role } from "../../helpers";
-import { account } from "../../controllers";
+import { db } from "../../../helpers";
+import { account } from "../../../controllers";
 
 async function logout(req, res) {
   await db.connect();
