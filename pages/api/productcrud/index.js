@@ -1,5 +1,5 @@
 import { product } from "../../../controllers";
-import { db } from "../../../helpers";
+import { db, isAuthentication } from "../../../helpers";
 
 export const config = {
   api: {
@@ -7,14 +7,16 @@ export const config = {
   },
 };
 
-export default async function Index(req, res) {
+async function index(req, res) {
   await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":
-      await product.read(req, res);
+      await product.readAll(req, res);
       break;
     case "post":
       await product.create(req, res);
       break;
   }
 }
+
+export default isAuthentication(index);

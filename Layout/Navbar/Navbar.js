@@ -13,7 +13,7 @@ export default function Navbar({ apis = [{ title: "", link: "" }] }) {
   const router = useRouter();
   const handleLogout = async () => {
     try {
-      await axios.post(`${LocalApi}/logout`, "", {
+      await axios.post(`${LocalApi}/auth/logout`, "", {
         headers: {
           Authorization: `Bearer ${JSON.parse(
             localStorage.getItem("accessToken")

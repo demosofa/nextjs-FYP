@@ -29,7 +29,7 @@ export default function Login() {
         }
       });
       const data = await axios
-        .post(`${LocalApi}/login`, input)
+        .post(`${LocalApi}/auth/login`, input)
         .then((response) => response.data);
       expireStorage.setItem("accessToken", data.accessToken);
       dispatch(addNotification({ message: "Success Login" }));

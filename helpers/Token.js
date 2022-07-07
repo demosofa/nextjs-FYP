@@ -6,7 +6,7 @@ export default class Token {
       expiresIn: "2h",
     });
     this.refreshToken = jwt.sign(payload, process.env.ACCESS_REFESH_TOKKEN, {
-      expiresIn: "15h",
+      expiresIn: "1d",
     });
   }
   static verifyToken(tokken) {

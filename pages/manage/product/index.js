@@ -1,19 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Pagination, Container, Search } from "../../../components";
+import { retryAxios } from "../../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
-
-export async function getServerSideProps() {
-  const datas = await fetch(`http://localhost:3000/api/productcrud`);
-  const value = await datas.json();
-  return {
-    props: {
-      value,
-    },
-  };
-}
 
 export default function ProductCRUD({ value }) {
   const [products, setProducts] = useState([
@@ -28,6 +19,24 @@ export default function ProductCRUD({ value }) {
   ]);
   const [remove, setRemove] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    async function fireAxios() {
+      try {
+        retryAxios(axios);
+        const response = await axios.get(`${LocalApi}/productcrud`, {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("accessToken")
+            )}`,
+          },
+        });
+        const value = await response.data();
+      } catch (error) {
+        console.log("error");
+      }
+    }
+    fireAxios();
+  }, []);
 
   const handleStatus = async (e, index) => {
     setProducts((prev) => {

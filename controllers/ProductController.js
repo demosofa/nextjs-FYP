@@ -1,5 +1,5 @@
-import parseForm from "./services/parseForm";
 import UnitOfWork from "./services/UnitOfWork";
+import { parseForm } from "../helpers";
 
 class ProductController {
   constructor(unit = UnitOfWork) {

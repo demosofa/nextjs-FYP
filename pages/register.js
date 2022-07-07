@@ -171,7 +171,7 @@ function FormAccount({ info, moveTo, ...props }) {
         }
       });
       const data = await axios
-        .post(`${LocalApi}/register`, {
+        .post(`${LocalApi}/auth/register`, {
           account: input,
           userInfo: info,
         })
