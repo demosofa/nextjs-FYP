@@ -30,9 +30,9 @@ export default function ProductCRUD({ value }) {
             )}`,
           },
         });
-        const value = await response.data();
+        const value = await response.data;
       } catch (error) {
-        console.log("error");
+        console.log(error);
       }
     }
     fireAxios();
