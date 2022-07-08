@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 export default class Token {
   constructor(payload) {
     this.accessToken = jwt.sign(payload, process.env.ACCESS_TOKKEN_SECRET, {
-      expiresIn: "2h",
+      expiresIn: "30s",
     });
     this.refreshToken = jwt.sign(payload, process.env.ACCESS_REFESH_TOKKEN, {
       expiresIn: "1d",

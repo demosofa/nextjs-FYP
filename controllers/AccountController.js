@@ -22,7 +22,7 @@ class AccountController {
       userId: check.userId,
       role: check.role,
     });
-    setCookie(res, "refreshToken", refreshToken, { httpOnly: true });
+    setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
     return res.status(200).json({ accessToken });
   }
 
@@ -57,7 +57,7 @@ class AccountController {
       userId: user._id,
       role: created.role,
     });
-    setCookie(res, "refreshToken", refreshToken, { httpOnly: true });
+    setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
     return res.status(200).json({ accessToken });
   }
 }
