@@ -1,15 +1,24 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useMemo, useReducer } from "react";
 import { TagsInput, Icon } from "..";
 import reducer, { initialState } from "./reducer";
 import { addVariant, editVariant, deleteVariant } from "./actions";
 import { GiTrashCan } from "react-icons/gi";
 import styles from "./variant.module.scss";
+import useVariantPermutation from "../../hooks/useVariantPermutation";
 
 export default function Variants({
   oldVariants = initialState,
   setNewVariants,
 }) {
   const [variants, dispatch] = useReducer(reducer, oldVariants);
+
+  const arrVariant = useMemo(
+    () => variants.reduce((prev, curr) => [...prev, curr.options], []),
+    [variants]
+  );
+  const check = useVariantPermutation(arrVariant);
+  console.log(check);
+
   useEffect(() => setNewVariants(variants), [variants]);
 
   return (
