@@ -8,7 +8,7 @@ import {
   Form,
   Container,
   Icon,
-  Variants,
+  Variation,
 } from "../../../components";
 import { Validate } from "../../../utils";
 import { useUpload } from "../../../hooks";
@@ -199,7 +199,7 @@ export default function CreateEditForm({ product }) {
             </FileUpload.Input>
           </FileUpload>
 
-          <Variants
+          <Variation
             oldVariants={input.variants}
             setNewVariants={(values) =>
               setInput((prev) => ({
