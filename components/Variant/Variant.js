@@ -7,10 +7,13 @@ import {
 } from "../../redux/reducer/variantSlice";
 import { GiTrashCan } from "react-icons/gi";
 import styles from "./variant.module.scss";
+import { useEffect } from "react";
 
-export default function Variants() {
+export default function Variants({ setVariants }) {
   const variants = useSelector((state) => state.variant);
   const dispatch = useDispatch();
+
+  useEffect(() => setVariants(variants), [variants]);
   return (
     <div className={styles.container}>
       <div className={styles.title}>

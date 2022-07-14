@@ -9,46 +9,30 @@ import {
   Container,
   Icon,
   Variation,
+  Variant,
 } from "../../../components";
 import { Validate } from "../../../utils";
 import { useUpload } from "../../../hooks";
+import { useSelector } from "react-redux";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export async function getServerSideProps({ params }) {
-  let product = null;
-  const id = params.Id;
-  if (id === "create")
-    return {
-      props: {
-        product,
-      },
-    };
-  const data = await fetch(`${LocalApi}/productcrud/${id}`);
-  product = await data.json();
-  return {
-    props: {
-      product,
-    },
-  };
-}
-
-export default function CreateEditForm({ product }) {
-  const [input, setInput] = useState(() => {
-    if (product !== null) return product;
-    return {
-      id: "",
-      title: "",
-      description: "",
-      variants: [],
-      thumbnail: [],
-      categories: "",
-      status: "",
-      tags: [],
-      files: [],
-      price: 0,
-      quantity: 0,
-    };
+export default function CreateForm() {
+  const variants = useSelector((state) => state.variant);
+  const variations = useSelector((state) => state.variation);
+  const [input, setInput] = useState({
+    id: "",
+    title: "",
+    description: "",
+    variants,
+    variations,
+    thumbnail: [],
+    categories: "",
+    status: "",
+    tags: [],
+    files: [],
+    price: 0,
+    quantity: 0,
   });
 
   const [loading, getFiles, previews, deleteFile] = useUpload(
@@ -81,27 +65,16 @@ export default function CreateEditForm({ product }) {
     //   console.log(pair[0] + ", " + pair[1]);
     // }
     try {
-      if (product === null) {
-        axios
-          .post(`${LocalApi}/productcrud`, formdata, {
-            headers: {
-              // Authorization: `Bearer`,
-              "Content-type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            router.push("/manage/product");
-          });
-      } else {
-        axios
-          .put(`${LocalApi}/productcrud/${input.id}`, formdata, {
-            headers: {
-              // Authorization: `Bearer`,
-              "Content-type": "multipart/form-data",
-            },
-          })
-          .then((res) => {});
-      }
+      axios
+        .post(`${LocalApi}/productcrud`, formdata, {
+          headers: {
+            // Authorization: `Bearer`,
+            "Content-type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          router.push("/product");
+        });
     } catch (error) {
       console.log(error);
     }
@@ -113,9 +86,7 @@ export default function CreateEditForm({ product }) {
       onClick={(e) => e.stopPropagation()}
       style={{ maxWidth: "none", width: "auto", margin: "0 10%" }}
     >
-      <Form.Title style={{ fontSize: "20px" }}>
-        {product === null ? "Create Product" : `Edit Prodcut`}
-      </Form.Title>
+      <Form.Title style={{ fontSize: "20px" }}>Create Product</Form.Title>
 
       <Container.Flex style={{ justifyContent: "space-around", gap: "40px" }}>
         <Container.Flex
@@ -199,12 +170,20 @@ export default function CreateEditForm({ product }) {
             </FileUpload.Input>
           </FileUpload>
 
-          <Variation
-            oldVariants={input.variants}
-            setNewVariants={(values) =>
+          <Variant
+            setVariants={(items) =>
               setInput((prev) => ({
                 ...prev,
-                variants: values.map((item) => JSON.stringify(item)),
+                variants: items.map((item) => JSON.stringify(item)),
+              }))
+            }
+          ></Variant>
+
+          <Variation
+            setVariations={(items) =>
+              setInput((prev) => ({
+                ...prev,
+                variations: items.map((item) => JSON.stringify(item)),
               }))
             }
           />
@@ -265,6 +244,8 @@ export default function CreateEditForm({ product }) {
           </Form.Item>
         </Container.Flex>
       </Container.Flex>
+
+      {JSON.stringify(input)}
 
       <Form.Item style={{ justifyContent: "flex-start" }}>
         <Form.Submit>Submit</Form.Submit>

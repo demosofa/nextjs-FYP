@@ -9,6 +9,10 @@ const ProductVariant = new Schema(
   { timestamps: true }
 );
 
+ProductVariant.pre("deleteOne", function (next) {
+  mongoose.models.VariantOptions.deleteOne({ _id: this.type }, next);
+});
+
 module.exports =
   mongoose.models.ProductVariant ||
   mongoose.model("ProductVariant", ProductVariant);

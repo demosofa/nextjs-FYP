@@ -2,8 +2,6 @@ const Role = require("../helpers/Role");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const User = require("./User");
-
 const Account = new Schema(
   {
     username: { type: String, required: true, unique: true, maxlength: 50 },
@@ -20,7 +18,7 @@ const Account = new Schema(
   { timestamps: true }
 );
 
-Account.pre("deleteOne", (next) => {
-  User.deleteOne({ account: this._id }, next);
+Account.pre("deleteOne", function (next) {
+  mongoose.models.User.deleteOne({ _id: this.userId }, next);
 });
 module.exports = mongoose.models.Account || mongoose.model("Account", Account);

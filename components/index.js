@@ -21,6 +21,7 @@ export { default as Increment } from "./Increment/Increment";
 export { default as Slider } from "./Slider/Slider";
 export { default as Timer } from "./Timer/Timer";
 export { default as Comment } from "./Comment/Comment";
+export { default as Variant } from "./Variant/Variant";
 export { default as Variation } from "./Variation/Variation";
 
 export {

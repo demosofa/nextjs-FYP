@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Pagination, Container, Search } from "../../../components";
-import { retryAxios } from "../../../utils";
+import { Pagination, Container, Search } from "../../components";
+import { retryAxios } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
