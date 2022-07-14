@@ -8,14 +8,14 @@ interface seriallizeOptions extends CookieSerializeOptions{
 
 export default function setCookie(res: NextApiResponse, name: string, value: any, opt: seriallizeOptions) {
   const {age, ...others} = opt;
-  let config: object
+  let config: CookieSerializeOptions
   if(age){
     const maxAge = convertTime(age).second;
-    config = {path: "/", maxAge, ...others}
+    config = {maxAge, ...others}
   }
-  else config = {path: "/", ...others}
+  else config = others
   res.setHeader(
     "Set-Cookie",
-    serialize(name, String(value), config)
+    serialize(name, String(value), {path: "/", ...config})
   );
 }

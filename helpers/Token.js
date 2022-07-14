@@ -18,30 +18,31 @@ export default class Token {
 }
 
 // import { SignJWT, jwtVerify } from "jose";
-
-// export default class Token {
+// import util from "util"
+// export class Token {
 //   constructor(payload) {
 //     this.payload = payload;
+//     this.TextEncoder = typeof window != undefined ? new TextEncoder() : new util.TextEncoder()
 //   }
 //   signAccessToken() {
 //     return new SignJWT(this.payload)
 //       .setProtectedHeader({ alg: "HS256" })
 //       .setExpirationTime("2h")
-//       .sign(process.env.ACCESS_TOKKEN_SECRET);
+//       .sign(this.TextEncoder.encode(process.env.ACCESS_TOKKEN_SECRET));
 //   }
 //   signRefreshToken() {
 //     return new SignJWT(this.payload)
 //       .setProtectedHeader({ alg: "HS256" })
 //       .setExpirationTime("15h")
-//       .sign(process.env.ACCESS_REFESH_TOKKEN);
+//       .sign(this.TextEncoder.encode(process.env.ACCESS_REFESH_TOKKEN));
 //   }
 //   static verifyToken(tokken) {
-//     return jwtVerify(tokken, process.env.ACCESS_TOKKEN_SECRET, {
+//     return jwtVerify(tokken, this.TextEncoder.encode(process.env.ACCESS_TOKKEN_SECRET), {
 //       algorithms: "HS256",
 //     });
 //   }
 //   static verifyRefreshToken(token) {
-//     return jwtVerify(token, process.env.ACCESS_REFESH_TOKKEN, {
+//     return jwtVerify(token, this.TextEncoder.encode(process.env.ACCESS_REFESH_TOKKEN), {
 //       algorithms: "HS256",
 //     });
 //   }
