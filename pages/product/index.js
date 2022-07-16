@@ -21,18 +21,7 @@ function ProductCRUD() {
   ]);
   const [remove, setRemove] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-  const { loading, isLoggined, isAuthorized, data } = useAuthLoad({
-    config: {
-      url: `${LocalApi}/productcrud`,
-    },
-    roles: ["guest"],
-  });
-
-  useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
+  const router = useRouter();
 
   const handleStatus = async (e, index) => {
     setProducts((prev) => {
@@ -45,8 +34,29 @@ function ProductCRUD() {
     });
   };
 
-  const router = useRouter();
-  if (loading) return <Loading></Loading>;
+  const { loading, isLoggined, isAuthorized, data } = useAuthLoad({
+    config: {
+      url: `${LocalApi}/productcrud`,
+    },
+    roles: ["guest"],
+  });
+
+  useEffect(() => {
+    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
+    else if (!loading && !isAuthorized) router.back();
+  }, [loading, isLoggined, isAuthorized]);
+
+  if (loading || !isLoggined || !isAuthorized)
+    return (
+      <Loading
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%)`,
+        }}
+      ></Loading>
+    );
   return (
     <div className="product-crud__container">
       <Container.Flex>
