@@ -1,9 +1,9 @@
-import axios, {AxiosStatic} from "axios"
+import axios, {AxiosStatic, AxiosInstance} from "axios"
 import {expireStorage} from "."
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export default function retryAxios(axiosInstance: AxiosStatic, maxRetry = 2){
+export default function retryAxios(axiosInstance: AxiosStatic | AxiosInstance, maxRetry = 2){
   let counter = 0
   axiosInstance.interceptors.response.use(undefined, async (error) => {
     if(error.response.status === 401 && error.response.data.message === "Token is expired" && counter <= maxRetry) {
