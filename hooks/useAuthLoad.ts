@@ -16,22 +16,14 @@ export default function useAuthLoad({config, roles, deps=[]}: {config: AxiosRequ
         setLoggined(false); 
         setAuthorized(false); 
         return
-      }
+      } else setLoggined(true);
 
-      const {exp, role} = decoder(accessToken) as {exp: number, role: string};
-      if(exp * 1000 >= Date.now()) {
-        setLoading(false); 
-        setLoggined(false); 
-        return
-      }
-      else setLoggined(true);
-
+      const {role} = decoder(accessToken) as {exp: number, role: string};
       if(!roles.includes(role)) {
         setLoading(false); 
         setAuthorized(false); 
         return
-      }
-      else setAuthorized(true);
+      } else setAuthorized(true);
 
       retryAxios(axiosInstance);
       const value = (await axiosInstance({...config, headers: {
