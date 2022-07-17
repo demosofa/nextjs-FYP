@@ -1,12 +1,14 @@
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Pagination, Container, Search } from "../../components";
+import { Pagination, Container, Search, Loading } from "../../components";
 import { retryAxios } from "../../utils";
+import { useAuthLoad } from "../../hooks";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export default function ProductCRUD({ value }) {
+function ProductCRUD() {
   const [products, setProducts] = useState([
     {
       id: "",
@@ -19,24 +21,7 @@ export default function ProductCRUD({ value }) {
   ]);
   const [remove, setRemove] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  useEffect(() => {
-    async function fireAxios() {
-      try {
-        retryAxios(axios);
-        const response = await axios.get(`${LocalApi}/productcrud`, {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("accessToken")
-            )}`,
-          },
-        });
-        const value = await response.data;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fireAxios();
-  }, []);
+  const router = useRouter();
 
   const handleStatus = async (e, index) => {
     setProducts((prev) => {
@@ -49,7 +34,29 @@ export default function ProductCRUD({ value }) {
     });
   };
 
-  const router = useRouter();
+  const { loading, isLoggined, isAuthorized, data } = useAuthLoad({
+    config: {
+      url: `${LocalApi}/productcrud`,
+    },
+    roles: ["guest"],
+  });
+
+  useEffect(() => {
+    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
+    else if (!loading && !isAuthorized) router.back();
+  }, [loading, isLoggined, isAuthorized]);
+
+  if (loading || !isLoggined || !isAuthorized)
+    return (
+      <Loading
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%)`,
+        }}
+      ></Loading>
+    );
   return (
     <div className="product-crud__container">
       <Container.Flex>
@@ -156,3 +163,5 @@ function Remove({ index, product, setProducts, setRemove }) {
     </>
   );
 }
+
+export default dynamic(() => Promise.resolve(ProductCRUD), { ssr: false });

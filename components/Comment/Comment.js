@@ -11,14 +11,16 @@ export default function Comment({
 }) {
   const datas = useRef();
   const unique = useRef();
-  const [loading] = useAxiosLoad(
-    {
+  const { loading } = useAxiosLoad({
+    config: {
       headers: { "Content-Type": "application/json" },
       baseURL: url,
       method: "GET",
     },
-    (item) => (datas.current = item)
-  );
+    callback: async (axiosInstance) => {
+      datas.current = (await axiosInstance()).data;
+    },
+  });
 
   if (loading) return <Loading.Text />;
   return (
