@@ -7,16 +7,32 @@ import { retryAxios } from "../utils";
 export default function useAuthLoad({config, roles, deps=[]}: {config: AxiosRequestConfig, roles: string[], deps?: DependencyList}){
   const [isLoggined, setLoggined] = useState(false);
   const [isAuthorized, setAuthorized] = useState(false);
-  const [data, setData] = useState(null)
-  const {loading} = useAxiosLoad({
+  const [data, setData] = useState(null);
+  const {loading, setLoading} = useAxiosLoad({
     deps, callback: async (axiosInstance) => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-      if(!accessToken) {setLoggined(false); setAuthorized(false); return}
+      if(!accessToken) {
+        setLoading(false); 
+        setLoggined(false); 
+        setAuthorized(false); 
+        return
+      }
+
       const {exp, role} = decoder(accessToken) as {exp: number, role: string};
-      if(exp >= Date.now()) {setLoggined(false); return}
+      if(exp * 1000 >= Date.now()) {
+        setLoading(false); 
+        setLoggined(false); 
+        return
+      }
       else setLoggined(true);
-      if(!roles.includes(role)) {setAuthorized(false); return}
+
+      if(!roles.includes(role)) {
+        setLoading(false); 
+        setAuthorized(false); 
+        return
+      }
       else setAuthorized(true);
+
       retryAxios(axiosInstance);
       const value = (await axiosInstance({...config, headers: {
         Authorization: `Bearer ${accessToken}`,
