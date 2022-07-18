@@ -54,8 +54,9 @@ export default function FileUpload({
     [files]
   );
 
-  useEffect(() => setPrevFiles(files), [files]);
-  useEffect(() => setFiles(prevFiles), [prevFiles]);
+  useEffect(() => {
+    setPrevFiles(files);
+  }, [files]);
 
   return (
     <Kits.Provider value={{ files, setFiles, getFiles }}>
@@ -142,7 +143,7 @@ FileUpload.Show = function ShowFiles({ children, animate = "Fade", ...props }) {
       const fr = new FileReader();
       fr.readAsDataURL(file);
       fr.onload = () => {
-        resolve(fr.result, file);
+        resolve(fr.result);
       };
       fr.onerror = () => {
         reject(fr.onerror);

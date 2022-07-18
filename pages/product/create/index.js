@@ -35,17 +35,17 @@ export default function CreateForm() {
     quantity: 0,
   });
 
-  const [loading, getFiles, previews, deleteFile] = useUpload(
-    input.thumbnail,
-    (thumbnail) =>
+  const [loading, getFiles, previews, deleteFile] = useUpload({
+    init: input.thumbnail,
+    setPrevs: (thumbnail) =>
       setInput((prev) => {
         return { ...prev, thumbnail: thumbnail[0] };
       }),
-    {
+    limit: {
       size: 2,
       total: 1,
-    }
-  );
+    },
+  });
 
   const router = useRouter();
 

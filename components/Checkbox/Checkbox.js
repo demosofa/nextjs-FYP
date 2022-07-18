@@ -13,7 +13,7 @@ export default function Checkbox({
   const [checks, setChecks] = useState(checked);
 
   useEffect(() => setChecked(checks), [checks]);
-  useEffect(() => setChecks(checks), [checked]);
+  useEffect(() => setChecks(checked), [checked]);
 
   return (
     <Kits.Provider value={{ checks, setChecks, type, name }}>
