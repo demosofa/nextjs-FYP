@@ -5,6 +5,8 @@ import AccountRepository from "./AccountRepository";
 import CategoryRepository from "./CategoryRepository";
 import UserRepository from "./UserRepository";
 import VariantRepository from "./VariantRepository";
+import VariationRepository from "./VariationRepository";
+import VariantOptRepository from "./VariantOptRepository";
 
 export {
   ProdcutRepository,
@@ -14,4 +16,6 @@ export {
   CategoryRepository,
   UserRepository,
   VariantRepository,
+  VariationRepository,
+  VariantOptRepository,
 };

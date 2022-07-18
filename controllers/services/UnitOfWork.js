@@ -6,6 +6,8 @@ import {
   CategoryRepository,
   UserRepository,
   VariantRepository,
+  VariationRepository,
+  VariantOptRepository,
 } from "../repositories";
 
 class UnitOfWork {
@@ -17,6 +19,8 @@ class UnitOfWork {
     this.Order = new OrderRepository();
     this.Category = new CategoryRepository();
     this.Variant = new VariantRepository();
+    this.Variation = new VariationRepository();
+    this.Option = new VariantOptRepository();
   }
 }
 
