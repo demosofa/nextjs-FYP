@@ -1,13 +1,13 @@
 import { useCallback, useState, useEffect, useRef } from "react";
 
-export default function useUpload(
+export default function useUpload({
   init = [],
   setPrevs = Function,
   limit = {
     size: 5,
     total: 10,
-  }
-) {
+  },
+}) {
   const [files, setFiles] = useState(init);
   const run = useRef(true);
   const [previews, setPreviews] = useState([]);
@@ -73,7 +73,7 @@ export default function useUpload(
       const fr = new FileReader();
       fr.readAsDataURL(file);
       fr.onload = () => {
-        resolve(fr.result, file);
+        resolve(fr.result);
       };
       fr.onerror = () => {
         reject(fr.onerror);
