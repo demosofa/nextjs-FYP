@@ -13,7 +13,7 @@ export default function retryAxios(axiosInstance: AxiosStatic | AxiosInstance, m
         expireStorage.setItem("accessToken", accessToken)
         const config = {...error.config, headers: {...error.config.headers, Authorization: `Bearer ${accessToken}`}}
         counter+=1
-        return new Promise((resolve) => resolve(axiosInstance(config)))
+        return axiosInstance(config)
       }
       catch(err){
         return Promise.reject(err)
