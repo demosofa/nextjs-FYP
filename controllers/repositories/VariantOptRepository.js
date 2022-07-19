@@ -1,7 +1,7 @@
 import GenericRepository from "../services/GenericRepository";
-const VariantOptions = require("../../models/VariantOptions");
+const VariantOption = require("../../models/VariantOption");
 export default class VariantOptRepository extends GenericRepository {
   constructor() {
-    super(VariantOptions);
+    super(VariantOption);
   }
 }

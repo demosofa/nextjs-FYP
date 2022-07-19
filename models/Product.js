@@ -16,9 +16,11 @@ const Product = new Schema(
         required: true,
       },
     ],
-    quantity: { type: Number, required: true },
     variants: [{ type: Schema.Types.ObjectId, ref: "Variant", required: true }],
-    price: { type: Number, required: true },
+    variations: [
+      { type: Schema.Types.ObjectId, ref: "ProductVariation", required: true },
+    ],
+    manufacturer: { type: String, required: true },
   },
   { timestamps: true }
 );
