@@ -1,8 +1,8 @@
 import GenericRepository from "../services/GenericRepository";
-const ProductVariant = require("../../models/ProductVariant");
+const ProductVariation = require("../../models/ProductVariation");
 
 export default class VariationRepository extends GenericRepository {
   constructor() {
-    super(ProductVariant);
+    super(ProductVariation);
   }
 }

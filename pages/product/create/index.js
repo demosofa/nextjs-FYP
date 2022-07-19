@@ -21,7 +21,6 @@ export default function CreateForm() {
   const variants = useSelector((state) => state.variant);
   const variations = useSelector((state) => state.variation);
   const [input, setInput] = useState({
-    id: "",
     title: "",
     description: "",
     variants,
