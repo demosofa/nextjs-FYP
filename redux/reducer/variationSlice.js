@@ -2,11 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = [
   {
-    title: "",
+    sku: "",
     thumbnail: null,
     type: [],
     price: 0,
-    stock: 0,
+    quantity: 0,
   },
 ];
 
@@ -16,11 +16,11 @@ const variation = createSlice({
   reducers: {
     addVariation(state, { payload }) {
       return payload.map((variant) => ({
-        title: "",
+        sku: "",
         thumbnail: null,
         type: variant,
         price: 0,
-        stock: 0,
+        quantity: 0,
       }));
     },
     editVariation(state, { payload }) {
