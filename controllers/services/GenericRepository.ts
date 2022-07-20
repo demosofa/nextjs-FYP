@@ -1,8 +1,9 @@
 import IGenericRepository from "../interfaces/IGenericRepository";
+import {Model} from "mongoose"
 
 export default class GenericRepository<T> implements IGenericRepository<T> {
-  private context: any;
-  constructor(context: any) {
+  private context: typeof Model;
+  constructor(context: typeof Model) {
     this.context = context;
   }
   getOne(value: string, prop = "_id") {

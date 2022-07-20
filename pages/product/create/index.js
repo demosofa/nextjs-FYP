@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
 import {
@@ -10,9 +10,10 @@ import {
   Icon,
   Variation,
   Variant,
+  Loading,
 } from "../../../components";
 import { retryAxios, Validate } from "../../../utils";
-import { useUpload } from "../../../hooks";
+import { useAxiosLoad, useUpload } from "../../../hooks";
 import { Media } from "../../_app";
 import { useSelector } from "react-redux";
 
@@ -21,6 +22,7 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 export default function CreateForm() {
   const variants = useSelector((state) => state.variant);
   const variations = useSelector((state) => state.variation);
+  const arrCategory = useRef([]);
   const [input, setInput] = useState({
     title: "",
     description: "",
@@ -39,9 +41,7 @@ export default function CreateForm() {
   const [loading, getFiles, previews, deleteFile] = useUpload({
     init: input.thumbnail,
     setPrevs: (thumbnail) =>
-      setInput((prev) => {
-        return { ...prev, thumbnail: thumbnail[0] };
-      }),
+      setInput((prev) => ({ ...prev, thumbnail: thumbnail[0] })),
     limit: {
       size: 2,
       total: 1,
@@ -49,6 +49,16 @@ export default function CreateForm() {
   });
 
   const router = useRouter();
+
+  const { loading: isLoading } = useAxiosLoad({
+    config: {
+      baseURL: `${LocalApi}/category`,
+      method: "GET",
+    },
+    callback: async (instance) => {
+      arrCategory.current = (await instance()).data.categories;
+    },
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,6 +92,17 @@ export default function CreateForm() {
       console.log(error);
     }
   };
+  if (isLoading)
+    return (
+      <Loading
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%)`,
+        }}
+      ></Loading>
+    );
   return (
     <Form
       className="create_edit"
@@ -98,7 +119,7 @@ export default function CreateForm() {
     >
       <Form.Title style={{ fontSize: "20px" }}>Create Product</Form.Title>
 
-      <Container.Grid style={{ justifyContent: "space-around", gap: "40px" }}>
+      <Container.Grid style={{ gap: "40px" }}>
         <Container.Flex
           style={{ flex: 1.8, flexDirection: "column", gap: "25px" }}
         >
@@ -213,6 +234,23 @@ export default function CreateForm() {
                 setInput((prev) => ({ ...prev, manufacturer: e.target.value }))
               }
             />
+          </Form.Item>
+
+          <Form.Item>
+            <Form.Title>Category</Form.Title>
+            <Form.Select
+              onChange={(e) =>
+                setInput((prev) => ({ ...prev, categories: e.target.value }))
+              }
+            >
+              {arrCategory.current.map((category) => {
+                return (
+                  <Form.Option value={category._id}>
+                    {category.name}
+                  </Form.Option>
+                );
+              })}
+            </Form.Select>
           </Form.Item>
 
           <Form.Item style={{ justifyContent: "flex-start" }}>

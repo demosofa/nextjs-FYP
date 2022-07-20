@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.5.1",
+    "@types/formidable": "^2.0.5",
     "@types/jsonwebtoken": "^8.5.8",
     "cross-env": "^7.0.3",
     "eslint": "8.12.0",
