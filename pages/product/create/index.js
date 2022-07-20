@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
 import {
@@ -11,8 +11,9 @@ import {
   Variation,
   Variant,
 } from "../../../components";
-import { Validate } from "../../../utils";
+import { retryAxios, Validate } from "../../../utils";
 import { useUpload } from "../../../hooks";
+import { Media } from "../../_app";
 import { useSelector } from "react-redux";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
@@ -30,9 +31,10 @@ export default function CreateForm() {
     status: "",
     tags: [],
     files: [],
-    price: 0,
-    quantity: 0,
+    manufacturer: "",
   });
+
+  const { device, Devices } = useContext(Media);
 
   const [loading, getFiles, previews, deleteFile] = useUpload({
     init: input.thumbnail,
@@ -63,11 +65,13 @@ export default function CreateForm() {
     // for (var pair of formdata.entries()) {
     //   console.log(pair[0] + ", " + pair[1]);
     // }
+    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
     try {
+      retryAxios(axios);
       axios
         .post(`${LocalApi}/productcrud`, formdata, {
           headers: {
-            // Authorization: `Bearer`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-type": "multipart/form-data",
           },
         })
@@ -83,11 +87,18 @@ export default function CreateForm() {
       className="create_edit"
       onSubmit={handleSubmit}
       onClick={(e) => e.stopPropagation()}
-      style={{ maxWidth: "none", width: "auto", margin: "0 10%" }}
+      style={{
+        maxWidth: "none",
+        width: "auto",
+        margin:
+          (device === Devices.pc && "0 10%") ||
+          (device === Devices.tablet && "0 7%") ||
+          "0",
+      }}
     >
       <Form.Title style={{ fontSize: "20px" }}>Create Product</Form.Title>
 
-      <Container.Flex style={{ justifyContent: "space-around", gap: "40px" }}>
+      <Container.Grid style={{ justifyContent: "space-around", gap: "40px" }}>
         <Container.Flex
           style={{ flex: 1.8, flexDirection: "column", gap: "25px" }}
         >
@@ -153,7 +164,7 @@ export default function CreateForm() {
             setPrevFiles={(files) =>
               setInput((prev) => ({ ...prev, files: files }))
             }
-            style={{ maxWidth: "500px", height: "200px" }}
+            style={{ height: "200px" }}
           >
             <FileUpload.Show></FileUpload.Show>
             <FileUpload.Input
@@ -168,24 +179,6 @@ export default function CreateForm() {
               </label>
             </FileUpload.Input>
           </FileUpload>
-
-          <Variant
-            setVariants={(items) =>
-              setInput((prev) => ({
-                ...prev,
-                variants: items.map((item) => JSON.stringify(item)),
-              }))
-            }
-          ></Variant>
-
-          <Variation
-            setVariations={(items) =>
-              setInput((prev) => ({
-                ...prev,
-                variations: items.map((item) => JSON.stringify(item)),
-              }))
-            }
-          />
         </Container.Flex>
 
         <Container.Flex
@@ -213,21 +206,11 @@ export default function CreateForm() {
           </Form.Item>
 
           <Form.Item>
-            <Form.Title>Price</Form.Title>
+            <Form.Title>Manufacturer</Form.Title>
             <Form.Input
-              value={input.price}
+              value={input.manufacturer}
               onChange={(e) =>
-                setInput((prev) => ({ ...prev, price: e.target.value }))
-              }
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Form.Title>Quantity</Form.Title>
-            <Form.Input
-              value={input.quantity}
-              onChange={(e) =>
-                setInput((prev) => ({ ...prev, quantity: e.target.value }))
+                setInput((prev) => ({ ...prev, manufacturer: e.target.value }))
               }
             />
           </Form.Item>
@@ -242,7 +225,25 @@ export default function CreateForm() {
             />
           </Form.Item>
         </Container.Flex>
-      </Container.Flex>
+      </Container.Grid>
+
+      <Variant
+        setVariants={(items) =>
+          setInput((prev) => ({
+            ...prev,
+            variants: items.map((item) => JSON.stringify(item)),
+          }))
+        }
+      ></Variant>
+
+      <Variation
+        setVariations={(items) =>
+          setInput((prev) => ({
+            ...prev,
+            variations: items.map((item) => JSON.stringify(item)),
+          }))
+        }
+      />
 
       {JSON.stringify(input)}
 

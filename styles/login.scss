@@ -13,11 +13,11 @@
     padding: 0 20px;
     height: 100vh;
     @include flex(0, column, center);
-    @include mq("tablet-wide"){
+    @include mq("tablet-wide", min){
       flex: 1;
     }
 
-    @include mq("phablet", max){
+    @include mq("phablet"){
       position: relative;
       width: 100vw;
     }

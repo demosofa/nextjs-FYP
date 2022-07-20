@@ -4,6 +4,8 @@
 @import "./home";
 @import "./overview";
 @import "./login.scss";
+@import "./mixin.scss";
+
 :root {
   --grey-one: #eaeaf0;
   --grey-two: #2e3f59;
@@ -54,6 +56,12 @@ table {
 	border-collapse: collapse;
 	overflow: hidden;
 	box-shadow: 0 0 20px rgba(0,0,0,0.1);
+	@include mq("tablet-wide"){
+		width: 680px;
+	}
+	@include mq("tablet"){
+		width: 580px;
+	}
 }
 
 th,

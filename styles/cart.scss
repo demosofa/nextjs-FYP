@@ -4,7 +4,7 @@
   width: 100%;
   display: flex;
   gap: 20px;
-  @include mq("tablet", max){
+  @include mq("tablet"){
     flex-direction: column;
   }
 }

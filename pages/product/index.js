@@ -15,8 +15,6 @@ function ProductCRUD() {
       thumbnail: [],
       title: "T-shirt",
       status: "active",
-      price: 2000,
-      quantity: 40,
     },
   ]);
   const [remove, setRemove] = useState(null);
@@ -71,8 +69,6 @@ function ProductCRUD() {
               <th>Thumbnail</th>
               <th>Title</th>
               <th>Status</th>
-              <th>Price</th>
-              <th>Quantity</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -93,8 +89,6 @@ function ProductCRUD() {
                       <option value="out">out</option>
                     </select>
                   </td>
-                  <td>{product.price}</td>
-                  <td>{product.quantity}</td>
                   <td>
                     <button onClick={() => router.push("/overview")}>
                       Preview

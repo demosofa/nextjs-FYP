@@ -33,10 +33,10 @@ export default function Variation({ setVariations }) {
           <tr>
             <th>No.</th>
             <th>Thumbnail</th>
-            <th>Title</th>
+            <th>Sku</th>
             <th>Type</th>
             <th>Price</th>
-            <th>Stock</th>
+            <th>Quantity</th>
           </tr>
         </thead>
         <tbody>
@@ -48,9 +48,9 @@ export default function Variation({ setVariations }) {
                 <td></td>
                 <td>
                   <input
-                    value={variation.title}
+                    value={variation.sku}
                     onChange={(e) =>
-                      dispatch(editVariation({ index, title: e.target.value }))
+                      dispatch(editVariation({ index, sku: e.target.value }))
                     }
                   ></input>
                 </td>
@@ -65,9 +65,11 @@ export default function Variation({ setVariations }) {
                 </td>
                 <td>
                   <input
-                    value={variation.stock}
+                    value={variation.quantity}
                     onChange={(e) =>
-                      dispatch(editVariation({ index, stock: e.target.value }))
+                      dispatch(
+                        editVariation({ index, quantity: e.target.value })
+                      )
                     }
                   ></input>
                 </td>
