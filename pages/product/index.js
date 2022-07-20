@@ -9,14 +9,6 @@ import { useAuthLoad } from "../../hooks";
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function ProductCRUD() {
-  const [products, setProducts] = useState([
-    {
-      id: "",
-      thumbnail: [],
-      title: "T-shirt",
-      status: "active",
-    },
-  ]);
   const [remove, setRemove] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
@@ -73,7 +65,7 @@ function ProductCRUD() {
             </tr>
           </thead>
           <tbody>
-            {products.map((product, index) => {
+            {Object.values(data).map((product, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
@@ -90,11 +82,13 @@ function ProductCRUD() {
                     </select>
                   </td>
                   <td>
-                    <button onClick={() => router.push("/overview")}>
+                    <button
+                      onClick={() => router.push(`/overview/${product._id}`)}
+                    >
                       Preview
                     </button>
                     <button
-                      onClick={() => router.push(`product/${product.id}`)}
+                      onClick={() => router.push(`product/${product._id}`)}
                     >
                       Edit
                     </button>

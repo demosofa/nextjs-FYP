@@ -16,11 +16,11 @@ import Layout from "../../Layout";
 import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 
+const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+
 export async function getServerSideProps({ params }) {
-  const data = await fetch(
-    `https://fakestoreapi.com/products/${params.productId}`
-  );
-  const product = await data.json();
+  const data = await fetch(`${LocalApi}/productcrud/${params.productId}`);
+  const product = await data.json().then((res) => res._doc);
   return {
     props: {
       product,
@@ -102,7 +102,7 @@ export default function Overview({ product }) {
               setChecked={(value) => setOption(value.join(""))}
             >
               Size:
-              {["M", "L", "XL", "XXL"].map((item) => {
+              {product.variants.map((item) => {
                 return (
                   <div key={item} style={{ width: "fit-content" }}>
                     <Checkbox.Item value={item}>{item}</Checkbox.Item>
@@ -143,10 +143,10 @@ export default function Overview({ product }) {
           </Container.Flex>
         </div>
 
-        <div className="rating">
+        {/* <div className="rating">
           <Rating rated={4} />
           <div className="count">{product.rating.count}</div>
-        </div>
+        </div> */}
 
         <Comment url={"https://jsonplaceholder.typicode.com/comments"} />
       </div>

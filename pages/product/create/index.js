@@ -245,7 +245,7 @@ export default function CreateForm() {
             >
               {arrCategory.current.map((category) => {
                 return (
-                  <Form.Option value={category._id}>
+                  <Form.Option key={category._id} value={category._id}>
                     {category.name}
                   </Form.Option>
                 );
