@@ -9,7 +9,7 @@ class AccountController {
 
   async login(req, res) {
     const { username, password } = req.body;
-    const check = await this.unit.Account.getOne(username, "username");
+    const check = await this.unit.Account.getOne({ username });
     if (!check)
       return res
         .status(300)
@@ -33,10 +33,9 @@ class AccountController {
 
   async register(req, res) {
     const { account, userInfo } = req.body;
-    const isExisted = await this.unit.Account.getOne(
-      account.username,
-      "username"
-    );
+    const isExisted = await this.unit.Account.getOne({
+      username: account.username,
+    });
     if (isExisted)
       return res.status(300).json({
         message: "There is already existed account with this username",
