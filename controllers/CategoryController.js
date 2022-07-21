@@ -5,7 +5,7 @@ class CategoryController {
     this.unit = new unit();
   }
   async read(req, res) {
-    const category = await this.unit.Category.getOne(req.query.id);
+    const category = await this.unit.Category.getById(req.query.id);
     return res.status(200).json({ category });
   }
   async readAll(req, res) {
@@ -13,7 +13,7 @@ class CategoryController {
     return res.status(200).json({ categories });
   }
   async create(req, res) {
-    const Category = await this.unit.Category.getOne(req.body.name, "name");
+    const Category = await this.unit.Category.getOne({ name: req.body.name });
     if (Category)
       return res.status(300).json({
         message: "there is already an existed category",
@@ -24,7 +24,7 @@ class CategoryController {
     return res.status(200).json({ created });
   }
   async update(req, res) {
-    const Category = await this.unit.Category.getOne(req.body.id);
+    const Category = await this.unit.Category.getById(req.body.id);
     if (!Category)
       return res.status(300).json({
         message: "there is any existed category",

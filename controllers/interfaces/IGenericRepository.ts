@@ -1,7 +1,9 @@
 export default interface IGenericRepository<T>{
-  getOne(value: string, prop: string) : Promise<any>;
-  getAll(condition: object): Promise<any>;
-  create(data: T): Promise<any>;
-  updateById(id: string, data: T): Promise<any>;
-  deleteOne(value: string, prop: string) : Promise<any>;
+  getById(id: string) : any;
+  getOne(condition: object) : any;
+  getAll(condition: object): any;
+  create(data: T): any;
+  updateById(id: string, data: T): any;
+  deleteById(id: string): any
+  deleteOne(condition: object) : any;
 }

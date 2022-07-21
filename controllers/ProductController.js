@@ -7,13 +7,43 @@ class ProductController {
   }
 
   async read(req, res) {
-    const product = await this.unit.Product.getOne(req.query.id);
+    const product = await this.unit.Product.getById(req.query.id)
+      .populate({
+        path: "variants",
+        populate: {
+          path: "options",
+          model: "VariantOption",
+        },
+      })
+      .populate({
+        path: "variations",
+        populate: {
+          path: "type",
+          model: "VariantOption",
+        },
+      })
+      .exec();
     if (!product) return res.status(404).json({ errorMessage: "Not Found" });
     return res.status(200).json({ ...product });
   }
 
   async readAll(req, res) {
-    const products = await this.unit.Product.getAll();
+    const products = await this.unit.Product.getAll()
+      .populate({
+        path: "variants",
+        populate: {
+          path: "options",
+          model: "VariantOption",
+        },
+      })
+      .populate({
+        path: "variations",
+        populate: {
+          path: "type",
+          model: "VariantOption",
+        },
+      })
+      .exec();
     if (!products) return res.status(404).json({ errorMessage: "Not Found" });
     return res.status(200).json({ ...products });
   }
@@ -22,7 +52,9 @@ class ProductController {
     const result = await parseForm(req);
     if (!result)
       return res.status(500).json({ errorMessage: `Fail to load file` });
-    const check = await this.unit.Product.getOne(result.fields.title, "title");
+    const check = await this.unit.Product.getOne({
+      title: result.fields.title,
+    });
     if (check)
       return res
         .status(500)
@@ -55,7 +87,7 @@ class ProductController {
     );
     const product = await this.unit.Product.create({
       ...others,
-      image: result.files.files.map((file) => file.newFilename),
+      images: result.files.files.map((file) => file.newFilename),
       thumbnail: result.files.thumbnail.newFilename,
       variants: arrVariant.map((item) => item._id),
       variations: arrVariation.map((item) => item._id),
@@ -69,7 +101,9 @@ class ProductController {
     const result = await parseForm(req);
     if (!result)
       return res.status(500).json({ errorMessage: `Fail to load file` });
-    const check = await this.unit.Product.getOne(result.fields.title, "title");
+    const check = await this.unit.Product.getOne({
+      title: result.fields.title,
+    });
     if (check)
       return res
         .status(500)
