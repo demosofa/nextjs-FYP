@@ -24,7 +24,7 @@ export default function Variants({ setVariants }) {
       </div>
       {variants.map((variant, index) => {
         return (
-          <div className={styles.variant} key={index}>
+          <div className={styles.variant} key={variant.id}>
             <input
               value={variant.name}
               onChange={(e) =>

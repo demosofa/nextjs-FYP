@@ -136,7 +136,7 @@ Form.Select = function ({ children, ...restProp }) {
 
 Form.Option = function ({ children, ...props }) {
   return (
-    <option {...props} className={styles.form__option} value={props.value}>
+    <option {...props} className={styles.form__option}>
       {children}
     </option>
   );

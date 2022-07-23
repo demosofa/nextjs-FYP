@@ -1,13 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const initialState = [{ name: "", options: [] }];
+export const initialState = [{ id: null, name: "", options: [] }];
 
 const variant = createSlice({
   initialState,
   name: "variant",
   reducers: {
-    addVariant(state, action) {
-      return [...state, ...initialState];
+    addVariant(state) {
+      let check = false;
+      let unique = { ...initialState.concat()[0] };
+      while (!check) {
+        unique.id = Math.random();
+        let existed = state.filter((item) => item.id === unique.id);
+        if (existed.length === 0) check = true;
+      }
+      return [...state, unique];
     },
     editVariant(state, { payload }) {
       const { index, ...props } = payload;

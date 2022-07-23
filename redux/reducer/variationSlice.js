@@ -29,6 +29,10 @@ const variation = createSlice({
       copy[index] = { ...copy[index], ...props };
       return copy;
     },
+    editAllVariations(state, { payload }) {
+      const { price, quantity } = payload;
+      return state.map((item) => ({ ...item, price, quantity }));
+    },
     deleteVariation(state, { payload }) {
       return state.filter((_, index) => index !== payload);
     },
@@ -36,5 +40,9 @@ const variation = createSlice({
 });
 
 export default variation.reducer;
-export const { addVariation, editVariation, deleteVariation } =
-  variation.actions;
+export const {
+  addVariation,
+  editVariation,
+  editAllVariations,
+  deleteVariation,
+} = variation.actions;

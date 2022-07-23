@@ -11,7 +11,6 @@ export default function Increment({
   const [quantity, setQuantity] = useState(value);
 
   useEffect(() => setValue(quantity), [quantity]);
-  useEffect(() => setQuantity(value), [value]);
 
   return (
     <div className={styles.set_quantity} {...props}>

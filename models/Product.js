@@ -7,7 +7,7 @@ const Product = new Schema(
     description: { type: String, required: true, maxlength: 255 },
     status: { type: String, required: true },
     thumbnail: { type: String, required: true },
-    image: [{ type: String, required: true }],
+    images: [{ type: String, required: true }],
     tags: [{ type: String }],
     categories: [
       {

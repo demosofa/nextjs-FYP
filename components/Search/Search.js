@@ -1,13 +1,11 @@
-import { useState } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import styles from "./search.module.scss";
 
-export default function Search({ setSearch }) {
-  const [input, setInput] = useState("");
+export default function Search({ onClick, ...props }) {
   return (
     <div className={styles.search_wrapper}>
-      <input value={input} onChange={(e) => setInput(e.target.value)} />
-      <BiSearchAlt2 style={{ color: "blue" }} />
+      <input {...props} />
+      <BiSearchAlt2 style={{ color: "blue" }} onClick={onClick} />
     </div>
   );
 }

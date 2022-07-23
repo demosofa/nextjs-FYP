@@ -1,23 +1,30 @@
 import IGenericRepository from "../interfaces/IGenericRepository";
+import { FilterQuery, Model } from "mongoose"
 
-export default class GenericRepository<T> implements IGenericRepository<T> {
-  private context: any;
-  constructor(context: any) {
+export default class GenericRepository<T extends {_id: string}> implements IGenericRepository<T> {
+  private context: typeof Model;
+  constructor(context: typeof Model) {
     this.context = context;
   }
-  getOne(value: string, prop = "_id") {
-    return this.context.findOne({ [prop]: value }).exec();
+  getById(id: string) {
+    return this.context.findById(id);
   }
-  getAll(condition: object) {
-    return this.context.find(condition).exec();
+  getOne(condition: FilterQuery<T>) {
+    return this.context.findOne(condition);
+  }
+  getAll(condition: FilterQuery<T>) {
+    return this.context.find(condition);
   }
   create(data: T) {
     return this.context.create(data);
   }
   updateById(id: string, data: T) {
-    return this.context.updateOne({_id: id}, data).exec();
+    return this.context.findByIdAndUpdate(id, data);
   }
-  deleteOne(value: string, prop = "_id") {
-    return this.context.deleteOne({ [prop]: value }).exec();
+  deleteById(id: string) {
+    return this.context.findByIdAndDelete(id)
+  }
+  deleteOne(condition: FilterQuery<T>) {
+    return this.context.deleteOne(condition);
   }
 }

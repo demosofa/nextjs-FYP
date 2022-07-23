@@ -15,10 +15,9 @@ export default function TagsInput({
   let inputDiv;
 
   useEffect(() => setPrevTags(tags), [tags]);
-  useEffect(() => setTags(prevTags), [prevTags]);
 
   const handleDelete = (index) => {
-    setTags(tags.filter((tag) => tag !== tags[index]));
+    setTags((prev) => prev.filter((tag) => tag !== tags[index]));
   };
 
   const handleFilter = (value) => {
