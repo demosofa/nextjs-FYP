@@ -1,13 +1,12 @@
 import { useCallback, useState, useEffect, useRef } from "react";
 
-export default function useUpload({
+export default function useUpload(
   init = [],
-  setPrevs = Function,
   limit = {
     size: 5,
     total: 10,
-  },
-}) {
+  }
+) {
   const [files, setFiles] = useState(init);
   const run = useRef(true);
   const [previews, setPreviews] = useState([]);
@@ -62,8 +61,8 @@ export default function useUpload({
     (e, index) => {
       e.stopPropagation();
       run.current = false;
-      setFiles(files.filter((_, i) => i !== index));
-      setPreviews(previews.filter((_, i) => i !== index));
+      setFiles((prev) => prev.filter((_, i) => i !== index));
+      setPreviews((prev) => prev.filter((_, i) => i !== index));
     },
     [files]
   );
@@ -87,8 +86,14 @@ export default function useUpload({
       .then((files) => run.current && setPreviews(files))
       .then(() => setLoading(false))
       .then(() => (run.current = true));
-    setPrevs(files);
   }, [files]);
 
-  return [loading, getFiles, previews, handleDelete, handleOpenPreview];
+  return {
+    loading,
+    files,
+    previews,
+    getFiles,
+    handleDelete,
+    handleOpenPreview,
+  };
 }

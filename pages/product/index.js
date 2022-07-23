@@ -11,25 +11,28 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 function ProductCRUD() {
   const [remove, setRemove] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [params, setParams] = useState({
+    search: "",
+    filter: "",
+    sort: "",
+  });
+  const [search, setSearch] = useState(params.search);
   const router = useRouter();
-
-  const handleStatus = async (e, index) => {
-    setProducts((prev) => {
-      let target = prev.concat();
-      target[index].status = e.target.value;
-      return target;
-    });
-    await axios.patch(`${LocalApi}/cart/${products[index].id}`, {
-      status: e.target.value,
-    });
-  };
 
   const { loading, isLoggined, isAuthorized, data } = useAuthLoad({
     config: {
       url: `${LocalApi}/productcrud`,
+      params,
     },
     roles: ["guest"],
+    deps: [params],
   });
+
+  const handleStatus = async (e, index) => {
+    await axios.patch(`${LocalApi}/productcrud/${data[index].id}`, {
+      status: e.target.value,
+    });
+  };
 
   useEffect(() => {
     if (!loading && !isLoggined && !isAuthorized) router.push("/login");
@@ -51,7 +54,11 @@ function ProductCRUD() {
     <div className="product-crud__container">
       <Container.Flex>
         <button onClick={() => router.push(`product/create`)}>Create</button>
-        <Search />
+        <Search
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClick={() => setParams((prev) => ({ ...prev, search }))}
+        />
       </Container.Flex>
       <div className="product-crud__table">
         <table>
@@ -61,6 +68,7 @@ function ProductCRUD() {
               <th>Thumbnail</th>
               <th>Title</th>
               <th>Status</th>
+              <th>TimeStamp</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -80,6 +88,10 @@ function ProductCRUD() {
                       <option value="non-active">non-active</option>
                       <option value="out">out</option>
                     </select>
+                  </td>
+                  <td>
+                    <p>Created at: {product.createdAt}</p>
+                    <p>Updated at: {product.updatedAt}</p>
                   </td>
                   <td>
                     <button

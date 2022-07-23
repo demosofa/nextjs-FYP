@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
 import {
@@ -15,7 +15,8 @@ import {
 import { retryAxios, Validate } from "../../../utils";
 import { useAxiosLoad, useUpload } from "../../../hooks";
 import { Media } from "../../_app";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { editAllVariations } from "../../../redux/reducer/variationSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -23,6 +24,8 @@ export default function CreateForm() {
   const variants = useSelector((state) => state.variant);
   const variations = useSelector((state) => state.variation);
   const arrCategory = useRef([]);
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [input, setInput] = useState({
     title: "",
     description: "",
@@ -34,21 +37,26 @@ export default function CreateForm() {
     tags: [],
     files: [],
     manufacturer: "",
+    price: 0,
+    quantity: 0,
   });
 
   const { device, Devices } = useContext(Media);
 
-  const [loading, getFiles, previews, deleteFile] = useUpload({
-    init: input.thumbnail,
-    setPrevs: (thumbnail) =>
-      setInput((prev) => ({ ...prev, thumbnail: thumbnail[0] })),
-    limit: {
-      size: 2,
-      total: 1,
-    },
+  const {
+    files: Thumbnail,
+    getFiles,
+    previews,
+    handleDelete: deleteFile,
+  } = useUpload(input.thumbnail, {
+    size: 2,
+    total: 1,
   });
 
-  const router = useRouter();
+  useEffect(
+    () => setInput((prev) => ({ ...prev, thumbnail: Thumbnail[0] })),
+    [Thumbnail]
+  );
 
   const { loading: isLoading } = useAxiosLoad({
     config: {
@@ -262,6 +270,26 @@ export default function CreateForm() {
               }
             />
           </Form.Item>
+
+          <Form.Item>
+            <Form.Title>Price</Form.Title>
+            <Form.Input
+              value={input.price}
+              onChange={(e) =>
+                setInput((prev) => ({ ...prev, price: e.target.value }))
+              }
+            ></Form.Input>
+          </Form.Item>
+
+          <Form.Item>
+            <Form.Title>Quantity</Form.Title>
+            <Form.Input
+              value={input.quantity}
+              onChange={(e) =>
+                setInput((prev) => ({ ...prev, quantity: e.target.value }))
+              }
+            ></Form.Input>
+          </Form.Item>
         </Container.Flex>
       </Container.Grid>
 
@@ -269,16 +297,26 @@ export default function CreateForm() {
         setVariants={(items) =>
           setInput((prev) => ({
             ...prev,
-            variants: items.map((item) => JSON.stringify(item)),
+            variants: items?.map((item) => JSON.stringify(item)),
           }))
         }
       ></Variant>
+
+      <Form.Button
+        onClick={() =>
+          dispatch(
+            editAllVariations({ price: input.price, quantity: input.quantity })
+          )
+        }
+      >
+        Apply Price and Quantity to all Variations
+      </Form.Button>
 
       <Variation
         setVariations={(items) =>
           setInput((prev) => ({
             ...prev,
-            variations: items.map((item) => JSON.stringify(item)),
+            variations: items?.map((item) => JSON.stringify(item)),
           }))
         }
       />
