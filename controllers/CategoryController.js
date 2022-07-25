@@ -30,13 +30,13 @@ class CategoryController {
         message: "there is any existed category",
       });
     const updated = await this.unit.Category.updateById(req.body.id, req.body);
-    if (!updated.matchedCount)
+    if (!updated)
       return res.status(500).json({ message: "there is error in server" });
     return res.status(200).json({ updated });
   }
   async delete(req, res) {
-    const deleted = await this.unit.Category.deleteOne(req.query.id);
-    if (!deleted.deletedCount) return res.status(500).send("<p>fail<p>");
+    const deleted = await this.unit.Category.deleteById(req.query.id);
+    if (!deleted) return res.status(500).send("<p>fail<p>");
     return res.status(200).json({ deleted });
   }
 }
