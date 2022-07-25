@@ -4,7 +4,6 @@ import { NextApiRequest } from "next";
 export default function parseForm(req: NextApiRequest, options: Partial<Options> = {
   multiples: true,
   keepExtensions: true,
-  encoding: "base64"
   // uploadDir: "./public/",
 }) {
   const form = new IncomingForm(options);

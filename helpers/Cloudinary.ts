@@ -7,13 +7,16 @@ cloudinary.config({
 })
 
 export default class Cloudinary{
-  static listFolders(options?: AdminApiOptions){
-    return new Promise((resolve, reject) => {
-      cloudinary.api.root_folders((err, result) =>{
-        if(err) reject(err);
-        resolve(result)
-      }, options)
-    })
+  public static v2 = cloudinary;
+  static listFolders(root_folder?: string, options?: AdminApiOptions){
+    if(!root_folder)
+      return new Promise((resolve, reject) => {
+        cloudinary.api.root_folders((err, result) =>{
+          if(err) reject(err);
+          resolve(result)
+        }, options)
+      })
+    else return cloudinary.api.sub_folders(root_folder, options)
   }
   static listResources(options?: AdminAndResourceOptions){
     return cloudinary.api.resources(options)
