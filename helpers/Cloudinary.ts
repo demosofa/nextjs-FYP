@@ -8,7 +8,7 @@ cloudinary.config({
 
 export default class Cloudinary{
   public static v2 = cloudinary;
-  static listFolders(root_folder?: string,options?: AdminApiOptions){
+  static listFolders(root_folder?: string, options?: AdminApiOptions){
     if(!root_folder)
       return new Promise((resolve, reject) => {
         cloudinary.api.root_folders((err, result) =>{
