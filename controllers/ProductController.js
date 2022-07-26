@@ -88,7 +88,6 @@ class ProductController {
     const product = await this.unit.Product.create({
       ...others,
       images: result.files.files.map((file) => file.newFilename),
-      thumbnail: result.files.thumbnail.newFilename,
       variants: arrVariant.map((item) => item._id),
       variations: arrVariation.map((item) => item._id),
     });

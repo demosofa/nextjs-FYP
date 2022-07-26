@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
 import {
@@ -7,16 +7,16 @@ import {
   TagsInput,
   Form,
   Container,
-  Icon,
   Variation,
   Variant,
   Loading,
 } from "../../../components";
 import { retryAxios, Validate } from "../../../utils";
-import { useAxiosLoad, useUpload } from "../../../hooks";
+import { useAxiosLoad } from "../../../hooks";
 import { Media } from "../../_app";
 import { useSelector, useDispatch } from "react-redux";
 import { editAllVariations } from "../../../redux/reducer/variationSlice";
+import { addNotification } from "../../../redux/reducer/notificationSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -31,7 +31,6 @@ export default function CreateForm() {
     description: "",
     variants,
     variations,
-    thumbnail: [],
     categories: "",
     status: "",
     tags: [],
@@ -42,21 +41,6 @@ export default function CreateForm() {
   });
 
   const { device, Devices } = useContext(Media);
-
-  const {
-    files: Thumbnail,
-    getFiles,
-    previews,
-    handleDelete: deleteFile,
-  } = useUpload(input.thumbnail, {
-    size: 2,
-    total: 1,
-  });
-
-  useEffect(
-    () => setInput((prev) => ({ ...prev, thumbnail: Thumbnail[0] })),
-    [Thumbnail]
-  );
 
   const { loading: isLoading } = useAxiosLoad({
     config: {
@@ -71,20 +55,19 @@ export default function CreateForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formdata = new FormData();
-    Object.entries(input).forEach((field) => {
-      let key = field[0];
-      const value = field[1];
-      if (value instanceof Array) {
-        for (var i = 0; i < value.length; i++) {
-          formdata.append(key, value[i]);
-        }
-      } else formdata.append(key, value);
-    });
-    // for (var pair of formdata.entries()) {
-    //   console.log(pair[0] + ", " + pair[1]);
-    // }
-    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
     try {
+      Object.entries(input).forEach((field) => {
+        let key = field[0];
+        const value = field[1];
+        if (value instanceof Array) {
+          for (var i = 0; i < value.length; i++) {
+            formdata.append(key, value[i]);
+          }
+        } else {
+          formdata.append(key, value);
+        }
+      });
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
       retryAxios(axios);
       axios
         .post(`${LocalApi}/productcrud`, formdata, {
@@ -93,11 +76,9 @@ export default function CreateForm() {
             "Content-type": "multipart/form-data",
           },
         })
-        .then((res) => {
-          router.push("/product");
-        });
+        .then((res) => router.push("/product"));
     } catch (error) {
-      console.log(error);
+      dispatch(addNotification(error));
     }
   };
   if (isLoading)
@@ -132,41 +113,6 @@ export default function CreateForm() {
           style={{ flex: 1.8, flexDirection: "column", gap: "25px" }}
         >
           <Container.Flex style={{ justifyContent: "space-between" }}>
-            <Form.Item>
-              <Form.Title>Thumbnail</Form.Title>
-              <div className="thumbnail_upload">
-                {!input.thumbnail && (
-                  <label
-                    className="add_file__btn"
-                    style={{ width: "100%", height: "100%" }}
-                  >
-                    Click to add thumbnail
-                    <input
-                      type="file"
-                      onChange={(e) => getFiles(e.target.files)}
-                      style={{ display: "none" }}
-                    ></input>
-                  </label>
-                )}
-                {previews.map((preview, index) => (
-                  <div
-                    key={index}
-                    style={{ width: "100%", height: "100%" }}
-                    onClick={(e) => deleteFile(e, index)}
-                  >
-                    <img
-                      src={preview}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: "6px",
-                      }}
-                    ></img>
-                  </div>
-                ))}
-              </div>
-            </Form.Item>
-
             <Form.Item>
               <Form.Title>Title</Form.Title>
               <Form.Input
