@@ -1,6 +1,6 @@
 import { useContext, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../../redux/reducer/cartSlice";
+import { addCart } from "../../redux/reducer/cartSlice";
 import {
   ImageMagnifier,
   Comment,
@@ -20,7 +20,7 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export async function getServerSideProps({ params }) {
   const data = await fetch(`${LocalApi}/productcrud/${params.productId}`);
-  const product = await data.json().then((res) => res._doc);
+  const product = await data.json().then((res) => res.product);
   return {
     props: {
       product,
@@ -46,7 +46,7 @@ export default function Overview({ product }) {
     const { _id, title, thumbnail } = product;
     const { price } = targetVariation;
     dispatch(
-      addProduct({
+      addCart({
         id: _id,
         title,
         thumbnail,
