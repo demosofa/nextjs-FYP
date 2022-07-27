@@ -16,6 +16,8 @@ class CartController {
     const data = await this.unit.Cart.getById(req.query.id);
     if (!data) return res.status(500).json({ message: "Cart not exist" });
     const update = await this.unit.Cart.updateById(req.query.id, result.fields);
+    if (!update)
+      return res.status(500).json({ message: "fail to update Cart" });
     return res.status(200).json({ message: "success update cart" });
   }
 }
