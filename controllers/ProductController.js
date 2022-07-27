@@ -24,7 +24,7 @@ class ProductController {
       })
       .exec();
     if (!product) return res.status(404).json({ errorMessage: "Not Found" });
-    return res.status(200).json({ ...product });
+    return res.status(200).json({ product });
   }
 
   async readAll(req, res) {
@@ -45,7 +45,7 @@ class ProductController {
       })
       .exec();
     if (!products) return res.status(404).json({ errorMessage: "Not Found" });
-    return res.status(200).json({ ...products });
+    return res.status(200).json({ products });
   }
 
   async create(req, res) {

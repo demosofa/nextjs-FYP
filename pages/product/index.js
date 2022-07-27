@@ -29,6 +29,7 @@ function ProductCRUD() {
   });
 
   const handleStatus = async (e, index) => {
+    retryAxios(axios);
     await axios.patch(`${LocalApi}/productcrud/${data[index].id}`, {
       status: e.target.value,
     });
@@ -73,7 +74,7 @@ function ProductCRUD() {
             </tr>
           </thead>
           <tbody>
-            {Object.values(data).map((product, index) => {
+            {Object.values(data.products).map((product, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>

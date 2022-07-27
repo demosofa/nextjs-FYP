@@ -52,7 +52,7 @@ export default class Validate {
       throw new Error("this input contains code");
     return this;
   }
-  isPassWord(pwdlength: number) {
+  isPassWord(pwdlength = 8) {
     const regex = new RegExp(
       `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${pwdlength},}$`
     );
