@@ -74,7 +74,7 @@ function ProductCRUD() {
             </tr>
           </thead>
           <tbody>
-            {Object.values(data.products).map((product, index) => {
+            {Object.values(data).map((product, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>

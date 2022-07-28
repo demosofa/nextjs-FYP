@@ -5,7 +5,7 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export async function getServerSideProps({ params }) {
   const response = await fetch(`${LocalApi}/productcrud/${params.id}`);
-  const product = await response.json()._doc;
+  const product = await response.json();
   return {
     props: {
       product,
@@ -55,7 +55,7 @@ export default function UpdateForm({ product }) {
               return (
                 <tr>
                   <td>{index}</td>
-                  <td>v{variation.thumbnail}</td>
+                  <td>{variation.thumbnail}</td>
                   <td>{variation.sku}</td>
                   <td>{variation.type.join("/")}</td>
                   <td>{variation.price}</td>

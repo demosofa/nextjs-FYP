@@ -9,7 +9,7 @@ export default function retryAxios(axiosInstance: AxiosStatic | AxiosInstance, m
     if(error.response.status === 401 && error.response.data.message === "Token is expired" && counter <= maxRetry) {
       try{
         const response = await axios.post(`${LocalApi}/auth/refreshToken`);
-        const {accessToken} = await response.data;
+        const accessToken = await response.data;
         expireStorage.setItem("accessToken", accessToken)
         const config = {...error.config, headers: {...error.config.headers, Authorization: `Bearer ${accessToken}`}}
         counter+=1

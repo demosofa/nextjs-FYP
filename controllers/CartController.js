@@ -9,7 +9,7 @@ class CartController {
   async read(req, res) {
     const cart = await this.unit.Cart.getById(req.query.id);
     if (!cart) return res.status(500).json({ message: "Cant find cart" });
-    return res.status(200).json({ cart });
+    return res.status(200).json(cart);
   }
   async update(req, res) {
     const result = await parseForm(req);
