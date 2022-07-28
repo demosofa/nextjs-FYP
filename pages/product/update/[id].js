@@ -5,7 +5,7 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export async function getServerSideProps({ params }) {
   const response = await fetch(`${LocalApi}/productcrud/${params.id}`);
-  const product = await response.json()._doc;
+  const product = await response.json();
   return {
     props: {
       product,

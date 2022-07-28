@@ -6,25 +6,27 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET
 })
 
+interface RootApiOptions extends AdminApiOptions{
+  root_folder?: string
+}
+
 export default class Cloudinary{
   public static v2 = cloudinary;
-  static listFolders(root_folder?: string, options?: AdminApiOptions){
+  static listFolders(options?: RootApiOptions){
+    const {root_folder, ...others} = options
     if(!root_folder)
       return new Promise((resolve, reject) => {
         cloudinary.api.root_folders((err, result) =>{
           if(err) reject(err);
           resolve(result)
-        }, options)
+        }, others)
       })
-    else return cloudinary.api.sub_folders(root_folder, options)
+    else return cloudinary.api.sub_folders(root_folder, others)
   }
   static listResources(options?: AdminAndResourceOptions){
     return cloudinary.api.resources(options)
   }
-  static async createFolder(path: string, options?: AdminApiOptions){
-    const result: any = await this.listFolders();
-    const index = result.folders.findIndex((folder) => folder.path === path);
-    if(index !== -1) return result.folders[index]
+  static createFolder(path: string, options?: AdminApiOptions){
     return cloudinary.api.create_folder(path, options)
   }
   static deleteFolder(path: string, options?: AdminApiOptions){
@@ -36,10 +38,7 @@ export default class Cloudinary{
   static destroyFile (public_id: string, options?: { resource_type?: string; type?: string; invalidate?: boolean; }){
     return cloudinary.uploader.destroy(public_id, options)
   }
-  static createZip(options?: ArchiveApiOptions){
-    return cloudinary.uploader.create_zip(options)
-  }
-  static downloadZip (options?: ArchiveApiOptions | ConfigAndUrlOptions) {
+  static downloadZipUrl (options?: ArchiveApiOptions | ConfigAndUrlOptions) {
     return cloudinary.utils.download_zip_url(options);
   }
 }
