@@ -23,7 +23,7 @@ class AccountController {
       role: check.role,
     });
     setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
-    return res.status(200).json({ accessToken });
+    return res.status(200).json(accessToken);
   }
 
   async logout(req, res) {
@@ -56,7 +56,7 @@ class AccountController {
       role: created.role,
     });
     setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
-    return res.status(200).json({ accessToken });
+    return res.status(200).json(accessToken);
   }
 }
 

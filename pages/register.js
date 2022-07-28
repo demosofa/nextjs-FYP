@@ -170,13 +170,13 @@ function FormAccount({ info, moveTo, ...props }) {
             throw new Error();
         }
       });
-      const data = await axios
+      const accessToken = await axios
         .post(`${LocalApi}/auth/register`, {
           account: input,
           userInfo: info,
         })
         .then((response) => response.data);
-      expireStorage.setItem("accessToken", data.accessToken);
+      expireStorage.setItem("accessToken", accessToken);
       dispatch(addNotification({ message: "Success Register" }));
       router.back();
     } catch (error) {

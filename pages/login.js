@@ -28,10 +28,10 @@ export default function Login() {
             break;
         }
       });
-      const data = await axios
+      const accessToken = await axios
         .post(`${LocalApi}/auth/login`, input)
         .then((response) => response.data);
-      expireStorage.setItem("accessToken", data.accessToken);
+      expireStorage.setItem("accessToken", accessToken);
       dispatch(addNotification({ message: "Success Login" }));
       router.back();
     } catch (error) {
