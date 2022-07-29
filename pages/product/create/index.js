@@ -48,7 +48,7 @@ export default function CreateForm() {
       method: "GET",
     },
     callback: async (instance) => {
-      arrCategory.current = (await instance()).data.categories;
+      arrCategory.current = (await instance()).data;
     },
   });
 

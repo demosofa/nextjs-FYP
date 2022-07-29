@@ -14,7 +14,10 @@ async function upload(req, res) {
     const folder = await Cloudinary.createFolder(`CMS/${path}`);
     const uploaded = await Promise.all(
       files.map((file) =>
-        Cloudinary.uploadFile(file.filepath, { folder: folder.path })
+        Cloudinary.uploadFile(file.filepath, {
+          folder: folder.path,
+          unique_filename: true,
+        })
       )
     );
     res.status(200).json(uploaded);

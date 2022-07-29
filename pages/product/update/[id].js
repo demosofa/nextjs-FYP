@@ -55,7 +55,7 @@ export default function UpdateForm({ product }) {
               return (
                 <tr>
                   <td>{index}</td>
-                  <td>v{variation.thumbnail}</td>
+                  <td>{variation.thumbnail}</td>
                   <td>{variation.sku}</td>
                   <td>{variation.type.join("/")}</td>
                   <td>{variation.price}</td>
