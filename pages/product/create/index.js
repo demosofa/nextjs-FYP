@@ -11,7 +11,7 @@ import {
   Variant,
   Loading,
 } from "../../../components";
-import { retryAxios, Validate } from "../../../utils";
+import { retryAxios, Validate, uploadApi } from "../../../utils";
 import { useAxiosLoad } from "../../../hooks";
 import { Media } from "../../_app";
 import { useSelector, useDispatch } from "react-redux";
@@ -34,7 +34,7 @@ export default function CreateForm() {
     categories: "",
     status: "",
     tags: [],
-    files: [],
+    images: [],
     manufacturer: "",
     price: 0,
     quantity: 0,
@@ -54,30 +54,25 @@ export default function CreateForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formdata = new FormData();
+    let uploaded;
     try {
-      Object.entries(input).forEach((field) => {
-        let key = field[0];
-        const value = field[1];
-        if (value instanceof Array) {
-          for (var i = 0; i < value.length; i++) {
-            formdata.append(key, value[i]);
-          }
-        } else {
-          formdata.append(key, value);
-        }
-      });
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
       retryAxios(axios);
-      axios
-        .post(`${LocalApi}/productcrud`, formdata, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-type": "multipart/form-data",
-          },
-        })
-        .then((res) => router.push("/product"));
+      uploaded = await uploadApi(axios, {
+        path: "store",
+        files: input.images,
+      });
+      const newInput = { ...input, images: uploaded };
+      await axios.post(`${LocalApi}/productcrud`, newInput, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      router.push("/product");
     } catch (error) {
+      const arrPublic_id = uploaded.map((item) => item.public_id);
+      await axios.post(`${LocalApi}/destroy`, {
+        path: "store",
+        files: arrPublic_id,
+      });
       dispatch(addNotification(error));
     }
   };
@@ -135,10 +130,8 @@ export default function CreateForm() {
           </Form.Item>
 
           <FileUpload
-            prevFiles={input.files}
-            setPrevFiles={(files) =>
-              setInput((prev) => ({ ...prev, files: files }))
-            }
+            prevFiles={input.images}
+            setPrevFiles={(images) => setInput((prev) => ({ ...prev, images }))}
             style={{ height: "200px" }}
           >
             <FileUpload.Show></FileUpload.Show>
