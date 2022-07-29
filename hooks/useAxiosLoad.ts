@@ -24,7 +24,7 @@ export default function useAxiosLoad(
       }
     };
     loadingData();
-    return () => controller.current.abort();
+    return () => controller.current?.abort();
   }, deps);
 
   return {loading, axiosInstance, setLoading, controller};

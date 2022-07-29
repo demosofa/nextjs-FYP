@@ -109,7 +109,7 @@ FileUpload.Show = function ShowFiles({ children, animate = "Fade", ...props }) {
           return (
             <div
               key={files[index].name}
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "100%" }}
               onClick={(e) => handleOpenPreview(e, index)}
             >
               <div className={styles.img_container}>

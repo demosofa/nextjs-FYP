@@ -7,6 +7,7 @@ import UserRepository from "./UserRepository";
 import VariantRepository from "./VariantRepository";
 import VariationRepository from "./VariationRepository";
 import VariantOptRepository from "./VariantOptRepository";
+import FileRepository from "./FileRepository";
 
 export {
   ProdcutRepository,
@@ -18,4 +19,5 @@ export {
   VariantRepository,
   VariationRepository,
   VariantOptRepository,
+  FileRepository,
 };
