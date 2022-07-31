@@ -11,31 +11,35 @@ const cart = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addProduct(state, action) {
-      const index = state.products.findIndex(
+    addCart(state, action) {
+      const copy = JSON.parse(JSON.stringify(state));
+      const index = copy.products.findIndex(
         (item) => item.title === action.payload.title
       );
-      if (index === -1) state.products.push(action.payload);
-      else state.products[index] = action.payload;
-      state.quantity = state.products.reduce(
+      if (index === -1) copy.products.push(action.payload);
+      else copy.products[index] = action.payload;
+      copy.quantity = copy.products.reduce(
         (prev, curr) => prev + curr.quantity,
         0
       );
-      state.total = Math.round(
-        state.products.reduce((prev, curr) => prev + curr.total, 0)
+      copy.total = Math.round(
+        copy.products.reduce((prev, curr) => prev + curr.total, 0)
       );
+      return copy;
     },
-    removeProduct(state, action) {
-      state.products = state.products.filter(
+    removeCart(state, action) {
+      const copy = JSON.parse(JSON.stringify(state));
+      copy.products = copy.products.filter(
         (item) => item.title !== action.payload.title
       );
-      state.quantity = state.products.reduce(
+      copy.quantity = copy.products.reduce(
         (prev, curr) => prev + curr.quantity,
         0
       );
-      state.total = Math.round(
-        state.products.reduce((prev, curr) => prev + curr.total, 0)
+      copy.total = Math.round(
+        copy.products.reduce((prev, curr) => prev + curr.total, 0)
       );
+      return copy;
     },
   },
   extraReducers: (builder) => {
@@ -44,6 +48,6 @@ const cart = createSlice({
   },
 });
 
-export const { addProduct, removeProduct } = cart.actions;
+export const { addCart, editCart, removeCart } = cart.actions;
 
 export default cart.reducer;

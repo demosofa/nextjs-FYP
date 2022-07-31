@@ -11,25 +11,35 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 function ProductCRUD() {
   const [remove, setRemove] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [params, setParams] = useState({
+    search: "",
+    filter: "",
+    sort: "",
+  });
+  const [search, setSearch] = useState(params.search);
   const router = useRouter();
 
+  const {
+    loading,
+    isLoggined,
+    isAuthorized,
+    data: products,
+    setData: setProducts,
+  } = useAuthLoad({
+    config: {
+      url: `${LocalApi}/product`,
+      params,
+    },
+    roles: ["guest"],
+    deps: [params],
+  });
+
   const handleStatus = async (e, index) => {
-    setProducts((prev) => {
-      let target = prev.concat();
-      target[index].status = e.target.value;
-      return target;
-    });
-    await axios.patch(`${LocalApi}/cart/${products[index].id}`, {
+    retryAxios(axios);
+    await axios.patch(`${LocalApi}/product/${data[index].id}`, {
       status: e.target.value,
     });
   };
-
-  const { loading, isLoggined, isAuthorized, data } = useAuthLoad({
-    config: {
-      url: `${LocalApi}/productcrud`,
-    },
-    roles: ["guest"],
-  });
 
   useEffect(() => {
     if (!loading && !isLoggined && !isAuthorized) router.push("/login");
@@ -51,7 +61,11 @@ function ProductCRUD() {
     <div className="product-crud__container">
       <Container.Flex>
         <button onClick={() => router.push(`product/create`)}>Create</button>
-        <Search />
+        <Search
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClick={() => setParams((prev) => ({ ...prev, search }))}
+        />
       </Container.Flex>
       <div className="product-crud__table">
         <table>
@@ -61,11 +75,12 @@ function ProductCRUD() {
               <th>Thumbnail</th>
               <th>Title</th>
               <th>Status</th>
+              <th>TimeStamp</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {Object.values(data).map((product, index) => {
+            {products.map((product, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
@@ -80,6 +95,10 @@ function ProductCRUD() {
                       <option value="non-active">non-active</option>
                       <option value="out">out</option>
                     </select>
+                  </td>
+                  <td>
+                    <p>Created at: {product.createdAt}</p>
+                    <p>Updated at: {product.updatedAt}</p>
                   </td>
                   <td>
                     <button
@@ -122,7 +141,14 @@ function ProductCRUD() {
 }
 
 function Remove({ index, product, setProducts, setRemove }) {
-  const handleRemove = () => {
+  const handleRemove = async () => {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+    retryAxios(axios);
+    await axios.delete(`${LocalApi}/product/${product._id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     setProducts((prev) => prev.filter((_, i) => i !== index));
     setRemove(null);
   };

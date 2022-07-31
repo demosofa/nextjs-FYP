@@ -1,5 +1,4 @@
 import UnitOfWork from "./services/UnitOfWork";
-import { parseForm } from "../helpers";
 
 class ProductController {
   constructor(unit = UnitOfWork) {
@@ -15,6 +14,8 @@ class ProductController {
           model: "VariantOption",
         },
       })
+      .populate("images")
+      .populate("categories")
       .populate({
         path: "variations",
         populate: {
@@ -24,7 +25,7 @@ class ProductController {
       })
       .exec();
     if (!product) return res.status(404).json({ errorMessage: "Not Found" });
-    return res.status(200).json({ ...product });
+    return res.status(200).json(product);
   }
 
   async readAll(req, res) {
@@ -45,26 +46,26 @@ class ProductController {
       })
       .exec();
     if (!products) return res.status(404).json({ errorMessage: "Not Found" });
-    return res.status(200).json({ ...products });
+    return res.status(200).json(products);
   }
 
   async create(req, res) {
-    const result = await parseForm(req);
-    if (!result)
-      return res.status(500).json({ errorMessage: `Fail to load file` });
+    const { variants, variations, images, ...others } = req.body;
     const check = await this.unit.Product.getOne({
-      title: result.fields.title,
+      title: others.title,
     });
     if (check)
       return res
         .status(500)
-        .json({ errorMessage: `Product already has ${result.fields.title}` });
-    const { variants, variations, ...others } = result.fields;
+        .json({ errorMessage: `Product already has ${others.title}` });
+    const arrImage = await Promise.all(
+      images.map((image) => this.unit.File.create(image))
+    );
     let newVariants = variants instanceof Array ? variants : [variants];
     let productOpts = [];
     const arrVariant = await Promise.all(
       newVariants.map(async (item) => {
-        let { name, options } = JSON.parse(item);
+        const { name, options } = JSON.parse(item);
         const arrOption = await Promise.all(
           options.map((opt) => this.unit.Option.create({ name: opt }))
         );
@@ -87,8 +88,7 @@ class ProductController {
     );
     const product = await this.unit.Product.create({
       ...others,
-      images: result.files.files.map((file) => file.newFilename),
-      thumbnail: result.files.thumbnail.newFilename,
+      images: arrImage.map((file) => file._id),
       variants: arrVariant.map((item) => item._id),
       variations: arrVariation.map((item) => item._id),
     });
@@ -98,23 +98,40 @@ class ProductController {
   }
 
   async update(req, res) {
-    const result = await parseForm(req);
-    if (!result)
-      return res.status(500).json({ errorMessage: `Fail to load file` });
+    const { variations, newImages, filterImages, images, ...others } = req.body;
     const check = await this.unit.Product.getOne({
-      title: result.fields.title,
+      title: others.title,
     });
     if (check)
       return res
         .status(500)
-        .json({ errorMessage: `Product already has ${result.fields.title}` });
-    const product = await this.unit.Product.updateById(result.fields.id, {
-      ...result.fields,
-      image: result.files.files.map((file) => file.name),
+        .json({ errorMessage: `Product already has ${others.title}` });
+    images.forEach(async (image) => {
+      await this.unit.File.updateOne({ public_id: image.public_id }, image);
+    });
+    filterImages.forEach(async (image) => {
+      await this.unit.File.deleteById(image._id);
+    });
+    const product = await this.unit.Product.updateById(others._id, {
+      ...others,
+      image: images.map((file) => file.name),
     });
     if (!product)
       return res.status(500).json({ message: `Fail to update collection` });
     return res.status(200).json({ message: "Success update Product" });
+  }
+
+  async patch(req, res) {
+    const { _id, status } = req.body;
+    const patched = await this.unit.Product.updateById(_id, { status });
+    if (!patched) return res.status(500).end();
+    return res.status(200).end();
+  }
+
+  async delete(req, res) {
+    const deleted = await this.unit.Product.deleteById(req.query.id);
+    if (!deleted) return res.status(500).end();
+    return res.status(200).end();
   }
 }
 

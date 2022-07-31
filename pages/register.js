@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/reducer/notificationSlice";
+import { Notification } from "../Layout";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -40,11 +41,13 @@ export default function Register() {
           />
         </Slider>
       </div>
+      <Notification />
     </div>
   );
 }
 
 function FormInfo({ info, setInfo, moveTo, ...props }) {
+  const dispatch = useDispatch();
   const handleContinue = (e) => {
     e.preventDefault();
     try {
@@ -63,7 +66,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
       });
       moveTo();
     } catch (error) {
-      console.log(error.message);
+      dispatch(addNotification({ message: error.message }));
     }
   };
   return (
@@ -167,20 +170,20 @@ function FormAccount({ info, moveTo, ...props }) {
             break;
           case "passwordAgain":
             if (input.password === entry[1]) break;
-            throw new Error();
+            throw new Error("please input the same password");
         }
       });
-      const data = await axios
+      const accessToken = await axios
         .post(`${LocalApi}/auth/register`, {
           account: input,
           userInfo: info,
         })
         .then((response) => response.data);
-      expireStorage.setItem("accessToken", data.accessToken);
+      expireStorage.setItem("accessToken", accessToken);
       dispatch(addNotification({ message: "Success Register" }));
       router.back();
     } catch (error) {
-      console.log(error.message);
+      dispatch(addNotification({ message: error.message }));
     }
   };
   return (

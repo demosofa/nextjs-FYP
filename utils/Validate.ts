@@ -1,14 +1,8 @@
-// isNaN(this.input) && !isFinite(this.input)
 export default class Validate {
   constructor(
-    string,
-    config = {
-      enoughLength: 8,
-      passwordLength: 8,
-    }
+    public input: string,
   ) {
-    this.input = string;
-    this.config = config;
+    this.input = input;
   }
 
   isEmail() {
@@ -38,9 +32,13 @@ export default class Validate {
     if (!regex.test(this.input)) throw new Error("this is not a phone number");
     return this;
   }
-  isEnoughLength() {
-    if (this.input.length > this.config.length)
+  isEnoughLength({min, max}:{min?: number, max?: number}) {
+    if(min && this.input.length < min)
+      throw new Error("this is too short")
+    if (max && this.input.length > max)
       throw new Error("this is too long");
+    if(!min && !max) 
+      throw new Error("please provide min and max arguments")
     return this;
   }
   isNotSpecial() {
@@ -54,9 +52,9 @@ export default class Validate {
       throw new Error("this input contains code");
     return this;
   }
-  isPassWord() {
+  isPassWord(pwdlength = 8) {
     const regex = new RegExp(
-      `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${this.config.passwordLength},}$`
+      `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${pwdlength},}$`
     );
     if (!regex.test(this.input))
       throw new Error("this input is not like password");

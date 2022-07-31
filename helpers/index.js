@@ -7,3 +7,4 @@ export { default as parseForm } from "./parseForm";
 export { default as Devices } from "./Devices";
 export { default as Role } from "./Role";
 export { default as Token } from "./Token";
+export { default as Cloudinary } from "./Cloudinary";

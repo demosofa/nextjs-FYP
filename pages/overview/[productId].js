@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../../redux/reducer/cartSlice";
+import { addCart } from "../../redux/reducer/cartSlice";
 import {
   ImageMagnifier,
   Comment,
@@ -19,8 +19,8 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export async function getServerSideProps({ params }) {
-  const data = await fetch(`${LocalApi}/productcrud/${params.productId}`);
-  const product = await data.json().then((res) => res._doc);
+  const data = await fetch(`${LocalApi}/product/${params.productId}`);
+  const product = await data.json();
   return {
     props: {
       product,
@@ -31,19 +31,26 @@ export async function getServerSideProps({ params }) {
 export default function Overview({ product }) {
   const [image, setImage] = useState();
   const [quantity, setQuantity] = useState(1);
-  const [option, setOption] = useState();
+  const [options, setOptions] = useState([]);
+  const targetVariation = useMemo(() => {
+    const index = product.variations.findIndex((item) =>
+      item.type.every((value) => options.includes(value.name))
+    );
+    return product.variations[index];
+  }, [options]);
 
   const { device, Devices } = useContext(Media);
 
   const dispatch = useDispatch();
-  const handleOrder = () => {
-    const { id, title, image, price } = product;
+  const handleAddToCart = () => {
+    const { _id, title, images } = product;
+    const { price } = targetVariation;
     dispatch(
-      addProduct({
-        id,
+      addCart({
+        id: _id,
         title,
-        image,
-        option,
+        image: images[0].url,
+        options,
         quantity,
         price,
         total: quantity * price,
@@ -57,28 +64,33 @@ export default function Overview({ product }) {
     );
   };
 
+  useEffect(() => setImage(product.images[0].url), []);
+
   return (
     <Layout>
       <div className="page-overview">
         <div className="container-info">
           <div className="preview-product">
             <ImageMagnifier
-              src={image || product.image}
-              style={{ maxWidth: "300px", height: "350px" }}
+              src={image}
+              style={{ width: "100%", height: "350px" }}
               className="product-img"
             ></ImageMagnifier>
-            {/* <Slider
-            config={{
-              vertical: device !== Devices.phone ? true : false,
-              slides: { perView: 3 },
-            }}
-          >
-            <Slider.Content className="slider">
-              {[].map((src, index) => (
-                <img key={index} src={src}></img>
+            <Slider
+              className="slider"
+              config={{
+                vertical: device === Devices.phone ? true : false,
+                slides: { perView: 1 },
+              }}
+            >
+              {product.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image.url}
+                  onMouseEnter={() => setImage(image.url)}
+                ></img>
               ))}
-            </Slider.Content>
-          </Slider> */}
+            </Slider>
           </div>
           <div className="product-info">
             <label>{product.title}</label>
@@ -87,29 +99,45 @@ export default function Overview({ product }) {
 
             <Container.Flex style={{ gap: "10px" }}>
               <label>Price: </label>
-              <div>{product.price} $</div>
+              <div>{targetVariation?.price} $</div>
             </Container.Flex>
 
             <Container.Flex style={{ gap: "10px" }}>
               <label>Category: </label>
-              <div className="categrory">{product.category}</div>
+              <div className="categrory">{product.categories[0].name}</div>
             </Container.Flex>
 
-            <Checkbox
-              type="radio"
-              name="size"
-              style={{ display: "flex", justifyContent: "space-between" }}
-              setChecked={(value) => setOption(value.join(""))}
-            >
-              Size:
-              {product.variants.map((item) => {
-                return (
-                  <div key={item} style={{ width: "fit-content" }}>
-                    <Checkbox.Item value={item}>{item}</Checkbox.Item>
-                  </div>
-                );
-              })}
-            </Checkbox>
+            {product.variants.map((variant, index) => {
+              return (
+                <Checkbox
+                  key={variant._id}
+                  type="radio"
+                  name={variant.name}
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                  setChecked={(value) =>
+                    setOptions((prev) => {
+                      const clone = prev.concat();
+                      clone[index] = value.join("");
+                      return clone;
+                    })
+                  }
+                >
+                  {variant.name}
+                  {variant.options.map((item, index) => {
+                    return (
+                      <div key={item._id} style={{ width: "fit-content" }}>
+                        <Checkbox.Item
+                          value={item.name}
+                          defaultChecked={index === 0}
+                        >
+                          {item.name}
+                        </Checkbox.Item>
+                      </div>
+                    );
+                  })}
+                </Checkbox>
+              );
+            })}
 
             <Container.Flex
               style={{
@@ -124,10 +152,13 @@ export default function Overview({ product }) {
                 style={{ flex: 1 }}
               />
               <button
-                style={{ flex: 2 }}
+                style={{ flex: 1 }}
                 className="btn-add-to-cart"
-                onClick={handleOrder}
+                onClick={handleAddToCart}
               >
+                Add to Cart
+              </button>
+              <button style={{ flex: 1 }} className="btn-add-to-cart">
                 Order
               </button>
             </Container.Flex>

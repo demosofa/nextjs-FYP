@@ -17,7 +17,7 @@ export default function TagsInput({
   useEffect(() => setPrevTags(tags), [tags]);
 
   const handleDelete = (index) => {
-    setTags(tags.filter((tag) => tag !== tags[index]));
+    setTags((prev) => prev.filter((tag) => tag !== tags[index]));
   };
 
   const handleFilter = (value) => {

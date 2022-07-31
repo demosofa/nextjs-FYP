@@ -1,7 +1,7 @@
-import {AxiosRequestConfig} from "axios"
+import { AxiosRequestConfig } from "axios"
 import { useState, DependencyList } from "react"
 import decoder from "jwt-decode"
-import {useAxiosLoad} from ".";
+import { useAxiosLoad } from ".";
 import { retryAxios } from "../utils";
 
 export default function useAuthLoad({config, roles, deps=[]}: {config: AxiosRequestConfig, roles: string[], deps?: DependencyList}){
@@ -34,5 +34,5 @@ export default function useAuthLoad({config, roles, deps=[]}: {config: AxiosRequ
       return
     }
   })
-  return {loading, isLoggined, isAuthorized, data}
+  return {loading, isLoggined, isAuthorized, data, setData}
 }

@@ -3,12 +3,13 @@ const Schema = mongoose.Schema;
 
 const ProductVariation = new Schema(
   {
-    sku: { type: String, require: true, max: 200 },
+    sku: { type: String, required: true, max: 200 },
+    // image: { type: Schema.Types.ObjectId, ref: "File", required: true },
     type: [
-      { type: Schema.Types.ObjectId, ref: "VariantOption", require: true },
+      { type: Schema.Types.ObjectId, ref: "VariantOption", required: true },
     ],
-    price: { type: Number, require: true },
-    quantity: { type: Number, require: true },
+    price: { type: Number, required: true },
+    quantity: { type: Number, required: true },
   },
   { timestamps: true }
 );

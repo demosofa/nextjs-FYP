@@ -23,7 +23,12 @@ export default function Checkbox({
   );
 }
 
-Checkbox.Item = function Item({ children, value = children, ...props }) {
+Checkbox.Item = function Item({
+  children,
+  value = children,
+  defaultChecked = false,
+  ...props
+}) {
   const { checks, setChecks, type, name } = useContext(Kits);
   const handleCheck = () => {
     if (type === "checkbox")
@@ -34,6 +39,11 @@ Checkbox.Item = function Item({ children, value = children, ...props }) {
       );
     else if (type === "radio") setChecks([value]);
   };
+
+  useEffect(() => {
+    if (defaultChecked) handleCheck();
+  }, []);
+
   return (
     <>
       <input

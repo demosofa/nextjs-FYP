@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
 import { Animation, Icon, Increment } from "../../components";
-import { addProduct, removeProduct } from "../../redux/reducer/cartSlice";
+import { addCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
@@ -17,17 +17,13 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 // }
 
 export default function Cart() {
-  const cartState = useSelector((state) => {
-    console.log(state);
-    return state.cart;
-  });
-
+  const cartState = useSelector((state) => state.cart);
   const [cart, setCart] = useState({
     products: [
       {
         title: "",
         image: "",
-        option: "",
+        options: [],
         quantity: 0,
         price: 0,
         total: 0,
@@ -57,7 +53,7 @@ export default function Cart() {
                   </div>
                   <div className="info product__option">
                     <span>Option: </span>
-                    {item.option}
+                    {item.options.join(", ")}
                   </div>
                   <div className="info product__price">
                     <span>Price: </span>
@@ -72,7 +68,7 @@ export default function Cart() {
                   setValue={(value) => {
                     if (item.title)
                       dispatch(
-                        addProduct({
+                        addCart({
                           ...item,
                           quantity: value,
                           total: Math.round(value * item.price),
@@ -87,7 +83,7 @@ export default function Cart() {
               </div>
               <Icon
                 className="remove__product"
-                onClick={() => dispatch(removeProduct(item))}
+                onClick={() => dispatch(removeCart(item))}
                 style={{ padding: 0 }}
               >
                 <IoIosClose />

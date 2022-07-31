@@ -14,7 +14,7 @@ class AccountController {
       return res
         .status(300)
         .json({ message: "there is no account with this username" });
-    const validPass = await bcrypt.compare(password, check.hashpassword);
+    const validPass = await bcrypt.compare(password, check.hashPassword);
     if (!validPass)
       return res.status(300).json({ message: "Invalid password" });
     const { accessToken, refreshToken } = new Token({
@@ -23,7 +23,7 @@ class AccountController {
       role: check.role,
     });
     setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
-    return res.status(200).json({ accessToken });
+    return res.status(200).json(accessToken);
   }
 
   async logout(req, res) {
@@ -45,9 +45,8 @@ class AccountController {
     let hashPassword = await bcrypt.hash(account.password, 10);
     const created = await this.unit.Account.create({
       username: account.username,
-      hashpassword: hashPassword,
-      email: userInfo.email,
-      userId: user._id,
+      hashPassword,
+      user: user._id,
     });
     if (!created)
       return res.status(500).json({ message: "Fail to Create Account" });
@@ -57,7 +56,7 @@ class AccountController {
       role: created.role,
     });
     setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
-    return res.status(200).json({ accessToken });
+    return res.status(200).json(accessToken);
   }
 }
 
