@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const ProductVariation = new Schema(
   {
     sku: { type: String, required: true, max: 200 },
-    // image: { type: Schema.Types.ObjectId, ref: "File", required: true },
+    image: { type: Schema.Types.ObjectId, ref: "File" },
     type: [
       { type: Schema.Types.ObjectId, ref: "VariantOption", required: true },
     ],
