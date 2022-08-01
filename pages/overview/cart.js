@@ -23,7 +23,7 @@ export default function Cart() {
       {
         title: "",
         image: "",
-        option: "",
+        options: [],
         quantity: 0,
         price: 0,
         total: 0,
@@ -53,7 +53,7 @@ export default function Cart() {
                   </div>
                   <div className="info product__option">
                     <span>Option: </span>
-                    {item.option}
+                    {item.options.join(", ")}
                   </div>
                   <div className="info product__price">
                     <span>Price: </span>

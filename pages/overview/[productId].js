@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCart } from "../../redux/reducer/cartSlice";
 import {
@@ -19,8 +19,8 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export async function getServerSideProps({ params }) {
-  const data = await fetch(`${LocalApi}/productcrud/${params.productId}`);
-  const product = await data.json().then((res) => res.product);
+  const data = await fetch(`${LocalApi}/product/${params.productId}`);
+  const product = await data.json();
   return {
     props: {
       product,
@@ -42,14 +42,14 @@ export default function Overview({ product }) {
   const { device, Devices } = useContext(Media);
 
   const dispatch = useDispatch();
-  const handleOrder = () => {
-    const { _id, title, thumbnail } = product;
+  const handleAddToCart = () => {
+    const { _id, title, images } = product;
     const { price } = targetVariation;
     dispatch(
       addCart({
         id: _id,
         title,
-        thumbnail,
+        image: images[0].url,
         options,
         quantity,
         price,
@@ -64,29 +64,34 @@ export default function Overview({ product }) {
     );
   };
 
+  useEffect(() => setImage(product.images[0].url), []);
+
   return (
     <Layout>
       <div className="page-overview">
         <div className="container-info">
-          {/* <div className="preview-product">
+          <div className="preview-product">
             <ImageMagnifier
-              src={image || product.thumbnail}
-              style={{ maxWidth: "300px", height: "350px" }}
+              src={image}
+              style={{ width: "100%", height: "350px" }}
               className="product-img"
             ></ImageMagnifier>
             <Slider
-            config={{
-              vertical: device !== Devices.phone ? true : false,
-              slides: { perView: 3 },
-            }}
-          >
-            <Slider.Content className="slider">
-              {[].map((src, index) => (
-                <img key={index} src={src}></img>
+              className="slider"
+              config={{
+                vertical: device === Devices.phone ? true : false,
+                slides: { perView: 1 },
+              }}
+            >
+              {product.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image.url}
+                  onMouseEnter={() => setImage(image.url)}
+                ></img>
               ))}
-            </Slider.Content>
-          </Slider>
-          </div> */}
+            </Slider>
+          </div>
           <div className="product-info">
             <label>{product.title}</label>
 
@@ -99,7 +104,7 @@ export default function Overview({ product }) {
 
             <Container.Flex style={{ gap: "10px" }}>
               <label>Category: </label>
-              <div className="categrory">{product.category}</div>
+              <div className="categrory">{product.categories[0].name}</div>
             </Container.Flex>
 
             {product.variants.map((variant, index) => {
@@ -149,7 +154,7 @@ export default function Overview({ product }) {
               <button
                 style={{ flex: 1 }}
                 className="btn-add-to-cart"
-                onClick={handleOrder}
+                onClick={handleAddToCart}
               >
                 Add to Cart
               </button>

@@ -52,16 +52,10 @@ a {
 }
 
 table {
-	width: 800px;
+	width: 100%;
 	border-collapse: collapse;
 	overflow: hidden;
 	box-shadow: 0 0 20px rgba(0,0,0,0.1);
-	@include mq("tablet-wide"){
-		width: 680px;
-	}
-	@include mq("tablet"){
-		width: 580px;
-	}
 }
 
 th,
@@ -102,5 +96,37 @@ tbody {
 				z-index: -1;
 			}
 		}
+	}
+}
+
+/*responsive*/
+
+@media(max-width: 500px){
+	.table thead{
+		display: none;
+	}
+
+	.table, .table tbody, .table tr, .table td{
+		display: block;
+		width: 100%;
+	}
+	.table tr{
+		margin-bottom:15px;
+	}
+	.table td{
+		text-align: right;
+		padding-left: 50%;
+		text-align: right;
+		position: relative;
+	}
+	.table td::before{
+		content: attr(data-label);
+		position: absolute;
+		left:0;
+		width: 50%;
+		padding-left:15px;
+		font-size:15px;
+		font-weight: bold;
+		text-align: left;
 	}
 }

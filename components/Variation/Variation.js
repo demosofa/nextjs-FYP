@@ -32,7 +32,6 @@ export default function Variation({ setVariations }) {
         <thead>
           <tr>
             <th>No.</th>
-            <th>Thumbnail</th>
             <th>Sku</th>
             <th>Type</th>
             <th>Price</th>
@@ -45,7 +44,6 @@ export default function Variation({ setVariations }) {
             return (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td></td>
                 <td>
                   <input
                     value={variation.sku}

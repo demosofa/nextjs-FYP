@@ -1,5 +1,4 @@
 import UnitOfWork from "./services/UnitOfWork";
-import { parseForm } from "../helpers";
 
 class ProductController {
   constructor(unit = UnitOfWork) {
@@ -15,6 +14,8 @@ class ProductController {
           model: "VariantOption",
         },
       })
+      .populate("images")
+      .populate("categories")
       .populate({
         path: "variations",
         populate: {
@@ -97,7 +98,7 @@ class ProductController {
   }
 
   async update(req, res) {
-    const { variations, images, ...others } = req.body;
+    const { _id, variations, newImages, filterImages, ...others } = req.body;
     const check = await this.unit.Product.getOne({
       title: others.title,
     });
@@ -105,13 +106,41 @@ class ProductController {
       return res
         .status(500)
         .json({ errorMessage: `Product already has ${others.title}` });
-    const product = await this.unit.Product.updateById(others._id, {
-      ...others,
-      image: images.map((file) => file.name),
-    });
-    if (!product)
-      return res.status(500).json({ message: `Fail to update collection` });
+    await Promise.all(
+      filterImages.map((image) => this.unit.File.deleteById(image._id))
+    );
+    const createdImages = await Promise.all(
+      newImages.map((image) => this.unit.File.create(image))
+    );
+    await Promise.all(
+      variations.map((variation) => {
+        const { _id, image, ...other } = variation;
+        const index = createdImages.findIndex(
+          (item) => item.public_id === image
+        );
+        if (!index) return this.unit.Variation.updateById(_id, { $set: other });
+        return this.unit.Variation.updateById(_id, {
+          $set: { image: createdImages[index]._id, ...other },
+        });
+      })
+    );
+    const updated = await this.unit.Product.updateById(_id, { $set: others });
+    if (!updated)
+      return res.status(500).json({ message: "Fail to update product" });
     return res.status(200).json({ message: "Success update Product" });
+  }
+
+  async patch(req, res) {
+    const { _id, ...others } = req.body;
+    const patched = await this.unit.Product.updateById(_id, { $set: others });
+    if (!patched) return res.status(500).end();
+    return res.status(200).end();
+  }
+
+  async delete(req, res) {
+    const deleted = await this.unit.Product.deleteById(req.query.id);
+    if (!deleted) return res.status(500).end();
+    return res.status(200).end();
   }
 }
 

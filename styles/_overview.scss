@@ -11,19 +11,18 @@
 
     .preview-product {
       flex: 1;
-      @include flex(10px, row-reverse);
+      @include flex(10px, column);
       @include mq("tablet"){
-        @include flex(10px, column)
+        @include flex(10px, row-reverse)
       }
       .image__magnifier{
         flex: 4
       }
       .slider{
-        width: 60px; height: 180px;
-        @include mq("tablet"){
-          flex-direction: row;
-          width: 180px;
+        width: 180px;
           height: 60px;
+        @include mq("tablet"){
+          width: 60px; height: 180px;
         }
       }
     }

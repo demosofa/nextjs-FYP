@@ -9,20 +9,18 @@ export const config = {
 async function upload(req, res) {
   try {
     const result = await parseForm(req);
-    const path = result.fields.path;
-    const files = result.files[Object.keys(result.files)[0]];
+    const { path, public_id } = result.fields;
+    const file = result.files[Object.keys(result.files)[0]][0];
     const folder = await Cloudinary.createFolder(`CMS/${path}`);
-    const uploaded = await Promise.all(
-      files.map((file) =>
-        Cloudinary.uploadFile(file.filepath, {
-          folder: folder.path,
-          unique_filename: true,
-        })
-      )
-    );
+    let options = {
+      folder: folder.path,
+      unique_filename: true,
+    };
+    if (public_id) options.public_id = public_id;
+    const uploaded = await Cloudinary.uploadFile(file.filepath, options);
     res.status(200).json(uploaded);
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.status(500).json({ message: err.message });
   }
 }
 

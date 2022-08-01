@@ -1,4 +1,4 @@
-import axios, {AxiosStatic, AxiosInstance} from "axios"
+import axios, { AxiosStatic, AxiosInstance } from "axios"
 import {expireStorage} from "."
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;

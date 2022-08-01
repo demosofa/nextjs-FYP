@@ -19,9 +19,15 @@ function ProductCRUD() {
   const [search, setSearch] = useState(params.search);
   const router = useRouter();
 
-  const { loading, isLoggined, isAuthorized, data } = useAuthLoad({
+  const {
+    loading,
+    isLoggined,
+    isAuthorized,
+    data: products,
+    setData: setProducts,
+  } = useAuthLoad({
     config: {
-      url: `${LocalApi}/productcrud`,
+      url: `${LocalApi}/product`,
       params,
     },
     roles: ["guest"],
@@ -30,7 +36,7 @@ function ProductCRUD() {
 
   const handleStatus = async (e, index) => {
     retryAxios(axios);
-    await axios.patch(`${LocalApi}/productcrud/${data[index].id}`, {
+    await axios.patch(`${LocalApi}/product/${data[index].id}`, {
       status: e.target.value,
     });
   };
@@ -74,7 +80,7 @@ function ProductCRUD() {
             </tr>
           </thead>
           <tbody>
-            {Object.values(data).map((product, index) => {
+            {products.map((product, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
@@ -135,7 +141,14 @@ function ProductCRUD() {
 }
 
 function Remove({ index, product, setProducts, setRemove }) {
-  const handleRemove = () => {
+  const handleRemove = async () => {
+    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+    retryAxios(axios);
+    await axios.delete(`${LocalApi}/product/${product._id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     setProducts((prev) => prev.filter((_, i) => i !== index));
     setRemove(null);
   };

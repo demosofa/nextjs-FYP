@@ -3,7 +3,7 @@ const LocalApi = process.env.LOCAL_API;
 
 const productApi = createApi({
   reducerPath: "productApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `${LocalApi}/productcrud` }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${LocalApi}/product` }),
   tagTypes: ["Manage Product"],
   endpoints: (builder) => ({
     getPorduct: builder.query({ query: (id) => `/${id}` }),

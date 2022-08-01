@@ -17,10 +17,10 @@ export default async function (req, res) {
       await product.update(req, res);
       break;
     case "patch":
-      await product.update(req, res);
+      await product.patch(req, res);
       break;
     case "delete":
-      await product.remove(req, res);
+      await product.delete(req, res);
       break;
   }
 }
