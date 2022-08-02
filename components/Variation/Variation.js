@@ -9,7 +9,7 @@ import {
   deleteVariation,
 } from "../../redux/reducer/variationSlice";
 
-export default function Variation({ setVariations }) {
+export default function Variation() {
   const variants = useSelector((state) => state.variant);
   const dispatch = useDispatch();
 
@@ -23,8 +23,6 @@ export default function Variation({ setVariations }) {
   useEffect(() => {
     dispatch(addVariation(list));
   }, [variants]);
-
-  useEffect(() => setVariations(variations), [variations]);
 
   return (
     <div style={{ padding: "5px" }}>
@@ -40,7 +38,7 @@ export default function Variation({ setVariations }) {
         </thead>
         <tbody>
           {variations.map((variation, index) => {
-            if (!variation.type.length) return undefined;
+            if (!variation.types.length) return undefined;
             return (
               <tr key={index}>
                 <td>{index + 1}</td>
@@ -52,7 +50,7 @@ export default function Variation({ setVariations }) {
                     }
                   ></input>
                 </td>
-                <td>{variation.type.join("/")}</td>
+                <td>{variation.types.join("/")}</td>
                 <td>
                   <input
                     value={variation.price}

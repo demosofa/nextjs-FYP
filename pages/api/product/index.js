@@ -11,7 +11,7 @@ async function index(req, res) {
   await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":
-      await product.readAll(req, res);
+      await product.listManagedProduct(req, res);
       break;
     case "post":
       await product.create(req, res);

@@ -1,4 +1,6 @@
 import { Cloudinary, isAuthentication, parseForm } from "../../helpers";
+import { UploadApiOptions } from "cloudinary";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export const config = {
   api: {
@@ -6,17 +8,20 @@ export const config = {
   },
 };
 
-async function upload(req, res) {
+async function upload(req: NextApiRequest, res: NextApiResponse) {
   try {
     const result = await parseForm(req);
-    const { path, public_id } = result.fields;
+    let { path, public_id } = result.fields;
     const file = result.files[Object.keys(result.files)[0]][0];
     const folder = await Cloudinary.createFolder(`CMS/${path}`);
-    let options = {
+    let options: UploadApiOptions = {
       folder: folder.path,
       unique_filename: true,
     };
-    if (public_id) options.public_id = public_id;
+    if (public_id) {
+      public_id = public_id[0].replace(folder.path + "/", "")
+      options = { ...options, public_id, invalidate: true };
+    }
     const uploaded = await Cloudinary.uploadFile(file.filepath, options);
     res.status(200).json(uploaded);
   } catch (err) {

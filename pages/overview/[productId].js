@@ -34,7 +34,7 @@ export default function Overview({ product }) {
   const [options, setOptions] = useState([]);
   const targetVariation = useMemo(() => {
     const index = product.variations.findIndex((item) =>
-      item.type.every((value) => options.includes(value.name))
+      item.types.every((value) => options.includes(value.name))
     );
     return product.variations[index];
   }, [options]);
@@ -99,7 +99,9 @@ export default function Overview({ product }) {
 
             <Container.Flex style={{ gap: "10px" }}>
               <label>Price: </label>
-              <div>{targetVariation?.price} $</div>
+              <div>
+                {targetVariation ? targetVariation.price : product.price} $
+              </div>
             </Container.Flex>
 
             <Container.Flex style={{ gap: "10px" }}>
