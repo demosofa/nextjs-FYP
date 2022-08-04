@@ -7,10 +7,9 @@ import {
   TagsInput,
   Form,
   Container,
-  Variation,
-  Variant,
   Loading,
 } from "../../../components";
+import { Variation, Variant } from "../../../containers";
 import { Notification } from "../../../Layout";
 import { retryAxios, Validate, uploadApi } from "../../../utils";
 import { useAxiosLoad } from "../../../hooks";
@@ -30,8 +29,6 @@ export default function CreateForm() {
   const [input, setInput] = useState({
     title: "",
     description: "",
-    variants,
-    variations,
     categories: "",
     status: "",
     tags: [],
@@ -67,7 +64,7 @@ export default function CreateForm() {
           });
         })
       );
-      const newInput = { ...input, images: uploaded };
+      const newInput = { ...input, variants, variations, images: uploaded };
       await axios.post(`${LocalApi}/product`, newInput, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
@@ -157,15 +154,7 @@ export default function CreateForm() {
               </FileUpload.Input>
             </FileUpload>
 
-            <Variant
-              setVariants={(items) =>
-                setInput((prev) => ({
-                  ...prev,
-                  variants: items?.map((item) => JSON.stringify(item)),
-                }))
-              }
-            ></Variant>
-
+            <Variant />
             <Form.Button
               onClick={() =>
                 dispatch(
@@ -178,15 +167,7 @@ export default function CreateForm() {
             >
               Apply Price and Quantity to all Variations
             </Form.Button>
-
-            <Variation
-              setVariations={(items) =>
-                setInput((prev) => ({
-                  ...prev,
-                  variations: items?.map((item) => JSON.stringify(item)),
-                }))
-              }
-            />
+            <Variation />
           </Container.Flex>
 
           <Container.Flex
@@ -275,7 +256,7 @@ export default function CreateForm() {
           </Container.Flex>
         </Container.Grid>
 
-        {JSON.stringify(input)}
+        {JSON.stringify([variants, variations])}
 
         <Form.Item style={{ justifyContent: "flex-start" }}>
           <Form.Submit>Submit</Form.Submit>

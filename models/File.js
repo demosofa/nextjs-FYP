@@ -8,7 +8,7 @@ const File = new Schema(
     format: { type: String },
     type: { type: String, required: true },
     url: { type: String, required: true },
-    size: { type: Number },
+    size: { type: Number, required: true },
   },
   { timestamps: true }
 );

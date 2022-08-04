@@ -19,7 +19,7 @@ class ProductController {
       .populate({
         path: "variations",
         populate: {
-          path: "type",
+          path: "types",
           model: "VariantOption",
         },
       })
@@ -28,8 +28,63 @@ class ProductController {
     return res.status(200).json(product);
   }
 
-  async readAll(req, res) {
+  async getAll(req, res) {
+    const { page, search, sort } = req.query;
     const products = await this.unit.Product.getAll()
+      .where("status", "active")
+      .skip((page - 1) * 10)
+      .limit(10)
+      .sort({
+        [sort]: "asc",
+      })
+      .select(["_id", "images", "categories"])
+      .populate({ path: "images", select: "url" })
+      .populate("categories", "name")
+      .exec();
+    if (!products.length) return res.status(500).end();
+    return res.status(200).json(products);
+  }
+
+  async getImage(req, res) {
+    const { images } = await this.unit.Product.getById(req.query.id)
+      .select("images")
+      .populate("images")
+      .exec();
+    if (!images)
+      return res.status(500).json({ message: "Fail to load images" });
+    return res.status(200).json(images);
+  }
+
+  async getVariation(req, res) {
+    const { variations } = await this.unit.Product.getById(req.query.id)
+      .select("variations")
+      .populate({
+        path: "variations",
+        populate: {
+          path: "types",
+          model: "VariantOption",
+        },
+        populate: {
+          path: "image",
+          model: "File",
+        },
+      })
+      .exec();
+    if (!variations)
+      return res.status(500).json({ message: "Fail to load variations" });
+    return res.status(200).json(variations);
+  }
+
+  async listManagedProduct(req, res) {
+    const { page, search, sort } = req.query;
+    const products = await this.unit.Product.getAll()
+      .skip((page - 1) * 10)
+      .limit(10)
+      .sort({
+        [sort]: "asc",
+      })
+      .populate("categories", "name")
+      .populate({ path: "images", select: "url" })
       .populate({
         path: "variants",
         populate: {
@@ -40,7 +95,7 @@ class ProductController {
       .populate({
         path: "variations",
         populate: {
-          path: "type",
+          path: "types",
           model: "VariantOption",
         },
       })
@@ -61,36 +116,41 @@ class ProductController {
     const arrImage = await Promise.all(
       images.map((image) => this.unit.File.create(image))
     );
-    let newVariants = variants instanceof Array ? variants : [variants];
     let productOpts = [];
-    const arrVariant = await Promise.all(
-      newVariants.map(async (item) => {
-        const { name, options } = JSON.parse(item);
-        const arrOption = await Promise.all(
-          options.map((opt) => this.unit.Option.create({ name: opt }))
-        );
-        productOpts.push(...arrOption);
-        return this.unit.Variant.create({
-          name,
-          options: arrOption.map((opt) => opt._id),
-        });
-      })
-    );
-    const arrVariation = await Promise.all(
-      variations.map((item) => {
-        const { type, ...others } = JSON.parse(item);
-        let arrType = [];
-        productOpts.forEach((opt) => {
-          if (type.includes(opt.name)) arrType.push(opt._id);
-        });
-        return this.unit.Variation.create({ ...others, type: arrType });
-      })
-    );
+    let arrVariant;
+    if (variants.length) {
+      arrVariant = await Promise.all(
+        variants.map(async (item) => {
+          const { name, options } = item;
+          const arrOption = await Promise.all(
+            options.map((opt) => this.unit.Option.create({ name: opt }))
+          );
+          productOpts.push(...arrOption);
+          return this.unit.Variant.create({
+            name,
+            options: arrOption.map((opt) => opt._id),
+          });
+        })
+      );
+    }
+    let arrVariation;
+    if (variations.length) {
+      arrVariation = await Promise.all(
+        variations.map((item) => {
+          const { types, ...others } = item;
+          let arrType = [];
+          productOpts.forEach((opt) => {
+            if (types.includes(opt.name)) arrType.push(opt._id);
+          });
+          return this.unit.Variation.create({ ...others, types: arrType });
+        })
+      );
+    }
     const product = await this.unit.Product.create({
       ...others,
       images: arrImage.map((file) => file._id),
-      variants: arrVariant.map((item) => item._id),
-      variations: arrVariation.map((item) => item._id),
+      variants: arrVariant?.map((item) => item._id),
+      variations: arrVariation?.map((item) => item._id),
     });
     if (!product)
       return res.status(500).json({ message: `Fail to create collection` });
@@ -98,41 +158,60 @@ class ProductController {
   }
 
   async update(req, res) {
-    const { _id, variations, newImages, filterImages, ...others } = req.body;
-    const check = await this.unit.Product.getOne({
-      title: others.title,
-    });
-    if (check)
-      return res
-        .status(500)
-        .json({ errorMessage: `Product already has ${others.title}` });
-    await Promise.all(
-      filterImages.map((image) => this.unit.File.deleteById(image._id))
-    );
-    const createdImages = await Promise.all(
-      newImages.map((image) => this.unit.File.create(image))
-    );
-    await Promise.all(
-      variations.map((variation) => {
-        const { _id, image, ...other } = variation;
-        const index = createdImages.findIndex(
-          (item) => item.public_id === image
-        );
-        if (!index) return this.unit.Variation.updateById(_id, { $set: other });
-        return this.unit.Variation.updateById(_id, {
-          $set: { image: createdImages[index]._id, ...other },
-        });
-      })
-    );
+    const { _id, ...others } = req.body;
     const updated = await this.unit.Product.updateById(_id, { $set: others });
     if (!updated)
       return res.status(500).json({ message: "Fail to update product" });
     return res.status(200).json({ message: "Success update Product" });
   }
 
+  async putImage(req, res) {
+    const _id = req.query.id;
+    const { newImages, filterImages } = req.body;
+    if (filterImages.length) {
+      await Promise.all(
+        filterImages.map((image) => this.unit.File.deleteById(image._id))
+      );
+    }
+    if (newImages.length) {
+      const createdImages = await Promise.all(
+        newImages.map((image) => this.unit.File.create(image))
+      );
+      const createdIds = createdImages.map((image) => image._id);
+      const updated = await this.unit.Product.updateById(_id, {
+        $push: { images: { $each: createdIds } },
+      });
+      if (!updated)
+        return res
+          .status(500)
+          .json({ message: "Fail to update product images" });
+    }
+    return res.status(200).json({ message: "Success update product images" });
+  }
+
+  async patchVariation(req, res) {
+    const { variations } = req.body;
+    const updated = await Promise.all(
+      variations.map((variation) => {
+        const { _id, image, ...other } = variation;
+        if (!image) return this.unit.Variation.updateById(_id, { $set: other });
+        return this.unit.Variation.updateById(_id, {
+          $set: { image: image._id, ...other },
+        });
+      })
+    );
+    if (!updated.length)
+      return res
+        .status(500)
+        .json({ message: "Fail to update product variations" });
+    return res
+      .status(200)
+      .json({ message: "Success update product variations" });
+  }
+
   async patch(req, res) {
-    const { _id, ...others } = req.body;
-    const patched = await this.unit.Product.updateById(_id, { $set: others });
+    const _id = req.query.id;
+    const patched = await this.unit.Product.updateById(_id, { $set: req.body });
     if (!patched) return res.status(500).end();
     return res.status(200).end();
   }

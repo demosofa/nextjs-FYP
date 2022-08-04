@@ -6,7 +6,7 @@ export default async function refreshToken(req: NextApiRequest, res: NextApiResp
   try {
     const {accountId, userId, role} = Token.verifyRefreshToken(req.cookies.refreshToken) as {accountId: string, userId: string, role: string};
     const {accessToken, refreshToken} = new Token({accountId, userId, role});
-    setCookie(res, 'refreshToken', refreshToken, {httpOnly: true});
+    setCookie(res, 'refreshToken', refreshToken, {httpOnly: true, age: "1d"});
     res.status(200).json(accessToken)
   }catch(err){
     setCookie(res, "refreshToken", "deleted", {httpOnly:true, maxAge: -1})

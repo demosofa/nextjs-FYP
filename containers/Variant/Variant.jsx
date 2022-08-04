@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { TagsInput, Icon } from "..";
+import { TagsInput, Icon } from "../../components";
 import {
   addVariant,
   editVariant,
@@ -7,13 +7,10 @@ import {
 } from "../../redux/reducer/variantSlice";
 import { GiTrashCan } from "react-icons/gi";
 import styles from "./variant.module.scss";
-import { useEffect } from "react";
 
-export default function Variants({ setVariants }) {
+export default function Variants() {
   const variants = useSelector((state) => state.variant);
   const dispatch = useDispatch();
-
-  useEffect(() => setVariants(variants), [variants]);
   return (
     <div className={styles.container}>
       <div className={styles.title}>
@@ -38,8 +35,6 @@ export default function Variants({ setVariants }) {
                 dispatch(editVariant({ index, options: tags }));
               }}
             ></TagsInput>
-
-            {/* {JSON.stringify(variant.options)} */}
             <Icon onClick={() => dispatch(deleteVariant(index))}>
               <GiTrashCan />
             </Icon>

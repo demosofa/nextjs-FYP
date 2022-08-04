@@ -5,7 +5,7 @@ const ProductVariation = new Schema(
   {
     sku: { type: String, required: true, max: 200 },
     image: { type: Schema.Types.ObjectId, ref: "File" },
-    type: [
+    types: [
       { type: Schema.Types.ObjectId, ref: "VariantOption", required: true },
     ],
     price: { type: Number, required: true },

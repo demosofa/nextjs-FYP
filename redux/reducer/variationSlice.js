@@ -3,8 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = [
   {
     sku: "",
-    thumbnail: null,
-    type: [],
+    types: [],
     price: 0,
     quantity: 0,
   },
@@ -17,8 +16,7 @@ const variation = createSlice({
     addVariation(state, { payload }) {
       return payload.map((variant) => ({
         sku: "",
-        thumbnail: null,
-        type: variant,
+        types: variant,
         price: 0,
         quantity: 0,
       }));

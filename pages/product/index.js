@@ -5,19 +5,23 @@ import { useRouter } from "next/router";
 import { Pagination, Container, Search, Loading } from "../../components";
 import { retryAxios } from "../../utils";
 import { useAuthLoad } from "../../hooks";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../../redux/reducer/notificationSlice";
+import { Notification } from "../../Layout";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function ProductCRUD() {
   const [remove, setRemove] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const [params, setParams] = useState({
     search: "",
     filter: "",
-    sort: "",
+    sort: "title",
+    page: 1,
   });
   const [search, setSearch] = useState(params.search);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const {
     loading,
@@ -36,9 +40,18 @@ function ProductCRUD() {
 
   const handleStatus = async (e, index) => {
     retryAxios(axios);
-    await axios.patch(`${LocalApi}/product/${data[index].id}`, {
-      status: e.target.value,
-    });
+    try {
+      await axios.patch(`${LocalApi}/product/${products[index]._id}`, {
+        status: e.target.value,
+      });
+      setProducts((prev) => {
+        const copy = JSON.parse(JSON.stringify(prev));
+        copy[index].status = e.target.value;
+        return copy;
+      });
+    } catch (error) {
+      dispatch(addNotification({ message: error.message }));
+    }
   };
 
   useEffect(() => {
@@ -59,6 +72,7 @@ function ProductCRUD() {
     );
   return (
     <div className="product-crud__container">
+      <Notification />
       <Container.Flex>
         <button onClick={() => router.push(`product/create`)}>Create</button>
         <Search
@@ -84,16 +98,30 @@ function ProductCRUD() {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{product.thumbnail}</td>
+                  <td>
+                    <img
+                      src={product.images[0].url}
+                      style={{ width: "100px", height: "80px" }}
+                    ></img>
+                  </td>
                   <td>{product.title}</td>
                   <td>
-                    <select
-                      value={product.status}
-                      onChange={(e) => handleStatus(e, index)}
-                    >
-                      <option value="active">active</option>
-                      <option value="non-active">non-active</option>
-                      <option value="out">out</option>
+                    <select onChange={(e) => handleStatus(e, index)}>
+                      <option
+                        value="active"
+                        selected={product.status === "active"}
+                      >
+                        active
+                      </option>
+                      <option
+                        value="non-active"
+                        selected={product.status === "non-active"}
+                      >
+                        non-active
+                      </option>
+                      <option value="out" selected={product.status === "out"}>
+                        out
+                      </option>
                     </select>
                   </td>
                   <td>
@@ -107,7 +135,9 @@ function ProductCRUD() {
                       Preview
                     </button>
                     <button
-                      onClick={() => router.push(`product/${product._id}`)}
+                      onClick={() =>
+                        router.push(`product/update/${product._id}`)
+                      }
                     >
                       Edit
                     </button>
@@ -129,8 +159,8 @@ function ProductCRUD() {
       </div>
       <Pagination
         totalPageCount={10}
-        currentPage={currentPage}
-        setCurrentPage={(page) => setCurrentPage(page)}
+        currentPage={params.page}
+        setCurrentPage={(page) => setParams((prev) => ({ ...prev, page }))}
       >
         <Pagination.Arrow>
           <Pagination.Number />

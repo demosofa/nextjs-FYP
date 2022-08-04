@@ -15,10 +15,10 @@ const Product = new Schema(
         required: true,
       },
     ],
-    variants: [{ type: Schema.Types.ObjectId, ref: "Variant", required: true }],
-    variations: [
-      { type: Schema.Types.ObjectId, ref: "ProductVariation", required: true },
-    ],
+    price: { type: Number },
+    quantity: { type: Number },
+    variants: [{ type: Schema.Types.ObjectId, ref: "Variant" }],
+    variations: [{ type: Schema.Types.ObjectId, ref: "ProductVariation" }],
     manufacturer: { type: String, required: true },
   },
   { timestamps: true }

@@ -1,11 +1,11 @@
 import { product } from "../../../controllers";
 import { db } from "../../../helpers";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
 
 export default async function (req, res) {
   await db.connect();

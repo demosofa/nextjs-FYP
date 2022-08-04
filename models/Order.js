@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Order = new Schema(
   {
-    userId: { type: mongoose.SchemaTypes.ObjectId, ref: "Account" },
+    user: { type: mongoose.SchemaTypes.ObjectId, ref: "Account" },
     products: [
       {
         type: Schema.Types.ObjectId,
