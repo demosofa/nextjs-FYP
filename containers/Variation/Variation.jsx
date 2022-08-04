@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GiTrashCan } from "react-icons/gi";
 import { useVariantPermutation } from "../../hooks";

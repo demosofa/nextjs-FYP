@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { TagsInput, Icon } from "..";
+import { TagsInput, Icon } from "../../components";
 import {
   addVariant,
   editVariant,

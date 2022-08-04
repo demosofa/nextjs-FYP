@@ -7,10 +7,9 @@ import {
   TagsInput,
   Form,
   Container,
-  Variation,
-  Variant,
   Loading,
 } from "../../../components";
+import { Variation, Variant } from "../../../containers";
 import { Notification } from "../../../Layout";
 import { retryAxios, Validate, uploadApi } from "../../../utils";
 import { useAxiosLoad } from "../../../hooks";
