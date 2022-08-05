@@ -9,9 +9,9 @@ if (!MONGO_URL) {
 }
 
 type cachedMongoose = {
-  conn: typeof mongoose,
-  promise: Promise<typeof mongoose>
-}
+  conn: typeof mongoose;
+  promise: Promise<typeof mongoose>;
+};
 
 /**
  * Global is used here to maintain a cached connection across hot reloads

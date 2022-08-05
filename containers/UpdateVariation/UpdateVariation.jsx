@@ -67,7 +67,7 @@ export default function UpdateVariation({ productId }) {
       ></Loading>
     );
   return (
-    <div>
+    <div style={{ overflowX: "auto" }}>
       <table>
         <thead>
           <tr>
@@ -82,7 +82,7 @@ export default function UpdateVariation({ productId }) {
         <tbody>
           {storedVariations?.map((variation, index) => {
             return (
-              <tr>
+              <tr key={index}>
                 <td>{index + 1}</td>
                 <td onClick={(e) => setVariationImage(index)}>
                   {variation.image && (

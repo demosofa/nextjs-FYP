@@ -34,7 +34,7 @@ export default function Blog({ post }) {
   return (
     <iframe
       srcDoc={post.content}
-      frameborder="0"
+      frameBorder="0"
       style={{ overflow: "hidden", height: "100vw", width: "100vh" }}
     />
   );

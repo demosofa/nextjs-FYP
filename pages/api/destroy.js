@@ -6,8 +6,7 @@ async function destroy(req, res) {
     await Promise.all(files.map((file) => Cloudinary.destroyFile(file)));
     res.status(200).end();
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err });
+    res.status(500).json({ message: err.message });
   }
 }
 

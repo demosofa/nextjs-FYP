@@ -44,9 +44,17 @@ export default function Home({ products }) {
                           src={item.images[0].url}
                           style={{ height: "175px", borderRadius: "10px" }}
                         ></img>
-                        <p style={{ textAlign: "center", fontSize: "14px" }}>
-                          {item.title}
-                        </p>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <label style={{ fontSize: "14px" }}>
+                            {item.title}
+                          </label>
+                          <span>{item.price ? item.price : "optional"} $</span>
+                        </div>
                       </div>
                     </a>
                   </Link>

@@ -18,10 +18,7 @@ class ProductController {
       .populate("categories")
       .populate({
         path: "variations",
-        populate: {
-          path: "types",
-          model: "VariantOption",
-        },
+        populate: ["types", "image"],
       })
       .exec();
     if (!product) return res.status(404).json({ errorMessage: "Not Found" });
@@ -69,14 +66,7 @@ class ProductController {
       .select("variations")
       .populate({
         path: "variations",
-        populate: {
-          path: "types",
-          model: "VariantOption",
-        },
-        populate: {
-          path: "image",
-          model: "File",
-        },
+        populate: ["types", "image"],
       })
       .exec();
     if (!variations)
@@ -103,10 +93,7 @@ class ProductController {
       })
       .populate({
         path: "variations",
-        populate: {
-          path: "types",
-          model: "VariantOption",
-        },
+        populate: "types",
       })
       .exec();
     if (!products) return res.status(404).json({ errorMessage: "Not Found" });

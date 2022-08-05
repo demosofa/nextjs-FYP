@@ -45,12 +45,12 @@ export default function Overview({ product }) {
   const dispatch = useDispatch();
   const handleAddToCart = () => {
     const { _id, title, images } = product;
-    const { price } = targetVariation;
+    const { price, image } = targetVariation;
     dispatch(
       addCart({
         id: _id,
         title,
-        image: images[0].url,
+        image: image?.url || images[0].url,
         options,
         quantity,
         price,
@@ -65,7 +65,11 @@ export default function Overview({ product }) {
     );
   };
 
-  useEffect(() => setImage(product.images[0].url), []);
+  useEffect(() => {
+    if (targetVariation && targetVariation.image)
+      setImage(targetVariation.image.url);
+    else setImage(product.images[0].url);
+  }, [options]);
 
   return (
     <Layout>

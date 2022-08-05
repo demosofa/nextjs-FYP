@@ -28,7 +28,7 @@ export default function AccountIndex({ accounts }) {
         <tbody>
           {accounts.map((account, index) => {
             return (
-              <tr>
+              <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{account.id}</td>
                 <td>{account.username}</td>
