@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { Animation } from "../components";
+import { Animation, Timer } from "../components";
 import Layout from "../Layout";
 import styles from "../styles/Home.module.scss";
 
@@ -33,23 +33,26 @@ export default function Home({ products }) {
         <main className={styles.main}>
           <div className="trending"></div>
           <div className={styles.grid}>
-            {products?.map((item) => {
-              return (
-                <Link href={`/overview/${item._id}`} key={item.title}>
-                  <a>
-                    <Animation.Zoom key={item.title} className={styles.card}>
+            <Animation.Zoom className={styles.card}>
+              {products?.map((item) => {
+                return (
+                  <Link href={`/overview/${item._id}`} key={item.title}>
+                    <a>
+                      {item.time && <Timer value={item.time} />}
                       <div style={{ padding: "5px", fontSize: "13px" }}>
                         <img
                           src={item.images[0].url}
                           style={{ height: "175px", borderRadius: "10px" }}
                         ></img>
-                        <span>{item.title}</span>
+                        <p style={{ textAlign: "center", fontSize: "14px" }}>
+                          {item.title}
+                        </p>
                       </div>
-                    </Animation.Zoom>
-                  </a>
-                </Link>
-              );
-            })}
+                    </a>
+                  </Link>
+                );
+              })}
+            </Animation.Zoom>
           </div>
         </main>
 

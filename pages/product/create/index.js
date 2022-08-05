@@ -183,7 +183,7 @@ export default function CreateForm() {
             <Form.Item>
               <Form.Title>Status</Form.Title>
               <Form.Select
-                value={input.status}
+                defaultValue={input.status || "active"}
                 onChange={(e) =>
                   setInput((prev) => ({ ...prev, status: e.target.value }))
                 }
@@ -210,6 +210,7 @@ export default function CreateForm() {
             <Form.Item>
               <Form.Title>Category</Form.Title>
               <Form.Select
+                defaultValue={input.categories || arrCategory.current[0]}
                 onChange={(e) =>
                   setInput((prev) => ({ ...prev, categories: e.target.value }))
                 }

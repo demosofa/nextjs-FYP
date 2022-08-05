@@ -106,22 +106,13 @@ function ProductCRUD() {
                   </td>
                   <td>{product.title}</td>
                   <td>
-                    <select onChange={(e) => handleStatus(e, index)}>
-                      <option
-                        value="active"
-                        selected={product.status === "active"}
-                      >
-                        active
-                      </option>
-                      <option
-                        value="non-active"
-                        selected={product.status === "non-active"}
-                      >
-                        non-active
-                      </option>
-                      <option value="out" selected={product.status === "out"}>
-                        out
-                      </option>
+                    <select
+                      defaultValue={product.status}
+                      onChange={(e) => handleStatus(e, index)}
+                    >
+                      <option value="active">active</option>
+                      <option value="non-active">non-active</option>
+                      <option value="out">out</option>
                     </select>
                   </td>
                   <td>

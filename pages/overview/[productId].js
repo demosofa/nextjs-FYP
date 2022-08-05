@@ -15,6 +15,7 @@ import {
 import Layout from "../../Layout";
 import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
+import { markdown } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -95,7 +96,7 @@ export default function Overview({ product }) {
           <div className="product-info">
             <label>{product.title}</label>
 
-            <Timer value={new Date(2022, 6, 22, 4).getTime()} />
+            {product.time && <Timer value={product.time} />}
 
             <Container.Flex style={{ gap: "10px" }}>
               <label>Price: </label>
@@ -171,15 +172,15 @@ export default function Overview({ product }) {
           <Container.Flex>
             <label>Description: </label>
             <ReadMoreLess style={{ height: "150px" }}>
-              <p>{product.description}</p>
+              {markdown(product.description)}
             </ReadMoreLess>
           </Container.Flex>
         </div>
 
-        {/* <div className="rating">
+        <div className="rating">
           <Rating rated={4} />
-          <div className="count">{product.rating.count}</div>
-        </div> */}
+          <div className="count">{product.rating}</div>
+        </div>
 
         <Comment url={"https://jsonplaceholder.typicode.com/comments"} />
       </div>

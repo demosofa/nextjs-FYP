@@ -1,33 +1,51 @@
 import IGenericRepository from "../interfaces/IGenericRepository";
-import { FilterQuery, Model, QueryOptions, UpdateWithAggregationPipeline, UpdateQuery, SaveOptions } from "mongoose"
+import {
+  FilterQuery,
+  Model,
+  QueryOptions,
+  UpdateWithAggregationPipeline,
+  UpdateQuery,
+  SaveOptions,
+} from "mongoose";
 
 export default class GenericRepository<T> implements IGenericRepository<T> {
   private context: typeof Model;
   constructor(context: typeof Model) {
     this.context = context;
   }
+  countData(filter: FilterQuery<any> = {}, options?: QueryOptions<any>) {
+    return this.context.countDocuments(filter, options);
+  }
   getById(id: string) {
     return this.context.findById(id);
   }
-  getOne(condition: FilterQuery<T>) {
-    return this.context.findOne(condition);
+  getOne(filter: FilterQuery<T>) {
+    return this.context.findOne(filter);
   }
-  getAll(condition: FilterQuery<T>) {
-    return this.context.find(condition);
+  getAll(filter: FilterQuery<T>) {
+    return this.context.find(filter);
   }
   async create(data: T, options?: SaveOptions) {
     return (await this.context.create([data], options))[0];
   }
-  updateById(id: string, update: UpdateQuery<any>, options?: QueryOptions<any>) {
+  updateById(
+    id: string,
+    update: UpdateQuery<any>,
+    options?: QueryOptions<any>
+  ) {
     return this.context.findByIdAndUpdate(id, update, options);
   }
-  updateOne(condition: FilterQuery<any>, update: UpdateWithAggregationPipeline | UpdateQuery<any>, options?: QueryOptions<any>){
-    return this.context.updateOne(condition, update, options)
+  updateOne(
+    filter: FilterQuery<any>,
+    update: UpdateWithAggregationPipeline | UpdateQuery<any>,
+    options?: QueryOptions<any>
+  ) {
+    return this.context.updateOne(filter, update, options);
   }
   deleteById(id: string, options?: QueryOptions<any>) {
-    return this.context.findByIdAndDelete(id, options)
+    return this.context.findByIdAndDelete(id, options);
   }
-  deleteOne(condition: FilterQuery<T>, options?: QueryOptions<any>) {
-    return this.context.deleteOne(condition, options);
+  deleteOne(filter: FilterQuery<T>, options?: QueryOptions<any>) {
+    return this.context.deleteOne(filter, options);
   }
 }

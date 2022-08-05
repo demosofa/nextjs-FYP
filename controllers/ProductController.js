@@ -37,7 +37,16 @@ class ProductController {
       .sort({
         [sort]: "asc",
       })
-      .select(["_id", "images", "categories"])
+      .select([
+        "_id",
+        "images",
+        "categories",
+        "title",
+        "rating",
+        "time",
+        "sale",
+        "price",
+      ])
       .populate({ path: "images", select: "url" })
       .populate("categories", "name")
       .exec();
