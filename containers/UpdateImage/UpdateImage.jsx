@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useMemo, useState } from "react";
-import { Container, FileUpload, Loading } from "../../components";
+import { Animation, Container, FileUpload, Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { AiOutlinePlus } from "react-icons/ai";
 import { retryAxios, uploadApi } from "../../utils";
@@ -9,7 +9,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export default function UpdateImage({ productId }) {
+export default function UpdateImage({ productId, setToggle }) {
   const [filterImages, setFilterImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
   const dispatch = useDispatch();
@@ -55,6 +55,7 @@ export default function UpdateImage({ productId }) {
           files: arrPublic_id,
         });
       }
+      setToggle(null);
     } catch (error) {
       const arrPublic_id = uploaded.map((item) => item.public_id);
       await axios.post(`${LocalApi}/destroy`, {
@@ -86,20 +87,27 @@ export default function UpdateImage({ productId }) {
         setPrevFiles={(images) => setNewImages(images)}
         maxByMB={10 - currentSize}
       >
-        {storedImages.map((image, index) => {
-          return (
-            <img
-              key={image._id}
-              style={{
-                width: "25%",
-                margin: "2px",
-              }}
-              alt="product"
-              src={image.url}
-              onClick={(e) => handleDeleteImage(e, index)}
-            ></img>
-          );
-        })}
+        <Animation.Zoom
+          style={{
+            width: "25%",
+            margin: "2px",
+          }}
+        >
+          {storedImages.map((image, index) => {
+            return (
+              <img
+                style={{
+                  width: "100%",
+                  margin: "2px",
+                }}
+                key={image._id}
+                alt="product"
+                src={image.url}
+                onClick={(e) => handleDeleteImage(e, index)}
+              ></img>
+            );
+          })}
+        </Animation.Zoom>
         <FileUpload.Show></FileUpload.Show>
         <FileUpload.Input
           id="file_input"
@@ -114,6 +122,7 @@ export default function UpdateImage({ productId }) {
         </FileUpload.Input>
       </FileUpload>
       <button onClick={handleSaveImage}>Save</button>
+      <button onClick={() => setToggle(null)}>Cancel</button>
     </Container>
   );
 }

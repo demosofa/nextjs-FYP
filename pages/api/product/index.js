@@ -1,12 +1,6 @@
 import { product } from "../../../controllers";
 import { db, isAuthentication } from "../../../helpers";
 
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };
-
 async function index(req, res) {
   await db.connect();
   switch (req.method.toLowerCase()) {
@@ -15,6 +9,9 @@ async function index(req, res) {
       break;
     case "post":
       await product.create(req, res);
+      break;
+    case "put":
+      await product.update(req, res);
       break;
   }
 }

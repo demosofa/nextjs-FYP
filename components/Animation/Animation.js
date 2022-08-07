@@ -2,7 +2,7 @@ import React from "react";
 import { useSpring, useTransition, animated } from "react-spring";
 
 export default function Animation() {
-  return <div></div>;
+  return;
 }
 
 Animation.Fade = function AnimateFade({ children, style, ...props }) {
@@ -28,7 +28,7 @@ Animation.Dropdown = function AnimateDropdown({ children, style, ...props }) {
     keys: (item) => item.key,
     from: { maxHeight: 0, overflow: "hidden" },
     enter: (item) => async (next, cancel) => {
-      await next({ maxHeight: 800, ...style });
+      await next({ maxHeight: 800 });
       await next({ overflow: "visible" });
     },
     leave: [{ overflow: "hidden" }, { maxHeight: 0 }],
@@ -37,7 +37,7 @@ Animation.Dropdown = function AnimateDropdown({ children, style, ...props }) {
   return transition(
     (prop, item) =>
       item && (
-        <animated.div style={prop} {...props}>
+        <animated.div style={{ ...style, ...prop }} {...props}>
           {item}
         </animated.div>
       )
@@ -67,15 +67,15 @@ Animation.Zoom = function AnimateZoom({ children, zoom = 1, style, ...props }) {
   const transition = useTransition(children, {
     keys: (item) => item.key,
     from: { transform: `scale(0)`, opacity: 0 },
-    enter: { transform: `scale(${x}, ${y})`, opacity: 1, ...style },
-    leave: { transform: `scale(0)`, opacity: 0 },
+    enter: { transform: `scale(${x}, ${y})`, opacity: 1 },
+    leave: { transform: `scale(0, 0)`, opacity: 0 },
     delay: 200,
     reset: false,
   });
   return transition(
-    (style, item) =>
+    (prop, item) =>
       item && (
-        <animated.div style={style} {...props}>
+        <animated.div style={{ ...style, ...prop }} {...props}>
           {item}
         </animated.div>
       )
@@ -86,14 +86,14 @@ Animation.Width = function AnimateWidth({ children, style, ...props }) {
   const transition = useTransition(children, {
     keys: (item) => item.key,
     from: { maxWidth: 0, opacity: 0 },
-    enter: { maxWidth: 200, opacity: 1, ...style },
+    enter: { maxWidth: 200, opacity: 1 },
     leave: { maxWidth: 0, opacity: 0 },
     config: { duration: 400 },
   });
   return transition(
     (prop, item) =>
       item && (
-        <animated.div style={prop} {...props}>
+        <animated.div style={{ ...style, ...prop }} {...props}>
           {item}
         </animated.div>
       )

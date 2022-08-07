@@ -16,10 +16,10 @@ export default function UpdateProduct() {
         Update Product Variation
       </div>
       {(toggle !== null && toggle === "image" && (
-        <UpdateImage productId={router.query?.id} />
+        <UpdateImage productId={router.query?.id} setToggle={setToggle} />
       )) ||
         (toggle === "variation" && (
-          <UpdateVariation productId={router.query?.id} />
+          <UpdateVariation productId={router.query?.id} setToggle={setToggle} />
         ))}
     </Container>
   );

@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Loading, Checkbox } from "../../components";
+import { Loading, Checkbox, Animation } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { retryAxios } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export default function UpdateVariation({ productId }) {
+export default function UpdateVariation({ productId, setToggle }) {
   const [variationImage, setVariationImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const dispatch = useDispatch();
@@ -50,6 +50,7 @@ export default function UpdateVariation({ productId }) {
       await axios.patch(`${LocalApi}/product/variation/${productId}`, {
         variations: storedVariations,
       });
+      setToggle(null);
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
     }
@@ -124,6 +125,7 @@ export default function UpdateVariation({ productId }) {
         </tbody>
       </table>
       <button onClick={handleSaveVariation}>Save Variation</button>
+      <button onClick={() => setToggle(null)}>Cancel</button>
       {variationImage !== null && (
         <div
           style={{
@@ -152,20 +154,23 @@ export default function UpdateVariation({ productId }) {
               flexWrap: "wrap",
             }}
           >
-            {storedImages?.map((image) => {
-              return (
-                <div key={image._id} style={{ width: "fit-content" }}>
-                  <Checkbox.Item value={image}>
-                    <img
-                      style={{ width: "80px", height: "60px" }}
-                      src={image.url}
-                    ></img>
-                  </Checkbox.Item>
-                </div>
-              );
-            })}
+            <Animation.Fade>
+              {storedImages?.map((image) => {
+                return (
+                  <div key={image._id} style={{ width: "fit-content" }}>
+                    <Checkbox.Item value={image}>
+                      <img
+                        style={{ width: "80px", height: "60px" }}
+                        src={image.url}
+                      ></img>
+                    </Checkbox.Item>
+                  </div>
+                );
+              })}
+            </Animation.Fade>
           </Checkbox>
           <button onClick={handleChangeImage}>Save</button>
+          <button onClick={() => setVariationImage(null)}>Cancel</button>
         </div>
       )}
     </div>
