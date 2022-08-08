@@ -14,14 +14,25 @@ export default function ContainerComponent({ children, ...restProps }) {
 }
 
 ContainerComponent.Absolute = function ({ children, ...restProps }) {
-  return <div className={styles.container__absolute}>{children}</div>;
+  return (
+    <div {...restProps} className={styles.container__absolute}>
+      {children}
+    </div>
+  );
 };
-ContainerComponent.Flex = function ({ children, forwardRef, ...restProps }) {
+ContainerComponent.Flex = function ({
+  children,
+  className,
+  justify = "",
+  align = "",
+  style,
+  ...restProps
+}) {
   return (
     <div
       {...restProps}
-      ref={forwardRef}
-      className={`${styles.container__flex} ${restProps.className}`}
+      style={{ justifyContent: justify, alignItems: align, ...style }}
+      className={`${styles.container__flex} ${className}`}
     >
       {children}
     </div>

@@ -1,7 +1,5 @@
 export default class Validate {
-  constructor(
-    public input: string,
-  ) {
+  constructor(public input: string) {
     this.input = input;
   }
 
@@ -32,13 +30,10 @@ export default class Validate {
     if (!regex.test(this.input)) throw new Error("this is not a phone number");
     return this;
   }
-  isEnoughLength({min, max}:{min?: number, max?: number}) {
-    if(min && this.input.length < min)
-      throw new Error("this is too short")
-    if (max && this.input.length > max)
-      throw new Error("this is too long");
-    if(!min && !max) 
-      throw new Error("please provide min and max arguments")
+  isEnoughLength({ min, max }: { min?: number; max?: number }) {
+    if (min && this.input.length < min) throw new Error("this is too short");
+    if (max && this.input.length > max) throw new Error("this is too long");
+    if (!min && !max) throw new Error("please provide min and max arguments");
     return this;
   }
   isNotSpecial() {
