@@ -22,12 +22,12 @@ class AccountController {
       userId: check.userId,
       role: check.role,
     });
-    setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
+    setCookie(res, { refreshToken }, { age: "1d" });
     return res.status(200).json(accessToken);
   }
 
   async logout(req, res) {
-    setCookie(res, "refreshToken", "deleted", { httpOnly: true, maxAge: -1 });
+    setCookie(res, { refreshToken: "delete" }, { maxAge: -1 });
     return res.status(200).end();
   }
 
@@ -55,7 +55,7 @@ class AccountController {
       userId: user._id,
       role: created.role,
     });
-    setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
+    setCookie(res, { refreshToken }, { age: "1d" });
     return res.status(200).json(accessToken);
   }
 }

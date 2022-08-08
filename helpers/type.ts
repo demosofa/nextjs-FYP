@@ -1,10 +1,10 @@
-import { NextApiRequest } from "next"
+import { NextApiRequest } from "next";
 
 export default interface Request extends NextApiRequest {
-  user?: user
+  user?: user;
 }
 
 interface user {
-  id: string,
-  role: string
+  id: string;
+  role: string;
 }

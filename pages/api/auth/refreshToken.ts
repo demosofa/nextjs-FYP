@@ -15,10 +15,10 @@ export default async function refreshToken(
       userId,
       role,
     });
-    setCookie(res, "refreshToken", refreshToken, { httpOnly: true, age: "1d" });
+    setCookie(res, { refreshToken }, { age: "1d" });
     res.status(200).json(accessToken);
   } catch (err) {
-    setCookie(res, "refreshToken", "deleted", { httpOnly: true, maxAge: -1 });
+    setCookie(res, { refreshToken: "delete" }, { maxAge: -1 });
     res.redirect(401, "http://localhost:3000/login");
   }
 }

@@ -2,20 +2,43 @@ import { serialize, CookieSerializeOptions } from "cookie";
 import { NextApiResponse } from "next";
 import { convertTime } from "../utils";
 
-interface seriallizeOptions extends CookieSerializeOptions{
-  age?: string
+interface serializeOptions extends CookieSerializeOptions {
+  age?: string;
 }
 
-export default function setCookie(res: NextApiResponse, name: string, value: any, opt: seriallizeOptions) {
-  const {age, ...others} = opt;
-  let config: CookieSerializeOptions
-  if(age){
-    const maxAge = convertTime(age).second;
-    config = {maxAge, ...others}
-  }
-  else config = others
+interface serializeOptionsValue extends serializeOptions {
+  value: string;
+}
+
+function setConfigCookie(key: string, data: any, config: serializeOptions) {
+  const { age, ...others } = config;
+  let defConfig: CookieSerializeOptions = {
+    httpOnly: true,
+    path: "/",
+    ...others,
+  };
+  if (config.age) {
+    let maxAge = convertTime(config.age).second;
+    return serialize(key, data, { ...defConfig, maxAge });
+  } else return serialize(key, data, defConfig);
+}
+
+export default function setCookie(
+  res: NextApiResponse,
+  cookies: { [key: string]: string | serializeOptionsValue },
+  config?: serializeOptions
+) {
   res.setHeader(
     "Set-Cookie",
-    serialize(name, String(value), {path: "/", ...config})
+    Object.entries(cookies).map((cookie) => {
+      const key = cookie[0];
+      const data = cookie[1];
+      if (typeof data === "string") {
+        return setConfigCookie(key, data as string, config);
+      } else {
+        const { value, ...configs } = <serializeOptionsValue>data;
+        return setConfigCookie(key, String(value), { ...config, ...configs });
+      }
+    })
   );
 }
