@@ -1,6 +1,8 @@
 import UnitOfWork from "./services/UnitOfWork";
 import bcrypt from "bcrypt";
-import { Token, setCookie } from "../helpers";
+import Cookies from "cookies";
+import { Token } from "../helpers";
+import { convertTime } from "../utils";
 
 class AccountController {
   constructor(unit = UnitOfWork) {
@@ -22,12 +24,15 @@ class AccountController {
       userId: check.userId,
       role: check.role,
     });
-    setCookie(res, { refreshToken }, { age: "1d" });
+    Cookies(req, res).set("refreshToken", refreshToken, {
+      maxAge: convertTime("1d").second,
+      overwrite: true,
+    });
     return res.status(200).json(accessToken);
   }
 
   async logout(req, res) {
-    setCookie(res, { refreshToken: "delete" }, { maxAge: -1 });
+    Cookies(req, res).set("refreshToken");
     return res.status(200).end();
   }
 
@@ -55,7 +60,10 @@ class AccountController {
       userId: user._id,
       role: created.role,
     });
-    setCookie(res, { refreshToken }, { age: "1d" });
+    Cookies(req, res).set("refreshToken", refreshToken, {
+      maxAge: convertTime("1d").second,
+      overwrite: true,
+    });
     return res.status(200).json(accessToken);
   }
 }

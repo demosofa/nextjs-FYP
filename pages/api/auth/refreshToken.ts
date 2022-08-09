@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { db, setCookie, Token } from "../../../helpers";
+import Cookies from "cookies";
+import { db, Token } from "../../../helpers";
+import { convertTime } from "../../../utils";
 
 export default async function refreshToken(
   req: NextApiRequest,
@@ -15,10 +17,12 @@ export default async function refreshToken(
       userId,
       role,
     });
-    setCookie(res, { refreshToken }, { age: "1d" });
+    Cookies(req, res).set("refreshToken", refreshToken, {
+      maxAge: convertTime("1d").second,
+    });
     res.status(200).json(accessToken);
   } catch (err) {
-    setCookie(res, { refreshToken: "delete" }, { maxAge: -1 });
+    Cookies(req, res).set("refreshToken");
     res.redirect(401, "http://localhost:3000/login");
   }
 }

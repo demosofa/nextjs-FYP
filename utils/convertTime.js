@@ -1,5 +1,5 @@
 export default function convertTime(value, isCount = false) {
-  let time = value instanceof String ? value : `${value}`;
+  let time = value instanceof String ? value : String(value);
   const unit = time.replace(/^[\s\d]+/, "").toLowerCase();
   const trueValue = parseInt(time.replace(unit, "").trim());
   let milisecond = trueValue;
