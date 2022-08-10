@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Cookies from "cookies";
-import { db, Token } from "../../../helpers";
-import { convertTime } from "../../../utils";
+import { db, setCookieToken } from "../../../helpers";
 
 export default async function refreshToken(
   req: NextApiRequest,
@@ -9,20 +7,9 @@ export default async function refreshToken(
 ) {
   await db.connect();
   try {
-    const { accountId, userId, role } = Token.verifyRefreshToken(
-      req.cookies.refreshToken
-    ) as { accountId: string; userId: string; role: string };
-    const { accessToken, refreshToken } = new Token({
-      accountId,
-      userId,
-      role,
-    });
-    Cookies(req, res).set("refreshToken", refreshToken, {
-      maxAge: convertTime("1d").second,
-    });
+    const accessToken = setCookieToken(req, res);
     res.status(200).json(accessToken);
-  } catch (err) {
-    Cookies(req, res).set("refreshToken");
+  } catch (error) {
     res.redirect(401, "http://localhost:3000/login");
   }
 }

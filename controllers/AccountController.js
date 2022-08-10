@@ -25,7 +25,7 @@ class AccountController {
       role: check.role,
     });
     Cookies(req, res).set("refreshToken", refreshToken, {
-      maxAge: convertTime("1d").second,
+      maxAge: convertTime("1d").milisecond,
       overwrite: true,
     });
     return res.status(200).json(accessToken);
@@ -61,7 +61,7 @@ class AccountController {
       role: created.role,
     });
     Cookies(req, res).set("refreshToken", refreshToken, {
-      maxAge: convertTime("1d").second,
+      maxAge: convertTime("1d").milisecond,
       overwrite: true,
     });
     return res.status(200).json(accessToken);
