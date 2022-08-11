@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Loading, Checkbox, Animation } from "../../components";
-import { useAuthLoad } from "../../hooks";
+import { useAxiosLoad } from "../../hooks";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { retryAxios } from "../../utils";
 
@@ -11,20 +11,28 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 export default function UpdateVariation({ productId, setToggle }) {
   const [variationImage, setVariationImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [storedVariations, setStoredVariations] = useState([]);
+  const [storedImages, setStoredImages] = useState([]);
   const dispatch = useDispatch();
 
-  const {
-    loading,
-    data: storedVariations,
-    setData: setStoredVariations,
-  } = useAuthLoad({
-    config: { url: `${LocalApi}/product/variation/${productId}` },
-    roles: ["guest"],
+  const { loading } = useAxiosLoad({
+    config: {
+      url: `${LocalApi}/product/variation/${productId}`,
+    },
+    async callback(axiosInstance) {
+      const response = (await axiosInstance()).data;
+      setStoredVariations(response);
+    },
   });
 
-  const { loading: loadingImages, data: storedImages } = useAuthLoad({
-    config: { url: `${LocalApi}/product/image/${productId}` },
-    roles: ["guest"],
+  const { loading: loadingImage } = useAxiosLoad({
+    config: {
+      url: `${LocalApi}/product/image/${productId}`,
+    },
+    async callback(axiosInstance) {
+      const response = (await axiosInstance()).data;
+      setStoredImages(response);
+    },
   });
 
   const handleChangeImage = () => {

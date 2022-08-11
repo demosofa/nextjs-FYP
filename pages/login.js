@@ -29,10 +29,10 @@ export default function Login() {
             break;
         }
       });
-      const accessToken = await axios
+      const permission = await axios
         .post(`${LocalApi}/auth/login`, input)
         .then((response) => response.data);
-      expireStorage.setItem("accessToken", accessToken);
+      expireStorage.setItem("permission", permission);
       router.back();
     } catch (error) {
       dispatch(addNotification({ message: error.message }));

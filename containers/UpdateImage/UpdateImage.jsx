@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useMemo, useState } from "react";
 import { Animation, Container, FileUpload, Loading } from "../../components";
-import { useAuthLoad } from "../../hooks";
+import { useAxiosLoad } from "../../hooks";
 import { AiOutlinePlus } from "react-icons/ai";
 import { retryAxios, uploadApi } from "../../utils";
 import { useDispatch } from "react-redux";
@@ -12,16 +12,17 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 export default function UpdateImage({ productId, setToggle }) {
   const [filterImages, setFilterImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
+  const [storedImages, setStoredImages] = useState([]);
   const dispatch = useDispatch();
-  const {
-    loading,
-    data: storedImages,
-    setData: setStoredImages,
-  } = useAuthLoad({
+
+  const { loading } = useAxiosLoad({
     config: {
       url: `${LocalApi}/product/image/${productId}`,
     },
-    roles: ["guest"],
+    async callback(axiosInstance) {
+      const response = (await axiosInstance()).data;
+      setStoredImages(response);
+    },
   });
 
   const currentSize = useMemo(() => {

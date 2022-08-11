@@ -13,13 +13,7 @@ export default function Navbar({ apis = [{ title: "", link: "" }] }) {
   const router = useRouter();
   const handleLogout = async () => {
     try {
-      await axios.post(`${LocalApi}/auth/logout`, "", {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("accessToken")
-          )}`,
-        },
-      });
+      await axios.post(`${LocalApi}/auth/logout`);
       localStorage.clear();
       router.reload();
     } catch (error) {
@@ -42,7 +36,7 @@ export default function Navbar({ apis = [{ title: "", link: "" }] }) {
         )}
       </div>
       <div className={styles.bar}>
-        {localStorage.getItem("accessToken") ? (
+        {localStorage.getItem("permission") ? (
           <span onClick={handleLogout} style={{ cursor: "pointer" }}>
             Logout
           </span>

@@ -173,13 +173,13 @@ function FormAccount({ info, moveTo, ...props }) {
             throw new Error("please input the same password");
         }
       });
-      const accessToken = await axios
+      const permission = await axios
         .post(`${LocalApi}/auth/register`, {
           account: input,
           userInfo: info,
         })
         .then((response) => response.data);
-      expireStorage.setItem("accessToken", accessToken);
+      expireStorage.setItem("permission", permission);
       dispatch(addNotification({ message: "Success Register" }));
       router.back();
     } catch (error) {

@@ -1,32 +1,16 @@
-import axios, { AxiosStatic, AxiosInstance } from "axios";
-import { expireStorage } from ".";
+import { AxiosStatic, AxiosInstance } from "axios";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export default function retryAxios(
-  axiosInstance: AxiosStatic | AxiosInstance,
-  maxRetry = 2
-) {
-  let counter = 0;
+export default function retryAxios(axiosInstance: AxiosStatic | AxiosInstance) {
   axiosInstance.interceptors.response.use(undefined, async (error) => {
     if (
       error.response.status === 401 &&
-      error.response.data.message === "Token is expired" &&
-      counter <= maxRetry
+      error.response.data.message === "Token is expired"
     ) {
       try {
-        const response = await axios.post(`${LocalApi}/auth/refreshToken`);
-        const accessToken = await response.data;
-        expireStorage.setItem("accessToken", accessToken);
-        const config = {
-          ...error.config,
-          headers: {
-            ...error.config.headers,
-            Authorization: `Bearer ${accessToken}`,
-          },
-        };
-        counter += 1;
-        return axiosInstance(config);
+        await axiosInstance.post(`${LocalApi}/auth/refreshToken`);
+        return axiosInstance(error.config);
       } catch (err) {
         return Promise.reject(err);
       }

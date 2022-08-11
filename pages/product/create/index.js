@@ -54,7 +54,6 @@ export default function CreateForm() {
     e.preventDefault();
     let uploaded;
     try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
       retryAxios(axios);
       uploaded = await Promise.all(
         input.images.map((image) => {
@@ -65,9 +64,7 @@ export default function CreateForm() {
         })
       );
       const newInput = { ...input, variants, variations, images: uploaded };
-      await axios.post(`${LocalApi}/product`, newInput, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      await axios.post(`${LocalApi}/product`, newInput);
       router.push("/product");
     } catch (error) {
       const arrPublic_id = uploaded.map((item) => item.public_id);

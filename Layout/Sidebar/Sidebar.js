@@ -18,13 +18,7 @@ export default function SideBar({
   const router = useRouter();
   const handleLogout = async () => {
     try {
-      await axios.post(`${LocalApi}/auth/logout`, "", {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("accessToken")
-          )}`,
-        },
-      });
+      await axios.post(`${LocalApi}/auth/logout`);
       localStorage.clear();
       router.reload();
     } catch (error) {
@@ -34,7 +28,7 @@ export default function SideBar({
 
   const [check, setCheck] = useState(false);
   useEffect(() => {
-    if (localStorage.getItem("accessToken")) setCheck(true);
+    if (localStorage.getItem("permission")) setCheck(true);
   });
 
   return (

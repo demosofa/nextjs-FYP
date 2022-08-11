@@ -1,42 +1,54 @@
 import axios from "axios";
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Pagination, Container, Search, Loading } from "../../components";
-import { retryAxios } from "../../utils";
-import { useAuthLoad } from "../../hooks";
+import { Pagination, Container, Search } from "../../components";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Notification } from "../../Layout";
+import { retryAxiosBackend } from "../../helpers";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-function ProductCRUD() {
+export async function getServerSideProps({ req, res, query }) {
+  let value = null;
+  const axiosInstance = axios.create({
+    headers: {
+      Cookie: req.headers.cookie,
+    },
+  });
+  retryAxiosBackend(axiosInstance, req, res);
+  try {
+    const response = await axiosInstance.get(`${LocalApi}/product`, {
+      params: query,
+    });
+    value = response.data;
+  } catch (error) {
+    console.log("!!! retry axios please");
+  }
+  return {
+    props: {
+      value,
+    },
+  };
+}
+
+export default function ProductCRUD({ value }) {
+  const [products, setProducts] = useState(value);
   const [remove, setRemove] = useState(null);
-  const [params, setParams] = useState({
+  const [query, setQuery] = useState({
     search: "",
     filter: "",
     sort: "title",
     page: 1,
   });
-  const [search, setSearch] = useState(params.search);
+  const [search, setSearch] = useState(query.search);
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const {
-    loading,
-    isLoggined,
-    isAuthorized,
-    data: products,
-    setData: setProducts,
-  } = useAuthLoad({
-    config: {
-      url: `${LocalApi}/product`,
-      params,
-    },
-    roles: ["guest"],
-    deps: [params],
-  });
+  useEffect(() => {
+    router.query = query;
+    router.replace({ pathname: router.pathname, query });
+  }, [query]);
 
   const handleStatus = async (e, index) => {
     retryAxios(axios);
@@ -53,23 +65,6 @@ function ProductCRUD() {
       dispatch(addNotification({ message: error.message }));
     }
   };
-
-  useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
-
-  if (loading || !isLoggined || !isAuthorized)
-    return (
-      <Loading
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: `translate(-50%, -50%)`,
-        }}
-      ></Loading>
-    );
   return (
     <div className="product-crud__container">
       <Notification />
@@ -78,7 +73,7 @@ function ProductCRUD() {
         <Search
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          onClick={() => setParams((prev) => ({ ...prev, search }))}
+          onClick={() => setQuery((prev) => ({ ...prev, search }))}
         />
       </Container.Flex>
       <div className="product-crud__table">
@@ -150,8 +145,8 @@ function ProductCRUD() {
       </div>
       <Pagination
         totalPageCount={10}
-        currentPage={params.page}
-        setCurrentPage={(page) => setParams((prev) => ({ ...prev, page }))}
+        currentPage={query.page}
+        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
       >
         <Pagination.Arrow>
           <Pagination.Number />
@@ -163,13 +158,8 @@ function ProductCRUD() {
 
 function Remove({ index, product, setProducts, setRemove }) {
   const handleRemove = async () => {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
     retryAxios(axios);
-    await axios.delete(`${LocalApi}/product/${product._id}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    await axios.delete(`${LocalApi}/product/${product._id}`);
     setProducts((prev) => prev.filter((_, i) => i !== index));
     setRemove(null);
   };
@@ -198,5 +188,3 @@ function Remove({ index, product, setProducts, setRemove }) {
     </>
   );
 }
-
-export default dynamic(() => Promise.resolve(ProductCRUD), { ssr: false });

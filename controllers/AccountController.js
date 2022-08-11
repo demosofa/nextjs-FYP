@@ -21,18 +21,23 @@ class AccountController {
       return res.status(300).json({ message: "Invalid password" });
     const { accessToken, refreshToken } = new Token({
       accountId: check._id,
-      userId: check.userId,
+      userId: check.user,
       role: check.role,
     });
-    Cookies(req, res).set("refreshToken", refreshToken, {
-      maxAge: convertTime("1d").milisecond,
-      overwrite: true,
-    });
+    new Cookies(req, res)
+      .set("accessToken", accessToken, {
+        maxAge: convertTime("5m").milisecond,
+        overwrite: true,
+      })
+      .set("refreshToken", refreshToken, {
+        maxAge: convertTime("1d").milisecond,
+        overwrite: true,
+      });
     return res.status(200).json(accessToken);
   }
 
   async logout(req, res) {
-    Cookies(req, res).set("refreshToken");
+    Cookies(req, res).set("accessToken").set("refreshToken");
     return res.status(200).end();
   }
 
@@ -60,10 +65,15 @@ class AccountController {
       userId: user._id,
       role: created.role,
     });
-    Cookies(req, res).set("refreshToken", refreshToken, {
-      maxAge: convertTime("1d").milisecond,
-      overwrite: true,
-    });
+    new Cookies(req, res)
+      .set("accessToken", accessToken, {
+        maxAge: convertTime("5m").milisecond,
+        overwrite: true,
+      })
+      .set("refreshToken", refreshToken, {
+        maxAge: convertTime("1d").milisecond,
+        overwrite: true,
+      });
     return res.status(200).json(accessToken);
   }
 }
