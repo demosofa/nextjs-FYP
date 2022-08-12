@@ -21,7 +21,7 @@ class AccountController {
       return res.status(300).json({ message: "Invalid password" });
     const { accessToken, refreshToken } = new Token({
       accountId: check._id,
-      userId: check.userId,
+      userId: check.user,
       role: check.role,
     });
     Cookies(req, res).set("refreshToken", refreshToken, {

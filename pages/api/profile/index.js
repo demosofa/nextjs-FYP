@@ -13,4 +13,4 @@ async function profileId(req, res) {
   }
 }
 
-export default profileId;
+export default isAuthentication(profileId);

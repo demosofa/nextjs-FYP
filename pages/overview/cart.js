@@ -3,6 +3,7 @@ import { IoIosClose } from "react-icons/io";
 import { Animation, Icon, Increment } from "../../components";
 import { addCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -40,6 +41,10 @@ export default function Cart() {
   const dispatch = useDispatch();
   return (
     <div className="cart__container">
+      <Head>
+        <title>Shopping Cart</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="cart__lst">
         {cart.products.map((item) => (
           <Animation.Zoom key={item.title}>
@@ -66,7 +71,7 @@ export default function Cart() {
                 <Increment
                   value={item.quantity}
                   setValue={(value) => {
-                    if (item.title)
+                    if (item.title) {
                       dispatch(
                         addCart({
                           ...item,
@@ -74,6 +79,7 @@ export default function Cart() {
                           total: Math.round(value * item.price),
                         })
                       );
+                    }
                   }}
                   style={{ width: "100px" }}
                 />

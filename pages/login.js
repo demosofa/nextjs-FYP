@@ -6,6 +6,7 @@ import { expireStorage, Validate } from "../utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/reducer/notificationSlice";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -41,6 +42,13 @@ export default function Login() {
   return (
     <>
       <div className="login-page">
+        <Head>
+          <title>Login</title>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
         <div className="background"></div>
         <div className="login-container">
           <Form onSubmit={handleSubmit}>

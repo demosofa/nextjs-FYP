@@ -16,6 +16,7 @@ import Layout from "../../Layout";
 import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { markdown } from "../../utils";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -73,6 +74,10 @@ export default function Overview({ product }) {
 
   return (
     <Layout>
+      <Head>
+        <title>{product.title}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="page-overview">
         <div className="container-info">
           <div className="preview-product">
