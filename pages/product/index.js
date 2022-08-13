@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Pagination, Container, Search, Loading } from "../../components";
-import { retryAxios } from "../../utils";
+import { expireStorage, retryAxios } from "../../utils";
 import { useAuthLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
@@ -168,7 +168,7 @@ function ProductCRUD() {
 
 function Remove({ index, product, setProducts, setRemove }) {
   const handleRemove = async () => {
-    const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+    const accessToken = expireStorage.getItem("accessToken");
     retryAxios(axios);
     await axios.delete(`${LocalApi}/product/${product._id}`, {
       headers: {

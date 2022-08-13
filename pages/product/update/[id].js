@@ -1,18 +1,97 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { Container } from "../../../components";
+import Head from "next/head";
+import { useState, useEffect } from "react";
+import { Form, Loading } from "../../../components";
 import { UpdateImage, UpdateVariation } from "../../../containers";
 import styles from "../../../styles/Home.module.scss";
+import dynamic from "next/dynamic";
+import { useAuthLoad } from "../../../hooks";
+import { expireStorage, retryAxios } from "../../../utils";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../../../redux/reducer/notificationSlice";
 
-export default function UpdateProduct() {
+const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+
+function UpdateProduct() {
   const [toggle, setToggle] = useState(null);
   const router = useRouter();
+  const { loading, isLoggined, isAuthorized, data, setData } = useAuthLoad({
+    config: {
+      url: `${LocalApi}/product/${router.query?.id}`,
+    },
+    roles: ["guest"],
+    deps: [router.isReady],
+  });
+
+  const dispatch = useDispatch();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    retryAxios(axios);
+    const accessToken = expireStorage.getItem("accessToken");
+    try {
+      await axios.put(`${LocalApi}/product`, data, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      router.back();
+    } catch (error) {
+      dispatch(addNotification({ message: error.message }));
+    }
+  };
+
+  useEffect(() => {
+    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
+    else if (!loading && !isAuthorized) router.back();
+  }, [loading, isLoggined, isAuthorized]);
+
+  if (loading || !isLoggined || !isAuthorized)
+    return (
+      <Loading
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%)`,
+        }}
+      ></Loading>
+    );
+
   return (
-    <Container>
+    <Form style={{ maxWidth: "800px" }} onSubmit={handleSubmit}>
       <Head>
         <title>Update Product</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <Form.Title style={{ fontSize: "20px" }}>Update Product</Form.Title>
+      <Form.Item>
+        <Form.Title>Description</Form.Title>
+        <Form.TextArea
+          value={data.description}
+          onChange={(e) =>
+            setData((prev) => ({ ...prev, description: e.target.value }))
+          }
+        />
+      </Form.Item>
+      <Form.Item>
+        <Form.Title>Sale Price</Form.Title>
+        <Form.Input
+          value={data.sale}
+          onChange={(e) =>
+            setData((prev) => ({ ...prev, sale: e.target.value }))
+          }
+        ></Form.Input>
+      </Form.Item>
+      <Form.Item>
+        <Form.Title>TimeStamp</Form.Title>
+        <Form.Input
+          value={data.time}
+          onChange={(e) =>
+            setData((prev) => ({ ...prev, time: e.target.value }))
+          }
+        ></Form.Input>
+      </Form.Item>
       <div className={styles.card} onClick={() => setToggle("image")}>
         Update Product Image
       </div>
@@ -25,6 +104,9 @@ export default function UpdateProduct() {
         (toggle === "variation" && (
           <UpdateVariation productId={router.query?.id} setToggle={setToggle} />
         ))}
-    </Container>
+      <Form.Submit>Submit</Form.Submit>
+    </Form>
   );
 }
+
+export default dynamic(() => Promise.resolve(UpdateProduct), { ssr: false });

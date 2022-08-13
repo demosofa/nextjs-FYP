@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, Fragment } from "react";
 import { Checkbox } from "../";
 import styles from "./rating.module.scss";
 
@@ -16,9 +16,8 @@ export default function Rating({ rated = 0, setRated = new Function() }) {
     >
       {arrStar.current.map((star) => {
         return (
-          <>
+          <Fragment key={star}>
             <Checkbox.Item
-              key={star}
               className={styles.star}
               value={star}
               id={"star-rating_" + star}
@@ -26,7 +25,6 @@ export default function Rating({ rated = 0, setRated = new Function() }) {
               <label htmlFor={"star-rating_" + star}></label>
             </Checkbox.Item>
             <Checkbox.Item
-              key={star - 0.5}
               className={styles.star}
               value={star - 0.5}
               id={"star-rating_" + star + "-and-half"}
@@ -36,7 +34,7 @@ export default function Rating({ rated = 0, setRated = new Function() }) {
                 htmlFor={"star-rating_" + star + "-and-half"}
               ></label>
             </Checkbox.Item>
-          </>
+          </Fragment>
         );
       })}
     </Checkbox>

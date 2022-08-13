@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Search, Icon } from "../../components";
-import { getURL } from "../../utils";
+import { expireStorage, getURL } from "../../utils";
 import { AiOutlineMenuFold } from "react-icons/ai";
 import styles from "./sideBar.module.scss";
 import { useRouter } from "next/router";
@@ -9,7 +9,7 @@ import axios from "axios";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export default function SideBar({
+export default function Sidebar({
   arrLink = [],
   children,
   setToggle,
@@ -17,12 +17,11 @@ export default function SideBar({
 }) {
   const router = useRouter();
   const handleLogout = async () => {
+    const accessToken = expireStorage.getItem("accessToken");
     try {
       await axios.post(`${LocalApi}/auth/logout`, "", {
         headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("accessToken")
-          )}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       localStorage.clear();
@@ -49,9 +48,11 @@ export default function SideBar({
         {arrLink.map((link, index) => {
           link.path = getURL(link.path);
           return (
-            <Link key={index} to={link.path} className={styles.item}>
+            <Link key={index} href={link.path}>
               {/* <Icon style={{ flex: "1" }}>{link.icon}</Icon> */}
-              <span style={{ flex: 2 }}>{link.title}</span>
+              <a className={styles.item} style={{ flex: 2 }}>
+                {link.title}
+              </a>
             </Link>
           );
         })}
