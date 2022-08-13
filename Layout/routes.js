@@ -1,7 +1,7 @@
 const ManagerRole = [
   {
     title: "Product Management",
-    link: "/product",
+    path: "/product",
   },
 ];
 

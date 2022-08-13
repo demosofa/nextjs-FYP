@@ -1,5 +1,4 @@
 export { default as db } from "./db";
-export { default as routes } from "./routes";
 export { default as isAuthentication } from "./isAuthentication";
 export { default as isAuthorization } from "./isAuthorization";
 export { default as parseForm } from "./parseForm";
