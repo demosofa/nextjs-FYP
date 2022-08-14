@@ -82,6 +82,7 @@ class ProductController {
       .sort({
         [sort]: "asc",
       })
+      .select(["-comments"])
       .populate("categories", "name")
       .populate({ path: "images", select: "url" })
       .populate({

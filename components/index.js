@@ -20,7 +20,6 @@ export { default as Form } from "./Form/Form";
 export { default as Increment } from "./Increment/Increment";
 export { default as Slider } from "./Slider/Slider";
 export { default as Timer } from "./Timer/Timer";
-export { default as Comment } from "./Comment/Comment";
 
 export {
   Animation,

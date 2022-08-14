@@ -7,4 +7,5 @@ export default interface Request extends NextApiRequest {
 interface user {
   id: string;
   role: string;
+  accountId: string;
 }

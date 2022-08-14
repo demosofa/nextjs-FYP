@@ -19,7 +19,7 @@ export default function UpdateImage({ productId, setToggle }) {
     setData: setStoredImages,
   } = useAuthLoad({
     config: {
-      url: `${LocalApi}/product/image/${productId}`,
+      url: `${LocalApi}/product/${productId}/image`,
     },
     roles: ["guest"],
   });
@@ -44,7 +44,7 @@ export default function UpdateImage({ productId, setToggle }) {
           })
         )
       );
-      await axios.put(`${LocalApi}/product/image/${productId}`, {
+      await axios.put(`${LocalApi}/product/${productId}/image`, {
         newImages: uploaded,
         filterImages,
       });

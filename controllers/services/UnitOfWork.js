@@ -9,6 +9,7 @@ import {
   VariationRepository,
   VariantOptRepository,
   FileRepository,
+  CommentRepository,
 } from "../repositories";
 
 class UnitOfWork {
@@ -23,6 +24,7 @@ class UnitOfWork {
     this.Variation = new VariationRepository();
     this.Option = new VariantOptRepository();
     this.File = new FileRepository();
+    this.Comment = new CommentRepository();
   }
 }
 

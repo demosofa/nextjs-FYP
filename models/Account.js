@@ -18,7 +18,11 @@ const Account = new Schema(
   { timestamps: true }
 );
 
-Account.pre("findOneAndDelete", function (next) {
-  mongoose.models.User.deleteOne({ _id: this.user }, next);
-});
+Account.pre(
+  "findOneAndDelete",
+  { document: false, query: true },
+  function (next) {
+    mongoose.models.User.deleteOne({ _id: this.user }, next);
+  }
+);
 module.exports = mongoose.models.Account || mongoose.model("Account", Account);

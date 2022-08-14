@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { addCart } from "../../redux/reducer/cartSlice";
 import {
   ImageMagnifier,
-  Comment,
   Checkbox,
   Container,
   ReadMoreLess,
@@ -12,6 +11,7 @@ import {
   Slider,
   Timer,
 } from "../../components";
+import { Comment } from "../../containers";
 import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
@@ -188,7 +188,7 @@ export default function Overview({ product }) {
         <div className="count">{product.rating}</div>
       </div>
 
-      <Comment url={"https://jsonplaceholder.typicode.com/comments"} />
+      <Comment url={`${LocalApi}/product/${product._id}/comment`} />
     </div>
   );
 }
