@@ -23,16 +23,21 @@ const Product = new Schema(
     variants: [{ type: Schema.Types.ObjectId, ref: "Variant" }],
     variations: [{ type: Schema.Types.ObjectId, ref: "ProductVariation" }],
     manufacturer: { type: String, required: true },
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
   { timestamps: true }
 );
 
-Product.pre("findOneAndDelete", function (next) {
-  mongoose
-    .model("Variations")
-    .deleteMany({ _id: { $in: this.variations } }, next);
-  mongoose.model("File").deleteMany({ _id: { $in: this.images } }, next);
-  mongoose.models.Variant.deleteMany({ _id: { $in: this.variants } }, next);
-});
+Product.pre(
+  "findOneAndDelete",
+  { document: false, query: true },
+  async function () {
+    await mongoose
+      .model("Variations")
+      .deleteMany({ _id: { $in: this.variations } });
+    await mongoose.model("File").deleteMany({ _id: { $in: this.images } });
+    await mongoose.models.Variant.deleteMany({ _id: { $in: this.variants } });
+  }
+);
 
 module.exports = mongoose.models.Product || mongoose.model("Product", Product);

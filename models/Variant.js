@@ -8,10 +8,9 @@ const Variant = new Schema({
   ],
 });
 
-Variant.pre("deleteMany", function (next) {
-  mongoose
-    .model("VariantOption")
-    .deleteMany({ _id: { $in: this.options } }, next);
+Variant.pre("deleteMany", { document: false, query: true }, function (next) {
+  mongoose.model("VariantOption").deleteMany({ _id: { $in: this.options } });
+  return next();
 });
 
 module.exports = mongoose.models.Variant || mongoose.model("Variant", Variant);

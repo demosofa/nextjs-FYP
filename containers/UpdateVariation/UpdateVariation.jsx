@@ -18,12 +18,12 @@ export default function UpdateVariation({ productId, setToggle }) {
     data: storedVariations,
     setData: setStoredVariations,
   } = useAuthLoad({
-    config: { url: `${LocalApi}/product/variation/${productId}` },
+    config: { url: `${LocalApi}/product/${productId}/variation` },
     roles: ["guest"],
   });
 
   const { loading: loadingImages, data: storedImages } = useAuthLoad({
-    config: { url: `${LocalApi}/product/image/${productId}` },
+    config: { url: `${LocalApi}/product/${productId}/image` },
     roles: ["guest"],
   });
 
@@ -47,7 +47,7 @@ export default function UpdateVariation({ productId, setToggle }) {
   const handleSaveVariation = async () => {
     try {
       retryAxios(axios);
-      await axios.patch(`${LocalApi}/product/variation/${productId}`, {
+      await axios.patch(`${LocalApi}/product/${productId}/variation`, {
         variations: storedVariations,
       });
       setToggle(null);
