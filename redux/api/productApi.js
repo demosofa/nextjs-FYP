@@ -1,10 +1,6 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-const LocalApi = process.env.LOCAL_API;
+import apiSlice from "./apiSlice";
 
-const productApi = createApi({
-  reducerPath: "productApi",
-  baseQuery: fetchBaseQuery({ baseUrl: `${LocalApi}/product` }),
-  tagTypes: ["Manage Product"],
+const productApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPorduct: builder.query({ query: (id) => `/${id}` }),
 

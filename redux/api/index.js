@@ -1,1 +1,1 @@
-export { default as productApi } from "./productApi";
+export { default as apiSlice } from "./apiSlice";

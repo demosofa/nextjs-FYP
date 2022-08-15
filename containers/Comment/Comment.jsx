@@ -6,6 +6,7 @@ import { useAxiosLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
+import decoder from "jwt-decode";
 import styles from "./comment.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API + "/comments";
@@ -46,6 +47,7 @@ export default function Comment({ url, maxTree = 3 }) {
           }
         );
         setComments((prev) => [response.data, ...prev]);
+        controller.current = null;
       } catch (error) {
         dispatch(addNotification({ message: error.message }));
       }
@@ -62,6 +64,7 @@ export default function Comment({ url, maxTree = 3 }) {
             key={comment.updatedAt}
             data={comment}
             maxTree={maxTree - 1}
+            parentCommentId={comment._id}
             setDelete={() =>
               setComments((prev) =>
                 prev.filter((item) => item._id !== comment._id)
@@ -74,13 +77,25 @@ export default function Comment({ url, maxTree = 3 }) {
   );
 }
 
-function CommentTab({ data, maxTree, setDelete, ...props }) {
+function CommentTab({
+  data,
+  maxTree,
+  parentCommentId,
+  setParentSubComments,
+  setDelete,
+  ...props
+}) {
   const [currentComment, setCurrentComment] = useState(data);
   const [toggle, setToggle] = useState({
     edit: false,
     reply: false,
     more: false,
   });
+  const { current: accessToken } = useRef(expireStorage.getItem("accessToken"));
+  const isAuthor = useState(() => {
+    const { accountId } = decoder(accessToken);
+    return accountId === data.author._id;
+  })[0];
   const [offDropdown, setOffDropdown] = useState(false);
   const [comments, setComments] = useState([]);
   const controller = useRef();
@@ -90,7 +105,6 @@ function CommentTab({ data, maxTree, setDelete, ...props }) {
     if (controller.current) controller.current.abort();
     else {
       controller.current = new AbortController();
-      const accessToken = expireStorage.getItem("accessToken");
       retryAxios(axios);
       try {
         await axios.patch(
@@ -105,6 +119,7 @@ function CommentTab({ data, maxTree, setDelete, ...props }) {
         );
         setCurrentComment((prev) => ({ ...prev, content }));
         setToggle((prev) => ({ ...prev, edit: false }));
+        controller.current = null;
       } catch (error) {
         dispatch(addNotification({ message: error.message }));
       }
@@ -115,7 +130,6 @@ function CommentTab({ data, maxTree, setDelete, ...props }) {
     if (controller.current) controller.current.abort();
     else {
       controller.current = new AbortController();
-      const accessToken = expireStorage.getItem("accessToken");
       retryAxios(axios);
       try {
         await axios.delete(`${LocalApi}/${data._id}`, {
@@ -125,6 +139,7 @@ function CommentTab({ data, maxTree, setDelete, ...props }) {
           },
         });
         setDelete();
+        controller.current = null;
       } catch (error) {
         dispatch(addNotification({ message: error.message }));
       }
@@ -134,7 +149,6 @@ function CommentTab({ data, maxTree, setDelete, ...props }) {
   const { loading } = useAxiosLoad({
     async callback(axiosInstance) {
       if (toggle.more) {
-        const accessToken = expireStorage.getItem("accessToken");
         retryAxios(axiosInstance);
         const response = await axiosInstance({
           url: `${LocalApi}/${currentComment._id}`,
@@ -152,7 +166,7 @@ function CommentTab({ data, maxTree, setDelete, ...props }) {
     <div className={styles.container} {...props}>
       <div className={styles.tab_container}>
         <Avatar></Avatar>
-        {!toggle.edit && (
+        {isAuthor && !toggle.edit && (
           <Dropdown
             icon={<BiDotsVertical />}
             toggle={offDropdown}
@@ -204,12 +218,16 @@ function CommentTab({ data, maxTree, setDelete, ...props }) {
       </div>
       {loading && <Loading.Text />}
       {comments.length > 0 && toggle.more && (
-        <div className="replys-container">
+        <div className={styles.replys_container}>
           {comments.map((comment) => (
             <CommentTab
               key={comment.updatedAt}
               data={comment}
               maxTree={maxTree - 1}
+              parentCommentId={
+                maxTree - 1 > 0 ? comment._id : currentComment._id
+              }
+              setParentSubComments={maxTree - 1 <= 0 && setComments}
               setDelete={() =>
                 setComments((prev) =>
                   prev.filter((item) => item._id !== comment._id)
@@ -221,8 +239,8 @@ function CommentTab({ data, maxTree, setDelete, ...props }) {
       )}
       {toggle.reply && (
         <CommentReply
-          urlWithParentComment={`${LocalApi}/${currentComment._id}`}
-          setComments={setComments}
+          urlWithParentCommentId={`${LocalApi}/${parentCommentId}`}
+          setComments={maxTree - 1 > 0 ? setComments : setParentSubComments}
           setToggle={(boolean) =>
             setToggle((prev) => ({ ...prev, reply: boolean }))
           }
@@ -249,7 +267,7 @@ function CommentInput({ data = "", callback, setToggle = undefined }) {
   );
 }
 
-function CommentReply({ urlWithParentComment, setComments, setToggle }) {
+function CommentReply({ urlWithParentCommentId, setComments, setToggle }) {
   const controller = useRef();
   const dispatch = useDispatch();
 
@@ -261,7 +279,7 @@ function CommentReply({ urlWithParentComment, setComments, setToggle }) {
       retryAxios(axios);
       try {
         const response = await axios.put(
-          urlWithParentComment,
+          urlWithParentCommentId,
           { content: value },
           {
             signal: controller.current.signal,
@@ -272,6 +290,7 @@ function CommentReply({ urlWithParentComment, setComments, setToggle }) {
         );
         setComments((prev) => [response.data, ...prev]);
         setToggle(false);
+        controller.current = null;
       } catch (error) {
         dispatch(addNotification({ message: error.message }));
       }

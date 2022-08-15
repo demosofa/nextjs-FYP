@@ -14,6 +14,7 @@ class CommentController {
           skip: (page - 1) * 10,
           limit: 10,
         },
+        populate: "author",
       })
       .exec();
     if (!comments)
@@ -24,7 +25,13 @@ class CommentController {
     const id = req.query.id;
     const { replys } = await this.unit.Comment.getById(id)
       .select("replys")
-      .populate("replys")
+      .populate({
+        path: "replys",
+        options: {
+          sort: { updatedAt: -1 },
+        },
+        populate: "author",
+      })
       .exec();
     if (!replys) return res.status(500).json({ message: "Cannot get reply" });
     return res.status(200).json(replys);

@@ -16,6 +16,7 @@ Comment.pre(
   "findOneAndDelete",
   { document: false, query: true },
   async function () {
+    console.log(this);
     await mongoose.model("Comment").deleteMany({ _id: { $in: this.replys } });
   }
 );
