@@ -165,7 +165,7 @@ function CommentTab({
   return (
     <div className={styles.container} {...props}>
       <div className={styles.tab_container}>
-        <Avatar></Avatar>
+        <Avatar text={currentComment.author.username}></Avatar>
         {isAuthor && !toggle.edit && (
           <Dropdown
             icon={<BiDotsVertical />}
@@ -239,6 +239,7 @@ function CommentTab({
       )}
       {toggle.reply && (
         <CommentReply
+          data={currentComment}
           urlWithParentCommentId={`${LocalApi}/${parentCommentId}`}
           setComments={maxTree - 1 > 0 ? setComments : setParentSubComments}
           setToggle={(boolean) =>
@@ -267,7 +268,12 @@ function CommentInput({ data = "", callback, setToggle = undefined }) {
   );
 }
 
-function CommentReply({ urlWithParentCommentId, setComments, setToggle }) {
+function CommentReply({
+  data,
+  urlWithParentCommentId,
+  setComments,
+  setToggle,
+}) {
   const controller = useRef();
   const dispatch = useDispatch();
 
@@ -299,7 +305,7 @@ function CommentReply({ urlWithParentCommentId, setComments, setToggle }) {
 
   return (
     <div className="reply-comment">
-      <Avatar></Avatar>
+      <Avatar text={data.author.username}></Avatar>
       <CommentInput callback={handleReply} setToggle={setToggle} />
     </div>
   );
