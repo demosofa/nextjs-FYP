@@ -1,0 +1,32 @@
+.img_selector{
+  width: 500px;
+  height: 350px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 13;
+  border-radius: 15px;
+  background-color: white;
+  gap: 15px;
+}
+.radio_img{
+  width: 80%;
+  height: 80%;
+  overflow-x: auto;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.checked{
+  border: 2px solid aquamarine;
+  & .icon{
+    font-size: small;
+    color: aquamarine;
+  }
+}
+
+.unchecked{
+  border: 2px solid gainsboro;
+}

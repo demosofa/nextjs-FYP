@@ -1,4 +1,5 @@
 import axios from "axios";
+import Head from "next/head"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Pagination, Container, Search } from "../../components";
@@ -67,6 +68,10 @@ export default function ProductCRUD({ value }) {
   };
   return (
     <div className="product-crud__container">
+      <Head>
+        <title>Manage Product</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Notification />
       <Container.Flex>
         <button onClick={() => router.push(`product/create`)}>Create</button>

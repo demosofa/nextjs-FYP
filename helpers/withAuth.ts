@@ -6,7 +6,7 @@ export default function withAuth(
   nextCb: (
     context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>,
     role?: string
-  ) => any
+  ) => Promise<any>
 ) {
   return async (
     context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
@@ -21,11 +21,12 @@ export default function withAuth(
         },
       };
     }
-    let value = null;
+    let value: { accountId: string; userId: string; role: string };
     try {
       value = Token.verifyToken(accessToken) as {
-        [userId: string]: string;
+        userId: string;
         role: string;
+        accountId: string;
       };
     } catch (error) {
       value = setCookieToken(req, res);

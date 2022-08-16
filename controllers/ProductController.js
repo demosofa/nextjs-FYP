@@ -1,4 +1,7 @@
+import axios from "axios";
 import UnitOfWork from "./services/UnitOfWork";
+
+const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 class ProductController {
   constructor(unit = UnitOfWork) {
@@ -82,6 +85,7 @@ class ProductController {
       .sort({
         [sort]: "asc",
       })
+      .select(["-comments"])
       .populate("categories", "name")
       .populate({ path: "images", select: "url" })
       .populate({
@@ -165,9 +169,11 @@ class ProductController {
     const _id = req.query.id;
     const { newImages, filterImages } = req.body;
     if (filterImages.length) {
-      await Promise.all(
+      const deleted = await Promise.all(
         filterImages.map((image) => this.unit.File.deleteById(image._id))
       );
+      if (!deleted)
+        return res.status(500).json({ message: "Fail to delete file" });
     }
     if (newImages.length) {
       const createdImages = await Promise.all(
@@ -213,8 +219,13 @@ class ProductController {
   }
 
   async delete(req, res) {
+    const { images } = await this.unit.Product.getById(req.query.id)
+      .select("images")
+      .populate("images");
+    const selectedPublic_id = images.map((image) => image.public_id);
     const deleted = await this.unit.Product.deleteById(req.query.id);
     if (!deleted) return res.status(500).end();
+    await axios.delete(`${LocalApi}/destroy`, { files: selectedPublic_id });
     return res.status(200).end();
   }
 }

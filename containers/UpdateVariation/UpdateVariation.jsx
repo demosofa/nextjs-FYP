@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Loading, Checkbox, Animation } from "../../components";
 import { useAxiosLoad } from "../../hooks";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { retryAxios } from "../../utils";
+import { AiOutlineCheck } from "react-icons/ai";
+import styles from "./updatevariation.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -55,7 +57,7 @@ export default function UpdateVariation({ productId, setToggle }) {
   const handleSaveVariation = async () => {
     try {
       retryAxios(axios);
-      await axios.patch(`${LocalApi}/product/variation/${productId}`, {
+      await axios.patch(`${LocalApi}/product/${productId}/variation`, {
         variations: storedVariations,
       });
       setToggle(null);
@@ -135,44 +137,40 @@ export default function UpdateVariation({ productId, setToggle }) {
       <button onClick={handleSaveVariation}>Save Variation</button>
       <button onClick={() => setToggle(null)}>Cancel</button>
       {variationImage !== null && (
-        <div
-          style={{
-            width: "500px",
-            height: "350px",
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 13,
-            borderRadius: "15px",
-            backgroundColor: "white",
-            gap: "15px",
-          }}
-        >
+        <div className={styles.img_selector}>
           <Checkbox
+            className={styles.radio_img}
             name="image"
             type="radio"
             setChecked={(value) => setSelectedImage(value[0])}
-            style={{
-              width: "80%",
-              height: "80%",
-              overflowX: "auto",
-              display: "flex",
-              gap: "15px",
-              flexWrap: "wrap",
-            }}
           >
             <Animation.Fade>
               {storedImages?.map((image) => {
                 return (
-                  <div key={image._id} style={{ width: "fit-content" }}>
-                    <Checkbox.Item value={image}>
+                  <Fragment key={image._id}>
+                    <Checkbox.Item
+                      id={image._id}
+                      value={image}
+                      style={{ display: "none" }}
+                    ></Checkbox.Item>
+                    <label
+                      htmlFor={image._id}
+                      className={
+                        [image].includes(selectedImage)
+                          ? styles.checked
+                          : styles.unchecked
+                      }
+                      style={{ width: "fit-content" }}
+                    >
                       <img
                         style={{ width: "80px", height: "60px" }}
                         src={image.url}
                       ></img>
-                    </Checkbox.Item>
-                  </div>
+                      {[image].includes(selectedImage) && (
+                        <AiOutlineCheck className={styles.icon} />
+                      )}
+                    </label>
+                  </Fragment>
                 );
               })}
             </Animation.Fade>

@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { useState, DependencyList } from "react";
 import decoder from "jwt-decode";
 import { useAxiosLoad } from ".";
-import { retryAxios } from "../utils";
+import { expireStorage, retryAxios } from "../utils";
 
 export default function useAuthLoad({
   config,
@@ -19,7 +19,7 @@ export default function useAuthLoad({
   const { loading, setLoading } = useAxiosLoad({
     deps,
     callback: async (axiosInstance) => {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+      const accessToken = expireStorage.getItem("accessToken");
       if (!accessToken) {
         setLoading(false);
         setLoggined(false);
@@ -35,15 +35,14 @@ export default function useAuthLoad({
       } else setAuthorized(true);
 
       retryAxios(axiosInstance);
-      const value = (
-        await axiosInstance({
-          ...config,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            ...config.headers,
-          },
-        })
-      ).data;
+      const response = await axiosInstance({
+        ...config,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          ...config.headers,
+        },
+      });
+      const value = response.data;
       setData(value);
       return;
     },

@@ -1,18 +1,23 @@
 import { useCallback, useState, useEffect, useRef } from "react";
 
-export default function useUpload(
+export default function useUpload({
   init = [],
   limit = {
     size: 5,
     total: 10,
-  }
-) {
-  const [files, setFiles] = useState(init);
+  },
+  callback,
+}: {
+  init?: any[];
+  limit?: { size: number; total: number };
+  callback?: (Files: File[], Previews: (string | ArrayBuffer)[]) => any;
+}) {
+  const [files, setFiles] = useState<Array<File>>(init);
   const run = useRef(true);
   const [previews, setPreviews] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const isOverSize = (currentFiles, newFile) => {
+  const isOverSize = (currentFiles: File[], newFile: File) => {
     const maxMB = limit.size * 1024 * 1024;
     let futureSize = currentFiles.reduce(
       (prev, curr) => prev + curr.size,
@@ -22,14 +27,14 @@ export default function useUpload(
     return true;
   };
 
-  const isExist = (currentFiles, newFile) => {
+  const isExist = (currentFiles: File[], newFile: File) => {
     const index = currentFiles.findIndex((file) => file.name === newFile.name);
     if (index === -1) return false;
     return true;
   };
 
   const getFiles = useCallback(
-    (newFiles) => {
+    async (newFiles: FileList) => {
       let length = Math.min(limit.total - files.length, newFiles.length);
       for (var i = 0; i < length; i++) {
         setFiles((prev) => {
@@ -44,7 +49,7 @@ export default function useUpload(
   );
 
   const handleOpenPreview = useCallback(
-    (e, index) => {
+    (e: MouseEvent, index: number) => {
       e.stopPropagation();
       if (e.detail > 1) {
         const popup = window.open("", files[index].name);
@@ -54,21 +59,21 @@ export default function useUpload(
         popup.document.close();
       }
     },
-    [files]
+    [files, previews]
   );
 
   const handleDelete = useCallback(
-    (e, index) => {
+    async (e: MouseEvent, index: number) => {
       e.stopPropagation();
       run.current = false;
       setFiles((prev) => prev.filter((_, i) => i !== index));
       setPreviews((prev) => prev.filter((_, i) => i !== index));
     },
-    [files]
+    [files, previews]
   );
 
-  const handleFile = (file) => {
-    return new Promise((resolve, reject) => {
+  const handleFile = (file: File) => {
+    return new Promise<string | ArrayBuffer>((resolve, reject) => {
       const fr = new FileReader();
       fr.readAsDataURL(file);
       fr.onload = () => {
@@ -83,9 +88,12 @@ export default function useUpload(
   useEffect(() => {
     setLoading(true);
     Promise.all(files.map((item) => handleFile(item)))
-      .then((files) => run.current && setPreviews(files))
-      .then(() => setLoading(false))
-      .then(() => (run.current = true));
+      .then(async (filesResult) => {
+        if (run.current) setPreviews(filesResult);
+        await callback(files, filesResult);
+      })
+      .then(() => (run.current = true))
+      .then(() => setLoading(false));
   }, [files]);
 
   return {

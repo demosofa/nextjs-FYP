@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { cart, notification, variant, variation } from "./reducer";
-import { productApi } from "./api";
+import { apiSlice } from "./api";
 import CartStorage from "./middleware/CartStorage";
 import { expireStorage } from "../utils";
 
@@ -23,9 +23,9 @@ export const store = configureStore({
     notification,
     variant,
     variation,
-    [productApi.reducerPath]: productApi.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([CartStorage, productApi.middleware]),
+    getDefaultMiddleware().concat([CartStorage, apiSlice.middleware]),
   preloadedState: { cart: loadState("CartStorage") },
 });

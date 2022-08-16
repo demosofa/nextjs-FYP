@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/reducer/notificationSlice";
 import { Notification } from "../Layout";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -21,6 +22,10 @@ export default function Register() {
   const [instanceRef, setInstance] = useState();
   return (
     <div className="login-page">
+      <Head>
+        <title>Register</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="background"></div>
       <div className="login-container">
         <Slider
@@ -66,6 +71,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
       });
       moveTo();
     } catch (error) {
+      console.log(error);
       dispatch(addNotification({ message: error.message }));
     }
   };

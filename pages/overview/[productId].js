@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { addCart } from "../../redux/reducer/cartSlice";
 import {
   ImageMagnifier,
-  Comment,
   Checkbox,
   Container,
   ReadMoreLess,
@@ -12,10 +11,10 @@ import {
   Slider,
   Timer,
 } from "../../components";
-import Layout from "../../Layout";
+import { Comment } from "../../containers";
 import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { markdown } from "../../utils";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -72,122 +71,124 @@ export default function Overview({ product }) {
   }, [options]);
 
   return (
-    <Layout>
-      <div className="page-overview">
-        <div className="container-info">
-          <div className="preview-product">
-            <ImageMagnifier
-              src={image}
-              style={{ width: "100%", height: "350px" }}
-              className="product-img"
-            ></ImageMagnifier>
-            <Slider
-              className="slider"
-              config={{
-                vertical: device === Devices.phone ? true : false,
-                slides: { perView: 1 },
-              }}
-            >
-              {product.images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image.url}
-                  onMouseEnter={() => setImage(image.url)}
-                ></img>
-              ))}
-            </Slider>
-          </div>
-          <div className="product-info">
-            <label>{product.title}</label>
-
-            {product.time && <Timer value={product.time} />}
-
-            <Container.Flex style={{ gap: "10px" }}>
-              <label>Price: </label>
-              <div>
-                {targetVariation ? targetVariation.price : product.price} $
-              </div>
-            </Container.Flex>
-
-            <Container.Flex style={{ gap: "10px" }}>
-              <label>Category: </label>
-              <div className="categrory">{product.categories[0].name}</div>
-            </Container.Flex>
-
-            {product.variants.map((variant, index) => {
-              return (
-                <Checkbox
-                  key={variant._id}
-                  type="radio"
-                  name={variant.name}
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                  setChecked={(value) =>
-                    setOptions((prev) => {
-                      const clone = prev.concat();
-                      clone[index] = value.join("");
-                      return clone;
-                    })
-                  }
-                >
-                  {variant.name}
-                  {variant.options.map((item, index) => {
-                    return (
-                      <div key={item._id} style={{ width: "fit-content" }}>
-                        <Checkbox.Item
-                          value={item.name}
-                          defaultChecked={index === 0}
-                        >
-                          {item.name}
-                        </Checkbox.Item>
-                      </div>
-                    );
-                  })}
-                </Checkbox>
-              );
-            })}
-
-            <Container.Flex
-              style={{
-                alignItems: "center",
-                gap: "10px",
-                justifyContent: "center",
-              }}
-            >
-              <Increment
-                value={quantity}
-                setValue={setQuantity}
-                style={{ flex: 1 }}
-              />
-              <button
-                style={{ flex: 1 }}
-                className="btn-add-to-cart"
-                onClick={handleAddToCart}
-              >
-                Add to Cart
-              </button>
-              <button style={{ flex: 1 }} className="btn-add-to-cart">
-                Order
-              </button>
-            </Container.Flex>
-          </div>
+    <div className="page-overview">
+      <Head>
+        <title>{product.title}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <div className="container-info">
+        <div className="preview-product">
+          <ImageMagnifier
+            src={image}
+            style={{ width: "100%", height: "350px" }}
+            className="product-img"
+          ></ImageMagnifier>
+          <Slider
+            className="slider"
+            config={{
+              vertical: device === Devices.phone ? true : false,
+              slides: { perView: 1 },
+            }}
+          >
+            {product.images.map((image, index) => (
+              <img
+                key={index}
+                src={image.url}
+                onMouseEnter={() => setImage(image.url)}
+              ></img>
+            ))}
+          </Slider>
         </div>
+        <div className="product-info">
+          <label>{product.title}</label>
 
-        <div>
-          <Container.Flex>
-            <label>Description: </label>
-            <ReadMoreLess style={{ height: "150px" }}>
-              {markdown(product.description)}
-            </ReadMoreLess>
+          {product.time && <Timer value={product.time} />}
+
+          <Container.Flex style={{ gap: "10px" }}>
+            <label>Price: </label>
+            <div>
+              {targetVariation ? targetVariation.price : product.price} $
+            </div>
+          </Container.Flex>
+
+          <Container.Flex style={{ gap: "10px" }}>
+            <label>Category: </label>
+            <div className="categrory">{product.categories[0].name}</div>
+          </Container.Flex>
+
+          {product.variants.map((variant, index) => {
+            return (
+              <Checkbox
+                key={variant._id}
+                type="radio"
+                name={variant.name}
+                style={{ display: "flex", justifyContent: "space-between" }}
+                setChecked={(value) =>
+                  setOptions((prev) => {
+                    const clone = prev.concat();
+                    clone[index] = value.join("");
+                    return clone;
+                  })
+                }
+              >
+                {variant.name}
+                {variant.options.map((item, index) => {
+                  return (
+                    <div key={item._id} style={{ width: "fit-content" }}>
+                      <Checkbox.Item
+                        value={item.name}
+                        defaultChecked={index === 0}
+                      >
+                        {item.name}
+                      </Checkbox.Item>
+                    </div>
+                  );
+                })}
+              </Checkbox>
+            );
+          })}
+
+          <Container.Flex
+            style={{
+              alignItems: "center",
+              gap: "10px",
+              justifyContent: "center",
+            }}
+          >
+            <Increment
+              value={quantity}
+              setValue={setQuantity}
+              style={{ flex: 1 }}
+            />
+            <button
+              style={{ flex: 1 }}
+              className="btn-add-to-cart"
+              onClick={handleAddToCart}
+            >
+              Add to Cart
+            </button>
+            <button style={{ flex: 1 }} className="btn-add-to-cart">
+              Order
+            </button>
           </Container.Flex>
         </div>
-
-        <div className="rating">
-          <Rating rated={4} />
-          <div className="count">{product.rating}</div>
-        </div>
-
-        <Comment url={"https://jsonplaceholder.typicode.com/comments"} />
       </div>
-    </Layout>
+
+      <div>
+        <Container.Flex>
+          <label>Description: </label>
+          <ReadMoreLess style={{ height: "150px" }}>
+            {product.description}
+          </ReadMoreLess>
+        </Container.Flex>
+      </div>
+
+      <div className="rating">
+        <Rating rated={4} />
+        <div className="count">{product.rating}</div>
+      </div>
+
+      <Comment url={`${LocalApi}/product/${product._id}/comment`} />
+    </div>
   );
 }

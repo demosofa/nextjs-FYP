@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, Children, useEffect } from "react";
+import { createContext, useContext, useRef, Children } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { Animation, Loading } from "../";
 import { useUpload } from "../../hooks";
@@ -21,12 +21,16 @@ export default function FileUpload({
     getFiles,
     handleDelete,
     handleOpenPreview,
-  } = useUpload(prevFiles, {
-    total: limitFiles,
-    size: maxByMB,
+  } = useUpload({
+    init: prevFiles,
+    limit: {
+      total: limitFiles,
+      size: maxByMB,
+    },
+    callback(files, previews) {
+      setPrevFiles(files, previews);
+    },
   });
-
-  useEffect(() => setPrevFiles(files, previews), [files]);
 
   return (
     <Kits.Provider

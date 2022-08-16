@@ -1,4 +1,4 @@
-import { Cloudinary, isAuthentication } from "../../helpers";
+import { Cloudinary } from "../../helpers";
 
 async function destroy(req, res) {
   try {

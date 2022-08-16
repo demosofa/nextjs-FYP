@@ -23,8 +23,7 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
   };
 });
 
-export default function MyProfile({ value, role }) {
-  console.log(role);
+export default function MyProfile({ value }) {
   return (
     <div>
       <div>{value.fullname}</div>

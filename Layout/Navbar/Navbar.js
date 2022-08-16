@@ -5,10 +5,11 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import styles from "./Navbar.module.css";
+import { expireStorage } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export default function Navbar({ apis = [{ title: "", link: "" }] }) {
+export default function Navbar({ arrLink = [{ title: "", link: "" }] }) {
   const cart = useSelector((state) => state.cart);
   const router = useRouter();
   const handleLogout = async () => {
@@ -26,11 +27,11 @@ export default function Navbar({ apis = [{ title: "", link: "" }] }) {
         <Search />
       </div>
       <div className={styles.bar}>
-        {apis.map(
-          (api, index) =>
-            api.title && (
-              <Link key={index} href={api.link}>
-                {api.title}
+        {arrLink.map(
+          (link, index) =>
+            link.title && (
+              <Link key={index} href={link.path}>
+                <a>{link.title}</a>
               </Link>
             )
         )}

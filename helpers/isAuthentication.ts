@@ -15,8 +15,13 @@ export default function isAuthentication(
         const value = Token.verifyToken(accessToken) as {
           [userId: string]: string;
           role: string;
+          accountId: string;
         };
-        req.user = { id: value.userId, role: value.role };
+        req.user = {
+          id: value.userId,
+          role: value.role,
+          accountId: value.accountId,
+        };
         return handler(req, res);
       } catch (err) {
         return res.status(401).json({ message: "Token is expired" });

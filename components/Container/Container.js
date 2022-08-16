@@ -23,8 +23,8 @@ ContainerComponent.Absolute = function ({ children, ...restProps }) {
 ContainerComponent.Flex = function ({
   children,
   className,
-  justify = "",
-  align = "",
+  justify = "none",
+  align = "none",
   style,
   ...restProps
 }) {

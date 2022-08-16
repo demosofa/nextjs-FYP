@@ -1,4 +1,5 @@
 import axios from "axios";
+import Head from "next/head";
 import { useContext, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -88,6 +89,10 @@ export default function CreateForm() {
     );
   return (
     <>
+      <Head>
+        <title>Create Product</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Notification />
       <Form
         className="create_edit"
