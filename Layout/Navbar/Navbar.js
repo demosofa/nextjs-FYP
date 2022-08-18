@@ -6,10 +6,12 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import styles from "./Navbar.module.css";
 import { expireStorage } from "../../utils";
+import { useState } from "react";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function Navbar({ arrLink = [{ title: "", link: "" }] }) {
+  const [search, setSearch] = useState("");
   const cart = useSelector((state) => state.cart);
   const router = useRouter();
   const handleLogout = async () => {
@@ -28,8 +30,15 @@ export default function Navbar({ arrLink = [{ title: "", link: "" }] }) {
   };
   return (
     <div className={styles.nav}>
+      <Link href="/">
+        <a>Home</a>
+      </Link>
       <div className={styles.bar}>
-        <Search />
+        <Search
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClick={() => router.push({ pathname: "/", query: { search } })}
+        />
       </div>
       <div className={styles.bar}>
         {arrLink.map(

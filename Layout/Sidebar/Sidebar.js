@@ -15,6 +15,7 @@ export default function Sidebar({
   setToggle,
   ...props
 }) {
+  const [search, setSearch] = useState("");
   const router = useRouter();
   const handleLogout = async () => {
     const accessToken = expireStorage.getItem("accessToken");
@@ -43,7 +44,14 @@ export default function Sidebar({
           <AiOutlineMenuFold />
         </Icon>
       </div>
-      <Search />
+      <Link href="/">
+        <a>Home</a>
+      </Link>
+      <Search
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        onClick={() => router.push({ pathname: "/", query: { search } })}
+      />
       <nav className={styles.nav}>
         {arrLink.map((link, index) => {
           link.path = getURL(link.path);

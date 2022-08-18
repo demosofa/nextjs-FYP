@@ -29,8 +29,19 @@ class ProductController {
   }
 
   async getAll(req, res) {
-    const { page, search, sort } = req.query;
-    const products = await this.unit.Product.getAll()
+    const { page, search, sort, category } = req.query;
+    let filterOptions = {};
+    if (search)
+      filterOptions = {
+        ...filterOptions,
+        title: { $regex: search, $options: "i" },
+      };
+    if (category) {
+      const result = await this.unit.Category.getOne({ name: category });
+      filterOptions = { ...filterOptions, categories: result._id };
+    }
+
+    const products = await this.unit.Product.getAll(filterOptions)
       .where("status", "active")
       .skip((page - 1) * 10)
       .limit(10)
@@ -50,7 +61,6 @@ class ProductController {
       .populate({ path: "images", select: "url" })
       .populate("categories", "name")
       .exec();
-    if (!products.length) return res.status(500).end();
     return res.status(200).json(products);
   }
 

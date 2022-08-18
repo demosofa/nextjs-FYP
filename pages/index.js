@@ -1,3 +1,4 @@
+import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,20 +7,23 @@ import styles from "../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export async function getStaticProps() {
+export async function getServerSideProps({ query }) {
   let products = null;
+  let categories = null;
   try {
-    const data = await fetch(`${LocalApi}/product/all`);
-    products = await data.json();
-  } catch (error) {
-    console.log(error);
-  }
+    const resProducts = await axios.get(`${LocalApi}/product/all`, {
+      params: query,
+    });
+    products = resProducts.data;
+    const resCategories = await axios.get(`${LocalApi}/category/all`);
+    categories = resCategories.data;
+  } catch (error) {}
   return {
-    props: { products },
+    props: { products, categories },
   };
 }
 
-export default function Home({ products }) {
+export default function Home({ products, categories }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -31,31 +35,41 @@ export default function Home({ products }) {
       <main className={styles.main}>
         <div className="trending"></div>
         <div className={styles.grid}>
+          <Animation.Fade>
+            {categories?.map((category) => (
+              <Link
+                key={category._id}
+                href={{ pathname: "/", query: { category: category.name } }}
+              >
+                <a>{category.name}</a>
+              </Link>
+            ))}
+          </Animation.Fade>
+        </div>
+        <div className={styles.grid}>
           <Animation.Zoom className={styles.card}>
-            {products?.map((item) => {
-              return (
-                <Link href={`/overview/${item._id}`} key={item.title}>
-                  <a>
-                    {item.time && <Timer value={item.time} />}
-                    <div style={{ padding: "5px", fontSize: "13px" }}>
-                      <img
-                        src={item.images[0].url}
-                        style={{ height: "175px", borderRadius: "10px" }}
-                      ></img>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <label style={{ fontSize: "14px" }}>{item.title}</label>
-                        <span>{item.price ? item.price : "optional"} $</span>
-                      </div>
+            {products?.map((item) => (
+              <Link href={`/overview/${item._id}`} key={item.title}>
+                <a>
+                  {item.time && <Timer value={item.time} />}
+                  <div style={{ padding: "5px", fontSize: "13px" }}>
+                    <img
+                      src={item.images[0].url}
+                      style={{ height: "175px", borderRadius: "10px" }}
+                    ></img>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <label style={{ fontSize: "14px" }}>{item.title}</label>
+                      <span>{item.price ? item.price : "optional"} $</span>
                     </div>
-                  </a>
-                </Link>
-              );
-            })}
+                  </div>
+                </a>
+              </Link>
+            ))}
           </Animation.Zoom>
         </div>
       </main>

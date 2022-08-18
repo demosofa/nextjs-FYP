@@ -10,6 +10,7 @@ import {
   Increment,
   Slider,
   Timer,
+  Breadcrumb,
 } from "../../components";
 import { Comment } from "../../containers";
 import { Media } from "../_app";
@@ -76,6 +77,7 @@ export default function Overview({ product }) {
         <title>{product.title}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <Breadcrumb categories={product.categories} />
       <div className="container-info">
         <div className="preview-product">
           <ImageMagnifier
@@ -109,11 +111,6 @@ export default function Overview({ product }) {
             <div>
               {targetVariation ? targetVariation.price : product.price} $
             </div>
-          </Container.Flex>
-
-          <Container.Flex style={{ gap: "10px" }}>
-            <label>Category: </label>
-            <div className="categrory">{product.categories[0].name}</div>
           </Container.Flex>
 
           {product.variants.map((variant, index) => {
