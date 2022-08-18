@@ -83,8 +83,14 @@ export default function UpdateImage({ productId, setToggle }) {
       dispatch(addNotification({ message: error.message }));
     }
   };
+
   const handleUpdateImage = (preparedForUpload) => {
-    setUpdateImages((prev) => [...prev, preparedForUpload]);
+    setUpdateImages((prev) => {
+      const unique = prev.filter(
+        (item) => item.public_id !== preparedForUpload.public_id
+      );
+      return [...unique, preparedForUpload];
+    });
   };
   const handleDeleteImage = (e, index) => {
     e.preventDefault();
@@ -133,8 +139,12 @@ export default function UpdateImage({ productId, setToggle }) {
           </label>
         </FileUpload.Input>
       </FileUpload>
-      <button onClick={handleSaveImage}>Save</button>
-      <button onClick={() => setToggle(null)}>Cancel</button>
+      <button type="button" onClick={handleSaveImage}>
+        Save
+      </button>
+      <button type="button" onClick={() => setToggle(null)}>
+        Cancel
+      </button>
     </div>
   );
 }
@@ -146,15 +156,11 @@ function StoredImage({
   ...props
 }) {
   const [displayOpts, setDisplayOpts] = useState(false);
-  const { previews, getFiles, handleDelete } = useUpload({
+  const { previews, getFiles } = useUpload({
     callback(files) {
       handleUpdateImage({ public_id: image.public_id, file: files[0] });
     },
   });
-  const handleUpdate = async (e) => {
-    if (previews.length) await handleDelete(e, 0);
-    await getFiles(e.target.files);
-  };
   return (
     <div
       className={styles.stored_img}
@@ -173,7 +179,7 @@ function StoredImage({
             id={image._id}
             style={{ display: "none" }}
             type="file"
-            onChange={handleUpdate}
+            onChange={(e) => getFiles(e.target.files, 0)}
             onClick={(event) => {
               event.target.value = null;
             }}

@@ -10,8 +10,5 @@ export default async function (req, res) {
     case "post":
       await category.create(req, res);
       break;
-    case "put":
-      await category.update(req, res);
-      break;
   }
 }

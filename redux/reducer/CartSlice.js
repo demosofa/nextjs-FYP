@@ -12,34 +12,34 @@ const cart = createSlice({
   initialState,
   reducers: {
     addCart(state, action) {
-      const copy = JSON.parse(JSON.stringify(state));
-      const index = copy.products.findIndex(
+      const clone = JSON.parse(JSON.stringify(state));
+      const index = clone.products.findIndex(
         (item) => item.title === action.payload.title
       );
-      if (index === -1) copy.products.push(action.payload);
-      else copy.products[index] = action.payload;
-      copy.quantity = copy.products.reduce(
+      if (index === -1) clone.products.push(action.payload);
+      else clone.products[index] = action.payload;
+      clone.quantity = clone.products.reduce(
         (prev, curr) => prev + curr.quantity,
         0
       );
-      copy.total = Math.round(
-        copy.products.reduce((prev, curr) => prev + curr.total, 0)
+      clone.total = Math.round(
+        clone.products.reduce((prev, curr) => prev + curr.total, 0)
       );
-      return copy;
+      return clone;
     },
     removeCart(state, action) {
-      const copy = JSON.parse(JSON.stringify(state));
-      copy.products = copy.products.filter(
+      const clone = JSON.parse(JSON.stringify(state));
+      clone.products = clone.products.filter(
         (item) => item.title !== action.payload.title
       );
-      copy.quantity = copy.products.reduce(
+      clone.quantity = clone.products.reduce(
         (prev, curr) => prev + curr.quantity,
         0
       );
-      copy.total = Math.round(
-        copy.products.reduce((prev, curr) => prev + curr.total, 0)
+      clone.total = Math.round(
+        clone.products.reduce((prev, curr) => prev + curr.total, 0)
       );
-      return copy;
+      return clone;
     },
   },
   extraReducers: (builder) => {
