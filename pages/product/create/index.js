@@ -18,6 +18,7 @@ import { Media } from "../../_app";
 import { useSelector, useDispatch } from "react-redux";
 import { editAllVariations } from "../../../redux/reducer/variationSlice";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
+import Select from "react-select";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -187,16 +188,17 @@ export default function CreateForm() {
           >
             <Form.Item>
               <Form.Title>Status</Form.Title>
-              <Form.Select
-                defaultValue={input.status || "active"}
-                onChange={(e) =>
-                  setInput((prev) => ({ ...prev, status: e.target.value }))
+              <Select
+                defaultValue={{ value: "active", label: "active" }}
+                onChange={({ value }) =>
+                  setInput((prev) => ({ ...prev, status: value }))
                 }
-              >
-                <Form.Option value="active">active</Form.Option>
-                <Form.Option value="non-active">non-active</Form.Option>
-                <Form.Option value="out">out</Form.Option>
-              </Form.Select>
+                options={[
+                  { value: "active", label: "active" },
+                  { value: "non-active", label: "non-active" },
+                  { value: "out", label: "out" },
+                ]}
+              />
             </Form.Item>
 
             <Form.Item>
@@ -214,20 +216,19 @@ export default function CreateForm() {
 
             <Form.Item>
               <Form.Title>Category</Form.Title>
-              <Form.Select
-                defaultValue={input.categories || arrCategory.current[0]}
-                onChange={(e) =>
-                  setInput((prev) => ({ ...prev, categories: e.target.value }))
+              <Select
+                defaultValue={{
+                  value: arrCategory.current[0]._id,
+                  label: arrCategory.current[0].name,
+                }}
+                onChange={({ value }) =>
+                  setInput((prev) => ({ ...prev, categories: value }))
                 }
-              >
-                {arrCategory.current.map((category) => {
-                  return (
-                    <Form.Option key={category._id} value={category._id}>
-                      {category.name}
-                    </Form.Option>
-                  );
-                })}
-              </Form.Select>
+                options={arrCategory.current.map((category) => ({
+                  value: category._id,
+                  label: category.name,
+                }))}
+              />
             </Form.Item>
 
             <Form.Item style={{ justifyContent: "flex-start" }}>
@@ -262,7 +263,7 @@ export default function CreateForm() {
           </Container.Flex>
         </Container.Grid>
 
-        {JSON.stringify([variants, variations])}
+        {JSON.stringify(input)}
 
         <Form.Item style={{ justifyContent: "flex-start" }}>
           <Form.Submit>Submit</Form.Submit>

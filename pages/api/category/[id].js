@@ -7,6 +7,12 @@ export default async function (req, res) {
     case "get":
       await category.read(req, res);
       break;
+    case "put":
+      await category.addSubCategory(req, res);
+      break;
+    case "patch":
+      await category.update(req, res);
+      break;
     case "delete":
       await category.delete(req, res);
       break;

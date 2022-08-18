@@ -31,18 +31,18 @@ export default function UpdateVariation({ productId, setToggle }) {
 
   const handleChangeImage = () => {
     setStoredVariations((prev) => {
-      const copy = JSON.parse(JSON.stringify(prev));
-      copy[variationImage].image = selectedImage;
-      return copy;
+      const clone = JSON.parse(JSON.stringify(prev));
+      clone[variationImage].image = selectedImage;
+      return clone;
     });
     setVariationImage(null);
   };
 
   const handleEditVariation = (payload, index) => {
     setStoredVariations((prev) => {
-      const copy = JSON.parse(JSON.stringify(prev));
-      copy[index] = { ...copy[index], ...payload };
-      return copy;
+      const clone = JSON.parse(JSON.stringify(prev));
+      clone[index] = { ...clone[index], ...payload };
+      return clone;
     });
   };
 
@@ -126,8 +126,12 @@ export default function UpdateVariation({ productId, setToggle }) {
           })}
         </tbody>
       </table>
-      <button onClick={handleSaveVariation}>Save Variation</button>
-      <button onClick={() => setToggle(null)}>Cancel</button>
+      <button type="button" onClick={handleSaveVariation}>
+        Save Variation
+      </button>
+      <button type="button" onClick={() => setToggle(null)}>
+        Cancel
+      </button>
       {variationImage !== null && (
         <div className={styles.img_selector}>
           <Checkbox

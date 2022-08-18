@@ -46,9 +46,9 @@ function ProductCRUD() {
         status: e.target.value,
       });
       setProducts((prev) => {
-        const copy = JSON.parse(JSON.stringify(prev));
-        copy[index].status = e.target.value;
-        return copy;
+        const clone = JSON.parse(JSON.stringify(prev));
+        clone[index].status = e.target.value;
+        return clone;
       });
     } catch (error) {
       dispatch(addNotification({ message: error.message }));

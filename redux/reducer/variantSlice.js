@@ -18,9 +18,9 @@ const variant = createSlice({
     },
     editVariant(state, { payload }) {
       const { index, ...props } = payload;
-      const copy = state.concat();
-      copy[index] = { ...copy[index], ...props };
-      return copy;
+      const clone = state.concat();
+      clone[index] = { ...clone[index], ...props };
+      return clone;
     },
     deleteVariant(state, { payload }) {
       return state.filter((_, index) => index !== payload);

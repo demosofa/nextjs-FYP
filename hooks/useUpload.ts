@@ -34,18 +34,35 @@ export default function useUpload({
   };
 
   const getFiles = useCallback(
-    async (newFiles: FileList) => {
+    (newFiles: FileList, overwriteStartAt?: number) => {
       let length = Math.min(limit.total - files.length, newFiles.length);
-      for (var i = 0; i < length; i++) {
-        setFiles((prev) => {
-          let currentFile = newFiles[i];
-          if (!isOverSize(prev, currentFile) && !isExist(prev, currentFile))
-            return [...prev, currentFile];
-          return prev;
-        });
-      }
+      setFiles((prev) => {
+        let currentFiles =
+          typeof overwriteStartAt == "number"
+            ? prev.filter((_, i) => i < overwriteStartAt)
+            : prev;
+        for (let i = 0; i < length; i++) {
+          let newFile = newFiles[i];
+          if (
+            !isOverSize(currentFiles, newFile) &&
+            !isExist(currentFiles, newFile)
+          )
+            currentFiles = [...currentFiles, newFile];
+        }
+        return currentFiles;
+      });
     },
     [files]
+  );
+
+  const handleDelete = useCallback(
+    (e: MouseEvent, index: number) => {
+      e.stopPropagation();
+      run.current = false;
+      setFiles((prev) => prev.filter((_, i) => i !== index));
+      setPreviews((prev) => prev.filter((_, i) => i !== index));
+    },
+    [files, previews]
   );
 
   const handleOpenPreview = useCallback(
@@ -58,16 +75,6 @@ export default function useUpload({
         );
         popup.document.close();
       }
-    },
-    [files, previews]
-  );
-
-  const handleDelete = useCallback(
-    async (e: MouseEvent, index: number) => {
-      e.stopPropagation();
-      run.current = false;
-      setFiles((prev) => prev.filter((_, i) => i !== index));
-      setPreviews((prev) => prev.filter((_, i) => i !== index));
     },
     [files, previews]
   );
@@ -88,9 +95,9 @@ export default function useUpload({
   useEffect(() => {
     setLoading(true);
     Promise.all(files.map((item) => handleFile(item)))
-      .then(async (filesResult) => {
-        if (run.current) setPreviews(filesResult);
-        await callback(files, filesResult);
+      .then(async (previewsResult) => {
+        if (run.current) setPreviews(previewsResult);
+        if (previewsResult.length) await callback(files, previewsResult);
       })
       .then(() => (run.current = true))
       .then(() => setLoading(false));
