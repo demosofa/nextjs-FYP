@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
 import { useAuthLoad, useAxiosLoad } from "../../hooks";
-import { Dropdown } from "../../components";
+import { Dropdown, Loading } from "../../components";
 import { expireStorage, retryAxios } from "../../utils";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { BiDotsVertical } from "react-icons/bi";
+import styles from "./crudcategory.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function CrudCategory({ maxTree = 3 }) {
+  const dispatch = useDispatch();
   const {
     loading,
     data: categories,
@@ -19,13 +21,13 @@ export default function CrudCategory({ maxTree = 3 }) {
     roles: ["guest"],
   });
 
-  const handleAddCategory = async ({ name, description }) => {
+  const handleAddCategory = async ({ name }) => {
     const accessToken = expireStorage.getItem("accessToken");
     retryAxios(axios);
     try {
       const response = await axios.post(
         `${LocalApi}/category`,
-        { name, description },
+        { name, isFirstLevel: "true" },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -41,14 +43,14 @@ export default function CrudCategory({ maxTree = 3 }) {
   if (loading) return <div>Loading</div>;
 
   return (
-    <div style={{ width: "100%", maxWidth: "500px", minWidth: "320px" }}>
+    <div className={styles.wrapper}>
       <CategoryInput callback={handleAddCategory}></CategoryInput>
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         {categories.length &&
           categories.map((category) => {
             return (
               <SubCategory
-                key={category._id}
+                key={category.updatedAt}
                 data={category}
                 maxTree={maxTree}
                 setDelete={() =>
@@ -64,7 +66,7 @@ export default function CrudCategory({ maxTree = 3 }) {
   );
 }
 
-function SubCategory({ data, maxTree, parentCategoryId, setDelete }) {
+function SubCategory({ data, maxTree, setDelete }) {
   const accessToken = expireStorage.getItem("accessToken");
   const [toggle, setToggle] = useState({
     edit: false,
@@ -80,7 +82,7 @@ function SubCategory({ data, maxTree, parentCategoryId, setDelete }) {
       if (toggle.more) {
         retryAxios(axiosInstance);
         const response = await axiosInstance({
-          url: `${LocalApi}/${currentCategory._id}`,
+          url: `${LocalApi}/category/${currentCategory._id}`,
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -91,12 +93,12 @@ function SubCategory({ data, maxTree, parentCategoryId, setDelete }) {
     deps: [toggle.more],
   });
 
-  const handleEditSave = async ({ name, description }) => {
+  const handleEditSave = async ({ name }) => {
     retryAxios(axios);
     try {
       await axios.patch(
-        `${LocalApi}/category/${data._id}`,
-        { name, description },
+        `${LocalApi}/category/${currentCategory._id}`,
+        { name },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -113,7 +115,7 @@ function SubCategory({ data, maxTree, parentCategoryId, setDelete }) {
   const handleDelete = async () => {
     retryAxios(axios);
     try {
-      await axios.delete(`${LocalApi}/category/${data._id}`, {
+      await axios.delete(`${LocalApi}/category/${currentCategory._id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -124,19 +126,20 @@ function SubCategory({ data, maxTree, parentCategoryId, setDelete }) {
     }
   };
 
-  const handleAddSubCategory = async ({ name, description }) => {
+  const handleAddSubCategory = async ({ name }) => {
     retryAxios(axios);
     try {
-      const response = await axios.post(
-        `${LocalApi}/category`,
-        { name, description },
+      const response = await axios.put(
+        `${LocalApi}/category/${currentCategory._id}`,
+        { name },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      setCategories((prev) => [response.data, ...prev]);
+      setCategories((prev) => [...prev, response.data]);
+      setToggle((prev) => ({ ...prev, add: false }));
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
     }
@@ -144,7 +147,7 @@ function SubCategory({ data, maxTree, parentCategoryId, setDelete }) {
 
   return (
     <div>
-      <div className="category-tab">
+      <div className={styles.container}>
         {(toggle.edit && (
           <CategoryInput
             data={currentCategory}
@@ -154,7 +157,7 @@ function SubCategory({ data, maxTree, parentCategoryId, setDelete }) {
             }
           />
         )) || (
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div className={styles.tab_container}>
             {currentCategory.name}
             {!toggle.edit && (
               <Dropdown
@@ -197,30 +200,29 @@ function SubCategory({ data, maxTree, parentCategoryId, setDelete }) {
         </div>
       )}
       {toggle.add && <CategoryInput callback={handleAddSubCategory} />}
-      <div>
-        {toggle.more && loading && (
-          <div className="{styles.sub_categories_container}">
-            {categories.map((category) => (
-              <SubCategory
-                key={category._id}
-                data={category}
-                maxTree={maxTree - 1}
-                setDelete={() =>
-                  setCategories((prev) =>
-                    prev.filter((item) => item._id !== category._id)
-                  )
-                }
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      {loading && <Loading.Text />}
+      {toggle.more && (
+        <div className={styles.sub_categories_container}>
+          {categories.map((category) => (
+            <SubCategory
+              key={category.updatedAt}
+              data={category}
+              maxTree={maxTree - 1}
+              setDelete={() =>
+                setCategories((prev) =>
+                  prev.filter((item) => item._id !== category._id)
+                )
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 function CategoryInput({
-  data = { name: "", description: "" },
+  data = { name: "" },
   callback,
   setToggle = undefined,
 }) {
@@ -232,12 +234,6 @@ function CategoryInput({
         value={input.name}
         onChange={(e) =>
           setInput((prev) => ({ ...prev, name: e.target.value }))
-        }
-      ></textarea>
-      <textarea
-        value={input.description}
-        onChange={(e) =>
-          setInput((prev) => ({ ...prev, description: e.target.value }))
         }
       ></textarea>
       <div>

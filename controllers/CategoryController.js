@@ -4,12 +4,17 @@ class CategoryController {
   constructor(unit = UnitOfWork) {
     this.unit = new unit();
   }
-  async read(req, res) {
-    const category = await this.unit.Category.getById(req.query.id);
-    return res.status(200).json(category);
+  async getSubCategories(req, res) {
+    const { subCategories } = await this.unit.Category.getById(req.query.id)
+      .select("subCategories")
+      .populate({ path: "subCategories", options: { sort: { updatedAt: -1 } } })
+      .exec();
+    return res.status(200).json(subCategories);
   }
-  async readAll(req, res) {
-    const categories = await this.unit.Category.getAll();
+  async getCategoriesAreFirstLevel(req, res) {
+    const categories = await this.unit.Category.getAll()
+      .where("isFirstLevel", "true")
+      .exec();
     return res.status(200).json(categories);
   }
   async create(req, res) {
