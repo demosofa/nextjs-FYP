@@ -4,6 +4,13 @@ class CategoryController {
   constructor(unit = UnitOfWork) {
     this.unit = new unit();
   }
+  async getAll(req, res) {
+    const categories = await this.unit.Category.getAll()
+      .select(["-createdAt", "-updatedAt"])
+      .exec();
+    if (!categories) return res.status(500).json("Fail to load all categories");
+    return res.status(200).json(categories);
+  }
   async getSubCategories(req, res) {
     const { subCategories } = await this.unit.Category.getById(req.query.id)
       .select("subCategories")
