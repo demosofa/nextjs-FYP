@@ -19,14 +19,13 @@ const Account = new Schema(
   { timestamps: true }
 );
 
-Account.pre(
+Account.post(
   "findOneAndDelete",
   { document: false, query: true },
-  async function (next) {
-    await mongoose.models.User.deleteOne({ _id: this.user });
-    await mongoose.models.Rate.deleteMany({ _id: { $in: this.ratings } });
-    await mongoose.model("Order").deleteMany({ _id: { $in: this.orders } });
-    return next();
+  async function (doc) {
+    await mongoose.models.User.deleteOne({ _id: doc.user });
+    await mongoose.models.Rate.deleteMany({ _id: { $in: doc.ratings } });
+    await mongoose.model("Order").deleteMany({ _id: { $in: doc.orders } });
   }
 );
 module.exports = mongoose.models.Account || mongoose.model("Account", Account);

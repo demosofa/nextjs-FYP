@@ -13,20 +13,20 @@ const File = new Schema(
   { timestamps: true }
 );
 
-File.pre(
+File.post(
   "findOneAndDelete",
   { document: false, query: true },
-  async function () {
+  async function (doc) {
     await mongoose.models.Product.updateOne(
-      { images: this._id },
+      { images: doc._id },
       {
         $pull: {
-          images: this._id,
+          images: doc._id,
         },
       }
     );
     await mongoose.model("Variation").updateOne(
-      { image: this._id },
+      { image: doc._id },
       {
         $unset: {
           image: 1,

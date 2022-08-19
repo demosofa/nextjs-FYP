@@ -33,7 +33,6 @@ export default function Comment({ url, maxTree = 3 }) {
     if (controller.current) controller.current.abort();
     else {
       controller.current = new AbortController();
-      const accessToken = expireStorage.getItem("accessToken");
       retryAxios(axios);
       try {
         const response = await axios.post(
@@ -41,9 +40,6 @@ export default function Comment({ url, maxTree = 3 }) {
           { content },
           {
             signal: controller.current.signal,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
           }
         );
         setComments((prev) => [response.data, ...prev]);
@@ -91,11 +87,6 @@ function CommentTab({
     reply: false,
     more: false,
   });
-  const { current: accessToken } = useRef(expireStorage.getItem("accessToken"));
-  const isAuthor = useState(() => {
-    const { accountId } = decoder(accessToken);
-    return accountId === data.author._id;
-  })[0];
   const [offDropdown, setOffDropdown] = useState(false);
   const [comments, setComments] = useState([]);
   const controller = useRef();
@@ -112,9 +103,6 @@ function CommentTab({
           { content },
           {
             signal: controller.current.signal,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
           }
         );
         setCurrentComment((prev) => ({ ...prev, content }));
@@ -134,9 +122,6 @@ function CommentTab({
       try {
         await axios.delete(`${LocalApi}/${data._id}`, {
           signal: controller.current.signal,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
         });
         setDelete();
         controller.current = null;
@@ -152,9 +137,6 @@ function CommentTab({
         retryAxios(axiosInstance);
         const response = await axiosInstance({
           url: `${LocalApi}/${currentComment._id}`,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
         });
         setComments(response.data);
       }
@@ -166,7 +148,7 @@ function CommentTab({
     <div className={styles.container} {...props}>
       <div className={styles.tab_container}>
         <Avatar text={currentComment.author.username}></Avatar>
-        {isAuthor && !toggle.edit && (
+        {!toggle.edit && (
           <Dropdown
             icon={<BiDotsVertical />}
             toggle={offDropdown}
@@ -281,7 +263,6 @@ function CommentReply({
     if (controller.current) controller.current.abort();
     else {
       controller.current = new AbortController();
-      const accessToken = expireStorage.getItem("accessToken");
       retryAxios(axios);
       try {
         const response = await axios.put(
@@ -289,9 +270,6 @@ function CommentReply({
           { content: value },
           {
             signal: controller.current.signal,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
           }
         );
         setComments((prev) => [response.data, ...prev]);

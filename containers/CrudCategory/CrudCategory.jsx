@@ -22,18 +22,12 @@ export default function CrudCategory({ maxTree = 3 }) {
   });
 
   const handleAddCategory = async ({ name }) => {
-    const accessToken = expireStorage.getItem("accessToken");
     retryAxios(axios);
     try {
-      const response = await axios.post(
-        `${LocalApi}/category`,
-        { name, isFirstLevel: "true" },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      const response = await axios.post(`${LocalApi}/category`, {
+        name,
+        isFirstLevel: "true",
+      });
       setCategories((prev) => [response.data, ...prev]);
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
@@ -83,9 +77,6 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
         retryAxios(axiosInstance);
         const response = await axiosInstance({
           url: `${LocalApi}/category/${currentCategory._id}`,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
         });
         setCategories(response.data);
       }
@@ -96,15 +87,9 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
   const handleEditSave = async ({ name }) => {
     retryAxios(axios);
     try {
-      await axios.patch(
-        `${LocalApi}/category/${currentCategory._id}`,
-        { name },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await axios.patch(`${LocalApi}/category/${currentCategory._id}`, {
+        name,
+      });
       setCurrentCategory((prev) => ({ ...prev, name }));
       setToggle((prev) => ({ ...prev, edit: false }));
     } catch (error) {
@@ -115,11 +100,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
   const handleDelete = async () => {
     retryAxios(axios);
     try {
-      await axios.delete(`${LocalApi}/category/${currentCategory._id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await axios.delete(`${LocalApi}/category/${currentCategory._id}`);
       setDelete();
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
@@ -131,12 +112,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
     try {
       const response = await axios.put(
         `${LocalApi}/category/${currentCategory._id}`,
-        { name },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
+        { name }
       );
       setCategories((prev) => [...prev, response.data]);
       setToggle((prev) => ({ ...prev, add: false }));

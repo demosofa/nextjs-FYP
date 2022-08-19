@@ -10,16 +10,15 @@ const Category = new Schema(
   { timestamps: true }
 );
 
-Category.pre(
+Category.post(
   ["findOnedAndDelete", "deleteMany"],
   { document: false, query: true },
-  async function (next) {
+  async function (doc) {
     console.log(this);
-    await mongoose.models.Product.deleteOne({ categories: this._id });
+    await mongoose.models.Product.deleteOne({ categories: doc._id });
     await mongoose
       .model("Category")
-      .deleteMany({ _id: { $in: this.subCategories } });
-    return next();
+      .deleteMany({ _id: { $in: doc.subCategories } });
   }
 );
 

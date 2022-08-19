@@ -28,16 +28,15 @@ const Product = new Schema(
   { timestamps: true }
 );
 
-Product.pre(
+Product.post(
   "findOneAndDelete",
   { document: false, query: true },
-  async function () {
-    console.log(this);
+  async function (doc) {
     await mongoose
       .model("Variation")
-      .deleteMany({ _id: { $in: this.variations } });
-    await mongoose.model("File").deleteMany({ _id: { $in: this.images } });
-    await mongoose.models.Variant.deleteMany({ _id: { $in: this.variants } });
+      .deleteMany({ _id: { $in: doc.variations } });
+    await mongoose.model("File").deleteMany({ _id: { $in: doc.images } });
+    await mongoose.models.Variant.deleteMany({ _id: { $in: doc.variants } });
   }
 );
 
