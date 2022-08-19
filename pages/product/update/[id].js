@@ -14,11 +14,15 @@ import { addNotification } from "../../../redux/reducer/notificationSlice";
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function UpdateProduct() {
+  const [product, setProduct] = useState();
   const [toggle, setToggle] = useState(null);
   const router = useRouter();
-  const { loading, isLoggined, isAuthorized, data, setData } = useAuthLoad({
-    config: {
-      url: `${LocalApi}/product/${router.query?.id}`,
+  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+    async cb(axiosInstance) {
+      const res = await axiosInstance({
+        url: `${LocalApi}/product/${router.query?.id}`,
+      });
+      setProduct(res.data);
     },
     roles: ["guest"],
     deps: [router.isReady],
@@ -27,7 +31,7 @@ function UpdateProduct() {
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { _id, description, sale, time } = data;
+    const { _id, description, sale, time } = product;
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
@@ -73,27 +77,27 @@ function UpdateProduct() {
       <Form.Item>
         <Form.Title>Description</Form.Title>
         <Form.TextArea
-          value={data.description}
+          value={product.description}
           onChange={(e) =>
-            setData((prev) => ({ ...prev, description: e.target.value }))
+            setProduct((prev) => ({ ...prev, description: e.target.value }))
           }
         />
       </Form.Item>
       <Form.Item>
         <Form.Title>Sale Price</Form.Title>
         <Form.Input
-          value={data.sale}
+          value={product.sale}
           onChange={(e) =>
-            setData((prev) => ({ ...prev, sale: e.target.value }))
+            setProduct((prev) => ({ ...prev, sale: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>
       <Form.Item>
         <Form.Title>TimeStamp</Form.Title>
         <Form.Input
-          value={data.time}
+          value={product.time}
           onChange={(e) =>
-            setData((prev) => ({ ...prev, time: e.target.value }))
+            setProduct((prev) => ({ ...prev, time: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>

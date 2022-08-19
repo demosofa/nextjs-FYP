@@ -12,12 +12,12 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function CrudCategory({ maxTree = 3 }) {
   const dispatch = useDispatch();
-  const {
-    loading,
-    data: categories,
-    setData: setCategories,
-  } = useAuthLoad({
-    config: { url: `${LocalApi}/category` },
+  const [categories, setCategories] = useState([]);
+  const { loading } = useAuthLoad({
+    async cb(axiosInstance) {
+      const res = await axiosInstance({ url: `${LocalApi}/category` });
+      setCategories(res.data);
+    },
     roles: ["guest"],
   });
 

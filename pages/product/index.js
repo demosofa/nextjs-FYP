@@ -21,19 +21,20 @@ function ProductCRUD() {
     page: 1,
   });
   const [search, setSearch] = useState(params.search);
+  const [products, setProducts] = useState([]);
+  const [totalPageCount, setTotalPageCount] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const {
-    loading,
-    isLoggined,
-    isAuthorized,
-    data: products,
-    setData: setProducts,
-  } = useAuthLoad({
-    config: {
-      url: `${LocalApi}/product`,
-      params,
+  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+    async cb(axiosInstance) {
+      const res = await axiosInstance({
+        url: `${LocalApi}/product`,
+        params,
+      });
+      setProducts(res.data.products);
+      if (totalPageCount === null) setTotalPageCount(res.data.pageCounted);
+      return;
     },
     roles: ["guest"],
     deps: [params],
@@ -154,7 +155,7 @@ function ProductCRUD() {
         )}
       </div>
       <Pagination
-        totalPageCount={10}
+        totalPageCount={totalPageCount}
         currentPage={params.page}
         setCurrentPage={(page) => setParams((prev) => ({ ...prev, page }))}
       >

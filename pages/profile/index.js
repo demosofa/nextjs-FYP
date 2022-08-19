@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
 
@@ -8,9 +8,13 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function MyProfile() {
   const router = useRouter();
-  const { loading, isLoggined, isAuthorized, data } = useAuthLoad({
-    config: {
-      url: `${LocalApi}/profile`,
+  const [data, setData] = useState();
+  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+    async cb(axiosInstance) {
+      const res = await axiosInstance({
+        url: `${LocalApi}/profile`,
+      });
+      setData(res.data);
     },
     roles: ["guest"],
   });

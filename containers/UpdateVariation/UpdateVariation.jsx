@@ -11,21 +11,29 @@ import styles from "./updatevariation.module.scss";
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function UpdateVariation({ productId, setToggle }) {
+  const [storedVariations, setStoredVariations] = useState([]);
   const [variationImage, setVariationImage] = useState(null);
+  const [storedImages, setStoredImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const dispatch = useDispatch();
 
-  const {
-    loading,
-    data: storedVariations,
-    setData: setStoredVariations,
-  } = useAuthLoad({
-    config: { url: `${LocalApi}/product/${productId}/variation` },
+  const { loading } = useAuthLoad({
+    async cb(axiosInstance) {
+      const res = await axiosInstance({
+        url: `${LocalApi}/product/${productId}/variation`,
+      });
+      setStoredVariations(res.data);
+    },
     roles: ["guest"],
   });
 
-  const { loading: loadingImages, data: storedImages } = useAuthLoad({
-    config: { url: `${LocalApi}/product/${productId}/image` },
+  const { loading: loadingImages } = useAuthLoad({
+    async cb(axiosInstance) {
+      const res = await axiosInstance({
+        url: `${LocalApi}/product/${productId}/image`,
+      });
+      setStoredImages(res.data);
+    },
     roles: ["guest"],
   });
 

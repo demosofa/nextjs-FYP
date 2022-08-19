@@ -97,7 +97,7 @@ Pagination.Number = function NumberPagination({
   });
 
   // If there are less than 2 times in pagination range we shall not render the component
-  if (currentPage === 0 || paginationRange.length < 2) {
+  if (currentPage === 0 || paginationRange.length < 1) {
     return null;
   }
 

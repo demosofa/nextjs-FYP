@@ -13,17 +13,17 @@ import styles from "./updateimage.module.scss";
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function UpdateImage({ productId, setToggle }) {
+  const [storedImages, setStoredImages] = useState([]);
   const [filterImages, setFilterImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
   const [updateImages, setUpdateImages] = useState([]);
   const dispatch = useDispatch();
-  const {
-    loading,
-    data: storedImages,
-    setData: setStoredImages,
-  } = useAuthLoad({
-    config: {
-      url: `${LocalApi}/product/${productId}/image`,
+  const { loading } = useAuthLoad({
+    async cb(axiosInstance) {
+      const res = await axiosInstance({
+        url: `${LocalApi}/product/${productId}/image`,
+      });
+      setStoredImages(res.data);
     },
     roles: ["guest"],
   });
