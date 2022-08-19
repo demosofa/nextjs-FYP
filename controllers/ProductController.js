@@ -61,7 +61,11 @@ class ProductController {
       .populate({ path: "images", select: "url" })
       .populate("categories", "name")
       .exec();
-    return res.status(200).json(products);
+    const productCounted = await this.unit.Product.countData({
+      status: "active",
+    });
+    const pageCounted = Math.ceil(productCounted / 10);
+    return res.status(200).json({ products, pageCounted });
   }
 
   async getImage(req, res) {

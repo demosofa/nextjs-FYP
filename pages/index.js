@@ -2,28 +2,48 @@ import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { Animation, Timer } from "../components";
+import { useState } from "react";
+import { Animation, Loading, Timer } from "../components";
+import { useAxiosLoad } from "../hooks";
 import styles from "../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalUrl = process.env.NEXT_PUBLIC_LOCAL_URL;
 
 export async function getServerSideProps({ query }) {
   let products = null;
+  let pageCounted = 0;
   let categories = null;
   try {
     const resProducts = await axios.get(`${LocalApi}/product/all`, {
       params: query,
     });
-    products = resProducts.data;
+    const result = resProducts.data;
+    products = result.products;
+    pageCounted = result.pageCounted;
     const resCategories = await axios.get(`${LocalApi}/category/all`);
     categories = resCategories.data;
   } catch (error) {}
   return {
-    props: { products, categories },
+    props: { products, categories, pageCounted },
   };
 }
 
-export default function Home({ products, categories }) {
+export default function Home({ products, categories, pageCounted }) {
+  const [pageLeft, setPageLeft] = useState(pageCounted);
+  const [lstProduct, setLstProduct] = useState(products);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { loading } = useAxiosLoad({
+    config: { url: `${LocalUrl}`, params: { page: currentPage } },
+    async callback(axios) {
+      if (currentPage > 1 && pageLeft > 0) {
+        const res = await axios();
+        setLstProduct((prev) => [...prev, res.data]);
+        setPageLeft((prev) => prev - 1);
+      }
+    },
+    deps: [currentPage],
+  });
   return (
     <div className={styles.container}>
       <Head>
@@ -35,7 +55,7 @@ export default function Home({ products, categories }) {
       <main className={styles.main}>
         <div className="trending"></div>
         <div className={styles.grid}>
-          <Animation.Fade>
+          <Animation.Fade className={styles.card}>
             {categories?.map((category) => (
               <Link
                 key={category._id}
@@ -48,7 +68,7 @@ export default function Home({ products, categories }) {
         </div>
         <div className={styles.grid}>
           <Animation.Zoom className={styles.card}>
-            {products?.map((item) => (
+            {lstProduct?.map((item) => (
               <Link href={`/overview/${item._id}`} key={item.title}>
                 <a>
                   {item.time && <Timer value={item.time} />}
@@ -72,6 +92,12 @@ export default function Home({ products, categories }) {
             ))}
           </Animation.Zoom>
         </div>
+        {loading && <Loading.Text />}
+        {pageLeft - 1 > 0 && (
+          <a onClick={() => setCurrentPage((prev) => prev + 1)}>
+            More Products
+          </a>
+        )}
       </main>
 
       <footer className={styles.footer}>

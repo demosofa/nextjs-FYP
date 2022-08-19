@@ -27,14 +27,19 @@ function UpdateProduct() {
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { _id, description, sale, time } = data;
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
-      await axios.put(`${LocalApi}/product`, data, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await axios.put(
+        `${LocalApi}/product`,
+        { _id, description, sale, time },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       router.back();
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
