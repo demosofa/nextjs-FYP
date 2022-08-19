@@ -29,8 +29,18 @@ class ProductController {
   }
 
   async getAll(req, res) {
-    const { page, search, sort } = req.query;
-    const products = await this.unit.Product.getAll()
+    const { page, search, sort, category } = req.query;
+    let filterOptions = {};
+    if (search)
+      filterOptions = {
+        ...filterOptions,
+        title: { $regex: search, $options: "i" },
+      };
+    if (category) {
+      const result = await this.unit.Category.getOne({ name: category });
+      filterOptions = { ...filterOptions, categories: result._id };
+    }
+    const products = await this.unit.Product.getAll(filterOptions)
       .where("status", "active")
       .skip((page - 1) * 10)
       .limit(10)
@@ -50,8 +60,12 @@ class ProductController {
       .populate({ path: "images", select: "url" })
       .populate("categories", "name")
       .exec();
-    if (!products.length) return res.status(500).end();
-    return res.status(200).json(products);
+    const productCounted = await this.unit.Product.countData({
+      status: "active",
+      ...filterOptions,
+    });
+    const pageCounted = Math.ceil(productCounted / 10);
+    return res.status(200).json({ products, pageCounted });
   }
 
   async getImage(req, res) {
@@ -78,8 +92,18 @@ class ProductController {
   }
 
   async listManagedProduct(req, res) {
-    const { page, search, sort } = req.query;
-    const products = await this.unit.Product.getAll()
+    const { page, search, sort, category } = req.query;
+    let filterOptions = {};
+    if (search)
+      filterOptions = {
+        ...filterOptions,
+        title: { $regex: search, $options: "i" },
+      };
+    if (category) {
+      const result = await this.unit.Category.getOne({ name: category });
+      filterOptions = { ...filterOptions, categories: result._id };
+    }
+    const products = await this.unit.Product.getAll(filterOptions)
       .skip((page - 1) * 10)
       .limit(10)
       .sort({
@@ -100,8 +124,9 @@ class ProductController {
         populate: "types",
       })
       .exec();
-    if (!products) return res.status(404).json({ errorMessage: "Not Found" });
-    return res.status(200).json(products);
+    const productCounted = await this.unit.Product.countData(filterOptions);
+    const pageCounted = Math.ceil(productCounted / 10);
+    return res.status(200).json({ products, pageCounted });
   }
 
   async create(req, res) {
@@ -225,7 +250,9 @@ class ProductController {
     const selectedPublic_id = images.map((image) => image.public_id);
     const deleted = await this.unit.Product.deleteById(req.query.id);
     if (!deleted) return res.status(500).end();
-    await axios.delete(`${LocalApi}/destroy`, { files: selectedPublic_id });
+    await axios.delete(`${LocalApi}/destroy`, {
+      data: { files: selectedPublic_id },
+    });
     return res.status(200).end();
   }
 }

@@ -5,6 +5,7 @@ import { AiOutlineMenuFold } from "react-icons/ai";
 import styles from "./sideBar.module.scss";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import decoder from "jwt-decode";
 import axios from "axios";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
@@ -15,6 +16,12 @@ export default function Sidebar({
   setToggle,
   ...props
 }) {
+  const auth = useState(() => {
+    const permission = expireStorage.getItem("permission");
+    const { role } = decoder(permission);
+    return role;
+  })[0];
+  const [search, setSearch] = useState("");
   const router = useRouter();
   const handleLogout = async () => {
     try {
@@ -26,9 +33,11 @@ export default function Sidebar({
     }
   };
 
+  console.log(auth);
+
   const [check, setCheck] = useState(false);
   useEffect(() => {
-    if (localStorage.getItem("permission")) setCheck(true);
+    if (auth) setCheck(true);
   });
 
   return (
@@ -38,16 +47,23 @@ export default function Sidebar({
           <AiOutlineMenuFold />
         </Icon>
       </div>
-      <Search />
+      <Link href="/">
+        <a>Home</a>
+      </Link>
+      {auth && (
+        <Search
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClick={() => router.push({ pathname: "/", query: { search } })}
+        />
+      )}
       <nav className={styles.nav}>
         {arrLink.map((link, index) => {
           link.path = getURL(link.path);
           return (
             <Link key={index} href={link.path}>
               {/* <Icon style={{ flex: "1" }}>{link.icon}</Icon> */}
-              <a className={styles.item} style={{ flex: 2 }}>
-                {link.title}
-              </a>
+              <a className={styles.item}>{link.title}</a>
             </Link>
           );
         })}

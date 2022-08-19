@@ -8,22 +8,20 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
 import { withAuth } from "../../../helpers";
+import { retryAxios } from "../../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export const getServerSideProps = withAuth(({req, params}, role) => {
+export const getServerSideProps = withAuth(async ({ req, params }, role) => {
   let value = null;
-  console.log(req.headers)
   try {
-    const response = await axios.get(`${LocalApi}/product/${params}`, {
+    const response = await axios.get(`${LocalApi}/product/${params.id}`, {
       headers: {
         Cookie: req.headers.cookie,
       },
     });
     value = response.data;
-  } catch (error) {
-    console.log(error.message);
-  }
+  } catch (error) {}
   return {
     props: {
       value,
@@ -32,16 +30,17 @@ export const getServerSideProps = withAuth(({req, params}, role) => {
   };
 });
 
-export default function UpdateProduct({value}) {
-  const [data, setData] = useState(value)
+export default function UpdateProduct({ value }) {
+  const [product, setProduct] = useState(value);
   const [toggle, setToggle] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { _id, description, sale, time } = product;
     retryAxios(axios);
     try {
-      await axios.put(`${LocalApi}/product`, data);
+      await axios.put(`${LocalApi}/product`, { _id, description, sale, time });
       router.back();
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
@@ -58,27 +57,27 @@ export default function UpdateProduct({value}) {
       <Form.Item>
         <Form.Title>Description</Form.Title>
         <Form.TextArea
-          value={data.description}
+          value={product.description}
           onChange={(e) =>
-            setData((prev) => ({ ...prev, description: e.target.value }))
+            setProduct((prev) => ({ ...prev, description: e.target.value }))
           }
         />
       </Form.Item>
       <Form.Item>
         <Form.Title>Sale Price</Form.Title>
         <Form.Input
-          value={data.sale}
+          value={product.sale}
           onChange={(e) =>
-            setData((prev) => ({ ...prev, sale: e.target.value }))
+            setProduct((prev) => ({ ...prev, sale: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>
       <Form.Item>
         <Form.Title>TimeStamp</Form.Title>
         <Form.Input
-          value={data.time}
+          value={product.time}
           onChange={(e) =>
-            setData((prev) => ({ ...prev, time: e.target.value }))
+            setProduct((prev) => ({ ...prev, time: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>

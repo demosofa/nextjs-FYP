@@ -1,36 +1,30 @@
 import axios from "axios";
 import Head from "next/head";
-import { useContext, useRef, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
-import {
-  FileUpload,
-  TagsInput,
-  Form,
-  Container,
-  Loading,
-} from "../../../components";
-import { Variation, Variant } from "../../../containers";
+import { FileUpload, TagsInput, Form, Container } from "../../../components";
+import { Variation, Variant, SelectCategory } from "../../../containers";
 import { Notification } from "../../../Layout";
 import { retryAxios, Validate, uploadApi } from "../../../utils";
-import { useAxiosLoad } from "../../../hooks";
 import { Media } from "../../_app";
 import { useSelector, useDispatch } from "react-redux";
 import { editAllVariations } from "../../../redux/reducer/variationSlice";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
+import Select from "react-select";
+import dynamic from "next/dynamic";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-export default function CreateForm() {
+function CreateForm() {
   const variants = useSelector((state) => state.variant);
   const variations = useSelector((state) => state.variation);
-  const arrCategory = useRef([]);
   const router = useRouter();
   const dispatch = useDispatch();
   const [input, setInput] = useState({
     title: "",
     description: "",
-    categories: "",
+    categories: [],
     status: "",
     tags: [],
     images: [],
@@ -40,16 +34,6 @@ export default function CreateForm() {
   });
 
   const { device, Devices } = useContext(Media);
-
-  const { loading: isLoading } = useAxiosLoad({
-    config: {
-      baseURL: `${LocalApi}/category`,
-      method: "GET",
-    },
-    callback: async (instance) => {
-      arrCategory.current = (await instance()).data;
-    },
-  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,17 +60,23 @@ export default function CreateForm() {
       dispatch(addNotification({ message: error.message }));
     }
   };
-  if (isLoading)
-    return (
-      <Loading
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: `translate(-50%, -50%)`,
-        }}
-      ></Loading>
-    );
+
+  const handleSelectedCategories = useCallback(
+    (index, categoryId) => {
+      setInput((prev) => {
+        const { images, ...other } = prev;
+        const clone = JSON.parse(JSON.stringify(other));
+        if (!categoryId) {
+          const updatedCategories = clone.categories.filter(
+            (_, i) => i < index
+          );
+          clone.categories = updatedCategories;
+        } else clone.categories[index] = categoryId;
+        return { ...clone, images };
+      });
+    },
+    [input.categories]
+  );
   return (
     <>
       <Head>
@@ -184,16 +174,17 @@ export default function CreateForm() {
           >
             <Form.Item>
               <Form.Title>Status</Form.Title>
-              <Form.Select
-                defaultValue={input.status || "active"}
-                onChange={(e) =>
-                  setInput((prev) => ({ ...prev, status: e.target.value }))
+              <Select
+                defaultValue={{ value: "active", label: "active" }}
+                onChange={({ value }) =>
+                  setInput((prev) => ({ ...prev, status: value }))
                 }
-              >
-                <Form.Option value="active">active</Form.Option>
-                <Form.Option value="non-active">non-active</Form.Option>
-                <Form.Option value="out">out</Form.Option>
-              </Form.Select>
+                options={[
+                  { value: "active", label: "active" },
+                  { value: "non-active", label: "non-active" },
+                  { value: "out", label: "out" },
+                ]}
+              />
             </Form.Item>
 
             <Form.Item>
@@ -211,20 +202,9 @@ export default function CreateForm() {
 
             <Form.Item>
               <Form.Title>Category</Form.Title>
-              <Form.Select
-                defaultValue={input.categories || arrCategory.current[0]}
-                onChange={(e) =>
-                  setInput((prev) => ({ ...prev, categories: e.target.value }))
-                }
-              >
-                {arrCategory.current.map((category) => {
-                  return (
-                    <Form.Option key={category._id} value={category._id}>
-                      {category.name}
-                    </Form.Option>
-                  );
-                })}
-              </Form.Select>
+              <SelectCategory
+                setSelectedCategories={handleSelectedCategories}
+              />
             </Form.Item>
 
             <Form.Item style={{ justifyContent: "flex-start" }}>
@@ -259,7 +239,7 @@ export default function CreateForm() {
           </Container.Flex>
         </Container.Grid>
 
-        {JSON.stringify([variants, variations])}
+        {JSON.stringify(input)}
 
         <Form.Item style={{ justifyContent: "flex-start" }}>
           <Form.Submit>Submit</Form.Submit>
@@ -269,3 +249,5 @@ export default function CreateForm() {
     </>
   );
 }
+
+export default dynamic(() => Promise.resolve(CreateForm), { ssr: false });

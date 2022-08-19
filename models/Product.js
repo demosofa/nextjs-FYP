@@ -21,7 +21,7 @@ const Product = new Schema(
     price: { type: Number },
     quantity: { type: Number },
     variants: [{ type: Schema.Types.ObjectId, ref: "Variant" }],
-    variations: [{ type: Schema.Types.ObjectId, ref: "ProductVariation" }],
+    variations: [{ type: Schema.Types.ObjectId, ref: "Variation" }],
     manufacturer: { type: String, required: true },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
@@ -32,8 +32,9 @@ Product.pre(
   "findOneAndDelete",
   { document: false, query: true },
   async function () {
+    console.log(this);
     await mongoose
-      .model("Variations")
+      .model("Variation")
       .deleteMany({ _id: { $in: this.variations } });
     await mongoose.model("File").deleteMany({ _id: { $in: this.images } });
     await mongoose.models.Variant.deleteMany({ _id: { $in: this.variants } });

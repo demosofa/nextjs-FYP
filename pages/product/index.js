@@ -1,5 +1,5 @@
 import axios from "axios";
-import Head from "next/head"
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Pagination, Container, Search } from "../../components";
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Notification } from "../../Layout";
 import { retryAxiosBackend } from "../../helpers";
+import { retryAxios } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -34,7 +35,7 @@ export async function getServerSideProps({ req, res, query }) {
 }
 
 export default function ProductCRUD({ value }) {
-  const [products, setProducts] = useState(value);
+  const [products, setProducts] = useState(value.products);
   const [remove, setRemove] = useState(null);
   const [query, setQuery] = useState({
     search: "",
@@ -58,9 +59,9 @@ export default function ProductCRUD({ value }) {
         status: e.target.value,
       });
       setProducts((prev) => {
-        const copy = JSON.parse(JSON.stringify(prev));
-        copy[index].status = e.target.value;
-        return copy;
+        const clone = JSON.parse(JSON.stringify(prev));
+        clone[index].status = e.target.value;
+        return clone;
       });
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
@@ -94,7 +95,7 @@ export default function ProductCRUD({ value }) {
             </tr>
           </thead>
           <tbody>
-            {products.map((product, index) => {
+            {products?.map((product, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
@@ -149,7 +150,7 @@ export default function ProductCRUD({ value }) {
         )}
       </div>
       <Pagination
-        totalPageCount={10}
+        totalPageCount={value.pageCounted}
         currentPage={query.page}
         setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
       >

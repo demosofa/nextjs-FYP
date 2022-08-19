@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosInstance, AxiosRequestConfig } from "axios";
 import { useState, DependencyList } from "react";
 import decoder from "jwt-decode";
 import { useAxiosLoad } from ".";
@@ -6,17 +6,19 @@ import { expireStorage, retryAxios } from "../utils";
 
 export default function useAuthLoad({
   config,
+  cb,
   roles,
   deps = [],
 }: {
-  config: AxiosRequestConfig;
+  config?: AxiosRequestConfig;
+  cb: (AxiosInstance: AxiosInstance) => unknown;
   roles: string[];
   deps?: DependencyList;
 }) {
   const [isLoggined, setLoggined] = useState(false);
   const [isAuthorized, setAuthorized] = useState(false);
-  const [data, setData] = useState(null);
   const { loading, setLoading } = useAxiosLoad({
+    config,
     deps,
     callback: async (axiosInstance) => {
       const accessToken = expireStorage.getItem("accessToken");
@@ -34,18 +36,11 @@ export default function useAuthLoad({
         return;
       } else setAuthorized(true);
 
+      axiosInstance.defaults.headers.get.Authorization = `Bearer ${accessToken}`;
       retryAxios(axiosInstance);
-      const response = await axiosInstance({
-        ...config,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          ...config.headers,
-        },
-      });
-      const value = response.data;
-      setData(value);
+      await cb(axiosInstance);
       return;
     },
   });
-  return { loading, isLoggined, isAuthorized, data, setData };
+  return { loading, isLoggined, isAuthorized };
 }

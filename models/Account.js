@@ -14,6 +14,7 @@ const Account = new Schema(
     },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     ratings: [{ type: Schema.Types.ObjectId, ref: "Rate" }],
+    orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   },
   { timestamps: true }
 );
@@ -21,8 +22,11 @@ const Account = new Schema(
 Account.pre(
   "findOneAndDelete",
   { document: false, query: true },
-  function (next) {
-    mongoose.models.User.deleteOne({ _id: this.user }, next);
+  async function (next) {
+    await mongoose.models.User.deleteOne({ _id: this.user });
+    await mongoose.models.Rate.deleteMany({ _id: { $in: this.ratings } });
+    await mongoose.model("Order").deleteMany({ _id: { $in: this.orders } });
+    return next();
   }
 );
 module.exports = mongoose.models.Account || mongoose.model("Account", Account);

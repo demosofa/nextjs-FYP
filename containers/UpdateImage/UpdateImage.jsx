@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useMemo, useState } from "react";
 import { Animation, FileUpload, Icon, Loading } from "../../components";
-import { useUpload } from "../../hooks";
+import { useAxiosLoad, useUpload } from "../../hooks";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsTrash } from "react-icons/bs";
 import { BiUpload } from "react-icons/bi";
@@ -13,18 +13,17 @@ import styles from "./updateimage.module.scss";
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function UpdateImage({ productId, setToggle }) {
+  const [storedImages, setStoredImages] = useState([]);
   const [filterImages, setFilterImages] = useState([]);
   const [newImages, setNewImages] = useState([]);
-  const [storedImages, setStoredImages] = useState([]);
   const [updateImages, setUpdateImages] = useState([]);
   const dispatch = useDispatch();
 
   const { loading } = useAxiosLoad({
-    config: {
-      url: `${LocalApi}/product/${productId}/image`,
-    },
     async callback(axiosInstance) {
-      const response = (await axiosInstance()).data;
+      const response = (
+        await axiosInstance({ url: `${LocalApi}/product/${productId}/image` })
+      ).data;
       setStoredImages(response);
     },
   });
@@ -84,8 +83,14 @@ export default function UpdateImage({ productId, setToggle }) {
       dispatch(addNotification({ message: error.message }));
     }
   };
+
   const handleUpdateImage = (preparedForUpload) => {
-    setUpdateImages((prev) => [...prev, preparedForUpload]);
+    setUpdateImages((prev) => {
+      const unique = prev.filter(
+        (item) => item.public_id !== preparedForUpload.public_id
+      );
+      return [...unique, preparedForUpload];
+    });
   };
   const handleDeleteImage = (e, index) => {
     e.preventDefault();
@@ -134,8 +139,12 @@ export default function UpdateImage({ productId, setToggle }) {
           </label>
         </FileUpload.Input>
       </FileUpload>
-      <button onClick={handleSaveImage}>Save</button>
-      <button onClick={() => setToggle(null)}>Cancel</button>
+      <button type="button" onClick={handleSaveImage}>
+        Save
+      </button>
+      <button type="button" onClick={() => setToggle(null)}>
+        Cancel
+      </button>
     </div>
   );
 }
@@ -147,15 +156,11 @@ function StoredImage({
   ...props
 }) {
   const [displayOpts, setDisplayOpts] = useState(false);
-  const { previews, getFiles, handleDelete } = useUpload({
+  const { previews, getFiles } = useUpload({
     callback(files) {
       handleUpdateImage({ public_id: image.public_id, file: files[0] });
     },
   });
-  const handleUpdate = async (e) => {
-    if (previews.length) await handleDelete(e, 0);
-    await getFiles(e.target.files);
-  };
   return (
     <div
       className={styles.stored_img}
@@ -174,7 +179,7 @@ function StoredImage({
             id={image._id}
             style={{ display: "none" }}
             type="file"
-            onChange={handleUpdate}
+            onChange={(e) => getFiles(e.target.files, 0)}
             onClick={(event) => {
               event.target.value = null;
             }}

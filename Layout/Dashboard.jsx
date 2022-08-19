@@ -17,7 +17,7 @@ export default function Dashboard({ children, arrLink }) {
           <AiOutlineMenuFold />
         </Icon>
       )}
-      {children}
+      <div className="body">{children}</div>
     </>
   );
 }

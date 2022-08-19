@@ -23,9 +23,9 @@ const variation = createSlice({
     },
     editVariation(state, { payload }) {
       const { index, ...props } = payload;
-      const copy = state.concat();
-      copy[index] = { ...copy[index], ...props };
-      return copy;
+      const clone = state.concat();
+      clone[index] = { ...clone[index], ...props };
+      return clone;
     },
     editAllVariations(state, { payload }) {
       const { price, quantity } = payload;

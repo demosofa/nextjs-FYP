@@ -25,7 +25,7 @@ File.pre(
         },
       }
     );
-    await mongoose.model("ProductVariation").updateOne(
+    await mongoose.model("Variation").updateOne(
       { image: this._id },
       {
         $unset: {
