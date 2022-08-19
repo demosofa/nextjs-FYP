@@ -21,6 +21,7 @@ async function upload(req: NextApiRequest, res: NextApiResponse) {
     if (public_id) {
       public_id = public_id[0].replace(folder.path + "/", "");
       options = { ...options, public_id, invalidate: true };
+      console.log(options);
     }
     const uploaded = await Cloudinary.uploadFile(file.filepath, options);
     res.status(200).json(uploaded);

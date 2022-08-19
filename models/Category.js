@@ -10,9 +10,18 @@ const Category = new Schema(
   { timestamps: true }
 );
 
-Category.pre(["deleteOne", "deleteMany"], function (next) {
-  mongoose.models.Product.deleteOne({ categories: this._id }, next);
-});
+Category.pre(
+  ["findOnedAndDelete", "deleteMany"],
+  { document: false, query: true },
+  async function (next) {
+    console.log(this);
+    await mongoose.models.Product.deleteOne({ categories: this._id });
+    await mongoose
+      .model("Category")
+      .deleteMany({ _id: { $in: this.subCategories } });
+    return next();
+  }
+);
 
 module.exports =
   mongoose.models.Category || mongoose.model("Category", Category);

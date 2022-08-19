@@ -8,8 +8,8 @@ export default function useToc() {
       const parentDiv = parent.current;
       const { scrollWidth, scrollHeight, clientHeight, clientWidth } =
         parentDiv;
-      var isOverflowY = scrollHeight > clientHeight;
-      var isOverflowX = scrollWidth > clientWidth;
+      let isOverflowY = scrollHeight > clientHeight;
+      let isOverflowX = scrollWidth > clientWidth;
       if (!e || (!isOverflowY && !isOverflowX)) return;
       let top = e.target.offsetTop;
       let left = e.target.offsetLeft;

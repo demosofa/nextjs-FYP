@@ -230,12 +230,12 @@ function CategoryInput({
 
   return (
     <div className="edit-container">
-      <textarea
+      <input
         value={input.name}
         onChange={(e) =>
           setInput((prev) => ({ ...prev, name: e.target.value }))
         }
-      ></textarea>
+      ></input>
       <div>
         <button onClick={() => callback(input)}>Save</button>
         {setToggle && <button onClick={() => setToggle(false)}>Cancel</button>}

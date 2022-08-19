@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const ProductVariation = new Schema(
+const Variation = new Schema(
   {
     sku: { type: String, required: true, max: 200 },
     image: { type: Schema.Types.ObjectId, ref: "File" },
@@ -15,5 +15,4 @@ const ProductVariation = new Schema(
 );
 
 module.exports =
-  mongoose.models.ProductVariation ||
-  mongoose.model("ProductVariation", ProductVariation);
+  mongoose.models.Variation || mongoose.model("Variation", Variation);

@@ -3,7 +3,7 @@ export default function cssToReact(style = "") {
   let arrProps = arrStyle.map((style) => style.trim().split(":"));
   let styles = {};
   arrProps.forEach((prop) => {
-    var key = prop[0],
+    let key = prop[0],
       value = prop[1];
     styles[key] = value;
   });

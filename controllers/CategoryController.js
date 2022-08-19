@@ -67,7 +67,7 @@ class CategoryController {
   async delete(req, res) {
     const deleted = await this.unit.Category.deleteById(req.query.id);
     if (!deleted) return res.status(500).send("<p>fail<p>");
-    return res.status(200).json(deleted);
+    return res.status(200).end();
   }
 }
 

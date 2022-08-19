@@ -19,7 +19,7 @@ export default function Register() {
     email: "",
   });
 
-  const [instanceRef, setInstance] = useState();
+  const [instance, setInstance] = useState();
   return (
     <div className="login-page">
       <Head>
@@ -37,13 +37,9 @@ export default function Register() {
             key={0}
             info={info}
             setInfo={setInfo}
-            moveTo={() => instanceRef?.current.next()}
+            moveTo={() => instance?.next()}
           />
-          <FormAccount
-            key={1}
-            info={info}
-            moveTo={() => instanceRef?.current.prev()}
-          />
+          <FormAccount key={1} info={info} moveTo={() => instance?.prev()} />
         </Slider>
       </div>
       <Notification />

@@ -251,7 +251,9 @@ class ProductController {
     const selectedPublic_id = images.map((image) => image.public_id);
     const deleted = await this.unit.Product.deleteById(req.query.id);
     if (!deleted) return res.status(500).end();
-    await axios.delete(`${LocalApi}/destroy`, { files: selectedPublic_id });
+    await axios.delete(`${LocalApi}/destroy`, {
+      data: { files: selectedPublic_id },
+    });
     return res.status(200).end();
   }
 }

@@ -13,7 +13,11 @@ const Order = new Schema(
     ],
     ammount: { type: Number, required: true },
     address: { type: Object },
-    status: { type: String, default: "pending" },
+    status: {
+      type: String,
+      enum: ["pending", "arrived", "paid"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );
