@@ -1,5 +1,5 @@
 import { product } from "../../../../controllers";
-import { db } from "../../../../helpers";
+import { db, isAuthentication } from "../../../../helpers";
 
 export default async function (req, res) {
   await db.connect();
@@ -8,10 +8,10 @@ export default async function (req, res) {
       await product.read(req, res);
       break;
     case "patch":
-      await product.patch(req, res);
+      await isAuthentication(product.patch.bind(product))(req, res);
       break;
     case "delete":
-      await product.delete(req, res);
+      await isAuthentication(product.delete.bind(product))(req, res);
       break;
   }
 }

@@ -222,7 +222,11 @@ class ProductController {
     const updated = await Promise.all(
       variations.map((variation) => {
         const { _id, image, ...other } = variation;
-        if (!image) return this.unit.Variation.updateById(_id, { $set: other });
+        if (!image)
+          return this.unit.Variation.updateById(_id, {
+            $set: other,
+            $unset: { image: 1 },
+          });
         return this.unit.Variation.updateById(_id, {
           $set: { image: image._id, ...other },
         });

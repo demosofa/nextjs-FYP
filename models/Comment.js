@@ -12,12 +12,24 @@ const Comment = new Schema(
   }
 );
 
-Comment.pre(
+Comment.post(
   "findOneAndDelete",
   { document: false, query: true },
-  async function () {
-    console.log(this);
-    await mongoose.model("Comment").deleteMany({ _id: { $in: this.replys } });
+  async function (doc) {
+    // console.log(doc._id.toHexString());
+    await mongoose.models.Product.updateOne(
+      { comments: doc._id },
+      {
+        $pull: {
+          comments: doc._id,
+        },
+      }
+    );
+    await mongoose.model("Comment").deleteMany({ _id: { $in: doc.replys } });
+    await mongoose.models.Comment.updateOne(
+      { replys: doc._id },
+      { $pull: { replys: doc._id } }
+    );
   }
 );
 
