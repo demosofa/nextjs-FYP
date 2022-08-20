@@ -42,7 +42,7 @@ class CommentController {
     const created = await this.unit.Comment.create({
       author: req.user.accountId,
       content,
-    });
+    }).then((value) => value.populate("author"));
     if (!created)
       return res.status(500).json("Fail to create Comment for Product");
     const updated = await this.unit.Product.updateById(id, {
@@ -58,7 +58,7 @@ class CommentController {
     const comment = await this.unit.Comment.create({
       author: req.user.accountId,
       content,
-    });
+    }).then((value) => value.populate("author"));
     if (!comment)
       return res.status(500).json({ message: "Fail to create comment" });
     const updated = await this.unit.Comment.updateById(id, {

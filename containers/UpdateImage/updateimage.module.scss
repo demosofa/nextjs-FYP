@@ -14,7 +14,8 @@
     width: 100%;
     height: 100%;
     background-color: rgb(245, 245, 220, 0.7);
-    @include center("both")
+    @include center("both");
+    @include flex(20px, row, true)
   }
 }
 

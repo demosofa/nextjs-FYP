@@ -34,10 +34,12 @@ export default function Home({ products, categories, pageCounted }) {
   const [lstProduct, setLstProduct] = useState(products);
   const [currentPage, setCurrentPage] = useState(1);
   const { loading } = useAxiosLoad({
-    config: { url: `${LocalUrl}`, params: { page: currentPage } },
     async callback(axios) {
       if (currentPage > 1 && pageLeft > 0) {
-        const res = await axios();
+        const res = await axios({
+          url: `${LocalUrl}`,
+          params: { page: currentPage },
+        });
         setLstProduct((prev) => [...prev, res.data]);
         setPageLeft((prev) => prev - 1);
       }
