@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
+import styles from "../../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -37,14 +38,20 @@ function MyProfile() {
     );
   return (
     <div>
-      <div>{data.fullname}</div>
-      <div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+      <div className={styles.grid}>
+        <div>{data.fullname}</div>
+        <div className={styles.card}>
+          <div>{data.dateOfBirth}</div>
+          <div>{data.gender}</div>
+          <div>{data.phoneNumber}</div>
+          <div>{data.email}</div>
+        </div>
       </div>
-      <div></div>
+      <div className={styles.card}>
+        {data.orders?.map((order) => (
+          <div>{order._id}</div>
+        ))}
+      </div>
     </div>
   );
 }

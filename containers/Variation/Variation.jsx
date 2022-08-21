@@ -25,7 +25,7 @@ export default function Variation() {
 
   return (
     <div style={{ padding: "5px" }}>
-      <table>
+      <table className="table">
         <thead>
           <tr>
             <th>No.</th>

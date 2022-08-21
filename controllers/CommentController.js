@@ -1,3 +1,4 @@
+import { pusher } from "../helpers";
 import UnitOfWork from "./services/UnitOfWork";
 
 class CommentController {
@@ -68,6 +69,10 @@ class CommentController {
       return res
         .status(500)
         .json({ message: "Fail to add comment to parent Comment" });
+    console.log(req.query.id);
+    // await pusher.trigger(`reply-to-${req.query.id}`, "reply", {
+    //   message: `You have a reply from ${comment.author.username}`,
+    // });
     return res.status(200).json(comment);
   }
   async patch(req, res) {

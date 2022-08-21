@@ -2,7 +2,7 @@ import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Animation, Loading, Timer } from "../components";
 import { useAxiosLoad } from "../hooks";
 import styles from "../styles/Home.module.scss";
@@ -46,6 +46,9 @@ export default function Home({ products, categories, pageCounted }) {
     },
     deps: [currentPage],
   });
+
+  useEffect(() => setLstProduct(products), [products]);
+
   return (
     <div className={styles.container}>
       <Head>

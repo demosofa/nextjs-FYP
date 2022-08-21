@@ -95,6 +95,7 @@ function UpdateProduct() {
       <Form.Item>
         <Form.Title>TimeStamp</Form.Title>
         <Form.Input
+          type="date"
           value={product.time}
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, time: e.target.value }))
