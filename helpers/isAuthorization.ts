@@ -1,11 +1,11 @@
-import type { NextApiResponse, NextApiHandler } from "next";
-import Request from "./type";
+import { Response } from "express";
+import RequestUser from "./type";
 
 export default function isAuthorization(
-  handler: NextApiHandler,
+  handler: (req: RequestUser, res: Response) => unknown,
   roles: string[]
-): NextApiHandler {
-  return (req: Request, res: NextApiResponse): unknown => {
+) {
+  return (req: RequestUser, res: Response): unknown => {
     if (!roles.includes(req.user.role)) return res.status(300).end();
     return handler(req, res);
   };

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect' node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "cross-env NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "proxy": "http://localhost:3000",
@@ -16,6 +16,8 @@
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.30.1",
     "cookies": "^0.8.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
     "formidable": "^3.2.4",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",

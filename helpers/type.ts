@@ -1,11 +1,13 @@
-import { NextApiRequest } from "next";
+import { Request } from "express";
 
-export default interface Request extends NextApiRequest {
-  user?: user;
-}
-
-interface user {
+export type User = {
   id: string;
   role: string;
   accountId: string;
+};
+
+interface RequestUser extends Request {
+  user?: User;
 }
+
+export default RequestUser;

@@ -93,8 +93,8 @@ function CommentTab({
   const controller = useRef();
   const dispatch = useDispatch();
 
-  console.log(maxTree);
-  console.log(parentCommentId);
+  // console.log(maxTree);
+  // console.log(parentCommentId);
 
   const handleEditSave = async (content) => {
     if (controller.current) controller.current.abort();
@@ -224,7 +224,9 @@ function CommentTab({
               key={comment.updatedAt}
               data={comment}
               maxTree={maxTree - 1}
-              parentCommentId={maxTree > 0 ? comment._id : currentComment._id}
+              parentCommentId={
+                maxTree - 1 > 0 ? comment._id : currentComment._id
+              }
               setParentSubComments={
                 maxTree > 0 ? setComments : setParentSubComments
               }

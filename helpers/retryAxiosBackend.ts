@@ -1,11 +1,11 @@
 import { AxiosInstance, AxiosStatic } from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
+import { Request, Response } from "express";
 import setCookieToken from "./setCookieToken";
 
 export default function retryAxiosBackend(
   axiosInstance: AxiosInstance | AxiosStatic,
-  req: NextApiRequest,
-  res: NextApiResponse
+  req: Request,
+  res: Response
 ) {
   axiosInstance.interceptors.response.use(undefined, async (error) => {
     if (

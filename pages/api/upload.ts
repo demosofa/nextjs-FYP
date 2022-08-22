@@ -1,6 +1,6 @@
 import { Cloudinary, parseForm } from "../../helpers";
 import { UploadApiOptions } from "cloudinary";
-import { NextApiRequest, NextApiResponse } from "next";
+import { Request, Response } from "express";
 
 export const config = {
   api: {
@@ -8,7 +8,7 @@ export const config = {
   },
 };
 
-async function upload(req: NextApiRequest, res: NextApiResponse) {
+async function upload(req: Request, res: Response) {
   try {
     const result = await parseForm(req);
     let { path, public_id } = result.fields;

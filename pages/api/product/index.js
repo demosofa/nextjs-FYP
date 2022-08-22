@@ -1,8 +1,7 @@
 import { product } from "../../../controllers";
-import { db, isAuthentication } from "../../../helpers";
+import { isAuthentication } from "../../../helpers";
 
 async function index(req, res) {
-  await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":
       await product.listManagedProduct(req, res);

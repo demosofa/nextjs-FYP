@@ -61,7 +61,6 @@ export default function CrudCategory({ maxTree = 3 }) {
 }
 
 function SubCategory({ data, maxTree, setDelete, ...props }) {
-  const accessToken = expireStorage.getItem("accessToken");
   const [toggle, setToggle] = useState({
     edit: false,
     add: false,

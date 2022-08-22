@@ -25,7 +25,12 @@ export async function getServerSideProps({ req, res, query }) {
     });
     value = response.data;
   } catch (error) {
-    console.log("!!! retry axios please");
+    return {
+      redirect: {
+        destination: "/login",
+        statusCode: 302,
+      },
+    };
   }
   return {
     props: {
@@ -54,15 +59,10 @@ export default function ProductCRUD({ value }) {
 
   const handleStatus = async (e, index) => {
     retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
     try {
-      await axios.patch(
-        `${LocalApi}/product/${products[index]._id}`,
-        {
-          status: e.target.value,
-        },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
+      await axios.patch(`${LocalApi}/product/${products[index]._id}`, {
+        status: e.target.value,
+      });
       setProducts((prev) => {
         const clone = JSON.parse(JSON.stringify(prev));
         clone[index].status = e.target.value;

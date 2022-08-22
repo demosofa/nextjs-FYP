@@ -69,7 +69,7 @@ class CommentController {
       return res
         .status(500)
         .json({ message: "Fail to add comment to parent Comment" });
-    console.log(req.query.id);
+    // console.log(req.query.id);
     // await pusher.trigger(`reply-to-${req.query.id}`, "reply", {
     //   message: `You have a reply from ${comment.author.username}`,
     // });
