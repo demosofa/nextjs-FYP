@@ -54,10 +54,15 @@ export default function ProductCRUD({ value }) {
 
   const handleStatus = async (e, index) => {
     retryAxios(axios);
+    const accessToken = expireStorage.getItem("accessToken");
     try {
-      await axios.patch(`${LocalApi}/product/${products[index]._id}`, {
-        status: e.target.value,
-      });
+      await axios.patch(
+        `${LocalApi}/product/${products[index]._id}`,
+        {
+          status: e.target.value,
+        },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
       setProducts((prev) => {
         const clone = JSON.parse(JSON.stringify(prev));
         clone[index].status = e.target.value;

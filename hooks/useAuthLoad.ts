@@ -36,7 +36,7 @@ export default function useAuthLoad({
         return;
       } else setAuthorized(true);
 
-      axiosInstance.defaults.headers.get.Authorization = `Bearer ${accessToken}`;
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
       retryAxios(axiosInstance);
       await cb(axiosInstance);
       return;

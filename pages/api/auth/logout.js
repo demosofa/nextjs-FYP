@@ -1,11 +1,11 @@
 import { db } from "../../../helpers";
-import { account } from "../../../controllers";
+import { auth } from "../../../controllers";
 
 async function logout(req, res) {
   await db.connect();
   switch (req.method.toLowerCase()) {
     case "post":
-      await account.logout(req, res);
+      await auth.logout(req, res);
       break;
   }
 }

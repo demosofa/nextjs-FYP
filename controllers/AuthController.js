@@ -2,10 +2,10 @@ import UnitOfWork from "./services/UnitOfWork";
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
 import jwt from "jsonwebtoken";
-import { Token } from "../helpers";
+import { setCookieToken, Token } from "../helpers";
 import { convertTime } from "../utils";
 
-class AccountController {
+class AuthController {
   constructor(unit = UnitOfWork) {
     this.unit = new unit();
   }
@@ -79,6 +79,15 @@ class AccountController {
     const auth = jwt.sign(created.role, process.env.SECRET_KEY);
     return res.status(200).json(auth);
   }
+
+  async refresh(req, res) {
+    try {
+      setCookieToken(req, res);
+      return res.status(200).end();
+    } catch (error) {
+      return res.redirect(401, "http://localhost:3000/login");
+    }
+  }
 }
 
-export default new AccountController();
+export default new AuthController();

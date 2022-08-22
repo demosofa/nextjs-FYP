@@ -81,7 +81,7 @@ export default function UpdateVariation({ productId, setToggle }) {
     );
   return (
     <div style={{ overflowX: "auto" }}>
-      <table>
+      <table className="table">
         <thead>
           <tr>
             <th>No.</th>

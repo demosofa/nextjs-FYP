@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { BiDotsVertical } from "react-icons/bi";
 import { Avatar, Dropdown, Loading } from "../../components";
@@ -8,6 +8,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
 import decoder from "jwt-decode";
 import styles from "./comment.module.scss";
+import pusherJs from "pusher-js";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API + "/comments";
 
@@ -92,6 +93,9 @@ function CommentTab({
   const controller = useRef();
   const dispatch = useDispatch();
 
+  console.log(maxTree);
+  console.log(parentCommentId);
+
   const handleEditSave = async (content) => {
     if (controller.current) controller.current.abort();
     else {
@@ -143,6 +147,20 @@ function CommentTab({
     },
     deps: [toggle.more],
   });
+
+  // useEffect(() => {
+  //   const pusher = new pusherJs(process.env.NEXT_PUBLIC_key, {
+  //     cluster: process.env.NEXT_PUBLIC_cluster,
+  //   });
+  //   console.log(parentCommentId);
+  //   const channel = pusher.subscribe(`reply-to-${parentCommentId}`);
+  //   channel.bind("reply", function (data) {
+  //     dispatch(addNotification({ message: data.message }));
+  //   });
+  //   return () => {
+  //     pusher.unsubscribe(`reply-to-${parentCommentId}`);
+  //   };
+  // }, []);
 
   return (
     <div className={styles.container} {...props}>
@@ -206,15 +224,20 @@ function CommentTab({
               key={comment.updatedAt}
               data={comment}
               maxTree={maxTree - 1}
-              parentCommentId={
-                maxTree - 1 > 0 ? comment._id : currentComment._id
+              parentCommentId={maxTree > 0 ? comment._id : currentComment._id}
+              setParentSubComments={
+                maxTree > 0 ? setComments : setParentSubComments
               }
-              setParentSubComments={maxTree - 1 <= 0 && setComments}
-              setDelete={() =>
-                setComments((prev) =>
-                  prev.filter((item) => item._id !== comment._id)
-                )
-              }
+              setDelete={() => {
+                if (maxTree > 0)
+                  setComments((prev) =>
+                    prev.filter((item) => item._id !== comment._id)
+                  );
+                else
+                  setParentSubComments((prev) =>
+                    prev.filter((item) => item._id !== comment._id)
+                  );
+              }}
             />
           ))}
         </div>
@@ -223,7 +246,7 @@ function CommentTab({
         <CommentReply
           data={currentComment}
           urlWithParentCommentId={`${LocalApi}/${parentCommentId}`}
-          setComments={maxTree - 1 > 0 ? setComments : setParentSubComments}
+          setComments={maxTree > 0 ? setComments : setParentSubComments}
           setToggle={(boolean) =>
             setToggle((prev) => ({ ...prev, reply: boolean }))
           }

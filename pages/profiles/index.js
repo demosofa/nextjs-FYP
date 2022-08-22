@@ -15,7 +15,7 @@ export async function getServerSideProps() {
 export default function AccountIndex({ accounts }) {
   return (
     <div>
-      <table>
+      <table className="table">
         <thead>
           <tr>
             <th>No.</th>
