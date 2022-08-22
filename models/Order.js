@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const Order = new Schema(
   {
-    user: { type: mongoose.SchemaTypes.ObjectId, ref: "Account" },
+    customer: { type: mongoose.SchemaTypes.ObjectId, ref: "Account" },
+    shipper: { type: mongoose.SchemaTypes.ObjectId, ref: "Shipper" },
     products: [
       {
         type: Schema.Types.ObjectId,
@@ -12,7 +13,7 @@ const Order = new Schema(
       },
     ],
     ammount: { type: Number, required: true },
-    address: { type: Object },
+    address: { type: String, required: true },
     status: {
       type: String,
       enum: ["pending", "arrived", "paid"],

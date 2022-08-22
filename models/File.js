@@ -28,8 +28,8 @@ File.post(
     await mongoose.model("Variation").updateOne(
       { image: doc._id },
       {
-        $pull: {
-          image: doc._id,
+        $unset: {
+          image: 1,
         },
       }
     );

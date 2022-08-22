@@ -1,5 +1,5 @@
 import { db } from "../../../helpers";
-import { account } from "../../../controllers";
+import { auth } from "../../../controllers";
 
 export default async function (req, res) {
   await db.connect();
@@ -7,7 +7,7 @@ export default async function (req, res) {
     case "get":
       break;
     case "post":
-      await account.login(req, res);
+      await auth.login(req, res);
       break;
   }
 }

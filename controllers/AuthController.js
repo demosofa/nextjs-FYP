@@ -1,7 +1,7 @@
 import UnitOfWork from "./services/UnitOfWork";
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
-import { Token } from "../helpers";
+import { setCookieToken, Token } from "../helpers";
 import { convertTime } from "../utils";
 
 class AccountController {
@@ -65,6 +65,14 @@ class AccountController {
       overwrite: true,
     });
     return res.status(200).json(accessToken);
+  }
+  async refresh(req, res) {
+    try {
+      const accessToken = setCookieToken(req, res);
+      return res.status(200).json(accessToken);
+    } catch (error) {
+      return res.redirect(401, "http://localhost:3000/login");
+    }
   }
 }
 
