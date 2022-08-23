@@ -14,7 +14,6 @@ db.connect();
 nextApp.prepare().then(() => {
   const app = express();
   // app.use(express.static(path.join(__dirname, "public")));
-  // //add middleware for parsing url encoded and json
   // app.use(express.urlencoded({ extended: true }));
   // app.use(express.json());
 

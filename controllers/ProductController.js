@@ -8,7 +8,7 @@ class ProductController {
     this.unit = new unit();
   }
 
-  async read(req, res) {
+  read = async (req, res) => {
     const product = await this.unit.Product.getById(req.query.id)
       .populate({
         path: "variants",
@@ -26,9 +26,9 @@ class ProductController {
       .exec();
     if (!product) return res.status(404).json({ errorMessage: "Not Found" });
     return res.status(200).json(product);
-  }
+  };
 
-  async getAll(req, res) {
+  getAll = async (req, res) => {
     const { page, search, sort, category } = req.query;
     let filterOptions = {};
     if (search)
@@ -66,9 +66,9 @@ class ProductController {
     });
     const pageCounted = Math.ceil(productCounted / 10);
     return res.status(200).json({ products, pageCounted });
-  }
+  };
 
-  async getImage(req, res) {
+  getImage = async (req, res) => {
     const { images } = await this.unit.Product.getById(req.query.id)
       .select("images")
       .populate("images")
@@ -76,9 +76,9 @@ class ProductController {
     if (!images)
       return res.status(500).json({ message: "Fail to load images" });
     return res.status(200).json(images);
-  }
+  };
 
-  async getVariation(req, res) {
+  getVariation = async (req, res) => {
     const { variations } = await this.unit.Product.getById(req.query.id)
       .select("variations")
       .populate({
@@ -89,9 +89,9 @@ class ProductController {
     if (!variations)
       return res.status(500).json({ message: "Fail to load variations" });
     return res.status(200).json(variations);
-  }
+  };
 
-  async listManagedProduct(req, res) {
+  listManagedProduct = async (req, res) => {
     const { page, search, sort, category } = req.query;
     let filterOptions = {};
     if (search)
@@ -127,9 +127,9 @@ class ProductController {
     const productCounted = await this.unit.Product.countData(filterOptions);
     const pageCounted = Math.ceil(productCounted / 10);
     return res.status(200).json({ products, pageCounted });
-  }
+  };
 
-  async create(req, res) {
+  create = async (req, res) => {
     const { variants, variations, images, ...others } = req.body;
     const check = await this.unit.Product.getOne({
       title: others.title,
@@ -180,17 +180,17 @@ class ProductController {
     if (!product)
       return res.status(500).json({ message: `Fail to create collection` });
     return res.status(200).json({ message: "Success Create Product" });
-  }
+  };
 
-  async update(req, res) {
+  update = async (req, res) => {
     const { _id, ...others } = req.body;
     const updated = await this.unit.Product.updateById(_id, { $set: others });
     if (!updated)
       return res.status(500).json({ message: "Fail to update product" });
     return res.status(200).json({ message: "Success update Product" });
-  }
+  };
 
-  async putImage(req, res) {
+  putImage = async (req, res) => {
     const _id = req.query.id;
     const { newImages, filterImages } = req.body;
     if (filterImages.length) {
@@ -214,9 +214,9 @@ class ProductController {
           .json({ message: "Fail to update product images" });
     }
     return res.status(200).json({ message: "Success update product images" });
-  }
+  };
 
-  async patchVariation(req, res) {
+  patchVariation = async (req, res) => {
     const { variations } = req.body;
     const updated = await Promise.all(
       variations.map((variation) => {
@@ -238,16 +238,16 @@ class ProductController {
     return res
       .status(200)
       .json({ message: "Success update product variations" });
-  }
+  };
 
-  async patch(req, res) {
+  patch = async (req, res) => {
     const _id = req.query.id;
     const patched = await this.unit.Product.updateById(_id, { $set: req.body });
     if (!patched) return res.status(500).end();
     return res.status(200).end();
-  }
+  };
 
-  async delete(req, res) {
+  delete = async (req, res) => {
     const { images } = await this.unit.Product.getById(req.query.id)
       .select("images")
       .populate("images");
@@ -258,7 +258,7 @@ class ProductController {
       data: { files: selectedPublic_id },
     });
     return res.status(200).end();
-  }
+  };
 }
 
 export default new ProductController();
