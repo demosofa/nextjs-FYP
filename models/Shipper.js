@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const Account = require("./Account");
 
 module.exports =
-  Account.discriminators["Shipper"] ||
+  Account.discriminators ||
   Account.discriminator(
     "Shipper",
     new Schema({

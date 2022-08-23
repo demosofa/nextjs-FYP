@@ -7,22 +7,22 @@ const db = require("./helpers/db");
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
-const handler = app.getRequestHandler();
+const nextApp = next({ dev });
+const nextHandler = nextApp.getRequestHandler();
 
 db.connect();
-app.prepare().then(() => {
-  const server = express();
-  // server.use(express.static(path.join(__dirname, "public")));
-  //add middleware for parsing url encoded and json
-  server.use(express.urlencoded({ extended: true }));
-  server.use(express.json());
+nextApp.prepare().then(() => {
+  const app = express();
+  // app.use(express.static(path.join(__dirname, "public")));
+  // //add middleware for parsing url encoded and json
+  // app.use(express.urlencoded({ extended: true }));
+  // app.use(express.json());
 
-  server.all("*", (req, res) => {
-    return handler(req, res);
+  app.all("*", (req, res) => {
+    return nextHandler(req, res);
   });
 
-  server.listen(port, () => {
-    console.log(`Example server listening at http://localhost:${port}`);
+  app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`);
   });
 });
