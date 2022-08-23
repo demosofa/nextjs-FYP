@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { NextApiRequest } from "next";
 
 export type User = {
   id: string;
@@ -6,7 +6,7 @@ export type User = {
   accountId: string;
 };
 
-interface RequestUser extends Request {
+interface RequestUser extends NextApiRequest {
   user?: User;
 }
 

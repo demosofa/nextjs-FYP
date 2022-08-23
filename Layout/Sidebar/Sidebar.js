@@ -38,7 +38,7 @@ export default function Sidebar({
   const [check, setCheck] = useState(false);
   useEffect(() => {
     if (auth) setCheck(true);
-  });
+  }, [auth]);
 
   return (
     <div className={styles.side_bar} {...props}>

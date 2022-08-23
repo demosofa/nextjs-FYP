@@ -1,8 +1,8 @@
 import { IncomingForm, Fields, Files, Options } from "formidable";
-import { Request } from "express";
+import { NextApiRequest } from "next";
 
 export default function parseForm(
-  req: Request,
+  req: NextApiRequest,
   options: Partial<Options> = {
     multiples: true,
     keepExtensions: true,

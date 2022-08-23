@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextApiRequest, NextApiResponse } from "next";
 import { IncomingMessage, ServerResponse } from "http";
 import Cookies from "cookies";
 import { Token } from ".";
@@ -11,8 +11,8 @@ const setCookieToken = (
           [key: string]: string;
         }>;
       })
-    | Request,
-  res: ServerResponse | Response
+    | NextApiRequest,
+  res: ServerResponse | NextApiResponse
 ) => {
   try {
     const { accountId, userId, role } = Token.verifyRefreshToken(

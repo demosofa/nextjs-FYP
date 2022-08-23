@@ -9,6 +9,7 @@ import { expireStorage, retryAxios } from "../../utils";
 import decoder from "jwt-decode";
 import styles from "./comment.module.scss";
 import pusherJs from "pusher-js";
+import socket from "../../utils/socketClient";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API + "/comments";
 
@@ -299,6 +300,7 @@ function CommentReply({
         );
         setComments((prev) => [response.data, ...prev]);
         setToggle(false);
+        socket.emit("reply", `You receive a reply`);
         controller.current = null;
       } catch (error) {
         dispatch(addNotification({ message: error.message }));

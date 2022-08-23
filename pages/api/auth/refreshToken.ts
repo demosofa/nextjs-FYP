@@ -1,6 +1,9 @@
-import { Request, Response } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { auth } from "../../../controllers";
 
-export default async function refreshToken(req: Request, res: Response) {
+export default async function refreshToken(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   await auth.refresh(req, res);
 }

@@ -1,11 +1,11 @@
-import { Response } from "express";
-import RequestUser from "./type";
+import type { NextApiHandler, NextApiResponse } from "next";
+import NextApiRequest from "./type";
 import { Token } from "./";
 
 export default function isAuthentication(
-  handler: (req: RequestUser, res: Response) => unknown
-) {
-  return (req: RequestUser, res: Response): unknown => {
+  handler: NextApiHandler
+): NextApiHandler {
+  return (req: NextApiRequest, res: NextApiResponse): unknown => {
     const { accessToken, refreshToken } = req.cookies;
     if (!accessToken && !refreshToken) return res.status(401).end();
     else if (!accessToken && refreshToken)

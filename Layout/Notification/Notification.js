@@ -1,9 +1,19 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { ToastMessage } from "../../components";
+import { addNotification } from "../../redux/reducer/notificationSlice";
+import socket from "../../utils/socketClient";
 import styles from "./notification.module.scss";
 
 export default function notification({ ...props }) {
   const notifications = useSelector((state) => state.notification);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    socket.on("notify", (data) => {
+      dispatch(addNotification({ message: data }));
+    });
+    return () => socket.disconnect();
+  }, [socket]);
   return (
     <div className={styles.container} {...props}>
       {notifications.map((item) => {
