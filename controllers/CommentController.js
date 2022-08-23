@@ -5,7 +5,7 @@ class CommentController {
   constructor(unit = UnitOfWork) {
     this.unit = new unit();
   }
-  async getCommentFromProduct(req, res) {
+  getCommentFromProduct = async (req, res) => {
     const { id, page } = req.query;
     const { comments } = await this.unit.Product.getById(id)
       .select("comments")
@@ -21,8 +21,8 @@ class CommentController {
     if (!comments)
       return res.status(500).json({ message: "Fail to load comment" });
     return res.status(200).json(comments);
-  }
-  async getSubComment(req, res) {
+  };
+  getSubComment = async (req, res) => {
     const id = req.query.id;
     const { replys } = await this.unit.Comment.getById(id)
       .select("replys")
@@ -36,8 +36,8 @@ class CommentController {
       .exec();
     if (!replys) return res.status(500).json({ message: "Cannot get reply" });
     return res.status(200).json(replys);
-  }
-  async addCommentToProduct(req, res) {
+  };
+  addCommentToProduct = async (req, res) => {
     const id = req.query.id;
     const { content } = req.body;
     const created = await this.unit.Comment.create({
@@ -52,8 +52,8 @@ class CommentController {
     if (!updated)
       return res.status(500).json("Fail to insert comment to Product");
     return res.status(200).json(created);
-  }
-  async addSubComment(req, res) {
+  };
+  addSubComment = async (req, res) => {
     const id = req.query.id;
     const { content } = req.body;
     const comment = await this.unit.Comment.create({
@@ -74,21 +74,21 @@ class CommentController {
     //   message: `You have a reply from ${comment.author.username}`,
     // });
     return res.status(200).json(comment);
-  }
-  async patch(req, res) {
+  };
+  patch = async (req, res) => {
     const id = req.query.id;
     const updated = await this.unit.Comment.updateById(id, { $set: req.body });
     if (!updated)
       return res.status(500).json({ message: "Fail to update comment" });
     return res.status(200).end();
-  }
-  async delete(req, res) {
+  };
+  delete = async (req, res) => {
     const id = req.query.id;
     const deleted = await this.unit.Comment.deleteById(id);
     if (!deleted)
       return res.status(500).json({ message: "Cannot delete comment" });
     return res.status(200).end();
-  }
+  };
 }
 
 export default new CommentController();

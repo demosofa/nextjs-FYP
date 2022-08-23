@@ -9,7 +9,7 @@ class AccountController {
     this.unit = new unit();
   }
 
-  async login(req, res) {
+  login = async (req, res) => {
     const { username, password } = req.body;
     const check = await this.unit.Account.getOne({ username });
     if (!check)
@@ -29,14 +29,14 @@ class AccountController {
       overwrite: true,
     });
     return res.status(200).json(accessToken);
-  }
+  };
 
-  async logout(req, res) {
+  logout = async (req, res) => {
     Cookies(req, res).set("refreshToken");
     return res.status(200).end();
-  }
+  };
 
-  async register(req, res) {
+  register = async (req, res) => {
     const { account, userInfo } = req.body;
     const isExisted = await this.unit.Account.getOne({
       username: account.username,
@@ -65,15 +65,15 @@ class AccountController {
       overwrite: true,
     });
     return res.status(200).json(accessToken);
-  }
-  async refresh(req, res) {
+  };
+  refresh = async (req, res) => {
     try {
       const accessToken = setCookieToken(req, res);
       return res.status(200).json(accessToken);
     } catch (error) {
       return res.redirect(401, "http://localhost:3000/login");
     }
-  }
+  };
 }
 
 export default new AccountController();

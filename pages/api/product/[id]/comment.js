@@ -8,10 +8,7 @@ export default async function (req, res) {
       await comment.getCommentFromProduct(req, res);
       break;
     case "post":
-      await isAuthentication(comment.addCommentToProduct.bind(comment))(
-        req,
-        res
-      );
+      await isAuthentication(comment.addCommentToProduct)(req, res);
       break;
   }
 }
