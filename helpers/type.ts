@@ -1,6 +1,6 @@
 import { NextApiRequest } from "next";
 
-export default interface Request extends NextApiRequest {
+export default interface RequestUser extends NextApiRequest {
   user?: user;
 }
 

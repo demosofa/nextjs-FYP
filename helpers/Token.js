@@ -9,7 +9,13 @@ export default class Token {
       expiresIn: "1d",
     });
   }
-  static verifyToken(tokken) {
+  static signToken(payload, options = undefined) {
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, options);
+  }
+  static verifyToken(token, options = undefined) {
+    return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, options);
+  }
+  static verifyAccessToken(tokken) {
     return jwt.verify(tokken, process.env.ACCESS_TOKEN_SECRET);
   }
   static verifyRefreshToken(token) {

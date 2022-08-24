@@ -23,7 +23,7 @@ export default function withAuth(
     }
     let value: { accountId: string; userId: string; role: string };
     try {
-      value = Token.verifyToken(accessToken) as {
+      value = Token.verifyAccessToken(accessToken) as {
         userId: string;
         role: string;
         accountId: string;
