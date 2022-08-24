@@ -4,6 +4,7 @@ const express = require("express");
 const path = require("path");
 const { parse } = require("cookie");
 const { Server } = require("socket.io");
+const Token = require("./helpers/Token");
 
 const db = require("./helpers/db");
 
@@ -21,17 +22,22 @@ nextApp.prepare().then(() => {
       origin: ["http://localhost:3000"],
     },
   });
+
+  const session = {};
   io.use((socket, next) => {
     const { accessToken } = parse(socket.request.headers.cookie);
     if (!accessToken) return next(new Error("User is unauthorized"));
-    socket.user = accessToken;
+    const { accountId } = Token.verifyAccessToken(accessToken);
+    session[accountId] = socket.id;
     next();
   });
 
   io.on("connection", (socket) => {
     //Notify when replying
+    socket.emit("connected", "You have connected");
     socket.on("reply", (data) => {
-      socket.broadcast.emit("notify", data);
+      console.log("reply event run");
+      socket.to(session[data.to]).emit("notify", data.value);
     });
   });
   // app.use(express.static(path.join(__dirname, "public")));
@@ -42,7 +48,7 @@ nextApp.prepare().then(() => {
     return nextHandler(req, res);
   });
 
-  app.listen(port, () => {
+  server.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
   });
 });
