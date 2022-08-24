@@ -12,7 +12,7 @@ export default function isAuthentication(
       return res.status(401).json({ message: "Token is expired" });
     else
       try {
-        const value = Token.verifyToken(accessToken) as {
+        const value = Token.verifyAccessToken(accessToken) as {
           [userId: string]: string;
           role: string;
           accountId: string;
