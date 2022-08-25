@@ -13,6 +13,9 @@ const dev = process.env.NODE_ENV !== "production";
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
+let times = 1;
+console.log("run server times", times++);
+
 db.connect();
 nextApp.prepare().then(() => {
   const app = express();
@@ -22,6 +25,9 @@ nextApp.prepare().then(() => {
       origin: ["http://localhost:3000"],
     },
   });
+
+  let timesInPrepare = 1;
+  console.log("run server times in prepare mode", timesInPrepare++);
 
   const session = {};
   io.use((socket, next) => {
@@ -36,7 +42,7 @@ nextApp.prepare().then(() => {
     //Notify when replying
     socket.emit("connected", "You have connected");
     socket.on("reply", (data) => {
-      console.log("reply event run");
+      console.log(session);
       socket.to(session[data.to]).emit("notify", data.value);
     });
   });
@@ -49,6 +55,6 @@ nextApp.prepare().then(() => {
   });
 
   server.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`App currently is listening at http://localhost:${port}`);
   });
 });
