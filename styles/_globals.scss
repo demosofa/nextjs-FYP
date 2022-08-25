@@ -51,6 +51,17 @@ a {
   height: 70px;
 }
 
+.backdrop {
+	width: 100vw;
+	height: 100vh;
+	background-color: #333;
+	opacity: 0.8;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 10;
+}
+
 .table {
 	width: 100%;
 	border-collapse: collapse;

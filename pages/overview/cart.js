@@ -1,27 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
-import { Animation, Icon, Increment } from "../../components";
+import { Animation, Form, Icon, Increment } from "../../components";
 import { addCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import Head from "next/head";
+import { expireStorage, retryAxios } from "../../utils";
+import axios from "axios";
+import { addNotification } from "../../redux/reducer/notificationSlice";
+import { useRouter } from "next/router";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-// export async function getServerSideProps() {
-//   const response = await fetch(`${LocalApi}/cart/2`, {
-//     method: "GET",
-//   });
-//   const data = await response.json();
-//   return {
-//     props: data,
-//   };
-// }
-
 export default function Cart() {
+  const [display, setDisplay] = useState(false);
+  const [address, setAddress] = useState("");
   const cartState = useSelector((state) => state.cart);
   const [cart, setCart] = useState({
     products: [
       {
+        producId: "",
         title: "",
         image: "",
         options: [],
@@ -38,7 +35,31 @@ export default function Cart() {
     setCart(cartState);
   }, [cartState]);
 
+  const router = useRouter();
   const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    retryAxios(axios);
+    const accessToken = expireStorage.getItem("accessToken");
+    try {
+      await axios.post(
+        `${LocalApi}/order`,
+        { ...cart, address },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setDisplay(false);
+      localStorage.removeItem("CartStorage");
+      router.back();
+    } catch (error) {
+      dispatch(addNotification({ message: error.message }));
+    }
+  };
+
   return (
     <div className="cart__container">
       <Head>
@@ -48,7 +69,7 @@ export default function Cart() {
       <div className="cart__lst">
         {cart.products.map((item) => (
           <Animation.Zoom key={item.title}>
-            <div className="cart__product">
+            <div className="cart__product ux-card">
               <div className="cart__product__info">
                 <img alt="product" src={item.image}></img>
                 <div className="product__info">
@@ -98,7 +119,69 @@ export default function Cart() {
           </Animation.Zoom>
         ))}
       </div>
-      <div className="cart__total"></div>
+      <div className="summary ux-card">
+        <div>
+          <dl className="sub-total">
+            <dt>Sub Total</dt>
+            <dd>{cart.total}$</dd>
+            <dt>Tax</dt>
+            <dd>{cart.quantity * 0.5}$</dd>
+          </dl>
+          <dl className="total">
+            <dt>Total</dt>
+            <dd>{cart.total + cart.quantity * 0.5}$</dd>
+          </dl>
+          <button onClick={() => setDisplay(true)}>Checkout</button>
+        </div>
+      </div>
+      {display && (
+        <>
+          <div
+            className="backdrop"
+            onClick={() => {
+              setAddress(""), setDisplay(false);
+            }}
+          ></div>
+          <Form
+            onSubmit={handleSubmit}
+            style={{
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 13,
+              borderRadius: "15px",
+              backgroundColor: "white",
+              padding: "20px",
+              gap: "15px",
+            }}
+          >
+            <Form.Title>Please set form for your checkout</Form.Title>
+            <Form.Item>
+              <Form.Title>Your Address</Form.Title>
+              <Form.Input
+                onChange={(e) => setAddress(e.target.value)}
+              ></Form.Input>
+            </Form.Item>
+            <Form.Link
+              target="_blank"
+              href={`https://maps.google.com/maps?q=${address}`}
+            >
+              Check address in google map
+            </Form.Link>
+            <Form.Item>
+              <Form.Submit>Submit</Form.Submit>
+              <Form.Button
+                onClick={() => {
+                  setAddress(""), setDisplay(false);
+                }}
+              >
+                Cancel
+              </Form.Button>
+            </Form.Item>
+          </Form>
+        </>
+      )}
     </div>
   );
 }

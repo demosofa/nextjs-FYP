@@ -25,7 +25,7 @@ File.post(
         },
       }
     );
-    await mongoose.model("Variation").updateOne(
+    await mongoose.models.Variation.updateOne(
       { image: doc._id },
       {
         $unset: {

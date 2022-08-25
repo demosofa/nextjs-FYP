@@ -14,6 +14,19 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 750px;
+  min-width: 500px;
+}
+
+.ux-card {
+  border: 1px solid #E8E8E8;
+  background: #FCFCFC;
+  padding:20px;
+  position: relative;
+  &:hover {
+    border-color: #008a32;
+    background-color: #fff;
+  }
 }
 
 .cart__product{
@@ -22,6 +35,7 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  box-shadow: 4px 4px 0 0 rgb(0 0 0 / 10%);
   & > .cart__product__info{
     flex: 1;
     display: flex;
@@ -64,6 +78,72 @@
   }
 }
 
-.cart__total{
-  flex: 1
+.summary {
+  dl {
+    margin:0;
+    padding:20px;
+    dt {
+      float:left;
+      clear:left;
+      font-weight: normal;
+    }
+    dd {
+      float:right;
+      clear:right;
+      font-weight: bold;
+    }
+    &:after {
+      content: ".";
+      clear: both;
+      display: block;
+      height: 0;
+      visibility: hidden;
+    }
+  }
+  .sub-total {
+    @include mq("tablet") {
+      border-top: 5px solid #D0D0D0;
+      dt {
+        margin-top: 2px;
+      }
+      dd {
+        font-size: 18px;
+      }
+    }
+  }
+  .total {
+    background: #128937;
+    color: #fff;
+    padding: 20px;
+    dt {
+      text-transform: uppercase;
+      margin-top:0.5em;
+      font-weight:bold;
+    }
+    dd {
+      font-size:1.5em;
+    }
+  }
+  .support {
+    dd {
+      float: left;
+      font-weight: normal;
+      padding-left: 0.5em;
+    }
+  }
+  button {
+    margin: 0 20px;
+    width: calc(100% - 40px);
+    background: #53b5aa;
+    border: 1px solid #999;
+    border-style: none none solid none;
+    cursor: pointer;
+    display: block;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 300;
+    padding: 16px 0;
+    width: 290px;
+    text-align: center;
+  }
 }

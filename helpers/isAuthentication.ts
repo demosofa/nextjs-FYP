@@ -10,7 +10,7 @@ export default function isAuthentication(
     if (!authProp) return res.status(401).end();
     const currentAccessToken = authProp.split(" ")[1];
     try {
-      const value = Token.verifyToken(currentAccessToken) as {
+      const value = Token.verifyAccessToken(currentAccessToken) as {
         [userId: string]: string;
         accountId: string;
         role: string;

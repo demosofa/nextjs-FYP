@@ -48,7 +48,7 @@ export default function Overview({ product }) {
     const { price, image } = targetVariation;
     dispatch(
       addCart({
-        id: _id,
+        productId: _id,
         title,
         image: image?.url || images[0].url,
         options,

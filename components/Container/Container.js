@@ -57,7 +57,7 @@ ContainerComponent.GridThreeColumns = function ({ children, ...props }) {
 
 ContainerComponent.BackDrop = function ({ children, ...restProps }) {
   return (
-    <div className={styles.container__backdrop} {...restProps}>
+    <div className="backdrop" {...restProps}>
       {children}
     </div>
   );

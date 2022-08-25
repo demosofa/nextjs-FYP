@@ -3,16 +3,20 @@ const Schema = mongoose.Schema;
 
 const Order = new Schema(
   {
-    customer: { type: mongoose.SchemaTypes.ObjectId, ref: "Account" },
+    customer: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Account",
+      required: true,
+    },
     shipper: { type: mongoose.SchemaTypes.ObjectId, ref: "Shipper" },
-    products: [
+    orderItems: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Product",
-        quantity: { type: Number, default: 1 },
+        ref: "OrderItem",
       },
     ],
-    ammount: { type: Number, required: true },
+    quantity: { type: Number, required: true },
+    total: { type: Number, required: true },
     address: { type: String, required: true },
     status: {
       type: String,
