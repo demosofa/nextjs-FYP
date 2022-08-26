@@ -49,7 +49,7 @@ function MyProfile() {
       </div>
       <div className={styles.card}>
         {data.orders?.map((order) => (
-          <div>{order._id}</div>
+          <div key={order._id}>{order._id}</div>
         ))}
       </div>
     </div>

@@ -17,7 +17,7 @@ export default function ToastMessage({ id, type, message, timeout, ...props }) {
       }
       Progress.value -= 0.25;
     }, (0.2 * timeout) / 100);
-  }, [timeout]);
+  }, [timeout, id]);
   return (
     <div
       ref={ToastRef}

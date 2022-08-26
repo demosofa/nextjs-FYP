@@ -4,7 +4,7 @@ export { default as isAuthorization } from "./isAuthorization";
 export { default as parseForm } from "./parseForm";
 export { default as setCookieToken } from "./setCookieToken";
 export { default as pusherBE } from "./pusheBEr";
-export { default as ablyBE } from "./ablyBE";
+// export { default as ablyBE } from "./ablyBE";
 export { default as Devices } from "./Devices";
 export { default as Role } from "./Role";
 export { default as Token } from "./Token";

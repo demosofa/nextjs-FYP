@@ -142,20 +142,7 @@ export default function Cart() {
               setAddress(""), setDisplay(false);
             }}
           ></div>
-          <Form
-            onSubmit={handleSubmit}
-            style={{
-              position: "fixed",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              zIndex: 13,
-              borderRadius: "15px",
-              backgroundColor: "white",
-              padding: "20px",
-              gap: "15px",
-            }}
-          >
+          <Form onSubmit={handleSubmit} className="form_center">
             <Form.Title>Please set form for your checkout</Form.Title>
             <Form.Item>
               <Form.Title>Your Address</Form.Title>

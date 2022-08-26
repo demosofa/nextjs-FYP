@@ -64,10 +64,12 @@ function Shipper() {
       <Checkbox setChecked={(value) => setCheckOrder(value)}>
         <table className="table">
           <thead>
-            <th>Check</th>
-            <th>Order Id</th>
-            <th>Status</th>
-            <th>Address</th>
+            <tr>
+              <th>Check</th>
+              <th>Order Id</th>
+              <th>Status</th>
+              <th>Address</th>
+            </tr>
           </thead>
           <tbody>
             {orders.map((order) => (

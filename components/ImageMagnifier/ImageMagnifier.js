@@ -45,7 +45,7 @@ export default function ImageMagnifier({ zoom = 2, src, style, ...props }) {
       onMouseMove={(e) => track && handleMaginfier(e)}
       onMouseLeave={() => setTrack(false)}
     >
-      <img ref={target} src={src} {...props}></img>
+      <img alt="magnifier" ref={target} src={src} {...props}></img>
       {track && (
         <div
           ref={maginfier}

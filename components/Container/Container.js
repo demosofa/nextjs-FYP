@@ -13,14 +13,17 @@ export default function ContainerComponent({ children, ...restProps }) {
   );
 }
 
-ContainerComponent.Absolute = function ({ children, ...restProps }) {
+ContainerComponent.Absolute = function ContainerAbsolute({
+  children,
+  ...restProps
+}) {
   return (
     <div {...restProps} className={styles.container__absolute}>
       {children}
     </div>
   );
 };
-ContainerComponent.Flex = function ({
+ContainerComponent.Flex = function ContainerFlex({
   children,
   className,
   justify = "none",
@@ -39,7 +42,11 @@ ContainerComponent.Flex = function ({
   );
 };
 
-ContainerComponent.Grid = function ({ children, columns = 3, ...restProps }) {
+ContainerComponent.Grid = function ContainerGrid({
+  children,
+  columns = 3,
+  ...restProps
+}) {
   return (
     <div className={styles.container__grid} {...restProps}>
       {children}
@@ -47,7 +54,10 @@ ContainerComponent.Grid = function ({ children, columns = 3, ...restProps }) {
   );
 };
 
-ContainerComponent.GridThreeColumns = function ({ children, ...props }) {
+ContainerComponent.GridThreeColumns = function ContainerThreeColumns({
+  children,
+  ...props
+}) {
   return (
     <div className={styles.container__gridThreeColumns} {...props}>
       {children}
@@ -55,7 +65,10 @@ ContainerComponent.GridThreeColumns = function ({ children, ...props }) {
   );
 };
 
-ContainerComponent.BackDrop = function ({ children, ...restProps }) {
+ContainerComponent.BackDrop = function ContainerBackDrop({
+  children,
+  ...restProps
+}) {
   return (
     <div className="backdrop" {...restProps}>
       {children}
@@ -63,7 +76,7 @@ ContainerComponent.BackDrop = function ({ children, ...restProps }) {
   );
 };
 
-ContainerComponent.Item = function ({
+ContainerComponent.Item = function ContainerItem({
   children,
   width = "100%",
   padding = "5px",
@@ -81,17 +94,20 @@ ContainerComponent.Item = function ({
   );
 };
 
-ContainerComponent.Pane = function ({ children, ...restProps }) {
+ContainerComponent.Pane = function ContainerPane({ children, ...restProps }) {
   return (
     <div className={styles.container__pane} {...restProps}>
       {children}
     </div>
   );
 };
-ContainerComponent.Toggle = function ({ children, ...restProps }) {
+ContainerComponent.Toggle = function ContainerToggle({
+  children,
+  ...restProps
+}) {
   return <div {...restProps}>{children}</div>;
 };
-ContainerComponent.Inner = function ({ children, ...restProps }) {
+ContainerComponent.Inner = function ContainerInner({ children, ...restProps }) {
   return (
     <div className={styles.container__inner} {...restProps}>
       {children}
@@ -99,7 +115,10 @@ ContainerComponent.Inner = function ({ children, ...restProps }) {
   );
 };
 
-ContainerComponent.MiddleInner = function ({ children, ...restProps }) {
+ContainerComponent.MiddleInner = function ContainerMiddleInner({
+  children,
+  ...restProps
+}) {
   return (
     <div className={styles.container__middleInner} {...restProps}>
       {children}
@@ -107,7 +126,7 @@ ContainerComponent.MiddleInner = function ({ children, ...restProps }) {
   );
 };
 
-ContainerComponent.Link = function ({ children, ...restProps }) {
+ContainerComponent.Link = function ContainerLink({ children, ...restProps }) {
   return (
     <a className={styles.container__link} href={restProps.path}>
       {children}
@@ -115,7 +134,11 @@ ContainerComponent.Link = function ({ children, ...restProps }) {
   );
 };
 
-ContainerComponent.Section = function ({ children, forwardRef, ...restProps }) {
+ContainerComponent.Section = function ContainerSection({
+  children,
+  forwardRef,
+  ...restProps
+}) {
   return (
     <div
       {...restProps}
@@ -126,7 +149,7 @@ ContainerComponent.Section = function ({ children, forwardRef, ...restProps }) {
     </div>
   );
 };
-ContainerComponent.Hero = React.forwardRef(function (
+ContainerComponent.Hero = React.forwardRef(function ContainerHero(
   { children, ...restProps },
   ref
 ) {
@@ -136,7 +159,10 @@ ContainerComponent.Hero = React.forwardRef(function (
     </div>
   );
 });
-ContainerComponent.InlineGroup = function ({ children, ...props }) {
+ContainerComponent.InlineGroup = function ContainerInlineGroup({
+  children,
+  ...props
+}) {
   return (
     <div {...props} className={styles.container__inlineGroup}>
       {children}

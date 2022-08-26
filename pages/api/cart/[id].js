@@ -1,7 +1,7 @@
 import { cart } from "../../../controllers";
 import { db } from "../../../helpers";
 
-export default async function (req, res) {
+export default async function cartId(req, res) {
   await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":

@@ -42,7 +42,7 @@ Checkbox.Item = function Item({
 
   useEffect(() => {
     if (defaultChecked) handleCheck();
-  }, []);
+  }, [defaultChecked]);
 
   return (
     <>
