@@ -16,9 +16,9 @@ Category.post(
   async function (doc) {
     console.log(this);
     await mongoose.models.Product.deleteOne({ categories: doc._id });
-    await mongoose
-      .model("Category")
-      .deleteMany({ _id: { $in: doc.subCategories } });
+    await mongoose.models.Category.deleteMany({
+      _id: { $in: doc.subCategories },
+    });
   }
 );
 

@@ -93,9 +93,6 @@ function CommentTab({
   const controller = useRef();
   const dispatch = useDispatch();
 
-  console.log(maxTree);
-  console.log(parentCommentId);
-
   const handleEditSave = async (content) => {
     if (controller.current) controller.current.abort();
     else {

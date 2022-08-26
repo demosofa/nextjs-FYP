@@ -1,7 +1,7 @@
 import { db } from "../../../helpers";
 import { category } from "../../../controllers";
 
-export default async function (req, res) {
+export default async function categoryId(req, res) {
   await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":

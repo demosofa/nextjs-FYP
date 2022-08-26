@@ -79,6 +79,7 @@ export default function Home({ products, categories, pageCounted }) {
                   {item.time && <Timer value={item.time} />}
                   <div style={{ padding: "5px", fontSize: "13px" }}>
                     <img
+                      alt="product"
                       src={item.images[0].url}
                       style={{ height: "175px", borderRadius: "10px" }}
                     ></img>

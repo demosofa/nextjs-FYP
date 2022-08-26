@@ -101,6 +101,7 @@ export default function ProductCRUD({ value }) {
                   <td>{index + 1}</td>
                   <td>
                     <img
+                      alt="product"
                       src={product.images[0].url}
                       style={{ width: "100px", height: "80px" }}
                     ></img>
@@ -172,19 +173,7 @@ function Remove({ index, product, setProducts, setRemove }) {
   return (
     <>
       <Container.BackDrop onClick={(e) => setRemove(null)}></Container.BackDrop>
-      <Container.MiddleInner
-        style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          zIndex: 13,
-          borderRadius: "15px",
-          backgroundColor: "white",
-          padding: "20px",
-          gap: "15px",
-        }}
-      >
+      <Container.MiddleInner className="form_center">
         <label>{`Are you sure to Remove ${product.title}?`}</label>
         <Container.Flex style={{ gap: "10px" }}>
           <button onClick={handleRemove}>Yes</button>

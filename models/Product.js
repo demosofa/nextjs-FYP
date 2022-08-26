@@ -32,10 +32,10 @@ Product.post(
   "findOneAndDelete",
   { document: false, query: true },
   async function (doc) {
-    await mongoose
-      .model("Variation")
-      .deleteMany({ _id: { $in: doc.variations } });
-    await mongoose.model("File").deleteMany({ _id: { $in: doc.images } });
+    await mongoose.models.Variation.deleteMany({
+      _id: { $in: doc.variations },
+    });
+    await mongoose.models.File.deleteMany({ _id: { $in: doc.images } });
     await mongoose.models.Variant.deleteMany({ _id: { $in: doc.variants } });
   }
 );

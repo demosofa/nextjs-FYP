@@ -183,7 +183,7 @@ function FormAccount({ info, moveTo, ...props }) {
         .then((response) => response.data);
       expireStorage.setItem("permission", permission);
       dispatch(addNotification({ message: "Success Register" }));
-      router.back();
+      router.push("/");
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
     }

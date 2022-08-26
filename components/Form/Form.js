@@ -25,7 +25,7 @@ export default function Form({
   );
 }
 
-Form.Item = function ({ children, ...restProp }) {
+Form.Item = function FormItem({ children, ...restProp }) {
   return (
     <div className={styles.form__item} {...restProp}>
       {children}
@@ -33,7 +33,7 @@ Form.Item = function ({ children, ...restProp }) {
   );
 };
 
-Form.Title = function ({ children, ...restProp }) {
+Form.Title = function FormTitle({ children, ...restProp }) {
   return (
     <label className={styles.form__title} {...restProp}>
       {children}
@@ -41,7 +41,7 @@ Form.Title = function ({ children, ...restProp }) {
   );
 };
 
-Form.Logo = function ({ image, alt, ...restProp }) {
+Form.Logo = function FormLogo({ image, alt, ...restProp }) {
   return (
     <div className={styles.form__logo} {...restProp}>
       <img src={image} alt={alt} className="form__image" />
@@ -49,7 +49,7 @@ Form.Logo = function ({ image, alt, ...restProp }) {
   );
 };
 
-Form.Input = forwardRef(function ({ children, ...restProp }, ref) {
+Form.Input = forwardRef(function FormInput({ children, ...restProp }, ref) {
   return (
     <>
       {restProp.component}
@@ -63,7 +63,10 @@ Form.Input = forwardRef(function ({ children, ...restProp }, ref) {
   );
 });
 
-Form.Password = forwardRef(function ({ children, ...restProp }, ref) {
+Form.Password = forwardRef(function FormPassword(
+  { children, ...restProp },
+  ref
+) {
   const [show, setShow] = useState(false);
   return (
     <>
@@ -83,7 +86,7 @@ Form.Password = forwardRef(function ({ children, ...restProp }, ref) {
   );
 });
 
-Form.Submit = function ({ children, ...props }) {
+Form.Submit = function FormSubmit({ children, ...props }) {
   return (
     <button className={styles.form__button} type="submit" {...props}>
       {children}
@@ -91,7 +94,7 @@ Form.Submit = function ({ children, ...props }) {
   );
 };
 
-Form.Link = function ({ children, ...restProp }) {
+Form.Link = function FormLink({ children, ...restProp }) {
   return (
     <a href="" className={styles.form__link} {...restProp}>
       {children}
@@ -99,14 +102,14 @@ Form.Link = function ({ children, ...restProp }) {
   );
 };
 
-Form.Button = function ({ children, ...restProp }) {
+Form.Button = function FormButton({ children, ...restProp }) {
   return (
     <a className={styles.form__button} {...restProp}>
       {children}
     </a>
   );
 };
-Form.Message = function ({ children, ...restProps }) {
+Form.Message = function FormMessage({ children, ...restProps }) {
   return (
     <p className={styles.form__message} {...restProps}>
       {children}
@@ -114,7 +117,7 @@ Form.Message = function ({ children, ...restProps }) {
   );
 };
 
-Form.ErrorMessage = function ({ children, ...restProp }) {
+Form.ErrorMessage = function FormError({ children, ...restProp }) {
   return (
     <p className={styles.form__errorMsg} {...restProp}>
       {children}{" "}
@@ -122,11 +125,11 @@ Form.ErrorMessage = function ({ children, ...restProp }) {
   );
 };
 
-Form.TextArea = function ({ children, ...restProp }) {
+Form.TextArea = function FormTextArea({ children, ...restProp }) {
   return <textarea className={styles.form__textarea} {...restProp}></textarea>;
 };
 
-Form.Select = function ({ children, ...restProp }) {
+Form.Select = function FormSelect({ children, ...restProp }) {
   return (
     <select className={styles.form__select} {...restProp}>
       {children}
@@ -134,7 +137,7 @@ Form.Select = function ({ children, ...restProp }) {
   );
 };
 
-Form.Option = function ({ children, ...props }) {
+Form.Option = function FormOption({ children, ...props }) {
   return (
     <option {...props} className={styles.form__option}>
       {children}

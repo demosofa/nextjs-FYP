@@ -11,6 +11,7 @@ import {
   FileRepository,
   CommentRepository,
   ShipperRespository,
+  OrderItemRepository,
 } from "../repositories";
 
 class UnitOfWork {
@@ -20,6 +21,7 @@ class UnitOfWork {
     this.Product = new ProdcutRepository();
     this.Cart = new CartRepository();
     this.Order = new OrderRepository();
+    this.OrderItem = new OrderItemRepository();
     this.Category = new CategoryRepository();
     this.Variant = new VariantRepository();
     this.Variation = new VariationRepository();
