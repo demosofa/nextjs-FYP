@@ -81,11 +81,12 @@ export default function BarChart({ datas, row = null }) {
         className={`${styles.background} ${styles.containerColumn}`}
         ref={handleWidthCol}
       >
-        {datas.map((data) => {
+        {datas.map((data, index) => {
           let heightCol =
             Cells.length && Math.round((heightForCalc * data.value) / Cells[0]);
           return (
             <div
+              key={index}
               className={`${styles.column} ${data.value}`}
               style={{
                 "--height": `${heightCol}px`,
@@ -101,7 +102,7 @@ export default function BarChart({ datas, row = null }) {
 
       <div className={`${styles.background} ${styles.containerValue}`}>
         {datas.map((data) => {
-          return <span>{data.name}</span>;
+          return <span key={data.name}>{data.name}</span>;
         })}
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { cart } from "../../../controllers";
 
-export default async function (req, res) {
+export default async function cartId(req, res) {
   switch (req.method.toLowerCase()) {
     case "get":
       await cart.read(req, res);

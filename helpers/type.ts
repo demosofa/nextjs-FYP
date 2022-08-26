@@ -6,8 +6,6 @@ export type User = {
   accountId: string;
 };
 
-interface RequestUser extends NextApiRequest {
+export default interface RequestUser extends NextApiRequest {
   user?: User;
 }
-
-export default RequestUser;

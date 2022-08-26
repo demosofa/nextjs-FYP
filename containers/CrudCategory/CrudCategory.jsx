@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useAxiosLoad } from "../../hooks";
 import { Dropdown, Loading } from "../../components";
-import { expireStorage, retryAxios } from "../../utils";
+import { retryAxios } from "../../utils";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { BiDotsVertical } from "react-icons/bi";
@@ -18,7 +18,6 @@ export default function CrudCategory({ maxTree = 3 }) {
       const res = await axiosInstance({ url: `${LocalApi}/category` });
       setCategories(res.data);
     },
-    roles: ["guest"],
   });
 
   const handleAddCategory = async ({ name }) => {

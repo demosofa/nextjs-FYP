@@ -30,6 +30,7 @@ export default function withAuth(
       };
     } catch (error) {
       value = setCookieToken(req, res);
+      req.headers.cookie = (res.getHeader("Set-Cookie") as string[]).join(", ");
     }
     return await nextCb(context, value?.role);
   };

@@ -1,7 +1,7 @@
 import { product } from "../../../../controllers";
 import { isAuthentication } from "../../../../helpers";
 
-export default async function (req, res) {
+export default async function ProductId(req, res) {
   switch (req.method.toLowerCase()) {
     case "get":
       await product.read(req, res);

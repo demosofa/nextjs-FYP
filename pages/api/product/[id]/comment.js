@@ -1,7 +1,7 @@
 import { comment } from "../../../../controllers";
 import { isAuthentication } from "../../../../helpers";
 
-export default async function (req, res) {
+export default async function productComment(req, res) {
   switch (req.method.toLowerCase()) {
     case "get":
       await comment.getCommentFromProduct(req, res);

@@ -38,7 +38,7 @@ export default function Overview({ product }) {
       item.types.every((value) => options.includes(value.name))
     );
     return product.variations[index];
-  }, [options]);
+  }, [options, product.variations]);
 
   const { device, Devices } = useContext(Media);
 
@@ -48,7 +48,7 @@ export default function Overview({ product }) {
     const { price, image } = targetVariation;
     dispatch(
       addCart({
-        id: _id,
+        productId: _id,
         title,
         image: image?.url || images[0].url,
         options,
@@ -69,7 +69,7 @@ export default function Overview({ product }) {
     if (targetVariation && targetVariation.image)
       setImage(targetVariation.image.url);
     else setImage(product.images[0].url);
-  }, [options]);
+  }, [options, product.images, targetVariation]);
 
   return (
     <div className="page-overview">
@@ -94,6 +94,7 @@ export default function Overview({ product }) {
           >
             {product.images.map((image, index) => (
               <img
+                alt="variation"
                 key={index}
                 src={image.url}
                 onMouseEnter={() => setImage(image.url)}

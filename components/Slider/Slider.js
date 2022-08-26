@@ -12,11 +12,11 @@ export default function Slider({
 }) {
   const [sliderRef, instance] = useKeenSlider({
     ...config,
-    slideChanged(slide) {
-      setSlide instanceof Function && setSlide(slide);
+    slideChanged(slider) {
+      setSlide instanceof Function && setSlide(slider);
     },
-    created(slide) {
-      setInstance instanceof Function && setInstance(slide);
+    created(slider) {
+      setInstance instanceof Function && setInstance(slider);
     },
   });
   return (

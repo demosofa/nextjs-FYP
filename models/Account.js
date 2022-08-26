@@ -16,7 +16,7 @@ const Account = new Schema(
     ratings: [{ type: Schema.Types.ObjectId, ref: "Rate" }],
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   },
-  { timestamps: true }
+  { timestamps: true, discriminatorKey: "Shipper" }
 );
 
 Account.post(
@@ -25,7 +25,7 @@ Account.post(
   async function (doc) {
     await mongoose.models.User.deleteOne({ _id: doc.user });
     await mongoose.models.Rate.deleteMany({ _id: { $in: doc.ratings } });
-    await mongoose.model("Order").deleteMany({ _id: { $in: doc.orders } });
+    await mongoose.models.Order.deleteMany({ _id: { $in: doc.orders } });
   }
 );
 module.exports = mongoose.models.Account || mongoose.model("Account", Account);
