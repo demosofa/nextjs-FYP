@@ -91,7 +91,7 @@ export default function Shipper({ lstOrder }) {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {lstOrder.map((order) => (
               <tr key={order._id}>
                 <td>
                   <Checkbox.Item value={order._id}></Checkbox.Item>
