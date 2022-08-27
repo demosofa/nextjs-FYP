@@ -42,10 +42,20 @@ export default class GenericRepository<T> implements IGenericRepository<T> {
   ) {
     return this.context.updateOne(filter, update, options);
   }
+  updateMany(
+    filter: FilterQuery<any>,
+    update: UpdateQuery<any> | UpdateWithAggregationPipeline,
+    options?: QueryOptions<any>
+  ) {
+    return this.context.updateMany(filter, update, options);
+  }
   deleteById(id: string, options?: QueryOptions<any>) {
     return this.context.findByIdAndDelete(id, options);
   }
   deleteOne(filter: FilterQuery<T>, options?: QueryOptions<any>) {
     return this.context.deleteOne(filter, options);
+  }
+  deleteMany(filter: FilterQuery<any>, options?: QueryOptions<any>) {
+    return this.context.deleteMany(filter, options);
   }
 }

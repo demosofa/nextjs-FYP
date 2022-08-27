@@ -46,9 +46,12 @@ export default function Navbar({ arrLink = [{ title: "", link: "" }] }) {
       </div>
       <div className={styles.bar}>
         {localStorage.getItem("permission") ? (
-          <span onClick={handleLogout} style={{ cursor: "pointer" }}>
-            Logout
-          </span>
+          <>
+            <Link href="/profile">My Profile</Link>
+            <span onClick={handleLogout} style={{ cursor: "pointer" }}>
+              Logout
+            </span>
+          </>
         ) : (
           <>
             <Link href="/login">Login</Link>

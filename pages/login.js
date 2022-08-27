@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form } from "../components";
 import { Notification } from "../Layout";
 import { expireStorage, Validate } from "../utils";
@@ -39,6 +39,10 @@ export default function Login() {
       dispatch(addNotification({ message: error.message }));
     }
   };
+  useEffect(() => {
+    const isAuth = expireStorage.getItem("permission");
+    if (isAuth) router.back();
+  }, []);
   return (
     <>
       <div className="login-page">

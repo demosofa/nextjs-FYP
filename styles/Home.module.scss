@@ -74,6 +74,10 @@
   @include grid(15px)
 }
 
+.flex{
+  @include flex(20px);
+}
+
 .card {
   // margin: 1rem;
   // padding: 1.5rem;

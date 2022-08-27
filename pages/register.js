@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox, Form, Slider } from "../components";
 import { expireStorage, Validate } from "../utils";
 import axios from "axios";
@@ -20,6 +20,11 @@ export default function Register() {
   });
 
   const [instance, setInstance] = useState();
+  const router = useRouter();
+  useEffect(() => {
+    const isAuth = expireStorage.getItem("permission");
+    if (isAuth) router.back();
+  }, []);
   return (
     <div className="login-page">
       <Head>
