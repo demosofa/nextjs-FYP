@@ -194,9 +194,10 @@ class ProductController {
     const _id = req.query.id;
     const { newImages, filterImages } = req.body;
     if (filterImages.length) {
-      const deleted = await Promise.all(
-        filterImages.map((image) => this.unit.File.deleteById(image._id))
-      );
+      const filterId = filterImages.map((image) => image._id);
+      const deleted = await this.unit.File.deleteMany({
+        _id: { $in: filterId },
+      });
       if (!deleted)
         return res.status(500).json({ message: "Fail to delete file" });
     }

@@ -1,36 +1,73 @@
 import axios from "axios";
+import useSWR from "swr";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Checkbox, Form } from "../../components";
 import { withAuth } from "../../helpers";
+import { Checkbox, Form, Loading } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { retryAxios } from "../../utils";
+import { convertTime, retryAxios } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
+const fetcher = async (config) => {
+  retryAxios(axios);
+  const response = await axios(config);
+  return response.data;
+};
+
 export const getServerSideProps = withAuth(async ({ req }, role) => {
-  let orders = null;
+  let lstOrder = null;
   try {
     const response = await axios.get(`${LocalApi}/order`, {
       headers: {
         Cookie: req.headers.cookie,
       },
     });
-    orders = response.data;
+    lstOrder = response.data;
   } catch (error) {
     console.log(error.message);
   }
   return {
     props: {
-      orders,
+      lstOrder,
       role,
     },
   };
 });
 
-export default function Shipper({ orders }) {
+export default function Shipper({ lstOrder }) {
   const [checkOrder, setCheckOrder] = useState([]);
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { data: orders, error } = useSWR(
+    {
+      url: `${LocalApi}/order`,
+    },
+    fetcher,
+    {
+      fallbackData: lstOrder,
+      refreshInterval: convertTime("5s").milisecond,
+      dedupingInterval: convertTime("5s").milisecond,
+      onError(err, key, config) {
+        if (err.status === 300) return router.back();
+        else if (err.status === 401) return router.push("/login");
+        else return;
+      },
+    }
+  );
+
+  if (!orders || error)
+    return (
+      <Loading
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%)`,
+        }}
+      ></Loading>
+    );
 
   const handleSubmit = async () => {
     retryAxios(axios);

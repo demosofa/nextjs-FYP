@@ -8,7 +8,11 @@ const Order = new Schema(
       ref: "Account",
       required: true,
     },
-    shipper: { type: mongoose.SchemaTypes.ObjectId, ref: "Shipper" },
+    shipper: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Shipper",
+      default: "there isn't any shipper accept this order",
+    },
     orderItems: [
       {
         type: Schema.Types.ObjectId,

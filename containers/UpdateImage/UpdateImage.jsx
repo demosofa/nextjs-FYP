@@ -94,7 +94,10 @@ export default function UpdateImage({ productId, setToggle }) {
   };
   const handleDeleteImage = (e, index) => {
     e.preventDefault();
-    setFilterImages(storedImages.filter((_, i) => i === index));
+    setFilterImages((prev) => [
+      ...prev,
+      ...storedImages.filter((_, i) => i === index),
+    ]);
     setStoredImages((prev) => prev.filter((_, i) => i !== index));
   };
   if (loading)

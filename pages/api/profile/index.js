@@ -7,7 +7,7 @@ async function profileId(req, res) {
     case "get":
       await user.getProfile(req, res);
       break;
-    case "post":
+    case "put":
       await user.updateProfile(req, res);
       break;
   }

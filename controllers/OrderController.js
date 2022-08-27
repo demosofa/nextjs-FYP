@@ -83,13 +83,10 @@ class OrderController {
       },
     });
     if (!adddOrders) return res.status(500).json("Fail to accept Shipping");
-    const orders = await Promise.all(
-      acceptedOrders.map((order) =>
-        this.unit.Order.updateById(order, {
-          $set: { shipper: req.user.accountId },
-        })
-      )
-    );
+    await this.unit.Order.updateMany({
+      _id: { $in: acceptedOrders },
+      $set: { shipper: req.use.accountId },
+    });
     return res.status(200).end();
   };
   patchOrder = async (req, res) => {

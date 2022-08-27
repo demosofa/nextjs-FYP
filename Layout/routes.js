@@ -4,6 +4,7 @@ const AdminRole = [
     path: "/product",
   },
   { title: "Category Management", path: "/admin/category" },
+  { title: "List pending Order", path: "/shipper" },
 ];
 
 export { AdminRole };
