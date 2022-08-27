@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Search, Icon } from "../../components";
+import { Search, Icon, Avatar } from "../../components";
 import { expireStorage, getURL } from "../../utils";
 import { AiOutlineMenuFold } from "react-icons/ai";
 import styles from "./sideBar.module.scss";
@@ -46,6 +46,11 @@ export default function Sidebar({
   return (
     <div className={styles.side_bar} {...props}>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Link href="/profile">
+          <a>
+            <Avatar>My Profile</Avatar>
+          </a>
+        </Link>
         <Icon onClick={() => setToggle(false)}>
           <AiOutlineMenuFold />
         </Icon>

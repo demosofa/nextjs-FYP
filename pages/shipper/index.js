@@ -1,35 +1,46 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
+import useSWR from "swr";
 import { Checkbox, Form, Loading } from "../../components";
-import { useAuthLoad } from "../../hooks";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
+import { convertTime, expireStorage, retryAxios } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
+const fetcher = async (config) => {
+  retryAxios(axios);
+  const response = await axios(config);
+  return response.data;
+};
+
 function Shipper() {
-  const [orders, setOrders] = useState([]);
+  const accessToken = expireStorage.getItem("accessToken");
   const [checkOrder, setCheckOrder] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
-  const { loading, isLoggined, isAuthorized } = useAuthLoad({
-    async cb(axiosInstance) {
-      const res = await axiosInstance({
-        url: `${LocalApi}/order`,
-      });
-      setOrders(res.data);
+  const { data: orders, error } = useSWR(
+    {
+      url: `${LocalApi}/order`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-    roles: ["guest"],
-  });
-  useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
+    fetcher,
+    {
+      refreshInterval: convertTime("5s").milisecond,
+      dedupingInterval: convertTime("5s").milisecond,
+      onError(err, key, config) {
+        if (err.status === 300) return router.back();
+        else if (err.status === 401) return router.push("/login");
+        else return;
+      },
+    }
+  );
 
-  if (loading || !isLoggined || !isAuthorized)
+  if (!orders || error)
     return (
       <Loading
         style={{

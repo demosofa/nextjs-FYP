@@ -39,6 +39,10 @@ export default function Login() {
       dispatch(addNotification({ message: error.message }));
     }
   };
+  useEffect(() => {
+    const isAuth = expireStorage.getItem("accessToken");
+    if (isAuth) router.back();
+  }, []);
   return (
     <>
       <div className="login-page">

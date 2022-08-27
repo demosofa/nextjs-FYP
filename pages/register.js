@@ -20,6 +20,11 @@ export default function Register() {
   });
 
   const [instance, setInstance] = useState();
+  const router = useRouter();
+  useEffect(() => {
+    const isAuth = expireStorage.getItem("accessToken");
+    if (isAuth) router.back();
+  }, []);
   return (
     <div className="login-page">
       <Head>

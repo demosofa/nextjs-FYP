@@ -17,7 +17,7 @@ export default function useAuthLoad({
 }) {
   const [isLoggined, setLoggined] = useState(false);
   const [isAuthorized, setAuthorized] = useState(false);
-  const { loading, setLoading } = useAxiosLoad({
+  const { loading, setLoading, axiosInstance } = useAxiosLoad({
     config,
     deps,
     callback: async (axiosInstance) => {
@@ -42,5 +42,5 @@ export default function useAuthLoad({
       return;
     },
   });
-  return { loading, isLoggined, isAuthorized };
+  return { loading, isLoggined, isAuthorized, axiosInstance };
 }

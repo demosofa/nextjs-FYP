@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Loading } from "../../components";
@@ -37,20 +38,66 @@ function MyProfile() {
       ></Loading>
     );
   return (
-    <div>
-      <div className={styles.grid}>
-        <div>{data.fullname}</div>
+    <div className={styles.flex} style={{ flexDirection: "column" }}>
+      <div className={styles.flex}>
+        <dl className={styles.flex}>
+          <dt>Full Name:</dt>
+          <dd>{data._doc.fullname}</dd>
+        </dl>
         <div className={styles.card}>
-          <div>{data.dateOfBirth}</div>
-          <div>{data.gender}</div>
-          <div>{data.phoneNumber}</div>
-          <div>{data.email}</div>
+          <dl className={styles.flex}>
+            <dt>Date of Birth:</dt>
+            <dd>{data._doc.dateOfBirth}</dd>
+          </dl>
+          <dl className={styles.flex}>
+            <dt>Gender:</dt>
+            <dd>{data._doc.gender}</dd>
+          </dl>
+          <dl className={styles.flex}>
+            <dt>Phone Number:</dt>
+            <dd>{data._doc.phoneNumber}</dd>
+          </dl>
+          <dl className={styles.flex}>
+            <dt>Email:</dt>
+            <dd>{data._doc.email}</dd>
+          </dl>
         </div>
+        <Link href="/profile/edit">
+          <a
+            style={{
+              borderRadius: "14px",
+              backgroundColor: "#eaeaea",
+              maxHeight: "50px",
+              padding: "5px 8px",
+            }}
+          >
+            Edit Profile
+          </a>
+        </Link>
       </div>
-      <div className={styles.card}>
-        {data.orders?.map((order) => (
-          <div key={order._id}>{order._id}</div>
-        ))}
+      <div className={styles.card} style={{ maxWidth: "100%" }}>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Id</th>
+              <th>Status</th>
+              <th>Time</th>
+              <th>Shipper</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.orders?.map((order, index) => (
+              <tr key={order._id}>
+                <td>{index + 1}</td>
+                <td>{order._id}</td>
+                <td>{order.status}</td>
+                <td>{order.createdAt}</td>
+                <td>{order.shipper?.username}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
