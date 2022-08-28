@@ -47,11 +47,13 @@
     "@types/cookies": "^0.7.7",
     "@types/formidable": "^2.0.5",
     "@types/jsonwebtoken": "^8.5.8",
-    "@types/node": "^18.7.11",
+    "@types/node": "^18.7.13",
     "@types/qrcode": "^1.5.0",
     "cross-env": "^7.0.3",
     "eslint": "8.12.0",
     "eslint-config-next": "12.1.4",
-    "sass": "^1.52.1"
+    "sass": "^1.52.1",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.4.0"
   }
 }

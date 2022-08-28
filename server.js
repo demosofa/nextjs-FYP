@@ -46,6 +46,10 @@ nextApp.prepare().then(() => {
       socket.to(session[data.to]).emit("notify", data.value);
     });
   });
+
+  io.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
   // app.use(express.static(path.join(__dirname, "public")));
   // app.use(express.urlencoded({ extended: true }));
   // app.use(express.json());

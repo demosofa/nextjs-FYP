@@ -11,7 +11,6 @@ const Order = new Schema(
     shipper: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Shipper",
-      default: "there isn't any shipper accept this order",
     },
     orderItems: [
       {
