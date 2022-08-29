@@ -9,5 +9,11 @@ const Shipper = new Schema(
   { discriminatorKey: "Shipper" }
 );
 
-module.exports =
-  Account.discriminators || Account.discriminator("Shipper", Shipper);
+function checkDiscriminator() {
+  if (Account.discriminators && Account.discriminators.Shipper) {
+    return Account.discriminators.Shipper;
+  }
+  return Account.discriminator("Shipper", Shipper);
+}
+
+module.exports = checkDiscriminator();

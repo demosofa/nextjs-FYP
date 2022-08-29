@@ -45,7 +45,7 @@ export default function Sidebar({
 
   return (
     <div className={styles.side_bar} {...props}>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Link href="/profile">
           <a>
             <Avatar>My Profile</Avatar>
@@ -77,6 +77,7 @@ export default function Sidebar({
         })}
         {children}
       </nav>
+      <Link href="/overview/cart">My Cart</Link>
       {(check && <div onClick={handleLogout}>Logout</div>) || (
         <>
           <div onClick={() => router.push("/login")}>Login</div>

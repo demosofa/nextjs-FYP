@@ -10,23 +10,25 @@ import { convertTime, expireStorage, retryAxios } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-const fetcher = async (config) => {
-  retryAxios(axios);
-  const response = await axios(config);
-  return response.data;
-};
-
 function Shipper() {
-  const accessToken = expireStorage.getItem("accessToken");
   const [checkOrder, setCheckOrder] = useState([]);
+
+  const fetcher = async (config) => {
+    retryAxios(axios);
+    const accessToken = expireStorage.getItem("accessToken");
+    const response = await axios({
+      ...config,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  };
   const dispatch = useDispatch();
   const router = useRouter();
   const { data: orders, error } = useSWR(
     {
       url: `${LocalApi}/order`,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
     },
     fetcher,
     {
@@ -35,7 +37,7 @@ function Shipper() {
       onError(err, key, config) {
         if (err.status === 300) return router.back();
         else if (err.status === 401) return router.push("/login");
-        else return;
+        else return dispatch(addNotification({ message: err }));
       },
     }
   );
