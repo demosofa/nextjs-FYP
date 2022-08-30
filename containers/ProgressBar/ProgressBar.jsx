@@ -5,6 +5,7 @@ export default function ProgressBar({
   pass = "",
   steps = [{ title: "", icon: null, allowed: false }],
   setSteps = new Function(),
+  onResult = new Function(),
 }) {
   const [progress, setProgress] = useState(() =>
     steps.map((item) => ({ ...item, active: false }))
@@ -18,8 +19,15 @@ export default function ProgressBar({
   };
   const handleComplete = (step, index) => {
     if (step.allowed)
-      if (index - 1 >= 0) progress[index - 1].active && setNewProgress(index);
-      else if (index === 0) setNewProgress(index);
+      if (index - 1 >= 0) {
+        if (progress[index - 1].active) {
+          onResult(progress[index].title);
+          setNewProgress(index);
+        }
+      } else if (index === 0) {
+        onResult(progress[index].title);
+        setNewProgress(index);
+      }
   };
   useEffect(() => {
     if (pass) {
@@ -38,7 +46,7 @@ export default function ProgressBar({
             data-desc={step.title}
             onClick={() => handleComplete(step, index)}
           >
-            {(step.icon && <Icon>{step.icon}</Icon>) || index}
+            {(step.icon && <Icon>{step.icon}</Icon>) || index + 1}
           </div>
         );
       })}

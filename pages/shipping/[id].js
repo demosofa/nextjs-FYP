@@ -1,6 +1,7 @@
 import axios from "axios";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
+import decoder from "jwt-decode";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { convertTime, expireStorage, retryAxios } from "../../utils";
@@ -8,13 +9,18 @@ import { Loading } from "../../components";
 import { ProgressBar, QRScanner } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useState } from "react";
-import { Role } from "../../helpers";
+import { Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function ShippingProgress() {
   const [showQR, setShowQR] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
+  const auth = useState(() => {
+    const accessToken = expireStorage.getItem("accessToken");
+    const { role } = decoder(accessToken);
+    return role;
+  })[0];
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -68,10 +74,24 @@ function ShippingProgress() {
     }
   };
 
+  const handleCheckStep = (value) => {
+    console.log(value);
+    if (value === "arrived") {
+      if (auth === Role.guest) {
+        setShowScanner(true);
+      } else if (auth === Role.shipper || auth === Role.admin) {
+        handleShowQr();
+      }
+    }
+  };
+
   const steps = [
     { title: "pending", allowed: false },
-    { title: "shipping", allowed: Role.shipper || Role.admin ? true : false },
-    { title: "arrived", allowed: false },
+    { title: "shipping", allowed: false },
+    {
+      title: "arrived",
+      allowed: auth === Role.shipper || auth === Role.admin ? true : false,
+    },
     { title: "paid", allowed: false },
   ];
 
@@ -88,13 +108,20 @@ function ShippingProgress() {
     );
   return (
     <div>
-      <button onClick={handleShowQr}>Show QR</button>
-      <ProgressBar steps={steps} pass={order.status}></ProgressBar>
-      <button onClick={() => setShowScanner((prev) => !prev)}>
-        Show Scanner
-      </button>
+      <ProgressBar
+        steps={steps}
+        pass={order.status}
+        onResult={handleCheckStep}
+      ></ProgressBar>
       {showQR !== null && <img src={showQR} alt="QR code"></img>}
-      {showScanner && <QRScanner></QRScanner>}
+      {showScanner && (
+        <div>
+          <button onClick={() => setShowScanner((prev) => !prev)}>
+            Show Scanner
+          </button>
+          <QRScanner></QRScanner>
+        </div>
+      )}
     </div>
   );
 }

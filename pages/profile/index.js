@@ -4,11 +4,13 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
+import { Role } from "../../shared";
 import styles from "../../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function MyProfile() {
+  const [viewOrder, setViewOrder] = useState(null);
   const router = useRouter();
   const [data, setData] = useState();
   const { loading, isLoggined, isAuthorized } = useAuthLoad({
@@ -18,7 +20,7 @@ function MyProfile() {
       });
       setData(res.data);
     },
-    roles: ["guest"],
+    roles: [Role.guest, Role.admin, Role.shipper],
   });
 
   useEffect(() => {
@@ -75,8 +77,11 @@ function MyProfile() {
           </a>
         </Link>
       </div>
-      <div className={styles.card} style={{ maxWidth: "100%" }}>
-        <table className="table">
+      <div
+        className={`${styles.card} manage_table`}
+        style={{ maxWidth: "100%" }}
+      >
+        <table>
           <thead>
             <tr>
               <th>No.</th>
@@ -84,6 +89,7 @@ function MyProfile() {
               <th>Status</th>
               <th>Order Time</th>
               <th>Shipper</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -94,10 +100,48 @@ function MyProfile() {
                 <td>{order.status}</td>
                 <td>{order.createdAt}</td>
                 <td>{order.shipper?.username}</td>
+                <td>
+                  <button onClick={() => setViewOrder(order.orderItems)}>
+                    View order items
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {viewOrder && (
+          <>
+            <div className="backdrop" onClick={() => setViewOrder(null)}></div>
+            <div className="form_center">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Options</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {viewOrder.map((item, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <img src={item.image} alt="order-item"></img>
+                      </td>
+                      <td>{item.title}</td>
+                      <td>{item.options.join(", ")}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.total}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

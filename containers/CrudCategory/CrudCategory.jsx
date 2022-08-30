@@ -6,6 +6,7 @@ import { expireStorage, retryAxios } from "../../utils";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { BiDotsVertical } from "react-icons/bi";
+import { Role } from "../../shared";
 import styles from "./crudcategory.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
@@ -18,7 +19,7 @@ export default function CrudCategory({ maxTree = 3 }) {
       const res = await axiosInstance({ url: `${LocalApi}/category` });
       setCategories(res.data);
     },
-    roles: ["guest"],
+    roles: [Role.admin],
   });
 
   const handleAddCategory = async ({ name }) => {

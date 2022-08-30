@@ -1,3 +1,4 @@
+import Role from "../shared/Role";
 import UnitOfWork from "./services/UnitOfWork";
 
 class AdminController {
@@ -7,7 +8,11 @@ class AdminController {
 
   getAllProfile = async (req, res) => {
     try {
-      const lstProfile = await this.unit.Account.getAll().exec();
+      const lstProfile = await this.unit.Account.getAll({
+        role: { $ne: Role.admin },
+      })
+        .populate({ path: "user", select: ["email", "phoneNumber"] })
+        .exec();
       return res.status(200).json(lstProfile);
     } catch (error) {
       return res.status(500).json(error.message);

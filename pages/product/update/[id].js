@@ -10,6 +10,7 @@ import { expireStorage, retryAxios } from "../../../utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
+import { Role } from "../../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -24,7 +25,7 @@ function UpdateProduct() {
       });
       setProduct(res.data);
     },
-    roles: ["guest"],
+    roles: [Role.admin],
     deps: [router.isReady],
   });
 

@@ -6,6 +6,7 @@ import { useAuthLoad } from "../../hooks";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { retryAxios } from "../../utils";
 import { AiOutlineCheck } from "react-icons/ai";
+import { Role } from "../../shared";
 import styles from "./updatevariation.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
@@ -24,7 +25,7 @@ export default function UpdateVariation({ productId, setToggle }) {
       });
       setStoredVariations(res.data);
     },
-    roles: ["guest"],
+    roles: [Role.admin],
   });
 
   const { loading: loadingImages } = useAuthLoad({
@@ -34,7 +35,7 @@ export default function UpdateVariation({ productId, setToggle }) {
       });
       setStoredImages(res.data);
     },
-    roles: ["guest"],
+    roles: [Role.admin],
   });
 
   const handleChangeImage = () => {

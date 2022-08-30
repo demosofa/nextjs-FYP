@@ -58,6 +58,7 @@ function MyShipping() {
             <th>Status</th>
             <th>Address</th>
             <th>Phone Number</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -69,6 +70,7 @@ function MyShipping() {
               <td>
                 <a
                   target="_blank"
+                  rel="noreferrer"
                   href={`https://maps.google.com/maps?q=${order.address}`}
                 >
                   {order.address}

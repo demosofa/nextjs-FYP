@@ -96,6 +96,10 @@ export default function ManageProfiles() {
                   ))}
                 </select>
               </td>
+              <td>
+                <div>Email: {profile.user.email}</div>
+                <div>phone Number: {profile.user.phoneNumber}</div>
+              </td>
             </tr>
           ))}
         </tbody>

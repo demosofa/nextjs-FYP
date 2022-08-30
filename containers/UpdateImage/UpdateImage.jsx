@@ -8,6 +8,7 @@ import { BiUpload } from "react-icons/bi";
 import { retryAxios, uploadApi } from "../../utils";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
+import { Role } from "../../shared";
 import styles from "./updateimage.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
@@ -25,7 +26,7 @@ export default function UpdateImage({ productId, setToggle }) {
       });
       setStoredImages(res.data);
     },
-    roles: ["guest"],
+    roles: [Role.admin],
   });
 
   const currentSize = useMemo(() => {

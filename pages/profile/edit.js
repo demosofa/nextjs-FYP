@@ -7,6 +7,7 @@ import { useAuthLoad } from "../../hooks";
 import { retryAxios } from "../../utils";
 import styles from "../../styles/Home.module.scss";
 import { addNotification } from "../../redux/reducer/notificationSlice";
+import { Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -26,7 +27,7 @@ function EditProfile() {
       });
       setData(res.data._doc);
     },
-    roles: ["guest"],
+    roles: [Role.admin, Role.guest, Role.shipper],
   });
 
   const handleSubmit = async () => {

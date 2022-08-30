@@ -9,6 +9,7 @@ import { useAuthLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Notification } from "../../Layout";
+import { Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -36,7 +37,7 @@ function ProductCRUD() {
       if (totalPageCount === null) setTotalPageCount(res.data.pageCounted);
       return;
     },
-    roles: ["guest"],
+    roles: [Role.admin],
     deps: [params],
   });
 
