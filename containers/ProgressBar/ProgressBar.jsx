@@ -24,7 +24,7 @@ export default function ProgressBar({
   useEffect(() => {
     if (pass) {
       const step = steps.findIndex((item) => item.title === pass);
-      for (let i = 0; i < step; i++) setNewProgress(i);
+      for (let i = 0; i <= step; i++) setNewProgress(i);
     }
   }, [pass]);
   useEffect(() => setSteps(progress), [progress]);

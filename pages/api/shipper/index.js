@@ -1,5 +1,5 @@
 import { order } from "../../../controllers";
-import { isAuthentication } from "../../../helpers";
+import { isAuthentication, isAuthorization, Role } from "../../../helpers";
 
 async function Shipper(req, res) {
   switch (req.method.toLowerCase()) {
@@ -12,4 +12,6 @@ async function Shipper(req, res) {
   }
 }
 
-export default isAuthentication(Shipper);
+export default isAuthentication(
+  isAuthorization(Shipper, [Role.shipper, Role.admin, Role.guest])
+);

@@ -8,6 +8,7 @@ import { Loading } from "../../components";
 import { ProgressBar, QRScanner } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useState } from "react";
+import { Role } from "../../helpers";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -69,6 +70,7 @@ function ShippingProgress() {
 
   const steps = [
     { title: "pending", allowed: false },
+    { title: "shipping", allowed: Role.shipper || Role.admin ? true : false },
     { title: "arrived", allowed: false },
     { title: "paid", allowed: false },
   ];

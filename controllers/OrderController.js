@@ -90,19 +90,23 @@ class OrderController {
   };
   acceptShipper = async (req, res) => {
     const { acceptedOrders } = req.body;
+    const { accountId, role } = req.user;
     try {
-      const addOrders = await this.unit.Shipper.updateById(req.user.accountId, {
-        $push: {
-          shipping: {
-            $each: acceptedOrders,
+      const addOrders = await this.unit.Account.updateOne(
+        { _id: accountId, role },
+        {
+          $push: {
+            shipping: {
+              $each: acceptedOrders,
+            },
           },
-        },
-      });
+        }
+      );
       await this.unit.Order.updateMany(
         {
           _id: { $in: acceptedOrders },
         },
-        { $set: { shipper: req.user.accountId } }
+        { $set: { shipper: accountId, status: "shipping" } }
       );
       return res.status(200).end();
     } catch (error) {

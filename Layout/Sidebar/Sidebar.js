@@ -16,11 +16,6 @@ export default function Sidebar({
   setToggle,
   ...props
 }) {
-  const auth = useState(() => {
-    const accessToken = expireStorage.getItem("accessToken");
-    const { role } = decoder(accessToken);
-    return role;
-  })[0];
   const [search, setSearch] = useState("");
   const router = useRouter();
   const handleLogout = async () => {
@@ -38,9 +33,13 @@ export default function Sidebar({
     }
   };
 
-  const [check, setCheck] = useState(false);
+  const [auth, setAuth] = useState();
   useEffect(() => {
-    if (auth) setCheck(true);
+    const accessToken = expireStorage.getItem("accessToken");
+    if (accessToken) {
+      const { role } = decoder(accessToken);
+      setAuth(role);
+    }
   });
 
   return (
@@ -78,7 +77,7 @@ export default function Sidebar({
         {children}
       </nav>
       <Link href="/overview/cart">My Cart</Link>
-      {(check && <div onClick={handleLogout}>Logout</div>) || (
+      {(auth && <div onClick={handleLogout}>Logout</div>) || (
         <>
           <div onClick={() => router.push("/login")}>Login</div>
           <div onClick={() => router.push("/register")}>Register</div>

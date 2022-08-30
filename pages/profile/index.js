@@ -82,7 +82,7 @@ function MyProfile() {
               <th>No.</th>
               <th>Id</th>
               <th>Status</th>
-              <th>Time</th>
+              <th>Order Time</th>
               <th>Shipper</th>
             </tr>
           </thead>

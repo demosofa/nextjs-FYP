@@ -6,10 +6,13 @@ import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
+import { Loading } from "../../components";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function MyShipping() {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -21,8 +24,6 @@ function MyShipping() {
     });
     return response.data;
   };
-  const dispatch = useDispatch();
-  const router = useRouter();
   const { data, error } = useSWR(
     {
       url: `${LocalApi}/shipper`,

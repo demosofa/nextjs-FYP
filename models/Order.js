@@ -10,7 +10,7 @@ const Order = new Schema(
     },
     shipper: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: "Shipper",
+      ref: "Account",
     },
     orderItems: [
       {
@@ -23,7 +23,7 @@ const Order = new Schema(
     address: { type: String, required: true },
     status: {
       type: String,
-      enum: ["pending", "arrived", "paid"],
+      enum: ["pending", "shipping", "arrived", "paid"],
       default: "pending",
     },
   },
