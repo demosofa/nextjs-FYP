@@ -1,7 +1,6 @@
 import UnitOfWork from "./services/UnitOfWork";
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
-import jwt from "jsonwebtoken";
 import { setCookieToken, Token } from "../helpers";
 import { convertTime } from "../utils";
 
@@ -34,7 +33,7 @@ class AuthController {
         maxAge: convertTime("1d").milisecond,
         overwrite: true,
       });
-    const auth = jwt.sign(check.role, process.env.SECRET_KEY);
+    const auth = Token.signToken({ role: check.role, username });
     return res.status(200).json(auth);
   };
 
@@ -76,7 +75,10 @@ class AuthController {
         maxAge: convertTime("1d").milisecond,
         overwrite: true,
       });
-    const auth = jwt.sign(created.role, process.env.SECRET_KEY);
+    const auth = Token.signToken({
+      role: created.role,
+      username: account.username,
+    });
     return res.status(200).json(auth);
   };
 

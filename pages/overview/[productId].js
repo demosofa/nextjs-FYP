@@ -44,8 +44,8 @@ export default function Overview({ product }) {
 
   const dispatch = useDispatch();
   const handleAddToCart = () => {
-    const { _id, title, images } = product;
-    const { price, image } = targetVariation;
+    let { _id, title, images, price } = product;
+    if (targetVariation) price = targetVariation.price;
     dispatch(
       addCart({
         productId: _id,

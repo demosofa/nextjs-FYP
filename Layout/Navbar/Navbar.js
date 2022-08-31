@@ -24,10 +24,10 @@ export default function Navbar({ arrLink = [{ title: "", link: "" }] }) {
   };
   return (
     <div className={styles.nav}>
-      <Link href="/">
-        <a>Home</a>
-      </Link>
       <div className={styles.bar}>
+        <Link href="/">
+          <a>Home</a>
+        </Link>
         <Search
           value={search}
           onChange={(e) => setSearch(e.target.value)}

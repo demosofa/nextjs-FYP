@@ -1,4 +1,4 @@
-const Role = require("../helpers/Role");
+const Role = require("../shared/Role");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -9,7 +9,7 @@ const Account = new Schema(
     avatar: { type: String, default: "avatar" },
     role: {
       type: String,
-      default: "guest",
+      default: Role.guest,
       enum: [Role.admin, Role.vendor, Role.shipper, Role.guest, Role.manager],
     },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },

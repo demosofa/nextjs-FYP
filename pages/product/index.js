@@ -90,7 +90,7 @@ export default function ProductCRUD({ value }) {
           onClick={() => setQuery((prev) => ({ ...prev, search }))}
         />
       </Container.Flex>
-      <div className="product-crud__table">
+      <div className="manage_table">
         <table>
           <thead>
             <tr>

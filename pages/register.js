@@ -72,7 +72,6 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
       });
       moveTo();
     } catch (error) {
-      console.log(error);
       dispatch(addNotification({ message: error.message }));
     }
   };

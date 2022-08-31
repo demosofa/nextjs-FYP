@@ -10,10 +10,10 @@ class Token {
     });
   }
   static signToken(payload, options = undefined) {
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, options);
+    return jwt.sign(payload, process.env.SECRET_KEY, options);
   }
   static verifyToken(token, options = undefined) {
-    return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, options);
+    return jwt.verify(token, process.env.SECRET_KEY, options);
   }
   static verifyAccessToken(tokken) {
     return jwt.verify(tokken, process.env.ACCESS_TOKEN_SECRET);

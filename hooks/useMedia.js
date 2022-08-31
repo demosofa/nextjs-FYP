@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Devices from "../helpers/Devices";
+import Devices from "../shared/Devices";
 
 export default function useMedia(min = 768, max = 1023) {
   const [device, setDevice] = useState();

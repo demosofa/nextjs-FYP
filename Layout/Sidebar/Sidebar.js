@@ -16,11 +16,6 @@ export default function Sidebar({
   setToggle,
   ...props
 }) {
-  const auth = useState(() => {
-    const permission = expireStorage.getItem("permission");
-    const { role } = decoder(permission);
-    return role;
-  })[0];
   const [search, setSearch] = useState("");
   const router = useRouter();
   const handleLogout = async () => {
@@ -33,16 +28,18 @@ export default function Sidebar({
     }
   };
 
-  console.log(auth);
-
-  const [check, setCheck] = useState(false);
+  const [auth, setAuth] = useState();
   useEffect(() => {
-    if (auth) setCheck(true);
-  }, [auth]);
+    const permission = expireStorage.getItem("permission");
+    if (permission) {
+      const { role } = decoder(permission);
+      setAuth(role);
+    }
+  });
 
   return (
     <div className={styles.side_bar} {...props}>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Link href="/profile">
           <a>
             <Avatar>My Profile</Avatar>
@@ -74,7 +71,8 @@ export default function Sidebar({
         })}
         {children}
       </nav>
-      {(check && <div onClick={handleLogout}>Logout</div>) || (
+      <Link href="/overview/cart">My Cart</Link>
+      {(auth && <div onClick={handleLogout}>Logout</div>) || (
         <>
           <div onClick={() => router.push("/login")}>Login</div>
           <div onClick={() => router.push("/register")}>Register</div>
