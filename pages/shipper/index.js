@@ -10,12 +10,6 @@ import { convertTime, retryAxios } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-const fetcher = async (config) => {
-  retryAxios(axios);
-  const response = await axios(config);
-  return response.data;
-};
-
 export const getServerSideProps = withAuth(async ({ req }, role) => {
   let lstOrder = null;
   try {
@@ -38,6 +32,12 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
 
 export default function Shipper({ lstOrder }) {
   const [checkOrder, setCheckOrder] = useState([]);
+
+  const fetcher = async (config) => {
+    retryAxios(axios);
+    const response = await axios(config);
+    return response.data;
+  };
   const dispatch = useDispatch();
   const router = useRouter();
   const { data: orders, error } = useSWR(
@@ -52,7 +52,7 @@ export default function Shipper({ lstOrder }) {
       onError(err, key, config) {
         if (err.status === 300) return router.back();
         else if (err.status === 401) return router.push("/login");
-        else return;
+        else return dispatch(addNotification({ message: err }));
       },
     }
   );

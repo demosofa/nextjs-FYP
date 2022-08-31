@@ -5,3 +5,5 @@ export { default as UpdateImage } from "./UpdateImage/UpdateImage";
 export { default as UpdateVariation } from "./UpdateVariation/UpdateVariation";
 export { default as CrudCategory } from "./CrudCategory/CrudCategory";
 export { default as SelectCategory } from "./SelectCategory/SelectCategory";
+export { default as ProgressBar } from "./ProgressBar/ProgressBar";
+export { default as QRScanner } from "./QRScanner/QRScanner";

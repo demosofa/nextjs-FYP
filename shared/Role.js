@@ -5,4 +5,4 @@ const Role = {
   manager: "manager",
   shipper: "shipper",
 };
-module.exports = Role;
+export default Role;

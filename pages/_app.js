@@ -1,5 +1,5 @@
 import { useMedia } from "../hooks";
-import Devices from "../helpers/Devices";
+import { Devices } from "../shared";
 import { createContext } from "react";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";

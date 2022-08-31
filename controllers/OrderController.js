@@ -6,9 +6,9 @@ class OrderController {
     this.unit = new unit();
   }
   getOrder = async (req, res) => {
-    const order = await this.unit.Order.getById(req.query.id);
+    const order = await this.unit.Order.getById(req.query.id).exec();
     if (!order) return res.status(500).json("Fail to get order");
-    return res.status(200);
+    return res.status(200).json(order);
   };
   MyOrder = async (req, res) => {
     const history = await this.unit.Order.getAll({
@@ -17,6 +17,21 @@ class OrderController {
       .populate({ path: "shipper", select: ["username"] })
       .exec();
     return res.status(200).json(history);
+  };
+  MyShipping = async (req, res) => {
+    const lstShipping = await this.unit.Order.getAll({
+      shipper: req.user.accountId,
+    })
+      .populate({
+        path: "customer",
+        select: ["username", "user"],
+        populate: {
+          path: "user",
+          select: ["phoneNumber"],
+        },
+      })
+      .exec();
+    return res.status(200).json(lstShipping);
   };
   lstOrder = async (req, res) => {
     const lstOrder = await this.unit.Order.getAll()
@@ -75,22 +90,32 @@ class OrderController {
   };
   acceptShipper = async (req, res) => {
     const { acceptedOrders } = req.body;
-    const adddOrders = await this.unit.Shipper.updateById(req.user.accountId, {
-      $push: {
-        shipping: {
-          $each: acceptedOrders,
+    const { accountId, role } = req.user;
+    try {
+      const addOrders = await this.unit.Account.updateOne(
+        { _id: accountId, role },
+        {
+          $push: {
+            shipping: {
+              $each: acceptedOrders,
+            },
+          },
+        }
+      );
+      await this.unit.Order.updateMany(
+        {
+          _id: { $in: acceptedOrders },
         },
-      },
-    });
-    if (!adddOrders) return res.status(500).json("Fail to accept Shipping");
-    await this.unit.Order.updateMany({
-      _id: { $in: acceptedOrders },
-      $set: { shipper: req.use.accountId },
-    });
-    return res.status(200).end();
+        { $set: { shipper: accountId, status: "shipping" } }
+      );
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).json(error);
+    }
   };
   patchOrder = async (req, res) => {
-    const patched = this.unit.Order.updateById(req.query._id, {
+    const patched = this.unit.Order.updateById(req.query.id, {
       $set: req.body,
     });
     return res.status(200).end();
