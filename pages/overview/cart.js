@@ -52,8 +52,8 @@ export default function Cart() {
           },
         }
       );
-      setDisplay(false);
       localStorage.removeItem("CartStorage");
+      setDisplay(false);
       router.back();
     } catch (error) {
       dispatch(addNotification({ message: error.message }));

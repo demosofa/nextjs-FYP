@@ -7,10 +7,13 @@ import useSWR from "swr";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
 import { Loading } from "../../components";
+import { useState } from "react";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function MyShipping() {
+  const [viewOrder, setViewOrder] = useState(null);
   const dispatch = useDispatch();
   const router = useRouter();
   const fetcher = async (config) => {
@@ -49,8 +52,13 @@ function MyShipping() {
       ></Loading>
     );
   return (
-    <div>
-      <table className="table">
+    <div className="manage_table">
+      <Head>
+        <title>My Shipping</title>
+        <meta name="description" content="My Shipping" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <table>
         <thead>
           <tr>
             <th>No.</th>
@@ -78,12 +86,48 @@ function MyShipping() {
               </td>
               <td>{order.customer.user.phoneNumber}</td>
               <td>
+                <button onClick={() => setViewOrder(order.orderItems)}>
+                  View List item
+                </button>
                 <Link href={`/shipping/${order._id}`}>Manage Progress</Link>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {viewOrder && (
+        <>
+          <div className="backdrop" onClick={() => setViewOrder(null)}></div>
+          <div className="form_center">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Image</th>
+                  <th>Title</th>
+                  <th>Options</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {viewOrder.map((item, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <img src={item.image} alt="order-item"></img>
+                    </td>
+                    <td>{item.title}</td>
+                    <td>{item.options.join(", ")}</td>
+                    <td>{item.quantity}</td>
+                    <td>{item.total}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </div>
   );
 }

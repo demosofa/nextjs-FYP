@@ -8,6 +8,7 @@ import { retryAxios } from "../../utils";
 import styles from "../../styles/Home.module.scss";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Role } from "../../shared";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -59,6 +60,11 @@ function EditProfile() {
 
   return (
     <Form onSubmit={handleSubmit}>
+      <Head>
+        <title>Edit My Profile</title>
+        <meta name="description" content="Edit My Profile" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Form.Title style={{ fontSize: "large" }}>{data.fullname}</Form.Title>
       <div className={styles.card} style={{ maxWidth: "none" }}>
         <Form.Item>

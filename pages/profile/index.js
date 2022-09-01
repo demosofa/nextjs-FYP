@@ -1,16 +1,22 @@
+import axios from "axios";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { Role } from "../../shared";
 import styles from "../../styles/Home.module.scss";
+import { expireStorage, retryAxios } from "../../utils";
+import { addNotification } from "../../redux/reducer/notificationSlice";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function MyProfile() {
   const [viewOrder, setViewOrder] = useState(null);
+  const dispatch = useDispatch();
   const router = useRouter();
   const [data, setData] = useState();
   const { loading, isLoggined, isAuthorized } = useAuthLoad({
@@ -22,6 +28,25 @@ function MyProfile() {
     },
     roles: [Role.guest, Role.admin, Role.shipper],
   });
+
+  const handleCancelOrder = async (orderId) => {
+    retryAxios(axios);
+    const accessToken = expireStorage.getItem("accessToken");
+    try {
+      await axios.delete(`${LocalApi}/order/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setData((prev) => {
+        const clone = JSON.parse(JSON.stringify(prev));
+        clone.orders = clone.orders.filter((item) => item._id !== orderId);
+        return clone;
+      });
+    } catch (error) {
+      dispatch(addNotification({ message: error.message }));
+    }
+  };
 
   useEffect(() => {
     if (!loading && !isLoggined && !isAuthorized) router.push("/login");
@@ -41,6 +66,11 @@ function MyProfile() {
     );
   return (
     <div className={styles.flex} style={{ flexDirection: "column" }}>
+      <Head>
+        <title>My Profile</title>
+        <meta name="description" content="My Profile" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className={styles.flex}>
         <dl className={styles.flex}>
           <dt>Full Name:</dt>
@@ -104,6 +134,11 @@ function MyProfile() {
                   <button onClick={() => setViewOrder(order.orderItems)}>
                     View order items
                   </button>
+                  {order.status === "pending" && (
+                    <button onClick={() => handleCancelOrder(order._id)}>
+                      Cancel Order
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

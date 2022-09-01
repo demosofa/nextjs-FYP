@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Loading } from "../../components";
 import { expireStorage, retryAxios } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -68,6 +69,11 @@ export default function ManageProfiles() {
   };
   return (
     <div className="manage_table">
+      <Head>
+        <title>Manage Profiles</title>
+        <meta name="description" content="Manage Profiles" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <table>
         <thead>
           <tr>

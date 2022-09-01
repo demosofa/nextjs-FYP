@@ -30,6 +30,7 @@ class OrderController {
           select: ["phoneNumber"],
         },
       })
+      .populate("orderItems")
       .exec();
     return res.status(200).json(lstShipping);
   };

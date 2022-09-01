@@ -1,5 +1,6 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -74,13 +75,18 @@ function Shipper() {
 
   return (
     <div>
+      <Head>
+        <title>List pending order</title>
+        <meta name="description" content="List pending order" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Checkbox setChecked={(value) => setCheckOrder(value)}>
         <table className="table">
           <thead>
             <tr>
               <th>Check</th>
               <th>Order Id</th>
-              <th>Status</th>
+              <th>Price</th>
               <th>Address</th>
             </tr>
           </thead>
@@ -91,7 +97,7 @@ function Shipper() {
                   <Checkbox.Item value={order._id}></Checkbox.Item>
                 </td>
                 <td>{order._id}</td>
-                <td>{order.status}</td>
+                <td>{order.total}</td>
                 <td>
                   <Form.Link
                     target="_blank"

@@ -10,6 +10,7 @@ import { ProgressBar, QRScanner } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useState } from "react";
 import { Role } from "../../shared";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -108,6 +109,11 @@ function ShippingProgress() {
     );
   return (
     <div>
+      <Head>
+        <title>Shipping Progress</title>
+        <meta name="description" content="Shipping Progress" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <ProgressBar
         steps={steps}
         pass={order.status}

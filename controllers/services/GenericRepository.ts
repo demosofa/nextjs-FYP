@@ -6,12 +6,17 @@ import {
   UpdateWithAggregationPipeline,
   UpdateQuery,
   SaveOptions,
+  PipelineStage,
+  AggregateOptions,
 } from "mongoose";
 
 export default class GenericRepository<T> implements IGenericRepository<T> {
   private context: typeof Model;
   constructor(context: typeof Model) {
     this.context = context;
+  }
+  aggregate(pipeline?: PipelineStage[], options?: AggregateOptions) {
+    return this.context.aggregate(pipeline, options);
   }
   countData(filter: FilterQuery<any> = {}, options?: QueryOptions<any>) {
     return this.context.countDocuments(filter, options);

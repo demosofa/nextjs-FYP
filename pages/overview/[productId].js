@@ -35,7 +35,9 @@ export default function Overview({ product }) {
   const [options, setOptions] = useState([]);
   const targetVariation = useMemo(() => {
     const index = product.variations.findIndex((item) =>
-      item.types.every((value) => options.includes(value.name))
+      item.types.every((value) =>
+        options.some((opt) => opt.includes(value.name))
+      )
     );
     return product.variations[index];
   }, [options, product.variations]);
@@ -134,7 +136,7 @@ export default function Overview({ product }) {
                   return (
                     <div key={item._id} style={{ width: "fit-content" }}>
                       <Checkbox.Item
-                        value={item.name}
+                        value={`${variant.name}: ${item.name}`}
                         defaultChecked={index === 0}
                       >
                         {item.name}
