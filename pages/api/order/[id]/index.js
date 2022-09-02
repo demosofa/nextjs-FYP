@@ -13,7 +13,7 @@ async function orderId(req, res) {
       await order.patchOrder(req, res);
       break;
     case "delete":
-      await order.delete(req, res);
+      await order.cancelOrder(req, res);
       break;
   }
 }

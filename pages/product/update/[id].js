@@ -32,13 +32,13 @@ function UpdateProduct() {
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { _id, description, sale, time } = product;
+    const { _id, description, quantity, sale, time } = product;
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
       await axios.put(
         `${LocalApi}/product`,
-        { _id, description, sale, time },
+        { _id, description, quantity, sale, time },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -85,6 +85,15 @@ function UpdateProduct() {
         />
       </Form.Item>
       <Form.Item>
+        <Form.Title>Quantity</Form.Title>
+        <Form.Input
+          value={product.quantity}
+          onChange={(e) =>
+            setProduct((prev) => ({ ...prev, quantity: e.target.value }))
+          }
+        ></Form.Input>
+      </Form.Item>
+      <Form.Item>
         <Form.Title>Sale Price</Form.Title>
         <Form.Input
           value={product.sale}
@@ -103,10 +112,10 @@ function UpdateProduct() {
           }
         ></Form.Input>
       </Form.Item>
-      <div className={styles.card} onClick={() => setToggle("image")}>
+      <div className="card" onClick={() => setToggle("image")}>
         Update Product Image
       </div>
-      <div className={styles.card} onClick={() => setToggle("variation")}>
+      <div className="card" onClick={() => setToggle("variation")}>
         Update Product Variation
       </div>
       {(toggle !== null && toggle === "image" && (

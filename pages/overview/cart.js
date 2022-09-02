@@ -8,6 +8,7 @@ import { expireStorage, retryAxios } from "../../utils";
 import axios from "axios";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -18,7 +19,8 @@ export default function Cart() {
   const [cart, setCart] = useState({
     products: [
       {
-        producId: "",
+        productId: "",
+        variationId: "",
         title: "",
         image: "",
         options: [],
@@ -43,16 +45,17 @@ export default function Cart() {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
-      await axios.post(
-        `${LocalApi}/order`,
-        { ...cart, address },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      localStorage.removeItem("CartStorage");
+      await axios
+        .post(
+          `${LocalApi}/order`,
+          { ...cart, address },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
+        .then(() => localStorage.removeItem("CartStorage"));
       setDisplay(false);
       router.back();
     } catch (error) {
@@ -69,53 +72,59 @@ export default function Cart() {
       <div className="cart__lst">
         {cart.products.map((item) => (
           <Animation.Zoom key={item.title}>
-            <div className="cart__product ux-card">
-              <div className="cart__product__info">
-                <img alt="product" src={item.image}></img>
-                <div className="product__info">
-                  <div className="info product__title">
-                    <span>Title: </span>
-                    {item.title}
-                  </div>
-                  <div className="info product__option">
-                    <span>Option: </span>
-                    {item.options.join(", ")}
-                  </div>
-                  <div className="info product__price">
-                    <span>Price: </span>
-                    {item.price} $
+            <Link href={`/overview/${item.productId}`}>
+              <a className="cart__product ux-card">
+                <div className="cart__product__info">
+                  <img alt="product" src={item.image}></img>
+                  <div className="product__info">
+                    <div className="info product__title">
+                      <span>Title: </span>
+                      {item.title}
+                    </div>
+                    <div className="info product__option">
+                      <span>Option: </span>
+                      {item.options.join(", ")}
+                    </div>
+                    <div className="info product__price">
+                      <span>Price: </span>
+                      {item.price} $
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="change__quantity">
-                <Increment
-                  value={item.quantity}
-                  setValue={(value) => {
-                    if (item.title) {
-                      dispatch(
-                        addCart({
-                          ...item,
-                          quantity: value,
-                          total: Math.round(value * item.price),
-                        })
-                      );
-                    }
-                  }}
-                  style={{ width: "100px" }}
-                />
-                <div className="info">
-                  <span>Total: </span> {item.total} $
+                <div className="change__quantity">
+                  <Increment
+                    value={item.quantity}
+                    setValue={(value) => {
+                      if (item.title) {
+                        dispatch(
+                          addCart({
+                            ...item,
+                            quantity: value,
+                            total: Math.round(value * item.price),
+                          })
+                        );
+                      }
+                    }}
+                    style={{ width: "100px" }}
+                  />
+                  <div className="info">
+                    <span>Total: </span> {item.total} $
+                  </div>
                 </div>
-              </div>
-              <Icon
-                className="remove__product"
-                onClick={() => dispatch(removeCart(item))}
-                style={{ padding: 0 }}
-              >
-                <IoIosClose />
-              </Icon>
-            </div>
+                <Icon
+                  className="remove__product"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dispatch(removeCart(item));
+                  }}
+                  style={{ padding: 0 }}
+                >
+                  <IoIosClose />
+                </Icon>
+              </a>
+            </Link>
           </Animation.Zoom>
         ))}
       </div>

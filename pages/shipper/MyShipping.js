@@ -85,11 +85,15 @@ function MyShipping() {
                 </a>
               </td>
               <td>{order.customer.user.phoneNumber}</td>
-              <td>
+              <td className="flex flex-col items-center">
                 <button onClick={() => setViewOrder(order.orderItems)}>
                   View List item
                 </button>
-                <Link href={`/shipping/${order._id}`}>Manage Progress</Link>
+                <Link href={`/shipping/${order._id}`}>
+                  <a className="flex items-center justify-center rounded-lg bg-amber-600 p-2">
+                    Manage Progress
+                  </a>
+                </Link>
               </td>
             </tr>
           ))}

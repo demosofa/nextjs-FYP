@@ -62,7 +62,6 @@ export default function ManageProfiles() {
         data[index].role = e.target.value;
         return data;
       } catch (error) {
-        console.log(error);
         dispatch(addNotification({ message: error.message }));
       }
     });

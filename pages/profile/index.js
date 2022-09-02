@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { Role } from "../../shared";
-import styles from "../../styles/Home.module.scss";
 import { expireStorage, retryAxios } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
@@ -65,31 +64,31 @@ function MyProfile() {
       ></Loading>
     );
   return (
-    <div className={styles.flex} style={{ flexDirection: "column" }}>
+    <div className="flex" style={{ flexDirection: "column" }}>
       <Head>
         <title>My Profile</title>
         <meta name="description" content="My Profile" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={styles.flex}>
-        <dl className={styles.flex}>
+      <div className="flex">
+        <dl className="flex">
           <dt>Full Name:</dt>
           <dd>{data._doc.fullname}</dd>
         </dl>
-        <div className={styles.card}>
-          <dl className={styles.flex}>
+        <div className="card">
+          <dl className="flex">
             <dt>Date of Birth:</dt>
             <dd>{data._doc.dateOfBirth}</dd>
           </dl>
-          <dl className={styles.flex}>
+          <dl className="flex">
             <dt>Gender:</dt>
             <dd>{data._doc.gender}</dd>
           </dl>
-          <dl className={styles.flex}>
+          <dl className="flex">
             <dt>Phone Number:</dt>
             <dd>{data._doc.phoneNumber}</dd>
           </dl>
-          <dl className={styles.flex}>
+          <dl className="flex">
             <dt>Email:</dt>
             <dd>{data._doc.email}</dd>
           </dl>
@@ -107,10 +106,7 @@ function MyProfile() {
           </a>
         </Link>
       </div>
-      <div
-        className={`${styles.card} manage_table`}
-        style={{ maxWidth: "100%" }}
-      >
+      <div className={`card manage_table`} style={{ maxWidth: "100%" }}>
         <table>
           <thead>
             <tr>
