@@ -40,12 +40,9 @@ class AdminController {
   };
 
   income = async (req, res) => {
-    const date = new Date();
-    const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
     const previousMonth = new Date(
-      new Date().setMonth(lastMonth.getMonth() - 1)
+      new Date().setMonth(new Date().getMonth() - 2)
     );
-
     try {
       const income = await this.unit.Order.aggregate()
         .match({ createdAt: { $gte: previousMonth } })
@@ -64,30 +61,54 @@ class AdminController {
     }
   };
 
-  topSold = async (req, res) => {
-    const date = new Date();
-    const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
+  profit = async (req, res) => {
     const previousMonth = new Date(
-      new Date().setMonth(lastMonth.getMonth() - 1)
+      new Date().setMonth(new Date().getMonth() - 2)
+    );
+    try {
+      const profit = await this.unit.Order.aggregate()
+        .match({ createdAt: { $gte: previousMonth }, status: "paid" })
+        .project({
+          month: { $month: "$createdAt" },
+          profit: "$total",
+        })
+        .group({ _id: "$month", total: { $sum: "$profit" } })
+        .sort({ _id: 1 });
+      return res.status(200).json(profit);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  };
+
+  topSold = async (req, res) => {
+    const previousMonth = new Date(
+      new Date().setMonth(new Date().getMonth() - 2)
     );
     try {
       const total = await this.unit.OrderItem.aggregate([
         { $match: { createdAt: { $gte: previousMonth } } },
         {
           $project: {
-            month: { $month: "$createdAt" },
-            sales: "$quantity",
+            productId: 1,
             title: 1,
             image: 1,
+            sales: "$quantity",
           },
         },
         {
           $group: {
             _id: "$productId",
+            image: { $last: "$image" },
+            title: { $last: "$title" },
             total: { $sum: "$sales" },
           },
         },
-      ]);
+        {
+          $sort: {
+            total: -1,
+          },
+        },
+      ]).limit(10);
       return res.status(200).json(total);
     } catch (error) {
       return res.status(500).json(error);

@@ -76,7 +76,6 @@ function ShippingProgress() {
   };
 
   const handleCheckStep = (value) => {
-    console.log(value);
     if (value === "arrived") {
       if (auth === Role.guest) {
         setShowScanner(true);
@@ -108,7 +107,7 @@ function ShippingProgress() {
       ></Loading>
     );
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center">
       <Head>
         <title>Shipping Progress</title>
         <meta name="description" content="Shipping Progress" />
@@ -119,7 +118,9 @@ function ShippingProgress() {
         pass={order.status}
         onResult={handleCheckStep}
       ></ProgressBar>
-      {showQR !== null && <img src={showQR} alt="QR code"></img>}
+      {showQR !== null && (
+        <img className="w-40" src={showQR} alt="QR code"></img>
+      )}
       {showScanner && (
         <div>
           <button onClick={() => setShowScanner((prev) => !prev)}>

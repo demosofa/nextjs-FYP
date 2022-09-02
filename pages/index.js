@@ -59,8 +59,8 @@ export default function Home({ products, categories, pageCounted }) {
 
       <main className={styles.main}>
         <div className="trending"></div>
-        <div className={styles.grid}>
-          <Animation.Fade className={styles.card}>
+        <div className="grid">
+          <Animation.Fade className="card">
             {categories?.map((category) => (
               <Link
                 key={category._id}
@@ -71,8 +71,8 @@ export default function Home({ products, categories, pageCounted }) {
             ))}
           </Animation.Fade>
         </div>
-        <div className={styles.grid}>
-          <Animation.Zoom className={styles.card}>
+        <div className="grid">
+          <Animation.Zoom className="card">
             {lstProduct?.map((item) => (
               <Link href={`/overview/${item._id}`} key={item.title}>
                 <a>

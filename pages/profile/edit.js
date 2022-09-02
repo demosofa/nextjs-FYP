@@ -66,7 +66,7 @@ function EditProfile() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Form.Title style={{ fontSize: "large" }}>{data.fullname}</Form.Title>
-      <div className={styles.card} style={{ maxWidth: "none" }}>
+      <div className="card" style={{ maxWidth: "none" }}>
         <Form.Item>
           <Form.Title>Date of Birth</Form.Title>
           <Form.Input

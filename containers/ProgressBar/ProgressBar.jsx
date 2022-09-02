@@ -6,11 +6,16 @@ export default function ProgressBar({
   steps = [{ title: "", icon: null, allowed: false }],
   setSteps = new Function(),
   onResult = new Function(),
+  ...props
 }) {
   const [progress, setProgress] = useState(() =>
     steps.map((item) => ({ ...item, active: false }))
   );
+  const [targetIndex, setTargetIndex] = useState(() =>
+    steps.findIndex((item) => item.title === pass)
+  );
   const setNewProgress = (index) => {
+    setTargetIndex(index);
     setProgress((prev) => {
       let newArr = JSON.parse(JSON.stringify(prev));
       newArr[index].active = true;
@@ -21,11 +26,9 @@ export default function ProgressBar({
     if (step.allowed)
       if (index - 1 >= 0) {
         if (progress[index - 1].active) {
-          onResult(progress[index].title);
           setNewProgress(index);
         }
       } else if (index === 0) {
-        onResult(progress[index].title);
         setNewProgress(index);
       }
   };
@@ -35,7 +38,10 @@ export default function ProgressBar({
       for (let i = 0; i <= step; i++) setNewProgress(i);
     }
   }, [pass]);
-  useEffect(() => setSteps(progress), [progress]);
+  useEffect(() => {
+    setSteps(progress);
+    onResult(progress[targetIndex].title);
+  }, [progress]);
   return (
     <div id={styles.steps}>
       {progress.map((step, index) => {
@@ -45,6 +51,7 @@ export default function ProgressBar({
             className={`${styles.step} ${step.active && styles.active}`}
             data-desc={step.title}
             onClick={() => handleComplete(step, index)}
+            {...props}
           >
             {(step.icon && <Icon>{step.icon}</Icon>) || index + 1}
           </div>
@@ -53,3 +60,5 @@ export default function ProgressBar({
     </div>
   );
 }
+
+ProgressBar.Step = function ProgressStep({}) {};

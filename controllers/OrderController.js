@@ -72,7 +72,18 @@ class OrderController {
   addOrder = async (req, res) => {
     const { products, ...others } = req.body;
     const orderItems = await Promise.all(
-      products.map((product) => this.unit.OrderItem.create(product))
+      products.map(async (product) => {
+        const reduce = parseInt(`-${product.quantity}`);
+        if (product.variationId)
+          await this.unit.Variation.updateById(product.variationId, {
+            $inc: { quantity: reduce },
+          });
+        else
+          await this.unit.Product.updateById(product.productId, {
+            $inc: { quantity: reduce },
+          });
+        return this.unit.OrderItem.create(product);
+      })
     );
     const created = await this.unit.Order.create({
       ...others,
@@ -121,8 +132,25 @@ class OrderController {
     });
     return res.status(200).end();
   };
-  delete = async (req, res) => {
-    const deleted = await this.unit.Order.deleteById(req.query.id);
+  cancelOrder = async (req, res) => {
+    await this.unit.Order.getById(req.query.id)
+      .select("orderItems")
+      .populate("orderItems")
+      .then(({ orderItems }) =>
+        Promise.all(
+          orderItems.map(async ({ productId, variationId, quantity }) => {
+            if (variationId)
+              return this.unit.Variation.updateById(variationId, {
+                $inc: { quantity },
+              });
+            else
+              return this.unit.Product.updateById(productId, {
+                $inc: { quantity },
+              });
+          })
+        )
+      );
+    await this.unit.Order.deleteById(req.query.id);
     return res.status(200).end();
   };
 }

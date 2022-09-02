@@ -9,4 +9,3 @@ export { default as retryAxios } from "./retryAxios";
 export { default as uploadApi } from "./uploadApi";
 export { default as Validate } from "./Validate";
 export { default as expireStorage } from "./expireStorage";
-// export { default as ablyFE } from "./ablyFE";
