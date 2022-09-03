@@ -48,9 +48,10 @@ export default function ProductCRUD({ value }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    router.query = query;
     router.replace({ pathname: router.pathname, query });
   }, [query]);
+
+  useEffect(() => setProducts(value.products), [value]);
 
   const handleStatus = async (e, index) => {
     retryAxios(axios);

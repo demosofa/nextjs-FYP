@@ -37,10 +37,16 @@ export default function UpdateProduct({ value }) {
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { _id, description, sale, time } = product;
+    const { _id, description, quantity, sale, time } = product;
     retryAxios(axios);
     try {
-      await axios.put(`${LocalApi}/product`, { _id, description, sale, time });
+      await axios.put(`${LocalApi}/product`, {
+        _id,
+        description,
+        quantity,
+        sale,
+        time,
+      });
       router.back();
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
@@ -64,6 +70,15 @@ export default function UpdateProduct({ value }) {
         />
       </Form.Item>
       <Form.Item>
+        <Form.Title>Quantity</Form.Title>
+        <Form.Input
+          value={product.quantity}
+          onChange={(e) =>
+            setProduct((prev) => ({ ...prev, quantity: e.target.value }))
+          }
+        ></Form.Input>
+      </Form.Item>
+      <Form.Item>
         <Form.Title>Sale Price</Form.Title>
         <Form.Input
           value={product.sale}
@@ -82,10 +97,10 @@ export default function UpdateProduct({ value }) {
           }
         ></Form.Input>
       </Form.Item>
-      <div className={styles.card} onClick={() => setToggle("image")}>
+      <div className="card" onClick={() => setToggle("image")}>
         Update Product Image
       </div>
-      <div className={styles.card} onClick={() => setToggle("variation")}>
+      <div className="card" onClick={() => setToggle("variation")}>
         Update Product Variation
       </div>
       {(toggle !== null && toggle === "image" && (
