@@ -30,12 +30,14 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function Overview({ product }) {
-  const [image, setImage] = useState();
+  const [targetImage, setTargetImage] = useState(product.images[0].url);
   const [quantity, setQuantity] = useState(1);
   const [options, setOptions] = useState([]);
   const targetVariation = useMemo(() => {
     const index = product.variations.findIndex((item) =>
-      item.types.every((value) => options.includes(value.name))
+      item.types.every((value) =>
+        options.some((opt) => opt.includes(value.name))
+      )
     );
     return product.variations[index];
   }, [options, product.variations]);
@@ -45,12 +47,19 @@ export default function Overview({ product }) {
   const dispatch = useDispatch();
   const handleAddToCart = () => {
     let { _id, title, images, price } = product;
-    if (targetVariation) price = targetVariation.price;
+    let variationId = null;
+    let variationImage = null;
+    if (targetVariation) {
+      variationId = targetVariation._id;
+      price = targetVariation.price;
+      variationImage = targetVariation.image?.url;
+    }
     dispatch(
       addCart({
         productId: _id,
+        variationId,
         title,
-        image: image?.url || images[0].url,
+        image: variationImage || images[0].url,
         options,
         quantity,
         price,
@@ -67,8 +76,7 @@ export default function Overview({ product }) {
 
   useEffect(() => {
     if (targetVariation && targetVariation.image)
-      setImage(targetVariation.image.url);
-    else setImage(product.images[0].url);
+      setTargetImage(targetVariation.image.url);
   }, [options, product.images, targetVariation]);
 
   return (
@@ -81,7 +89,7 @@ export default function Overview({ product }) {
       <div className="container-info">
         <div className="preview-product">
           <ImageMagnifier
-            src={image}
+            src={targetImage}
             style={{ width: "100%", height: "350px" }}
             className="product-img"
           ></ImageMagnifier>
@@ -97,7 +105,7 @@ export default function Overview({ product }) {
                 alt="variation"
                 key={index}
                 src={image.url}
-                onMouseEnter={() => setImage(image.url)}
+                onMouseEnter={() => setTargetImage(image.url)}
               ></img>
             ))}
           </Slider>
@@ -134,7 +142,7 @@ export default function Overview({ product }) {
                   return (
                     <div key={item._id} style={{ width: "fit-content" }}>
                       <Checkbox.Item
-                        value={item.name}
+                        value={`${variant.name}: ${item.name}`}
                         defaultChecked={index === 0}
                       >
                         {item.name}
@@ -146,29 +154,37 @@ export default function Overview({ product }) {
             );
           })}
 
-          <Container.Flex
-            style={{
-              alignItems: "center",
-              gap: "10px",
-              justifyContent: "center",
-            }}
-          >
-            <Increment
-              value={quantity}
-              setValue={setQuantity}
-              style={{ flex: 1 }}
-            />
-            <button
-              style={{ flex: 1 }}
-              className="btn-add-to-cart"
-              onClick={handleAddToCart}
+          {(!targetVariation && product.quantity > 0) ||
+          targetVariation?.quantity > 0 ? (
+            <Container.Flex
+              style={{
+                alignItems: "center",
+                gap: "10px",
+                justifyContent: "center",
+              }}
             >
-              Add to Cart
-            </button>
-            <button style={{ flex: 1 }} className="btn-add-to-cart">
-              Order
-            </button>
-          </Container.Flex>
+              <Increment
+                value={quantity}
+                setValue={setQuantity}
+                max={
+                  targetVariation ? targetVariation.quantity : product.quantity
+                }
+                style={{ flex: 1 }}
+              />
+              <button
+                style={{ flex: 1 }}
+                className="btn-add-to-cart"
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </button>
+              <button style={{ flex: 1 }} className="btn-add-to-cart">
+                Order
+              </button>
+            </Container.Flex>
+          ) : (
+            <span>Out of Stock right now</span>
+          )}
         </div>
       </div>
 

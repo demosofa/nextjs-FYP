@@ -7,6 +7,7 @@ const AdminRole = [
   { title: "List pending Order", path: "/shipper" },
   { title: "My Shipping", path: "/shipper/MyShipping" },
   { title: "Manage Account", path: "/admin/profiles" },
+  { title: "Dashboard", path: "/admin/dashboard" },
 ];
 
 export { AdminRole };

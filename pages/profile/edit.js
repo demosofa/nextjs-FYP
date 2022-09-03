@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import { Checkbox, Form } from "../../components";
 import { retryAxios } from "../../utils";
 import { withAuth } from "../../helpers";
-import styles from "../../styles/Home.module.scss";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import axios from "axios";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -47,8 +47,13 @@ export default function EditProfile({ profile }) {
 
   return (
     <Form onSubmit={handleSubmit}>
+      <Head>
+        <title>Edit My Profile</title>
+        <meta name="description" content="Edit My Profile" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Form.Title style={{ fontSize: "large" }}>{data.fullname}</Form.Title>
-      <div className={styles.card} style={{ maxWidth: "none" }}>
+      <div className="card" style={{ maxWidth: "none" }}>
         <Form.Item>
           <Form.Title>Date of Birth</Form.Title>
           <Form.Input
