@@ -30,4 +30,14 @@ const Order = new Schema(
   { timestamps: true }
 );
 
+Order.post(
+  "findOneAndDelete",
+  { document: false, query: true },
+  async function (doc) {
+    await mongoose.models.OrderItem.deleteMany({
+      _id: { $in: doc.orderItems },
+    });
+  }
+);
+
 module.exports = mongoose.models.Order || mongoose.model("Order", Order);

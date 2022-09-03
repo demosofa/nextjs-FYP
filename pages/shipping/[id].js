@@ -9,6 +9,7 @@ import { ProgressBar, QRScanner } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useState } from "react";
 import { Role } from "../../shared";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -78,7 +79,6 @@ export default function ShippingProgress({ initData, auth }) {
   };
 
   const handleCheckStep = (value) => {
-    console.log(value);
     if (value === "arrived") {
       if (auth === Role.guest) {
         setShowScanner(true);
@@ -110,13 +110,20 @@ export default function ShippingProgress({ initData, auth }) {
       ></Loading>
     );
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center">
+      <Head>
+        <title>Shipping Progress</title>
+        <meta name="description" content="Shipping Progress" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <ProgressBar
         steps={steps}
         pass={order.status}
         onResult={handleCheckStep}
       ></ProgressBar>
-      {showQR !== null && <img src={showQR} alt="QR code"></img>}
+      {showQR !== null && (
+        <img className="w-40" src={showQR} alt="QR code"></img>
+      )}
       {showScanner && (
         <div>
           <button onClick={() => setShowScanner((prev) => !prev)}>

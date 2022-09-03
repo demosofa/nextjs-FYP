@@ -6,6 +6,10 @@
 @import "./login.scss";
 @import "./mixin.scss";
 
+// @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --grey-one: #eaeaf0;
   --grey-two: #2e3f59;
@@ -31,6 +35,74 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.grid {
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // flex-wrap: wrap;
+  // max-width: 800px;
+  @include grid(15px)
+}
+
+// .flex{
+//   @include flex(20px);
+// 	&.column{
+// 		flex-direction: column;
+// 	}
+// 	&.wrap{
+// 		flex-wrap: wrap;
+// 	}
+// }
+
+.center{
+	&_col{
+		align-items: center;
+	}
+	&_row{
+		justify-content: center;
+	}
+}
+
+.card {
+  // margin: 1rem;
+  // padding: 1.5rem;
+  display: flex;
+	flex-direction: column;
+	background-color: #FFF;
+	overflow: hidden;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  max-width: 300px;
+  box-shadow: 0 5px 10px 0 rgba(#000, .15);
+  padding: 12px 7px;
+}
+
+.card:hover,
+.card:focus,
+.card:active {
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.card p {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.card img{
+  width: 100%;
 }
 
 .add_file__btn{
@@ -106,6 +178,10 @@ a {
 		td {
 			position: relative;
 			color: black;
+			img {
+				max-width: 140px;
+				max-height: 100px;
+			};
 			&:hover {
 				&:before {
 					content: "";
@@ -155,3 +231,27 @@ a {
 		text-align: left;
 	}
 }
+
+.skeleton {
+	background-color: #e2e5e7;
+	// The shine that's going to move across the skeleton:
+	background-image:			
+			linear-gradient(
+				90deg, 
+				rgba(#fff, 0), 
+				rgba(#fff, 0.5),
+				rgba(#fff, 0)
+			);
+	background-size: 40px 100%; // width of the shine
+	background-repeat: no-repeat; // No need to repeat the shine effect
+	background-position: left -40px top 0; // Place shine on the left side, with offset on the left based on the width of the shine - see background-size
+	animation: shine 1s ease infinite; // increase animation time to see effect in 'slow-mo'
+}
+
+@keyframes shine {
+	to {
+		// Move shine from left to right, with offset on the right based on the width of the shine - see background-size
+		background-position: right -40px top 0;
+	}
+}
+

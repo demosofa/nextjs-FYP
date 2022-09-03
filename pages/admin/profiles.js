@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Loading } from "../../components";
 import { retryAxios } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -50,13 +51,17 @@ export default function ManageProfiles() {
         data[index].role = e.target.value;
         return data;
       } catch (error) {
-        console.log(error);
         dispatch(addNotification({ message: error.message }));
       }
     });
   };
   return (
     <div className="manage_table">
+      <Head>
+        <title>Manage Profiles</title>
+        <meta name="description" content="Manage Profiles" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <table>
         <thead>
           <tr>

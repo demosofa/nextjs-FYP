@@ -1,4 +1,5 @@
 export default interface IGenericRepository<T> {
+  aggregate(pipeline: object, options?: object): any;
   countData(filter: object, options?: object): any;
   getById(id: string): any;
   getOne(filter: object): any;
