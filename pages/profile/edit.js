@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { Checkbox, Form, Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { retryAxios } from "../../utils";
-import styles from "../../styles/Home.module.scss";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Role } from "../../shared";
 import Head from "next/head";
@@ -26,12 +25,13 @@ function EditProfile() {
       const res = await axiosInstance({
         url: `${LocalApi}/profile`,
       });
-      setData(res.data._doc);
+      setData(res.data);
     },
     roles: [Role.admin, Role.guest, Role.shipper],
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     retryAxios(axios);
     try {
       await axios.put(`${LocalApi}/profile`, data);
