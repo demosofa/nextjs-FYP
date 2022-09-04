@@ -13,12 +13,22 @@ export default function Increment({
   ...props
 }) {
   const [quantity, setQuantity] = useState(value);
+  const [input, setInput] = useState(value);
 
   useEffect(() => {
-    if (quantity > max) setQuantity(max);
-    else if (quantity < min) setQuantity(min);
-    else setValue(quantity);
-  }, [quantity, min, max]);
+    if (quantity > max) {
+      setQuantity(max);
+      setInput(max);
+    } else if (quantity < min) {
+      setQuantity(min);
+      setInput(min);
+    }
+  }, [min, max]);
+
+  useEffect(() => {
+    setInput(quantity);
+    setValue(quantity);
+  }, [quantity]);
 
   return (
     <div className={styles.set_quantity} {...props}>
@@ -36,7 +46,22 @@ export default function Increment({
         />
       </Icon>
 
-      <div className={styles.quantity}>{quantity}</div>
+      <input
+        className={styles.quantity}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            if (parseInt(input) <= max && parseInt(input) >= min)
+              setQuantity(parseInt(input));
+            else setInput(quantity);
+          }
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      ></input>
 
       <Icon style={{ width: "50px", height: "50px" }}>
         <AiOutlinePlus

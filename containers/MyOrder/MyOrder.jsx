@@ -58,7 +58,10 @@ export default function MyOrder() {
   };
 
   return (
-    <div className="card manage_table w-full" style={{ maxWidth: "none" }}>
+    <div
+      className="card manage_table relative w-full"
+      style={{ maxWidth: "none" }}
+    >
       {!data || error ? (
         <Loading
           style={{

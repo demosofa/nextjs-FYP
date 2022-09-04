@@ -101,80 +101,19 @@ function CreateForm() {
         }}
       >
         <Form.Title style={{ fontSize: "20px" }}>Create Product</Form.Title>
-
-        <Container.Grid style={{ gap: "40px" }}>
-          <Container.Flex
-            style={{ flex: 1.8, flexDirection: "column", gap: "25px" }}
-          >
-            <Container.Flex style={{ justifyContent: "space-between" }}>
-              <Form.Item>
-                <Form.Title>Title</Form.Title>
-                <Form.Input
-                  value={input.title}
-                  onChange={(e) =>
-                    setInput((prev) => ({ ...prev, title: e.target.value }))
-                  }
-                />
-              </Form.Item>
-            </Container.Flex>
-
+        <Container.Flex
+          style={{ flex: 1.8, flexDirection: "column", gap: "25px" }}
+        >
+          <Container.Flex style={{ justifyContent: "space-between" }}>
             <Form.Item>
-              <Form.Title>Description</Form.Title>
-              <Form.TextArea
-                value={input.description}
+              <Form.Title>Title</Form.Title>
+              <Form.Input
+                value={input.title}
                 onChange={(e) =>
-                  setInput((prev) => ({ ...prev, description: e.target.value }))
+                  setInput((prev) => ({ ...prev, title: e.target.value }))
                 }
               />
             </Form.Item>
-
-            <FileUpload
-              prevFiles={input.images}
-              setPrevFiles={(images) =>
-                setInput((prev) => ({ ...prev, images }))
-              }
-              style={{ height: "200px" }}
-            >
-              <FileUpload.Show></FileUpload.Show>
-              <FileUpload.Input
-                id="file_input"
-                multiple
-                style={{
-                  display: "none",
-                }}
-              >
-                <label htmlFor="file_input" className="add_file__btn">
-                  <AiOutlinePlus style={{ width: "30px", height: "30px" }} />
-                </label>
-              </FileUpload.Input>
-            </FileUpload>
-
-            <Variant />
-            <Form.Button
-              onClick={() =>
-                dispatch(
-                  editAllVariations({
-                    price: input.price,
-                    quantity: input.quantity,
-                  })
-                )
-              }
-            >
-              Apply Price and Quantity to all Variations
-            </Form.Button>
-            <Variation />
-          </Container.Flex>
-
-          <Container.Flex
-            style={{
-              flex: 1,
-              flexDirection: "column",
-              gap: "25px",
-              position: "sticky",
-              top: 0,
-              maxHeight: "300px",
-            }}
-          >
             <Form.Item>
               <Form.Title>Status</Form.Title>
               <Select
@@ -189,20 +128,9 @@ function CreateForm() {
                 ]}
               />
             </Form.Item>
+          </Container.Flex>
 
-            <Form.Item>
-              <Form.Title>Manufacturer</Form.Title>
-              <Form.Input
-                value={input.manufacturer}
-                onChange={(e) =>
-                  setInput((prev) => ({
-                    ...prev,
-                    manufacturer: e.target.value,
-                  }))
-                }
-              />
-            </Form.Item>
-
+          <Container.Flex style={{ justifyContent: "space-between" }}>
             <Form.Item>
               <Form.Title>Category</Form.Title>
               <SelectCategory
@@ -219,30 +147,95 @@ function CreateForm() {
                 }
               />
             </Form.Item>
-
-            <Form.Item>
-              <Form.Title>Price</Form.Title>
-              <Form.Input
-                value={input.price}
-                onChange={(e) =>
-                  setInput((prev) => ({ ...prev, price: e.target.value }))
-                }
-              ></Form.Input>
-            </Form.Item>
-
-            <Form.Item>
-              <Form.Title>Quantity</Form.Title>
-              <Form.Input
-                value={input.quantity}
-                onChange={(e) =>
-                  setInput((prev) => ({ ...prev, quantity: e.target.value }))
-                }
-              ></Form.Input>
-            </Form.Item>
           </Container.Flex>
-        </Container.Grid>
 
-        {JSON.stringify(input)}
+          <Form.Item style={{ flexDirection: "column" }}>
+            <Form.Title>Description</Form.Title>
+            <Form.TextArea
+              value={input.description}
+              onChange={(e) =>
+                setInput((prev) => ({ ...prev, description: e.target.value }))
+              }
+            />
+          </Form.Item>
+
+          <Container.Flex
+            style={{
+              justifyContent: "space-between",
+              gap: "50px",
+            }}
+          >
+            <FileUpload
+              prevFiles={input.images}
+              setPrevFiles={(images) =>
+                setInput((prev) => ({ ...prev, images }))
+              }
+              style={{ height: "200px", width: "100%" }}
+            >
+              <FileUpload.Show></FileUpload.Show>
+              <FileUpload.Input
+                id="file_input"
+                multiple
+                style={{
+                  display: "none",
+                }}
+              >
+                <label htmlFor="file_input" className="add_file__btn">
+                  <AiOutlinePlus style={{ width: "30px", height: "30px" }} />
+                </label>
+              </FileUpload.Input>
+            </FileUpload>
+            <Container.Flex style={{ flexDirection: "column" }}>
+              <Form.Item>
+                <Form.Title>Manufacturer</Form.Title>
+                <Form.Input
+                  value={input.manufacturer}
+                  onChange={(e) =>
+                    setInput((prev) => ({
+                      ...prev,
+                      manufacturer: e.target.value,
+                    }))
+                  }
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Form.Title>Price</Form.Title>
+                <Form.Input
+                  value={input.price}
+                  onChange={(e) =>
+                    setInput((prev) => ({ ...prev, price: e.target.value }))
+                  }
+                ></Form.Input>
+              </Form.Item>
+
+              <Form.Item>
+                <Form.Title>Quantity</Form.Title>
+                <Form.Input
+                  value={input.quantity}
+                  onChange={(e) =>
+                    setInput((prev) => ({ ...prev, quantity: e.target.value }))
+                  }
+                ></Form.Input>
+              </Form.Item>
+            </Container.Flex>
+          </Container.Flex>
+
+          <Variant />
+          <Form.Button
+            onClick={() =>
+              dispatch(
+                editAllVariations({
+                  price: input.price,
+                  quantity: input.quantity,
+                })
+              )
+            }
+          >
+            Apply Price and Quantity to all Variations
+          </Form.Button>
+          <Variation />
+        </Container.Flex>
 
         <Form.Item style={{ justifyContent: "flex-start" }}>
           <Form.Submit>Submit</Form.Submit>

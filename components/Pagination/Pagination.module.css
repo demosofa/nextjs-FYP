@@ -51,9 +51,9 @@
   justify-content: center;
   align-items: center;
 }
-
+/* 
 .arrow {
-}
+} */
 
 .arrow::before {
   position: relative;

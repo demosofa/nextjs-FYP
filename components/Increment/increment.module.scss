@@ -3,10 +3,11 @@
   @include flex(0, row, center);
   & > .quantity{
     width: 60px;
-    height: 100%;
     padding: 10px 0;
     @include flex(0, row, center);
     background-color: white;
+    text-align: center;
+    border-radius: 8px;
   }
   & > .btn {
     margin: 0;

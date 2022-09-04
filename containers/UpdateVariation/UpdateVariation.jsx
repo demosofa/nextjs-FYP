@@ -67,17 +67,7 @@ export default function UpdateVariation({ productId, setToggle }) {
     }
   };
 
-  if (loading)
-    return (
-      <Loading
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: `translate(-50%, -50%)`,
-        }}
-      ></Loading>
-    );
+  if (loading) return <Loading.Text />;
   return (
     <div style={{ overflowX: "auto" }}>
       <table className="table">

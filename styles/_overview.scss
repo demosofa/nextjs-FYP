@@ -8,6 +8,9 @@
     width: 100%;
     padding: 15px;
     @include flex(30px, row, true);
+    @include mq("tablet"){
+      flex-direction: column;
+    }
 
     .preview-product {
       flex: 1;
@@ -38,13 +41,19 @@
 
       & .btn-add-to-cart{
         flex: 1;
-        height: 50px;
-        border-radius: 7px;
+        height: 65px;
+        border-radius: 8px;
         background-color: orangered;
         color: hsl(0, 0%, 90%);
         font-family: "Open Sans", sans-serif;
         font-size: larger;
         font-weight: 600;
+        @include mq("tablet-wide"){
+          font-size: medium
+        }
+        @include mq("tablet"){
+          font-size: small
+        }
       }
     }
   }
