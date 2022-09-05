@@ -4,7 +4,7 @@ import { Animation, Form, Icon, Increment } from "../../components";
 import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import { retryAxios } from "../../utils";
+import { retryAxios, Validate } from "../../utils";
 import axios from "axios";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useRouter } from "next/router";
@@ -44,6 +44,7 @@ export default function Cart() {
     e.preventDefault();
     retryAxios(axios);
     try {
+      new Validate(address).isEmpty().isNotSpecial();
       await axios.post(`${LocalApi}/order`, { ...cart, address });
       dispatch(clearCart());
       setDisplay(false);

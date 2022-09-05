@@ -53,7 +53,7 @@ export default function Shipper({ lstOrder }) {
       onError(err, key, config) {
         if (err.status === 300) return router.back();
         else if (err.status === 401) return router.push("/login");
-        else return dispatch(addNotification({ message: err }));
+        else return dispatch(addNotification({ message: err.message }));
       },
     }
   );
@@ -97,13 +97,13 @@ export default function Shipper({ lstOrder }) {
             </tr>
           </thead>
           <tbody>
-            {lstOrder.map((order) => (
+            {orders.map((order) => (
               <tr key={order._id}>
                 <td>
                   <Checkbox.Item value={order._id}></Checkbox.Item>
                 </td>
                 <td>{order._id}</td>
-                <td>{order.total}</td>
+                <td>${order.total}</td>
                 <td>
                   <Form.Link
                     target="_blank"

@@ -16,11 +16,13 @@ class UserController {
       .select("orders")
       .populate({
         path: "orders",
-        populate: {
-          path: "shipper",
-          select: "username",
-        },
-        populate: "orderItems",
+        populate: [
+          {
+            path: "shipper",
+            select: "username",
+          },
+          "orderItems",
+        ],
         options: {
           skip: (page - 1) * 10,
           limit: 10,
