@@ -25,7 +25,11 @@ Comment.post(
         },
       }
     );
-    await mongoose.models.Comment.deleteMany({ _id: { $in: doc.replys } });
+    await Promise.all(
+      doc.replys.map((reply) =>
+        mongoose.models.Comment.findByIdAndDelete(reply._id)
+      )
+    );
     await mongoose.models.Comment.updateOne(
       { replys: doc._id },
       { $pull: { replys: doc._id } }

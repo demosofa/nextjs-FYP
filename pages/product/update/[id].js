@@ -3,7 +3,6 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 import { Form, Loading } from "../../../components";
 import { UpdateImage, UpdateVariation } from "../../../containers";
-import styles from "../../../styles/Home.module.scss";
 import dynamic from "next/dynamic";
 import { useAuthLoad } from "../../../hooks";
 import { expireStorage, retryAxios } from "../../../utils";
@@ -75,7 +74,7 @@ function UpdateProduct() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Form.Title style={{ fontSize: "20px" }}>Update Product</Form.Title>
-      <Form.Item>
+      <Form.Item style={{ flexDirection: "column" }}>
         <Form.Title>Description</Form.Title>
         <Form.TextArea
           value={product.description}
@@ -83,6 +82,7 @@ function UpdateProduct() {
             setProduct((prev) => ({ ...prev, description: e.target.value }))
           }
         />
+        <label>{`${product.description.length}/1000`}</label>
       </Form.Item>
       <Form.Item>
         <Form.Title>Quantity</Form.Title>

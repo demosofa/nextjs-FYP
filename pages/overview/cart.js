@@ -4,7 +4,7 @@ import { Animation, Form, Icon, Increment } from "../../components";
 import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import { expireStorage, retryAxios } from "../../utils";
+import { expireStorage, retryAxios, Validate } from "../../utils";
 import axios from "axios";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useRouter } from "next/router";
@@ -45,6 +45,7 @@ export default function Cart() {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
+      new Validate(address).isEmpty().isNotSpecial();
       await axios.post(
         `${LocalApi}/order`,
         { ...cart, address },
