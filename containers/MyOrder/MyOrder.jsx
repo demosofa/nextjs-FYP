@@ -32,7 +32,7 @@ export default function MyOrder() {
       onError(err, key, config) {
         if (err.status === 300) return router.back();
         else if (err.status === 401) return router.push("/login");
-        else return dispatch(addNotification({ message: err }));
+        else return dispatch(addNotification({ message: err.message }));
       },
     }
   );
@@ -79,6 +79,7 @@ export default function MyOrder() {
               <th>Id</th>
               <th>Status</th>
               <th>Order Time</th>
+              <th>Cost</th>
               <th>Shipper</th>
               <th>Action</th>
             </tr>
@@ -90,6 +91,7 @@ export default function MyOrder() {
                 <td>{order._id}</td>
                 <td>{order.status}</td>
                 <td>{order.createdAt}</td>
+                <td>${order.total}</td>
                 <td>{order.shipper?.username}</td>
                 <td>
                   <button onClick={() => setViewOrder(order.orderItems)}>

@@ -10,17 +10,18 @@ const Category = new Schema(
   { timestamps: true }
 );
 
-Category.post(
-  ["findOnedAndDelete", "deleteMany"],
-  { document: false, query: true },
-  async function (doc) {
-    console.log(this);
-    await mongoose.models.Product.deleteOne({ categories: doc._id });
-    await mongoose.models.Category.deleteMany({
-      _id: { $in: doc.subCategories },
-    });
-  }
-);
+Category.post("findOneAndDelete", async function (doc) {
+  await mongoose.models.Product.deleteOne({ categories: doc._id });
+  await Promise.all(
+    doc.subCategories.map((sub) =>
+      mongoose.models.Category.findByIdAndDelete(sub._id)
+    )
+  );
+  await mongoose.models.Category.updateOne(
+    { subCategories: doc._id },
+    { $pull: { subCategories: doc._id } }
+  );
+});
 
 module.exports =
   mongoose.models.Category || mongoose.model("Category", Category);

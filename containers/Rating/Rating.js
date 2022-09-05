@@ -22,9 +22,10 @@ export default function Rating({ url }) {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      if (!response.data) return { _id: "", rating: 0 };
       return response.data;
     }
-    return 0;
+    return { _id: "", rating: 0 };
   };
   const dispatch = useDispatch();
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function Rating({ url }) {
     onError(err, key, config) {
       if (err.status === 300) return router.back();
       else if (err.status === 401) return router.push("/login");
-      else return dispatch(addNotification({ message: err }));
+      else return dispatch(addNotification({ message: err.message }));
     },
   });
 
@@ -61,7 +62,7 @@ export default function Rating({ url }) {
       });
   };
 
-  if (data === null || data === undefined || error) return <Loading.Text />;
+  if (!data || error) return <Loading.Text />;
   return (
     <Checkbox
       type="radio"

@@ -32,21 +32,11 @@ export default function ManageProfiles() {
       onError(err, key, config) {
         if (err.status === 300) return router.back();
         else if (err.status === 401) return router.push("/login");
-        else return dispatch(addNotification({ message: err }));
+        else return dispatch(addNotification({ message: err.message }));
       },
     }
   );
-  if (!data || error)
-    return (
-      <Loading
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: `translate(-50%, -50%)`,
-        }}
-      ></Loading>
-    );
+
   const handleChangeRole = (e, index) => {
     mutate(async (data) => {
       retryAxios(axios);
@@ -66,6 +56,19 @@ export default function ManageProfiles() {
       }
     });
   };
+
+  if (!data || error)
+    return (
+      <Loading
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%)`,
+        }}
+      ></Loading>
+    );
+
   return (
     <div className="manage_table">
       <Head>

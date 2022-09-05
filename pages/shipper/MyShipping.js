@@ -36,7 +36,7 @@ function MyShipping() {
       onError(err, key, config) {
         if (err.status === 300) return router.back();
         else if (err.status === 401) return router.push("/login");
-        else return dispatch(addNotification({ message: err }));
+        else return dispatch(addNotification({ message: err.message }));
       },
     }
   );
@@ -66,6 +66,7 @@ function MyShipping() {
             <th>Status</th>
             <th>Address</th>
             <th>Phone Number</th>
+            <th>Total Value</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -85,6 +86,7 @@ function MyShipping() {
                 </a>
               </td>
               <td>{order.customer.user.phoneNumber}</td>
+              <td>${order.total}</td>
               <td className="flex flex-col items-center">
                 <button onClick={() => setViewOrder(order.orderItems)}>
                   View List item

@@ -35,10 +35,39 @@ function CreateForm() {
 
   const { device, Devices } = useContext(Media);
 
+  const validateInput = () => {
+    const { title, description, status, manufacturer, price, quantity } = input;
+    Object.entries({
+      title,
+      description,
+      manufacturer,
+      price,
+      quantity,
+    }).forEach((entry) => {
+      switch (entry[0]) {
+        case "title":
+          new Validate(entry[1]).isEmpty().isEnoughLength({ max: 255 });
+          break;
+        case "description":
+          new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
+          break;
+        case "status":
+        case "manufacturer":
+          new Validate(entry[1]).isEmpty();
+          break;
+        case "price":
+        case "quantity":
+          new Validate(entry[1]).isEmpty().isNumber();
+          break;
+      }
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let uploaded;
     try {
+      validateInput();
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
       retryAxios(axios);
       uploaded = await Promise.all(
@@ -53,7 +82,7 @@ function CreateForm() {
       await axios.post(`${LocalApi}/product`, newInput, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-      router.push("/product");
+      router.back();
     } catch (error) {
       const arrPublic_id = uploaded.map((item) => item.public_id);
       await axios.post(`${LocalApi}/destroy`, {
@@ -157,6 +186,7 @@ function CreateForm() {
                 setInput((prev) => ({ ...prev, description: e.target.value }))
               }
             />
+            <label>{`${input.description.length}/1000`}</label>
           </Form.Item>
 
           <Container.Flex
