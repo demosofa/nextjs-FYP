@@ -6,3 +6,4 @@ export { default as user } from "./UserController";
 export { default as comment } from "./CommentController";
 export { default as order } from "./OrderController";
 export { default as admin } from "./AdminController";
+export { default as rate } from "./RateController";

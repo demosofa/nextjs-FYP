@@ -92,7 +92,7 @@ export default function ManageProfiles() {
               </td>
               <td>
                 <div>Email: {profile.user.email}</div>
-                <div>phone Number: {profile.user.phoneNumber}</div>
+                <div>Phone Number: {profile.user.phoneNumber}</div>
               </td>
             </tr>
           ))}

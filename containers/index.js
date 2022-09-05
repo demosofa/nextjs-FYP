@@ -8,3 +8,5 @@ export { default as SelectCategory } from "./SelectCategory/SelectCategory";
 export { default as ProgressBar } from "./ProgressBar/ProgressBar";
 export { default as QRScanner } from "./QRScanner/QRScanner";
 export { default as FeaturedInfo } from "./FeaturedInfo/FeaturedInfo";
+export { default as MyOrder } from "./MyOrder/MyOrder";
+export { default as Rating } from "./Rating/Rating";

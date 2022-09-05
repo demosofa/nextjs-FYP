@@ -128,7 +128,9 @@ Form.ErrorMessage = function FormError({ children, ...restProp }) {
 Form.TextArea = function FormTextArea({ children, ...restProp }) {
   return (
     <textarea
-      className="block w-full resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+      cols="60"
+      rows="15"
+      className="resize-none rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
       {...restProp}
     ></textarea>
   );

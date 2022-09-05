@@ -6,6 +6,12 @@ class UserController {
   }
   getProfile = async (req, res) => {
     const profile = await this.unit.User.getById(req.user.id);
+    if (!profile) return res.status(404).end();
+    return res.status(200).json(profile);
+  };
+  getMyOrder = async (req, res) => {
+    let { page, filter, sort } = req.query;
+    if (!sort) sort = "status";
     const { orders } = await this.unit.Account.getById(req.user.accountId)
       .select("orders")
       .populate({
@@ -15,9 +21,15 @@ class UserController {
           select: "username",
         },
         populate: "orderItems",
+        options: {
+          skip: (page - 1) * 10,
+          limit: 10,
+          sort: {
+            [sort]: -1,
+          },
+        },
       });
-    if (!profile) return res.status(404).end();
-    return res.status(200).json({ ...profile, orders });
+    return res.status(200).json(orders);
   };
   updateProfile = async (req, res) => {
     const profile = await this.unit.User.getById(req.body._id);

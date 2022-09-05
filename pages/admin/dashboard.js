@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { Loading } from "../../components";
 import { FeaturedInfo } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
+import { retryAxios } from "../../utils";
 import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;

@@ -19,6 +19,10 @@ Category.post(
     await mongoose.models.Category.deleteMany({
       _id: { $in: doc.subCategories },
     });
+    await mongoose.models.Category.updateOne(
+      { subCategories: doc._id },
+      { $pull: { subCategories: doc._id } }
+    );
   }
 );
 

@@ -45,7 +45,7 @@ export default class GenericRepository<T> implements IGenericRepository<T> {
     update: UpdateWithAggregationPipeline | UpdateQuery<any>,
     options?: QueryOptions<any>
   ) {
-    return this.context.updateOne(filter, update, options);
+    return this.context.findOneAndUpdate(filter, update, options);
   }
   updateMany(
     filter: FilterQuery<any>,

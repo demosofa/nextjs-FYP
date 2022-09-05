@@ -9,7 +9,7 @@ const Variant = new Schema({
 });
 
 Variant.post("deleteMany", { document: false, query: true }, function (doc) {
-  mongoose.model("VariantOption").deleteMany({ _id: { $in: doc.options } });
+  mongoose.models.VariantOption.deleteMany({ _id: { $in: doc.options } });
 });
 
 module.exports = mongoose.models.Variant || mongoose.model("Variant", Variant);

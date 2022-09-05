@@ -1,6 +1,3 @@
-/* Base setup */
-@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-
 /* Ratings widget */
 .rate {
     display: inline-block;
@@ -12,6 +9,7 @@
     /* Order correctly by floating highest to the right */
     & > label {
         float: right;
+        color: #eee;
         /* The star of the show */
         &:before {
             display: inline-block;
@@ -31,10 +29,10 @@
     }
     /* Click + hover color */
     input:checked ~ label, /* color current and previous stars on checked */
-    label:hover, label:hover ~ label { color: #73B100;  } /* color previous stars on hover */
+    label:hover, label:hover ~ label { color: orange;  } /* color previous stars on hover */
 
     /* Hover highlights */
     input:checked + label:hover, input:checked ~ label:hover, /* highlight current and previous stars */
     input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
-    label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #A6E72D;  } 
+    label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #ffd700;  } 
 }

@@ -7149,6 +7149,13 @@
   dependencies:
     "pify" "^2.3.0"
 
+"read-cache@^1.0.0":
+  "integrity" "sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA=="
+  "resolved" "https://registry.npmjs.org/read-cache/-/read-cache-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "pify" "^2.3.0"
+
 "readable-stream@^3.4.0", "readable-stream@^3.6.0":
   "integrity" "sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA=="
   "resolved" "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.0.tgz"

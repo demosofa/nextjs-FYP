@@ -12,6 +12,7 @@ import {
   CommentRepository,
   ShipperRespository,
   OrderItemRepository,
+  RateRepository,
 } from "../repositories";
 
 class UnitOfWork {
@@ -29,6 +30,7 @@ class UnitOfWork {
     this.File = new FileRepository();
     this.Comment = new CommentRepository();
     this.Shipper = new ShipperRespository();
+    this.Rate = new RateRepository();
   }
 }
 

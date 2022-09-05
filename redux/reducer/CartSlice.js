@@ -41,6 +41,10 @@ const cart = createSlice({
       );
       return clone;
     },
+    clearCart() {
+      localStorage.removeItem("cart");
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(pushCart.fulfilled, (state, action) => {});
@@ -48,6 +52,6 @@ const cart = createSlice({
   },
 });
 
-export const { addCart, editCart, removeCart } = cart.actions;
+export const { addCart, editCart, removeCart, clearCart } = cart.actions;
 
 export default cart.reducer;

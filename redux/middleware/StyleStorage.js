@@ -1,12 +1,12 @@
 import { expireStorage } from "../../utils";
 
-const StyleStorage = (store) => (next) => (action) => {
+const styleStorage = (store) => (next) => (action) => {
   const result = next(action);
   if (action.type?.startsWith("style/")) {
     const styleSate = store.getState().style;
-    expireStorage.setItem("StyleStorage", styleSate);
+    expireStorage.setItem("style", styleSate);
   }
   return result;
 };
 
-export default StyleStorage;
+export default styleStorage;
