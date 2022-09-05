@@ -15,7 +15,7 @@ class AdminController {
         .exec();
       return res.status(200).json(lstProfile);
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ message: error });
     }
   };
 
@@ -26,7 +26,7 @@ class AdminController {
       });
       return res.status(200).end();
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ message: error });
     }
   };
 
@@ -35,7 +35,7 @@ class AdminController {
       await this.unit.Account.deleteById(req.query.id);
       return res.status(200).end();
     } catch (error) {
-      return res.status(500).json(error.message);
+      return res.status(500).json({ message: error });
     }
   };
 

@@ -1,12 +1,14 @@
+import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
 import { expireStorage } from "../../utils";
+import { addCart, removeCart } from "../reducer/cartSlice";
 
-const CartStorage = (store) => (next) => (action) => {
-  const result = next(action);
-  if (action.type?.startsWith("cart/")) {
-    const cartState = store.getState().cart;
-    expireStorage.setItem("CartStorage", cartState, "5m");
-  }
-  return result;
-};
+const cartListenerMiddleware = createListenerMiddleware();
+cartListenerMiddleware.startListening({
+  matcher: isAnyOf(addCart, removeCart),
+  effect: async (action, listenerApi) => {
+    const cartState = listenerApi.getState().cart;
+    expireStorage.setItem("cart", cartState, "5m");
+  },
+});
 
-export default CartStorage;
+export default cartListenerMiddleware;

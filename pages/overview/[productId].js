@@ -4,15 +4,13 @@ import { addCart } from "../../redux/reducer/cartSlice";
 import {
   ImageMagnifier,
   Checkbox,
-  Container,
   ReadMoreLess,
-  Rating,
   Increment,
   Slider,
   Timer,
   Breadcrumb,
 } from "../../components";
-import { Comment } from "../../containers";
+import { Comment, Rating } from "../../containers";
 import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
@@ -112,15 +110,22 @@ export default function Overview({ product }) {
         </div>
         <div className="product-info">
           <label>{product.title}</label>
-
+          <div>
+            <label>{product.rateCount}</label>
+          </div>
           {product.time && <Timer value={product.time} />}
 
-          <Container.Flex style={{ gap: "10px" }}>
+          <div className="flex gap-3">
             <label>Price: </label>
             <div>
-              {targetVariation ? targetVariation.price : product.price} $
+              {targetVariation
+                ? targetVariation.price
+                : product.time
+                ? product.sale
+                : product.price}{" "}
+              $
             </div>
-          </Container.Flex>
+          </div>
 
           {product.variants.map((variant, index) => {
             return (
@@ -156,13 +161,7 @@ export default function Overview({ product }) {
 
           {(!targetVariation && product.quantity > 0) ||
           targetVariation?.quantity > 0 ? (
-            <Container.Flex
-              style={{
-                alignItems: "center",
-                gap: "10px",
-                justifyContent: "center",
-              }}
-            >
+            <div className="flex items-center justify-center gap-3">
               <Increment
                 value={quantity}
                 setValue={setQuantity}
@@ -181,7 +180,7 @@ export default function Overview({ product }) {
               <button style={{ flex: 1 }} className="btn-add-to-cart">
                 Order
               </button>
-            </Container.Flex>
+            </div>
           ) : (
             <span>Out of Stock right now</span>
           )}
@@ -189,18 +188,19 @@ export default function Overview({ product }) {
       </div>
 
       <div>
-        <Container.Flex>
-          <label>Description: </label>
-          <ReadMoreLess style={{ height: "150px" }}>
-            {product.description}
-          </ReadMoreLess>
-        </Container.Flex>
+        <dl>
+          <dt>Description: </dt>
+          <dd>
+            <ReadMoreLess style={{ height: "150px" }}>
+              <p className="text-ellipsis whitespace-pre-wrap leading-[1.7]">
+                {product.description}
+              </p>
+            </ReadMoreLess>
+          </dd>
+        </dl>
       </div>
 
-      <div className="rating">
-        <Rating rated={4} />
-        <div className="count">{product.rating}</div>
-      </div>
+      <Rating url={`${LocalApi}/rating/${product._id}`} />
 
       <Comment url={`${LocalApi}/product/${product._id}/comment`} />
     </div>

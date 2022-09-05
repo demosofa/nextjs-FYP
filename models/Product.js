@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const Product = new Schema(
   {
     title: { type: String, required: true, unique: true, maxlength: 225 },
-    description: { type: String, required: true, maxlength: 255 },
+    description: { type: String, required: true, maxlength: 1000 },
     status: { type: String, required: true },
     images: [{ type: Schema.Types.ObjectId, ref: "File", required: true }],
     tags: [{ type: String }],
@@ -15,7 +15,8 @@ const Product = new Schema(
         required: true,
       },
     ],
-    rating: { type: Number, default: 1 },
+    avgRating: { type: Number, default: 0 },
+    rateCount: { type: Number, default: 0 },
     time: { type: Date },
     sale: { type: Number },
     price: { type: Number },
@@ -37,6 +38,7 @@ Product.post(
     });
     await mongoose.models.File.deleteMany({ _id: { $in: doc.images } });
     await mongoose.models.Variant.deleteMany({ _id: { $in: doc.variants } });
+    await mongoose.models.Rate.deleteMany({ product: doc._id });
   }
 );
 

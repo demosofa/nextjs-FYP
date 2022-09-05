@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
 import { Animation, Form, Icon, Increment } from "../../components";
-import { addCart, removeCart } from "../../redux/reducer/cartSlice";
+import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { retryAxios } from "../../utils";
@@ -44,9 +44,8 @@ export default function Cart() {
     e.preventDefault();
     retryAxios(axios);
     try {
-      await axios
-        .post(`${LocalApi}/order`, { ...cart, address })
-        .then(() => localStorage.removeItem("CartStorage"));
+      await axios.post(`${LocalApi}/order`, { ...cart, address });
+      dispatch(clearCart());
       setDisplay(false);
       router.back();
     } catch (error) {

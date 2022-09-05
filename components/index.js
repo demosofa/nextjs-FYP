@@ -12,7 +12,6 @@ export { default as Icon } from "./Icon/Icon";
 export { default as Loading } from "./Loading/Loading";
 export { default as Badge } from "./Badge/Badge";
 export { default as Dropdown } from "./Dropdown/Dropdown";
-export { default as Rating } from "./Rating/Rating";
 export { default as ReadMoreLess } from "./ReadMoreLess/ReadMoreLess";
 export { default as Search } from "./Search/Search";
 export { default as Form } from "./Form/Form";

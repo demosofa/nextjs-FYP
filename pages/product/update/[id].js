@@ -3,7 +3,6 @@ import Head from "next/head";
 import { useState } from "react";
 import { Form } from "../../../components";
 import { UpdateImage, UpdateVariation } from "../../../containers";
-import styles from "../../../styles/Home.module.scss";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
@@ -60,7 +59,7 @@ export default function UpdateProduct({ value }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Form.Title style={{ fontSize: "20px" }}>Update Product</Form.Title>
-      <Form.Item>
+      <Form.Item style={{ flexDirection: "column" }}>
         <Form.Title>Description</Form.Title>
         <Form.TextArea
           value={product.description}
@@ -68,6 +67,7 @@ export default function UpdateProduct({ value }) {
             setProduct((prev) => ({ ...prev, description: e.target.value }))
           }
         />
+        <label>{`${input.description.length}/1000`}</label>
       </Form.Item>
       <Form.Item>
         <Form.Title>Quantity</Form.Title>

@@ -35,7 +35,8 @@ export default function EditProfile({ profile }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     retryAxios(axios);
     try {
       await axios.put(`${LocalApi}/profile`, data);

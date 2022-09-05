@@ -11,6 +11,7 @@ import VariantOptRepository from "./VariantOptRepository";
 import FileRepository from "./FileRepository";
 import CommentRepository from "./CommentRespository";
 import ShipperRespository from "./ShipperRespository";
+import RateRepository from "./RateRepository";
 
 export {
   ProdcutRepository,
@@ -26,4 +27,5 @@ export {
   FileRepository,
   CommentRepository,
   ShipperRespository,
+  RateRepository,
 };
