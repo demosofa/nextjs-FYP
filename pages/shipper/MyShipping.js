@@ -43,6 +43,7 @@ export default function MyShipping({ initData }) {
             <th>Status</th>
             <th>Address</th>
             <th>Phone Number</th>
+            <th>Total Value</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -62,6 +63,7 @@ export default function MyShipping({ initData }) {
                 </a>
               </td>
               <td>{order.customer.user.phoneNumber}</td>
+              <td>${order.total}</td>
               <td className="flex flex-col items-center">
                 <button onClick={() => setViewOrder(order.orderItems)}>
                   View List item

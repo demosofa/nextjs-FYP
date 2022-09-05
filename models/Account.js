@@ -25,7 +25,11 @@ Account.post(
   async function (doc) {
     await mongoose.models.User.deleteOne({ _id: doc.user });
     await mongoose.models.Rate.deleteMany({ _id: { $in: doc.ratings } });
-    await mongoose.models.Order.deleteMany({ _id: { $in: doc.orders } });
+    await Promise.all(
+      doc.orders.map((order) =>
+        mongoose.models.Order.findByIdAndDelete(order._id)
+      )
+    );
   }
 );
 module.exports = mongoose.models.Account || mongoose.model("Account", Account);

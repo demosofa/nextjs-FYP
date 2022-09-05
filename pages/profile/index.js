@@ -28,7 +28,7 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
 
 export default function MyProfile({ initData: data }) {
   return (
-    <div className="flex" style={{ flexDirection: "column" }}>
+    <div className="flex flex-col items-center gap-10">
       <Head>
         <title>My Profile</title>
         <meta name="description" content="My Profile" />

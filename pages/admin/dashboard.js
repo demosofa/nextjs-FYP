@@ -29,7 +29,7 @@ function Dashboard() {
       onError(err, key, config) {
         if (err.status === 300) return router.back();
         else if (err.status === 401) return router.push("/login");
-        else return dispatch(addNotification({ message: err }));
+        else return dispatch(addNotification({ message: err.message }));
       },
     }
   );
@@ -52,7 +52,7 @@ function Dashboard() {
         <meta name="description" content="Dashboard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex" style={{ justifyContent: "space-around" }}>
+      <div className="flex justify-around">
         <FeaturedInfo url={`${LocalApi}/admin/income`}>Revenue</FeaturedInfo>
         <FeaturedInfo url={`${LocalApi}/admin/profitMonthly`}>
           Profit

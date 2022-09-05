@@ -67,7 +67,7 @@ export default function UpdateProduct({ value }) {
             setProduct((prev) => ({ ...prev, description: e.target.value }))
           }
         />
-        <label>{`${input.description.length}/1000`}</label>
+        <label>{`${product.description.length}/1000`}</label>
       </Form.Item>
       <Form.Item>
         <Form.Title>Quantity</Form.Title>

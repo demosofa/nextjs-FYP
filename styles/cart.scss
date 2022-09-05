@@ -36,6 +36,7 @@
   justify-content: space-between;
   gap: 20px;
   box-shadow: 4px 4px 0 0 rgb(0 0 0 / 10%);
+  flex-wrap: wrap;
   & > .cart__product__info{
     flex: 1;
     display: flex;
@@ -143,7 +144,6 @@
     font-size: 20px;
     font-weight: 300;
     padding: 16px 0;
-    width: 290px;
     text-align: center;
   }
 }

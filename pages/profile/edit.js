@@ -47,7 +47,7 @@ export default function EditProfile({ profile }) {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} style={{ margin: "0 auto" }}>
       <Head>
         <title>Edit My Profile</title>
         <meta name="description" content="Edit My Profile" />

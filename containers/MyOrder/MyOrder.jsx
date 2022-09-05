@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { expireStorage, retryAxios } from "../../utils";
+import { retryAxios } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -14,13 +14,7 @@ export default function MyOrder() {
   const [viewOrder, setViewOrder] = useState(null);
   const fetcher = async (config) => {
     retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios(config);
     return response.data;
   };
   const dispatch = useDispatch();
@@ -32,7 +26,7 @@ export default function MyOrder() {
       onError(err, key, config) {
         if (err.status === 300) return router.back();
         else if (err.status === 401) return router.push("/login");
-        else return dispatch(addNotification({ message: err }));
+        else return dispatch(addNotification({ message: err.message }));
       },
     }
   );
@@ -40,13 +34,8 @@ export default function MyOrder() {
   const handleCancelOrder = async (orderId) => {
     mutate(async (data) => {
       retryAxios(axios);
-      const accessToken = expireStorage.getItem("accessToken");
       try {
-        await axios.delete(`${LocalApi}/order/${orderId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        await axios.delete(`${LocalApi}/order/${orderId}`);
         setDisplayCancel(null);
         data = data.filter((item) => item._id !== orderId);
         return data;
@@ -79,6 +68,7 @@ export default function MyOrder() {
               <th>Id</th>
               <th>Status</th>
               <th>Order Time</th>
+              <th>Cost</th>
               <th>Shipper</th>
               <th>Action</th>
             </tr>
@@ -90,6 +80,7 @@ export default function MyOrder() {
                 <td>{order._id}</td>
                 <td>{order.status}</td>
                 <td>{order.createdAt}</td>
+                <td>${order.total}</td>
                 <td>{order.shipper?.username}</td>
                 <td>
                   <button onClick={() => setViewOrder(order.orderItems)}>
