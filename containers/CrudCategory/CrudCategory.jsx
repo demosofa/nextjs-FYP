@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthLoad, useAxiosLoad } from "../../hooks";
 import { Dropdown, Loading } from "../../components";
 import { expireStorage, retryAxios } from "../../utils";
@@ -8,19 +8,39 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { BiDotsVertical } from "react-icons/bi";
 import { Role } from "../../shared";
 import styles from "./crudcategory.module.scss";
+import { useRouter } from "next/router";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export default function CrudCategory({ maxTree = 3 }) {
   const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
-  const { loading } = useAuthLoad({
+  const { loading, isLoggined, isAuthorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({ url: `${LocalApi}/category` });
       setCategories(res.data);
     },
     roles: [Role.admin],
   });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
+    else if (!loading && !isAuthorized) router.back();
+  }, [loading, isLoggined, isAuthorized]);
+
+  if (loading || !isLoggined || !isAuthorized)
+    return (
+      <Loading
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%)`,
+        }}
+      ></Loading>
+    );
 
   const handleAddCategory = async ({ name }) => {
     const accessToken = expireStorage.getItem("accessToken");

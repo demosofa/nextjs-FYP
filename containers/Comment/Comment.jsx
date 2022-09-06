@@ -94,6 +94,7 @@ function CommentTab({
   });
   const isAuthor = useState(() => {
     const accessToken = expireStorage.getItem("accessToken");
+    if (!accessToken) return false;
     const { accountId } = decoder(accessToken);
     return accountId === data.author._id;
   })[0];

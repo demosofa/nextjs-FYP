@@ -1,6 +1,7 @@
 import type { NextApiHandler, NextApiResponse } from "next";
 import Request from "./type";
 import { Token } from "./";
+import blacklist from "./blacklist";
 
 export default function isAuthentication(
   handler: NextApiHandler
@@ -20,6 +21,10 @@ export default function isAuthentication(
         role: value.role,
         accountId: value.accountId,
       };
+      if (blacklist.isInBlackList(req.user.accountId))
+        return res
+          .status(403)
+          .json({ message: "This account has been blocked" });
       return handler(req, res);
     } catch (err) {
       return res.status(401).json({ message: "Token is expired" });

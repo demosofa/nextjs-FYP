@@ -57,6 +57,41 @@ export default function ManageProfiles() {
     });
   };
 
+  const handleBlockUser = (index) => {
+    mutate(async (data) => {
+      retryAxios(axios);
+      const accessToken = expireStorage.getItem("accessToken");
+      try {
+        await axios.put(
+          `${LocalApi}/admin/profiles/${data[index]._id}`,
+          {
+            blocked: !data[index].blocked,
+          },
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+        data[index].blocked = true;
+        return data;
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+      }
+    });
+  };
+  const handleDeleteUser = (index) => {
+    mutate(async (data) => {
+      retryAxios(axios);
+      const accessToken = expireStorage.getItem("accessToken");
+      try {
+        await axios.delete(`${LocalApi}/admin/profiles/${data[index]._id}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        data = data.filter((_, i) => i !== index);
+        return data;
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+      }
+    });
+  };
+
   if (!data || error)
     return (
       <Loading
@@ -84,6 +119,7 @@ export default function ManageProfiles() {
             <th>User Name</th>
             <th>Role</th>
             <th>Contact</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -107,6 +143,12 @@ export default function ManageProfiles() {
               <td>
                 <div>Email: {profile.user.email}</div>
                 <div>Phone Number: {profile.user.phoneNumber}</div>
+              </td>
+              <td>
+                <button onClick={() => handleBlockUser(index)}>
+                  {profile.blocked ? "Unblock" : "Block"}
+                </button>
+                <button onClick={() => handleDeleteUser(index)}>Delete</button>
               </td>
             </tr>
           ))}

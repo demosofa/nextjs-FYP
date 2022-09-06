@@ -15,6 +15,7 @@ const Account = new Schema(
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     ratings: [{ type: Schema.Types.ObjectId, ref: "Rate" }],
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
+    blocked: { type: Boolean, default: false },
   },
   { timestamps: true, discriminatorKey: "Shipper" }
 );
