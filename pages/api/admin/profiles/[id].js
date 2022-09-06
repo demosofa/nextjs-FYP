@@ -4,6 +4,9 @@ import { Role } from "../../../../shared";
 
 async function profilesId(req, res) {
   switch (req.method.toLowerCase()) {
+    case "put":
+      await admin.blockOrUnblockAccount(req, res);
+      break;
     case "patch":
       await admin.changeRole(req, res);
       break;

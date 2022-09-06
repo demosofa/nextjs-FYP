@@ -31,7 +31,7 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
 });
 
 export default function EditProfile({ profile }) {
-  const [data, setData] = useState(profile._doc);
+  const [data, setData] = useState(profile);
   const router = useRouter();
   const dispatch = useDispatch();
 
