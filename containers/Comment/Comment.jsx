@@ -89,6 +89,12 @@ function CommentTab({
     reply: false,
     more: false,
   });
+  const isAuthor = useState(() => {
+    const permission = expireStorage.getItem("permission");
+    if (!permission) return false;
+    const { username } = decoder(permission);
+    return username === data.author.username;
+  })[0];
   const [offDropdown, setOffDropdown] = useState(false);
   const [comments, setComments] = useState([]);
   const controller = useRef();
@@ -164,7 +170,7 @@ function CommentTab({
     <div className={styles.container} {...props}>
       <div className={styles.tab_container}>
         <Avatar text={currentComment.author.username}></Avatar>
-        {!toggle.edit && (
+        {isAuthor && !toggle.edit && (
           <Dropdown
             icon={<BiDotsVertical />}
             toggle={offDropdown}

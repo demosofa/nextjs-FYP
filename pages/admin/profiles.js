@@ -46,6 +46,33 @@ export default function ManageProfiles() {
     });
   };
 
+  const handleBlocOrUnblockkUser = (index) => {
+    mutate(async (data) => {
+      retryAxios(axios);
+      try {
+        await axios.put(`${LocalApi}/admin/profiles/${data[index]._id}`, {
+          blocked: !data[index].blocked,
+        });
+        data[index].blocked = !data[index].blocked;
+        return data;
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+      }
+    });
+  };
+  const handleDeleteUser = (index) => {
+    mutate(async (data) => {
+      retryAxios(axios);
+      try {
+        await axios.delete(`${LocalApi}/admin/profiles/${data[index]._id}`);
+        data = data.filter((_, i) => i !== index);
+        return data;
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+      }
+    });
+  };
+
   if (!data || error)
     return (
       <Loading
@@ -73,6 +100,7 @@ export default function ManageProfiles() {
             <th>User Name</th>
             <th>Role</th>
             <th>Contact</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -96,6 +124,12 @@ export default function ManageProfiles() {
               <td>
                 <div>Email: {profile.user.email}</div>
                 <div>Phone Number: {profile.user.phoneNumber}</div>
+              </td>
+              <td>
+                <button onClick={() => handleBlocOrUnblockkUser(index)}>
+                  {profile.blocked ? "Unblock" : "Block"}
+                </button>
+                <button onClick={() => handleDeleteUser(index)}>Delete</button>
               </td>
             </tr>
           ))}

@@ -1,5 +1,6 @@
 import Role from "../shared/Role";
 import UnitOfWork from "./services/UnitOfWork";
+const blacklist = require("../helpers/blacklist");
 
 class AdminController {
   constructor(unit = UnitOfWork) {
@@ -24,6 +25,19 @@ class AdminController {
       await this.unit.Account.updateById(req.query.id, {
         $set: { role: req.body.role },
       });
+      return res.status(200).end();
+    } catch (error) {
+      return res.status(500).json({ message: error });
+    }
+  };
+
+  blockOrUnblockAccount = async (req, res) => {
+    try {
+      await this.unit.Account.updateById(req.query.id, {
+        $set: { blocked: req.body.blocked },
+      });
+      if (req.body.blocked) blacklist.addToBlackList(req.query.id);
+      else blacklist.removeFromBlackList(req.query.id);
       return res.status(200).end();
     } catch (error) {
       return res.status(500).json({ message: error });
