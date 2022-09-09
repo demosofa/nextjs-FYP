@@ -71,9 +71,12 @@ export default function Shipper({ lstOrder }) {
     );
 
   const handleSubmit = async () => {
-    retryAxios(axios);
     try {
-      await axios.put(`${LocalApi}/shipper`, { acceptedOrders: checkOrder });
+      await fetcher({
+        url: `${LocalApi}/shipper`,
+        method: "put",
+        data: { acceptedOrders: checkOrder },
+      });
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
     }

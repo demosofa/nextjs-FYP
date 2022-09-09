@@ -1,6 +1,6 @@
 let blacklist = [];
 
-module.exports = {
+export default {
   blacklist,
   isInBlackList: (data) => {
     if (blacklist.includes(data)) return true;

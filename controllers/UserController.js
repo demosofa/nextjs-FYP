@@ -10,7 +10,7 @@ class UserController {
     return res.status(200).json(profile);
   };
   getMyOrder = async (req, res) => {
-    let { page, filter, sort } = req.query;
+    let { page, status, sort } = req.query;
     if (!sort) sort = "status";
     const { orders } = await this.unit.Account.getById(req.user.accountId)
       .select("orders")
@@ -30,7 +30,11 @@ class UserController {
             [sort]: -1,
           },
         },
-      });
+        match: {
+          status,
+        },
+      })
+      .lean();
     return res.status(200).json(orders);
   };
   updateProfile = async (req, res) => {
