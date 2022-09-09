@@ -56,18 +56,12 @@ function Shipper() {
     );
 
   const handleSubmit = async () => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
     try {
-      await axios.put(
-        `${LocalApi}/shipper`,
-        { acceptedOrders: checkOrder },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await fetcher({
+        url: `${LocalApi}/shipper`,
+        method: "put",
+        data: { acceptedOrders: checkOrder },
+      });
     } catch (error) {
       dispatch(addNotification({ message: error.message }));
     }

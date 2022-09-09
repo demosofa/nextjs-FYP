@@ -6,17 +6,9 @@ class OrderController {
     this.unit = new unit();
   }
   getOrder = async (req, res) => {
-    const order = await this.unit.Order.getById(req.query.id).exec();
+    const order = await this.unit.Order.getById(req.query.id).lean();
     if (!order) return res.status(500).json("Fail to get order");
     return res.status(200).json(order);
-  };
-  MyOrder = async (req, res) => {
-    const history = await this.unit.Order.getAll({
-      customer: req.user.accountId,
-    })
-      .populate({ path: "shipper", select: ["username"] })
-      .exec();
-    return res.status(200).json(history);
   };
   MyShipping = async (req, res) => {
     const lstShipping = await this.unit.Order.getAll({
@@ -31,7 +23,7 @@ class OrderController {
         },
       })
       .populate("orderItems")
-      .exec();
+      .lean();
     return res.status(200).json(lstShipping);
   };
   lstOrder = async (req, res) => {
@@ -41,7 +33,7 @@ class OrderController {
         path: "customer",
         select: ["username"],
       })
-      .exec();
+      .lean();
     return res.status(200).json(lstOrder);
   };
   getQR = async (req, res) => {
@@ -63,7 +55,7 @@ class OrderController {
     })
       .populate({ path: "shipper", select: ["username"] })
       .populate("products")
-      .exec();
+      .lean();
     if (!orders.length) return res.status(500).json("This is not your order");
     const check = orders.findIndex((order) => order._id === id);
     if (check === -1) return res.status(500).json("This is not your order");
@@ -133,7 +125,9 @@ class OrderController {
     return res.status(200).end();
   };
   cancelOrder = async (req, res) => {
-    await this.unit.Order.getById(req.query.id)
+    await this.unit.Order.updateById(req.query.id, {
+      $set: { status: "cancel" },
+    })
       .select("orderItems")
       .populate("orderItems")
       .then(({ orderItems }) =>
@@ -150,7 +144,6 @@ class OrderController {
           })
         )
       );
-    await this.unit.Order.deleteById(req.query.id);
     return res.status(200).end();
   };
 }

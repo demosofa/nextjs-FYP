@@ -56,19 +56,12 @@ function ShippingProgress() {
   const handleShowQr = async () => {
     if (showQR !== null) setShowQR(null);
     else {
-      retryAxios(axios);
-      const accessToken = expireStorage.getItem("accessToken");
       try {
-        const response = await axios.put(
-          `${LocalApi}/order/${order._id}`,
-          undefined,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setShowQR(response.data);
+        const data = await fetcher({
+          url: `${LocalApi}/order/${order._id}`,
+          method: "put",
+        });
+        setShowQR(data);
       } catch (error) {
         dispatch(addNotification({ message: error.message }));
       }

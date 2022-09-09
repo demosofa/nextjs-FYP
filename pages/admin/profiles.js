@@ -39,16 +39,12 @@ export default function ManageProfiles() {
 
   const handleChangeRole = (e, index) => {
     mutate(async (data) => {
-      retryAxios(axios);
-      const accessToken = expireStorage.getItem("accessToken");
       try {
-        await axios.patch(
-          `${LocalApi}/admin/profiles/${data[index]._id}`,
-          {
-            role: e.target.value,
-          },
-          { headers: { Authorization: `Bearer ${accessToken}` } }
-        );
+        await fetcher({
+          url: `${LocalApi}/admin/profiles/${data[index]._id}`,
+          method: "patch",
+          data: { role: e.target.value },
+        });
         data[index].role = e.target.value;
         return data;
       } catch (error) {

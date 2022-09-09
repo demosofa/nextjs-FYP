@@ -126,7 +126,7 @@ function MyShipping() {
                     <td>{item.title}</td>
                     <td>{item.options.join(", ")}</td>
                     <td>{item.quantity}</td>
-                    <td>{item.total}</td>
+                    <td>${item.total}</td>
                   </tr>
                 ))}
               </tbody>

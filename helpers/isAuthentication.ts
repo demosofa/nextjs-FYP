@@ -1,7 +1,6 @@
 import type { NextApiHandler, NextApiResponse } from "next";
 import Request from "./type";
-import { Token } from "./";
-import blacklist from "./blacklist";
+import { Token, blacklist } from "./";
 
 export default function isAuthentication(
   handler: NextApiHandler
