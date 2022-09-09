@@ -23,7 +23,7 @@ class ProductController {
         path: "variations",
         populate: ["types", "image"],
       })
-      .exec();
+      .lean();
     if (!product) return res.status(404).json({ errorMessage: "Not Found" });
     return res.status(200).json(product);
   };
@@ -59,7 +59,7 @@ class ProductController {
       ])
       .populate({ path: "images", select: "url" })
       .populate("categories", "name")
-      .exec();
+      .lean();
     const productCounted = await this.unit.Product.countData({
       status: "active",
       ...filterOptions,
@@ -72,7 +72,7 @@ class ProductController {
     const { images } = await this.unit.Product.getById(req.query.id)
       .select("images")
       .populate("images")
-      .exec();
+      .lean();
     if (!images)
       return res.status(500).json({ message: "Fail to load images" });
     return res.status(200).json(images);
@@ -85,7 +85,7 @@ class ProductController {
         path: "variations",
         populate: ["types", "image"],
       })
-      .exec();
+      .lean();
     if (!variations)
       return res.status(500).json({ message: "Fail to load variations" });
     return res.status(200).json(variations);
@@ -123,7 +123,8 @@ class ProductController {
         path: "variations",
         populate: "types",
       })
-      .exec();
+      .lean();
+    if (!products) return res.status(404).json({ message: "Not Found" });
     const productCounted = await this.unit.Product.countData(filterOptions);
     const pageCounted = Math.ceil(productCounted / 10);
     return res.status(200).json({ products, pageCounted });

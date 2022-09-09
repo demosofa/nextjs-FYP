@@ -1,6 +1,6 @@
 import Role from "../shared/Role";
 import UnitOfWork from "./services/UnitOfWork";
-const blacklist = require("../helpers/blacklist");
+import { blacklist } from "../helpers";
 
 class AdminController {
   constructor(unit = UnitOfWork) {
@@ -13,7 +13,7 @@ class AdminController {
         role: { $ne: Role.admin },
       })
         .populate({ path: "user", select: ["email", "phoneNumber"] })
-        .exec();
+        .lean();
       return res.status(200).json(lstProfile);
     } catch (error) {
       return res.status(500).json({ message: error });

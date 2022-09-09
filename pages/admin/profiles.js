@@ -33,10 +33,11 @@ export default function ManageProfiles() {
 
   const handleChangeRole = (e, index) => {
     mutate(async (data) => {
-      retryAxios(axios);
       try {
-        await axios.patch(`${LocalApi}/admin/profiles/${data[index]._id}`, {
-          role: e.target.value,
+        await fetcher({
+          url: `${LocalApi}/admin/profiles/${data[index]._id}`,
+          method: "patch",
+          data: { role: e.target.value },
         });
         data[index].role = e.target.value;
         return data;

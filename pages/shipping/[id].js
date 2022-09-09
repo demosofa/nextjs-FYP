@@ -65,13 +65,12 @@ export default function ShippingProgress({ initData, auth }) {
   const handleShowQr = async () => {
     if (showQR !== null) setShowQR(null);
     else {
-      retryAxios(axios);
       try {
-        const response = await axios.put(
-          `${LocalApi}/order/${order._id}`,
-          undefined
-        );
-        setShowQR(response.data);
+        const data = await fetcher({
+          url: `${LocalApi}/order/${order._id}`,
+          method: "put",
+        });
+        setShowQR(data);
       } catch (error) {
         dispatch(addNotification({ message: error.message }));
       }

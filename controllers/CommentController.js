@@ -17,7 +17,7 @@ class CommentController {
         },
         populate: "author",
       })
-      .exec();
+      .lean();
     if (!comments)
       return res.status(500).json({ message: "Fail to load comment" });
     return res.status(200).json(comments);
@@ -33,7 +33,7 @@ class CommentController {
         },
         populate: "author",
       })
-      .exec();
+      .lean();
     if (!replys) return res.status(500).json({ message: "Cannot get reply" });
     return res.status(200).json(replys);
   };

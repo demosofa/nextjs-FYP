@@ -7,7 +7,7 @@ class CategoryController {
   getAll = async (req, res) => {
     const categories = await this.unit.Category.getAll()
       .select(["-createdAt", "-updatedAt"])
-      .exec();
+      .lean();
     if (!categories) return res.status(500).json("Fail to load all categories");
     return res.status(200).json(categories);
   };
@@ -15,13 +15,13 @@ class CategoryController {
     const { subCategories } = await this.unit.Category.getById(req.query.id)
       .select("subCategories")
       .populate({ path: "subCategories", options: { sort: { updatedAt: -1 } } })
-      .exec();
+      .lean();
     return res.status(200).json(subCategories);
   };
   getCategoriesAreFirstLevel = async (req, res) => {
     const categories = await this.unit.Category.getAll()
       .where("isFirstLevel", "true")
-      .exec();
+      .lean();
     return res.status(200).json(categories);
   };
   create = async (req, res) => {

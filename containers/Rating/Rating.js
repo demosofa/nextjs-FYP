@@ -36,19 +36,16 @@ export default function Rating({ url }) {
   });
 
   const handleRating = async (rating) => {
-    const permission = expireStorage.getItem("permission");
-    if (rating !== data?.rating && permission)
-      mutate(async (data) => {
-        retryAxios(axios);
-        try {
-          await axios.put(url, { rating });
-          data.rating = rating;
-          return data;
-        } catch (error) {
-          dispatch(addNotification({ message: error.message }));
-          return data;
-        }
-      });
+    mutate(async (data) => {
+      try {
+        await fetcher({ url, method: "put", data: { rating } });
+        data.rating = rating;
+        return data;
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+        return data;
+      }
+    });
   };
 
   if (!data || error) return <Loading.Text />;
