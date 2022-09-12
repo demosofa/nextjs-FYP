@@ -46,6 +46,21 @@ class UserController {
     if (!isUpdated) return res.status(404).end();
     return res.status(200).end();
   };
+  checkQR = async (req, res) => {
+    const { shipperId, id } = req.query;
+    const orders = await this.unit.Order.getAll({
+      customer: req.user.accountId,
+      shipper: shipperId,
+      status: "arrived",
+    })
+      .populate({ path: "shipper", select: ["username"] })
+      .populate("products")
+      .lean();
+    if (!orders.length) return res.status(500).json("This is not your order");
+    const check = orders.findIndex((order) => order._id === id);
+    if (check === -1) return res.status(500).json("This is not your order");
+    return res.status(200).json(orders[check]);
+  };
 }
 
 export default new UserController();

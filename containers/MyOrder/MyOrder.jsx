@@ -27,7 +27,7 @@ export default function MyOrder() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { data, error, mutate } = useSWR(
-    { baseURL: `${LocalApi}/profile/order` },
+    { url: `${LocalApi}/profile/order?status=shipping` },
     fetcher,
     {
       onError(err, key, config) {
@@ -47,12 +47,12 @@ export default function MyOrder() {
         });
         setDisplayCancel(null);
         const index = data.findIndex((item) => item._id === orderId);
-        data[index].status = value;
+        data[index].status = "cancel";
       } catch (error) {
         dispatch(addNotification({ message: error.message }));
         return data;
       }
-    });
+    }, false);
   };
 
   const handleFilter = ({ value }) => {
@@ -67,7 +67,7 @@ export default function MyOrder() {
         dispatch(addNotification({ message: error.message }));
         return data;
       }
-    });
+    }, false);
   };
 
   return (
@@ -181,7 +181,7 @@ export default function MyOrder() {
                       <td>{item.title}</td>
                       <td>{item.options.join(", ")}</td>
                       <td>{item.quantity}</td>
-                      <td>{item.total}</td>
+                      <td>${item.total}</td>
                     </tr>
                   ))}
                 </tbody>

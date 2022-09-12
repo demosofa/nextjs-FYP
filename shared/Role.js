@@ -1,6 +1,6 @@
 const Role = {
   admin: "admin",
-  vendor: "vendor",
+  seller: "seller",
   guest: "guest",
   manager: "manager",
   shipper: "shipper",

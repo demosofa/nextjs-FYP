@@ -1,7 +1,7 @@
 import { NextApiHandler } from "next";
 import Cookies from "cookies";
 import { Token } from ".";
-import { convertTime } from "../utils";
+import { convertTime } from "../shared";
 
 const setCookieToken: NextApiHandler = (req, res) => {
   try {

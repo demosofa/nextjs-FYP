@@ -1,22 +1,18 @@
 import axios from "axios";
-import dynamic from "next/dynamic";
-import Link from "next/link";
+import useSWRImmutable from "swr/immutable";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import useSWR from "swr";
-import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
 import { Loading } from "../../components";
+import { expireStorage, retryAxios } from "../../utils";
 import { useState } from "react";
-import Head from "next/head";
+import QrScanner from "react-qr-scanner";
+import dynamic from "next/dynamic";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
-function MyShipping() {
-  const [viewOrder, setViewOrder] = useState(null);
-  const [showQR, setShowQR] = useState(null);
-  const dispatch = useDispatch();
-  const router = useRouter();
+function SellerPage() {
+  const [viewOrder, setViewOrder] = useState();
+  const [showScanner, setShowScanner] = useState(false);
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -28,10 +24,10 @@ function MyShipping() {
     });
     return response.data;
   };
-  const { data, error } = useSWR(
-    {
-      url: `${LocalApi}/shipper`,
-    },
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { data, error, mutate } = useSWRImmutable(
+    { url: `${LocalApi}/seller` },
     fetcher,
     {
       onError(err, key, config) {
@@ -42,15 +38,15 @@ function MyShipping() {
     }
   );
 
-  const handleShowQR = async (orderId) => {
-    try {
-      const data = await fetcher({
-        url: `${LocalApi}/order/${orderId}`,
-        method: "put",
-      });
-      setShowQR(data);
-    } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+  const handleScan = async (scanData) => {
+    if (scanData && scanData !== "") {
+      try {
+        const result = await fetcher({
+          url: `${LocalApi}/seller/${scanData}`,
+        });
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+      }
     }
   };
 
@@ -66,22 +62,18 @@ function MyShipping() {
       ></Loading>
     );
   return (
-    <div className="manage_table">
-      <Head>
-        <title>My Shipping</title>
-        <meta name="description" content="My Shipping" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div>
+      <button onClick={() => setShowScanner(true)}>
+        Get Shipper order information
+      </button>
       <table>
         <thead>
           <tr>
             <th>No.</th>
-            <th>Order Id</th>
-            <th>Status</th>
-            <th>Address</th>
-            <th>Phone Number</th>
-            <th>Total Value</th>
-            <th>Action</th>
+            <th>Id</th>
+            <th>total</th>
+            <th>Validated At</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -89,32 +81,12 @@ function MyShipping() {
             <tr key={order._id}>
               <td>{index + 1}</td>
               <td>{order._id}</td>
-              <td>{order.status}</td>
+              <td>{order.total}</td>
+              <td>{order.validatedAt}</td>
               <td>
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href={`https://maps.google.com/maps?q=${order.address}`}
-                >
-                  {order.address}
-                </a>
-              </td>
-              <td>{order.customer.user.phoneNumber}</td>
-              <td>${order.total}</td>
-              <td className="flex flex-col items-center">
                 <button onClick={() => setViewOrder(order.orderItems)}>
                   View List item
                 </button>
-                {order.status === "pending" && (
-                  <button onClick={() => handleShowQR(order._id)}>
-                    Show QR to seller
-                  </button>
-                )}
-                <Link href={`/shipping/${order._id}`}>
-                  <a className="flex items-center justify-center rounded-lg bg-amber-600 p-2">
-                    Manage Progress
-                  </a>
-                </Link>
               </td>
             </tr>
           ))}
@@ -153,16 +125,17 @@ function MyShipping() {
           </div>
         </>
       )}
-      {showQR && (
-        <>
-          <div className="backdrop" onClick={() => setShowQR(null)}></div>
-          <div className="form_center">
-            <img src={showQR} alt="QR code"></img>
-          </div>
-        </>
+      {showScanner && (
+        <QrScanner
+          facingMode="front"
+          delay={500}
+          onError={(err) => dispatch(addNotification({ message: err }))}
+          onScan={handleScan}
+          className="h-80 w-80"
+        />
       )}
     </div>
   );
 }
 
-export default dynamic(() => Promise.resolve(MyShipping), { ssr: false });
+export default dynamic(() => Promise.resolve(SellerPage), { ssr: false });

@@ -10,7 +10,7 @@ const Account = new Schema(
     role: {
       type: String,
       default: Role.guest,
-      enum: [Role.admin, Role.vendor, Role.shipper, Role.guest, Role.manager],
+      enum: [Role.admin, Role.seller, Role.shipper, Role.guest, Role.manager],
     },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     ratings: [{ type: Schema.Types.ObjectId, ref: "Rate" }],

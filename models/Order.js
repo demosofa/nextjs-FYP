@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { convertTime } = require("../shared");
 const Schema = mongoose.Schema;
 
 const Order = new Schema(
@@ -26,6 +27,15 @@ const Order = new Schema(
       enum: ["cancel", "pending", "shipping", "arrived", "validated", "paid"],
       default: "pending",
     },
+    validatedAt: {
+      type: Date,
+      default: null,
+    },
+    // expireAt: {
+    //   type: Date,
+    //   default: Date.now(),
+    //   expires: convertTime("10d").second,
+    // },
   },
   { timestamps: true }
 );

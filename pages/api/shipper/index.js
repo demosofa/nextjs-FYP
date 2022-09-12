@@ -1,14 +1,14 @@
-import { order } from "../../../controllers";
+import { shipper } from "../../../controllers";
 import { isAuthentication, isAuthorization } from "../../../helpers";
 import { Role } from "../../../shared";
 
 async function Shipper(req, res) {
   switch (req.method.toLowerCase()) {
     case "get":
-      await order.MyShipping(req, res);
+      await shipper.MyShipping(req, res);
       break;
     case "put":
-      await order.acceptShipper(req, res);
+      await shipper.acceptShipper(req, res);
       break;
   }
 }

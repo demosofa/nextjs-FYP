@@ -1,4 +1,4 @@
-import convertTime from "./convertTime";
+import convertTime from "../shared/convertTime";
 import getUnique from "./getUnique";
 
 export default class expireStorage {

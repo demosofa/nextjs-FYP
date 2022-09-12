@@ -5,9 +5,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 import { Checkbox, Form, Loading } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { convertTime, expireStorage, retryAxios } from "../../utils";
+import { expireStorage, retryAxios } from "../../utils";
+import { convertTime } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -43,6 +45,8 @@ function Shipper() {
     }
   );
 
+  const { mutate } = useSWRImmutable({ url: `${LocalApi}/shipper` }, fetcher);
+
   if (!orders || error)
     return (
       <Loading
@@ -56,15 +60,21 @@ function Shipper() {
     );
 
   const handleSubmit = async () => {
-    try {
-      await fetcher({
-        url: `${LocalApi}/shipper`,
-        method: "put",
-        data: { acceptedOrders: checkOrder },
-      });
-    } catch (error) {
-      dispatch(addNotification({ message: error.message }));
-    }
+    mutate(async (data) => {
+      try {
+        if (data)
+          await fetcher({
+            url: `${LocalApi}/shipper`,
+            method: "put",
+            data: { acceptedOrders: checkOrder },
+          });
+        dispatch(addNotification({ message: "Success receive orders" }));
+        router.push("/");
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+      }
+      return data;
+    }, false);
   };
 
   return (
