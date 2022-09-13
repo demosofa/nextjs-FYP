@@ -2,7 +2,7 @@ import UnitOfWork from "./services/UnitOfWork";
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
 import { setCookieToken, Token } from "../helpers";
-import { convertTime } from "../utils";
+import { convertTime } from "../shared";
 
 class AuthController {
   constructor(unit = UnitOfWork) {

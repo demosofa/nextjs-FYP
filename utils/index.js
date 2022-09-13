@@ -1,6 +1,5 @@
 export { default as compareToRange } from "./compareToRange";
 export { default as onScroll } from "./onScroll";
-export { default as convertTime } from "./convertTime";
 export { default as getUnique } from "./getUnique";
 export { default as getURL } from "./getURL";
 export { default as markdown } from "./markdown";

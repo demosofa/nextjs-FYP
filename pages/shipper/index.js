@@ -1,13 +1,15 @@
 import axios from "axios";
-import useSWR from "swr";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { withAuth } from "../../helpers";
+import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 import { Checkbox, Form, Loading } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { convertTime, retryAxios } from "../../utils";
+import { retryAxios } from "../../utils";
+import { convertTime } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -51,12 +53,14 @@ export default function Shipper({ lstOrder }) {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
+        if (err.response.status === 300) return router.back();
+        else if (err.response.status === 401) return router.push("/login");
         else return dispatch(addNotification({ message: err.message }));
       },
     }
   );
+
+  const { mutate } = useSWRImmutable({ url: `${LocalApi}/shipper` }, fetcher);
 
   if (!orders || error)
     return (
@@ -71,15 +75,21 @@ export default function Shipper({ lstOrder }) {
     );
 
   const handleSubmit = async () => {
-    try {
-      await fetcher({
-        url: `${LocalApi}/shipper`,
-        method: "put",
-        data: { acceptedOrders: checkOrder },
-      });
-    } catch (error) {
-      dispatch(addNotification({ message: error.message }));
-    }
+    mutate(async (data) => {
+      try {
+        if (data)
+          await fetcher({
+            url: `${LocalApi}/shipper`,
+            method: "put",
+            data: { acceptedOrders: checkOrder },
+          });
+        dispatch(addNotification({ message: "Success receive orders" }));
+        router.push("/");
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+      }
+      return data;
+    }, false);
   };
 
   return (

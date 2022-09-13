@@ -1,5 +1,6 @@
 import axios from "axios";
 import Head from "next/head";
+import Select from "react-select";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Pagination, Container, Search } from "../../components";
@@ -82,6 +83,17 @@ export default function ProductCRUD({ value }) {
           onChange={(e) => setSearch(e.target.value)}
           onClick={() => setQuery((prev) => ({ ...prev, search }))}
         />
+        <Select
+          onChange={({ value }) =>
+            setQuery((prev) => ({ ...prev, filter: value }))
+          }
+          options={[
+            { value: "active", label: "Active" },
+            { value: "non-active", label: "Non Active" },
+            { value: "out", label: "Out of stock" },
+          ]}
+          className="ml-3"
+        />
       </Container.Flex>
       <div className="manage_table">
         <table>
@@ -89,7 +101,7 @@ export default function ProductCRUD({ value }) {
             <tr>
               <th>No.</th>
               <th>Thumbnail</th>
-              <th>Title</th>
+              <th style={{ width: "20%" }}>Title</th>
               <th>Status</th>
               <th>TimeStamp</th>
               <th>Actions</th>
@@ -107,7 +119,11 @@ export default function ProductCRUD({ value }) {
                       style={{ width: "100px", height: "80px" }}
                     ></img>
                   </td>
-                  <td>{product.title}</td>
+                  <td>
+                    <p className="line-clamp-1 hover:line-clamp-none">
+                      {product.title}
+                    </p>
+                  </td>
                   <td>
                     <select
                       defaultValue={product.status}
@@ -119,8 +135,18 @@ export default function ProductCRUD({ value }) {
                     </select>
                   </td>
                   <td>
-                    <p>Created at: {product.createdAt}</p>
-                    <p>Updated at: {product.updatedAt}</p>
+                    <p>
+                      Created at:{" "}
+                      {new Date(product.createdAt).toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </p>
+                    <p>
+                      Updated at:{" "}
+                      {new Date(product.updatedAt).toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </p>
                   </td>
                   <td>
                     <button
