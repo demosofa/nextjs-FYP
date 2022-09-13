@@ -31,8 +31,8 @@ export default function MyOrder() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
+        if (err.response.status === 300) return router.back();
+        else if (err.response.status === 401) return router.push("/login");
         else return dispatch(addNotification({ message: err.message }));
       },
     }
@@ -77,6 +77,7 @@ export default function MyOrder() {
         onChange={handleFilter}
         options={[
           { value: "pending", label: "Pending" },
+          { value: "progress", label: "Progress" },
           { value: "shipping", label: "Shipping" },
           { value: "arrived", label: "Arrived" },
           { value: "validated", label: "Validated" },
@@ -115,7 +116,11 @@ export default function MyOrder() {
                   <td>{index + 1}</td>
                   <td>{order._id}</td>
                   <td>{order.status}</td>
-                  <td>{order.createdAt}</td>
+                  <td>
+                    {new Date(order.createdAt).toLocaleString("en-US", {
+                      timeZone: "Asia/Ho_Chi_Minh",
+                    })}
+                  </td>
                   <td>${order.total}</td>
                   <td>{order.shipper?.username}</td>
                   <td>
@@ -178,7 +183,11 @@ export default function MyOrder() {
                       <td>
                         <img src={item.image} alt="order-item"></img>
                       </td>
-                      <td>{item.title}</td>
+                      <td>
+                        <p className="text-xs line-clamp-1 hover:line-clamp-none">
+                          {item.title}
+                        </p>
+                      </td>
                       <td>{item.options.join(", ")}</td>
                       <td>{item.quantity}</td>
                       <td>${item.total}</td>

@@ -11,13 +11,19 @@ const cart = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addCart(state, action) {
+    addCart(state, { payload }) {
       const clone = JSON.parse(JSON.stringify(state));
-      const index = clone.products.findIndex(
-        (item) => item.title === action.payload.title
+      const result = clone.products.filter(
+        (item) => item.title === payload.title
       );
-      if (index === -1) clone.products.push(action.payload);
-      else clone.products[index] = action.payload;
+      if (result.length === 0) clone.products.push(payload);
+      else {
+        const index = clone.products.findIndex(
+          (item) => item.variationId === payload.variationId
+        );
+        if (index === -1) clone.products.push(payload);
+        else clone.products[index] = payload;
+      }
       clone.quantity = clone.products.reduce(
         (prev, curr) => prev + curr.quantity,
         0
@@ -27,11 +33,16 @@ const cart = createSlice({
       );
       return clone;
     },
-    removeCart(state, action) {
+    removeCart(state, { payload }) {
       const clone = JSON.parse(JSON.stringify(state));
-      clone.products = clone.products.filter(
-        (item) => item.title !== action.payload.title
-      );
+      if (payload.variationId)
+        clone.products = clone.products.filter(
+          (item) => item.variationId !== payload.variationId
+        );
+      else
+        clone.products = clone.products.filter(
+          (item) => item.title !== payload.title
+        );
       clone.quantity = clone.products.reduce(
         (prev, curr) => prev + curr.quantity,
         0

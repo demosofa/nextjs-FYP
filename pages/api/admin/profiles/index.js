@@ -10,6 +10,4 @@ async function profilesIndex(req, res) {
   }
 }
 
-export default isAuthentication(
-  isAuthorization(profilesIndex, [Role.admin, Role.guest])
-);
+export default isAuthentication(isAuthorization(profilesIndex, [Role.admin]));

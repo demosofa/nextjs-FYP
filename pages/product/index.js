@@ -1,6 +1,7 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import Select from "react-select";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Pagination, Container, Search, Loading } from "../../components";
@@ -34,7 +35,7 @@ function ProductCRUD() {
         params,
       });
       setProducts(res.data.products);
-      if (totalPageCount === null) setTotalPageCount(res.data.pageCounted);
+      setTotalPageCount(res.data.pageCounted);
       return;
     },
     roles: [Role.admin],
@@ -92,6 +93,17 @@ function ProductCRUD() {
           onChange={(e) => setSearch(e.target.value)}
           onClick={() => setParams((prev) => ({ ...prev, search }))}
         />
+        <Select
+          onChange={({ value }) =>
+            setParams((prev) => ({ ...prev, filter: value }))
+          }
+          options={[
+            { value: "active", label: "Active" },
+            { value: "non-active", label: "Non Active" },
+            { value: "out", label: "Out of stock" },
+          ]}
+          className="ml-3"
+        />
       </Container.Flex>
       <div className="manage_table">
         <table>
@@ -99,7 +111,7 @@ function ProductCRUD() {
             <tr>
               <th>No.</th>
               <th>Thumbnail</th>
-              <th>Title</th>
+              <th style={{ width: "20%" }}>Title</th>
               <th>Status</th>
               <th>TimeStamp</th>
               <th>Actions</th>
@@ -117,7 +129,11 @@ function ProductCRUD() {
                       style={{ width: "100px", height: "80px" }}
                     ></img>
                   </td>
-                  <td>{product.title}</td>
+                  <td>
+                    <p className="line-clamp-1 hover:line-clamp-none">
+                      {product.title}
+                    </p>
+                  </td>
                   <td>
                     <select
                       defaultValue={product.status}
@@ -129,8 +145,18 @@ function ProductCRUD() {
                     </select>
                   </td>
                   <td>
-                    <p>Created at: {product.createdAt}</p>
-                    <p>Updated at: {product.updatedAt}</p>
+                    <p>
+                      Created at:{" "}
+                      {new Date(product.createdAt).toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </p>
+                    <p>
+                      Updated at:{" "}
+                      {new Date(product.updatedAt).toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </p>
                   </td>
                   <td>
                     <button

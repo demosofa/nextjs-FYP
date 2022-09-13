@@ -16,6 +16,4 @@ async function profilesId(req, res) {
   }
 }
 
-export default isAuthentication(
-  isAuthorization(profilesId, [Role.admin, Role.guest])
-);
+export default isAuthentication(isAuthorization(profilesId, [Role.admin]));

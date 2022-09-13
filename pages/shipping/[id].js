@@ -48,8 +48,8 @@ function ShippingProgress() {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
+        if (err.response.status === 300) return router.back();
+        else if (err.response.status === 401) return router.push("/login");
         else return dispatch(addNotification({ message: err.message }));
       },
     }
@@ -74,7 +74,7 @@ function ShippingProgress() {
     if (scanData && scanData !== "") {
       try {
         const result = await fetcher({
-          url: `${LocalApi}/order/${scanData}`,
+          url: `${LocalApi}/order/${scanData.text}`,
         });
       } catch (error) {
         dispatch(addNotification({ message: error.message }));
@@ -94,6 +94,7 @@ function ShippingProgress() {
 
   const steps = [
     { title: "pending", allowed: false },
+    { title: "progress", allowed: false },
     { title: "shipping", allowed: false },
     {
       title: "arrived",
