@@ -35,7 +35,7 @@ Pagination.Arrow = function ArrowPagination({ children, ...props }) {
       <Icon
         onClick={() => {
           if (currentPage > 1) {
-            setCurrentPage((prev) => prev - 1);
+            setCurrentPage(currentPage - 1);
           }
         }}
       >
@@ -47,7 +47,7 @@ Pagination.Arrow = function ArrowPagination({ children, ...props }) {
       <Icon
         onClick={() => {
           if (currentPage < totalPageCount) {
-            setCurrentPage((prev) => prev + 1);
+            setCurrentPage(currentPage + 1);
           }
         }}
       >

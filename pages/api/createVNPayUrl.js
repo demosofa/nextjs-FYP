@@ -1,6 +1,6 @@
 import { isAuthentication } from "../../helpers";
 
-function createVNPayUrl(req, res) {
+async function createVNPayUrl(req, res) {
   switch (req.method.toLowerCase()) {
     case "post":
       var ipAddr =
@@ -9,7 +9,7 @@ function createVNPayUrl(req, res) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
 
-      var dateFormat = require("dateformat");
+      var dateFormat = await import("dateformat");
 
       var tmnCode = process.env.vnp_TmnCode;
       var secretKey = process.env.vnp_HashSecret;

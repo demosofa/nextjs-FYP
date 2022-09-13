@@ -24,7 +24,15 @@ const Order = new Schema(
     address: { type: String, required: true },
     status: {
       type: String,
-      enum: ["cancel", "pending", "shipping", "arrived", "validated", "paid"],
+      enum: [
+        "cancel",
+        "pending",
+        "progress",
+        "shipping",
+        "arrived",
+        "validated",
+        "paid",
+      ],
       default: "pending",
     },
     validatedAt: {

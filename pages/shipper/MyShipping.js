@@ -35,8 +35,8 @@ function MyShipping() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
+        if (err.response.status === 300) return router.back();
+        else if (err.response.status === 401) return router.push("/login");
         else return dispatch(addNotification({ message: err.message }));
       },
     }
@@ -105,7 +105,7 @@ function MyShipping() {
                 <button onClick={() => setViewOrder(order.orderItems)}>
                   View List item
                 </button>
-                {order.status === "pending" && (
+                {order.status === "progress" && (
                   <button onClick={() => handleShowQR(order._id)}>
                     Show QR to seller
                   </button>
@@ -142,7 +142,11 @@ function MyShipping() {
                     <td>
                       <img src={item.image} alt="order-item"></img>
                     </td>
-                    <td>{item.title}</td>
+                    <td>
+                      <p className="line-clamp-1 hover:line-clamp-none">
+                        {item.title}
+                      </p>
+                    </td>
                     <td>{item.options.join(", ")}</td>
                     <td>{item.quantity}</td>
                     <td>${item.total}</td>

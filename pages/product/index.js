@@ -1,6 +1,7 @@
 import axios from "axios";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import Select from "react-select";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Pagination, Container, Search, Loading } from "../../components";
@@ -15,13 +16,13 @@ const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 function ProductCRUD() {
   const [remove, setRemove] = useState(null);
-  const [params, setParams] = useState({
+  const [query, setQuery] = useState({
     search: "",
     filter: "",
     sort: "title",
     page: 1,
   });
-  const [search, setSearch] = useState(params.search);
+  const [search, setSearch] = useState(query.search);
   const [products, setProducts] = useState([]);
   const [totalPageCount, setTotalPageCount] = useState(null);
   const router = useRouter();
@@ -31,14 +32,14 @@ function ProductCRUD() {
     async cb(axiosInstance) {
       const res = await axiosInstance({
         url: `${LocalApi}/product`,
-        params,
+        params: query,
       });
       setProducts(res.data.products);
-      if (totalPageCount === null) setTotalPageCount(res.data.pageCounted);
+      setTotalPageCount(res.data.pageCounted);
       return;
     },
     roles: [Role.admin],
-    deps: [params],
+    deps: [query],
   });
 
   const handleStatus = async (e, index) => {
@@ -90,7 +91,18 @@ function ProductCRUD() {
         <Search
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          onClick={() => setParams((prev) => ({ ...prev, search }))}
+          onClick={() => setQuery((prev) => ({ ...prev, search }))}
+        />
+        <Select
+          onChange={({ value }) =>
+            setQuery((prev) => ({ ...prev, filter: value }))
+          }
+          options={[
+            { value: "active", label: "Active" },
+            { value: "non-active", label: "Non Active" },
+            { value: "out", label: "Out of stock" },
+          ]}
+          className="ml-3"
         />
       </Container.Flex>
       <div className="manage_table">
@@ -99,7 +111,7 @@ function ProductCRUD() {
             <tr>
               <th>No.</th>
               <th>Thumbnail</th>
-              <th>Title</th>
+              <th style={{ width: "20%" }}>Title</th>
               <th>Status</th>
               <th>TimeStamp</th>
               <th>Actions</th>
@@ -117,7 +129,11 @@ function ProductCRUD() {
                       style={{ width: "100px", height: "80px" }}
                     ></img>
                   </td>
-                  <td>{product.title}</td>
+                  <td>
+                    <p className="line-clamp-1 hover:line-clamp-none">
+                      {product.title}
+                    </p>
+                  </td>
                   <td>
                     <select
                       defaultValue={product.status}
@@ -129,8 +145,18 @@ function ProductCRUD() {
                     </select>
                   </td>
                   <td>
-                    <p>Created at: {product.createdAt}</p>
-                    <p>Updated at: {product.updatedAt}</p>
+                    <p>
+                      Created at:{" "}
+                      {new Date(product.createdAt).toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </p>
+                    <p>
+                      Updated at:{" "}
+                      {new Date(product.updatedAt).toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </p>
                   </td>
                   <td>
                     <button
@@ -163,8 +189,8 @@ function ProductCRUD() {
       </div>
       <Pagination
         totalPageCount={totalPageCount}
-        currentPage={params.page}
-        setCurrentPage={(page) => setParams((prev) => ({ ...prev, page }))}
+        currentPage={query.page}
+        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
       >
         <Pagination.Arrow>
           <Pagination.Number />

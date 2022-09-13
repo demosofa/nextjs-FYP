@@ -8,7 +8,7 @@ async function Shipper(req, res) {
       await shipper.MyShipping(req, res);
       break;
     case "put":
-      await shipper.acceptShipper(req, res);
+      await shipper.acceptOrder(req, res);
       break;
   }
 }

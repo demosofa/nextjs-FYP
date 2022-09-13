@@ -77,19 +77,16 @@ export default function Home({ products, categories, pageCounted }) {
               <Link href={`/overview/${item._id}`} key={item.title}>
                 <a>
                   {item.time && <Timer value={item.time} />}
-                  <div style={{ padding: "5px", fontSize: "13px" }}>
+                  <div>
                     <img
                       alt="product"
                       src={item.images[0].url}
                       style={{ height: "175px", borderRadius: "10px" }}
                     ></img>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <label style={{ fontSize: "14px" }}>{item.title}</label>
+                    <div className="flex justify-center">
+                      <label className="text-sm line-clamp-1">
+                        {item.title}
+                      </label>
                       <span>{item.price ? item.price : "optional"} $</span>
                     </div>
                   </div>

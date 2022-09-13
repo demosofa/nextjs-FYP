@@ -7,7 +7,7 @@ class SellerController {
   todayValidated = async (req, res) => {
     const currentDate = new Date().getDate();
     try {
-      const datas = await this.unit.Order.getOne({
+      const datas = await this.unit.Order.getAll({
         validatedAt: { $gte: currentDate },
       })
         .populate("orderItems")
@@ -37,7 +37,7 @@ class SellerController {
   validateShipperOrder = async (req, res) => {
     try {
       await this.unit.Order.updateById(req.query.orderId, {
-        $set: { validatedAt: Date.now() },
+        $set: { validatedAt: Date.now(), status: "shipping" },
       });
       return res.status(200).end();
     } catch (error) {

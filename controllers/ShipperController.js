@@ -60,7 +60,7 @@ class ShipperController {
         {
           _id: { $in: acceptedOrders },
         },
-        { $set: { shipper: accountId, status: "shipping" } }
+        { $set: { shipper: accountId, status: "progress" } }
       );
       return res.status(200).end();
     } catch (error) {
