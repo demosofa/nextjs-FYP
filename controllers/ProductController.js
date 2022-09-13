@@ -37,7 +37,7 @@ class ProductController {
         title: { $regex: search, $options: "i" },
       };
     if (category) {
-      const result = await this.unit.Category.getOne({ name: category });
+      const result = await this.unit.Category.getOne({ name: category }).lean();
       filterOptions = { ...filterOptions, categories: result._id };
     }
     const products = await this.unit.Product.getAll(filterOptions)
@@ -63,7 +63,7 @@ class ProductController {
     const productCounted = await this.unit.Product.countData({
       status: "active",
       ...filterOptions,
-    });
+    }).lean();
     const pageCounted = Math.ceil(productCounted / 10);
     return res.status(200).json({ products, pageCounted });
   };
@@ -92,7 +92,7 @@ class ProductController {
   };
 
   listManagedProduct = async (req, res) => {
-    const { page, search, sort, category } = req.query;
+    const { page, search, sort, filter, category } = req.query;
     let filterOptions = {};
     if (search)
       filterOptions = {
@@ -103,6 +103,11 @@ class ProductController {
       const result = await this.unit.Category.getOne({ name: category });
       filterOptions = { ...filterOptions, categories: result._id };
     }
+    if (filter)
+      filterOptions = {
+        ...filterOptions,
+        status: filter,
+      };
     const products = await this.unit.Product.getAll(filterOptions)
       .skip((page - 1) * 10)
       .limit(10)
@@ -124,8 +129,10 @@ class ProductController {
         populate: "types",
       })
       .lean();
-    if (!products) return res.status(404).json({ message: "Not Found" });
-    const productCounted = await this.unit.Product.countData(filterOptions);
+    if (!products) return res.status(404).json({ errorMessage: "Not Found" });
+    const productCounted = await this.unit.Product.countData(
+      filterOptions
+    ).lean();
     const pageCounted = Math.ceil(productCounted / 10);
     return res.status(200).json({ products, pageCounted });
   };

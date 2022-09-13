@@ -9,11 +9,14 @@ import {
   Slider,
   Timer,
   Breadcrumb,
+  Form,
 } from "../../components";
 import { Comment, Rating } from "../../containers";
 import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
+import { expireStorage, retryAxios, Validate } from "../../utils";
+import axios from "axios";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -30,6 +33,8 @@ export async function getServerSideProps({ params }) {
 export default function Overview({ product }) {
   const [targetImage, setTargetImage] = useState(product.images[0].url);
   const [quantity, setQuantity] = useState(1);
+  const [address, setAddress] = useState("");
+  const [display, setDisplay] = useState(false);
   const [options, setOptions] = useState([]);
   const targetVariation = useMemo(() => {
     const index = product.variations.findIndex((item) =>
@@ -43,7 +48,7 @@ export default function Overview({ product }) {
   const { device, Devices } = useContext(Media);
 
   const dispatch = useDispatch();
-  const handleAddToCart = () => {
+  const generateCart = () => {
     let { _id, title, images, price } = product;
     let variationId = null;
     let variationImage = null;
@@ -52,24 +57,50 @@ export default function Overview({ product }) {
       price = targetVariation.price;
       variationImage = targetVariation.image?.url;
     }
-    dispatch(
-      addCart({
-        productId: _id,
-        variationId,
-        title,
-        image: variationImage || images[0].url,
-        options,
-        quantity,
-        price,
-        total: quantity * price,
-      })
-    );
+    return {
+      productId: _id,
+      variationId,
+      title,
+      image: variationImage || images[0].url,
+      options,
+      quantity,
+      price,
+      total: quantity * price,
+    };
+  };
+  const handleAddToCart = () => {
+    dispatch(addCart(generateCart()));
     dispatch(
       addNotification({
-        message: `Success add ${title} to Cart`,
+        message: `Success add ${product.title} to Cart`,
         type: "success",
       })
     );
+  };
+
+  const handleOrder = async (e) => {
+    e.preventDefault();
+    retryAxios(axios);
+    const accessToken = expireStorage.getItem("accessToken");
+    try {
+      let products = [generateCart()];
+      new Validate(address).isEmpty().isNotSpecial();
+      await axios.post(
+        `${LocalApi}/order`,
+        {
+          products,
+          total: products[0].total,
+          quantity: products[0].quantity,
+          address,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setDisplay(false);
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -133,7 +164,7 @@ export default function Overview({ product }) {
                 key={variant._id}
                 type="radio"
                 name={variant.name}
-                style={{ display: "flex", justifyContent: "space-between" }}
+                className="flex justify-between"
                 setChecked={(value) =>
                   setOptions((prev) => {
                     const clone = prev.concat();
@@ -171,13 +202,15 @@ export default function Overview({ product }) {
                 style={{ flex: 1 }}
               />
               <button
-                style={{ flex: 1 }}
-                className="btn-add-to-cart"
+                className="btn-add-to-cart flex-1"
                 onClick={handleAddToCart}
               >
                 Add to Cart
               </button>
-              <button style={{ flex: 1 }} className="btn-add-to-cart">
+              <button
+                className="btn-add-to-cart flex-1"
+                onClick={() => setDisplay(true)}
+              >
                 Order
               </button>
             </div>
@@ -187,22 +220,56 @@ export default function Overview({ product }) {
         </div>
       </div>
 
-      <div>
-        <dl>
-          <dt>Description: </dt>
-          <dd>
-            <ReadMoreLess style={{ height: "150px" }}>
-              <p className="text-ellipsis whitespace-pre-wrap leading-[1.7]">
-                {product.description}
-              </p>
-            </ReadMoreLess>
-          </dd>
-        </dl>
-      </div>
+      <dl>
+        <dt>Description: </dt>
+        <dd>
+          <ReadMoreLess style={{ height: "150px" }}>
+            <p className="text-ellipsis whitespace-pre-wrap leading-[1.7]">
+              {product.description}
+            </p>
+          </ReadMoreLess>
+        </dd>
+      </dl>
 
       <Rating url={`${LocalApi}/rating/${product._id}`} />
 
       <Comment url={`${LocalApi}/product/${product._id}/comment`} />
+
+      {display && (
+        <>
+          <div
+            className="backdrop"
+            onClick={() => {
+              setAddress(""), setDisplay(false);
+            }}
+          ></div>
+          <Form onSubmit={handleOrder} className="form_center">
+            <Form.Title>Please set form for your checkout</Form.Title>
+            <Form.Item>
+              <Form.Title>Your Address</Form.Title>
+              <Form.Input
+                onChange={(e) => setAddress(e.target.value)}
+              ></Form.Input>
+            </Form.Item>
+            <Form.Link
+              target="_blank"
+              href={`https://maps.google.com/maps?q=${address}`}
+            >
+              Check address in google map
+            </Form.Link>
+            <Form.Item>
+              <Form.Submit>Submit</Form.Submit>
+              <Form.Button
+                onClick={() => {
+                  setAddress(""), setDisplay(false);
+                }}
+              >
+                Cancel
+              </Form.Button>
+            </Form.Item>
+          </Form>
+        </>
+      )}
     </div>
   );
 }

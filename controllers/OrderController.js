@@ -10,22 +10,6 @@ class OrderController {
     if (!order) return res.status(500).json("Fail to get order");
     return res.status(200).json(order);
   };
-  MyShipping = async (req, res) => {
-    const lstShipping = await this.unit.Order.getAll({
-      shipper: req.user.accountId,
-    })
-      .populate({
-        path: "customer",
-        select: ["username", "user"],
-        populate: {
-          path: "user",
-          select: ["phoneNumber"],
-        },
-      })
-      .populate("orderItems")
-      .lean();
-    return res.status(200).json(lstShipping);
-  };
   lstOrder = async (req, res) => {
     const lstOrder = await this.unit.Order.getAll()
       .where("status", "pending")
@@ -37,8 +21,7 @@ class OrderController {
     return res.status(200).json(lstOrder);
   };
   getQR = async (req, res) => {
-    const api = process.env.NEXT_PUBLIC_LOCAL_API;
-    const url = `${api}/order/${req.query.id}/${req.user.accountId}`;
+    const url = `${req.query.id}/${req.user.accountId}`;
     try {
       const generatedQR = await toDataURL(url);
       return res.status(200).json(generatedQR);
@@ -91,32 +74,6 @@ class OrderController {
     );
     if (!addOrderToCustomer) return res.status(500).json("Fail to add Order");
     return res.status(200).end();
-  };
-  acceptShipper = async (req, res) => {
-    const { acceptedOrders } = req.body;
-    const { accountId, role } = req.user;
-    try {
-      const addOrders = await this.unit.Account.updateOne(
-        { _id: accountId, role },
-        {
-          $push: {
-            shipping: {
-              $each: acceptedOrders,
-            },
-          },
-        }
-      );
-      await this.unit.Order.updateMany(
-        {
-          _id: { $in: acceptedOrders },
-        },
-        { $set: { shipper: accountId, status: "shipping" } }
-      );
-      return res.status(200).end();
-    } catch (error) {
-      console.log(error.message);
-      return res.status(500).json(error);
-    }
   };
   patchOrder = async (req, res) => {
     const patched = this.unit.Order.updateById(req.query.id, {

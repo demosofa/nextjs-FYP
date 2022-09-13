@@ -27,8 +27,8 @@ function Dashboard() {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
+        if (err.response.status === 300) return router.back();
+        else if (err.response.status === 401) return router.push("/login");
         else return dispatch(addNotification({ message: err.message }));
       },
     }
@@ -65,7 +65,7 @@ function Dashboard() {
               <th>No.</th>
               <th>Image</th>
               <th>Id</th>
-              <th>Title</th>
+              <th className="w-[40%]">Title</th>
               <th>Sold</th>
             </tr>
           </thead>
@@ -81,7 +81,11 @@ function Dashboard() {
                   ></img>
                 </td>
                 <td>{product._id}</td>
-                <td>{product.title}</td>
+                <td>
+                  <p className="line-clamp-1 hover:line-clamp-none">
+                    {product.title}
+                  </p>
+                </td>
                 <td>{product.total}</td>
               </tr>
             ))}

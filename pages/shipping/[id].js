@@ -2,14 +2,16 @@ import axios from "axios";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { convertTime, retryAxios } from "../../utils";
-import { withAuth } from "../../helpers";
+import { retryAxios } from "../../utils";
+import { convertTime } from "../../shared";
 import { Loading } from "../../components";
-import { ProgressBar, QRScanner } from "../../containers";
+import { ProgressBar } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useState } from "react";
 import { Role } from "../../shared";
+import QrScanner from "react-qr-scanner";
 import Head from "next/head";
+import { withAuth } from "../../helpers";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -55,8 +57,8 @@ export default function ShippingProgress({ initData, auth }) {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
+        if (err.response.status === 300) return router.back();
+        else if (err.response.status === 401) return router.push("/login");
         else return dispatch(addNotification({ message: err.message }));
       },
     }
@@ -77,6 +79,18 @@ export default function ShippingProgress({ initData, auth }) {
     }
   };
 
+  const handleScan = async (scanData) => {
+    if (scanData && scanData !== "") {
+      try {
+        const result = await fetcher({
+          url: `${LocalApi}/order/${scanData.text}`,
+        });
+      } catch (error) {
+        dispatch(addNotification({ message: error.message }));
+      }
+    }
+  };
+
   const handleCheckStep = (value) => {
     if (value === "arrived") {
       if (auth === Role.guest) {
@@ -89,12 +103,13 @@ export default function ShippingProgress({ initData, auth }) {
 
   const steps = [
     { title: "pending", allowed: false },
+    { title: "progress", allowed: false },
     { title: "shipping", allowed: false },
     {
       title: "arrived",
       allowed: auth === Role.shipper || auth === Role.admin ? true : false,
     },
-    { title: "paid", allowed: false },
+    { title: "validated", allowed: false },
   ];
 
   if (!order || error)
@@ -128,7 +143,13 @@ export default function ShippingProgress({ initData, auth }) {
           <button onClick={() => setShowScanner((prev) => !prev)}>
             Show Scanner
           </button>
-          <QRScanner></QRScanner>
+          <QrScanner
+            facingMode="front"
+            delay={500}
+            onError={(err) => dispatch(addNotification({ message: err }))}
+            onScan={handleScan}
+            className="h-80 w-80"
+          />
         </div>
       )}
     </div>

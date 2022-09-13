@@ -62,7 +62,7 @@ export default function Cart() {
       </Head>
       <div className="cart__lst">
         {cart.products.map((item) => (
-          <Animation.Zoom key={item.title}>
+          <Animation.Zoom key={item.title + item.variationId}>
             <Link href={`/overview/${item.productId}`}>
               <a className="cart__product ux-card">
                 <div className="cart__product__info">
@@ -124,7 +124,7 @@ export default function Cart() {
           <dl className="sub-total">
             <dt>Sub Total</dt>
             <dd>{cart.total}$</dd>
-            <dt>Tax</dt>
+            <dt>Shipping fee</dt>
             <dd>{cart.quantity * 0.5}$</dd>
           </dl>
           <dl className="total">

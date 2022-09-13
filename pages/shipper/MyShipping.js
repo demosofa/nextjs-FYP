@@ -1,8 +1,11 @@
 import axios from "axios";
 import Link from "next/link";
-import { withAuth } from "../../helpers";
+import { useDispatch } from "react-redux";
+import { addNotification } from "../../redux/reducer/notificationSlice";
+import { retryAxios } from "../../utils";
 import { useState } from "react";
 import Head from "next/head";
+import { withAuth } from "../../helpers";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -28,6 +31,18 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
 
 export default function MyShipping({ initData }) {
   const [viewOrder, setViewOrder] = useState(null);
+  const [showQR, setShowQR] = useState(null);
+  const dispatch = useDispatch();
+  const handleShowQR = async (orderId) => {
+    retryAxios(axios);
+    try {
+      const response = await axios.put(`${LocalApi}/order/${orderId}`);
+      setShowQR(response.data);
+    } catch (error) {
+      dispatch(addNotification({ message: error.message }));
+    }
+  };
+
   return (
     <div className="manage_table">
       <Head>
@@ -68,6 +83,11 @@ export default function MyShipping({ initData }) {
                 <button onClick={() => setViewOrder(order.orderItems)}>
                   View List item
                 </button>
+                {order.status === "progress" && (
+                  <button onClick={() => handleShowQR(order._id)}>
+                    Show QR to seller
+                  </button>
+                )}
                 <Link href={`/shipping/${order._id}`}>
                   <a className="flex items-center justify-center rounded-lg bg-amber-600 p-2">
                     Manage Progress
@@ -100,7 +120,11 @@ export default function MyShipping({ initData }) {
                     <td>
                       <img src={item.image} alt="order-item"></img>
                     </td>
-                    <td>{item.title}</td>
+                    <td>
+                      <p className="line-clamp-1 hover:line-clamp-none">
+                        {item.title}
+                      </p>
+                    </td>
                     <td>{item.options.join(", ")}</td>
                     <td>{item.quantity}</td>
                     <td>${item.total}</td>
@@ -108,6 +132,14 @@ export default function MyShipping({ initData }) {
                 ))}
               </tbody>
             </table>
+          </div>
+        </>
+      )}
+      {showQR && (
+        <>
+          <div className="backdrop" onClick={() => setShowQR(null)}></div>
+          <div className="form_center">
+            <img src={showQR} alt="QR code"></img>
           </div>
         </>
       )}
