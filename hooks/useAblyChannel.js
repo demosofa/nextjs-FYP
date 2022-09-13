@@ -3,7 +3,7 @@ import { useMemo, useEffect } from "react";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 const ablyFE = new Ably.Realtime.Promise({
-  authUrl: `${LocalApi}/createTokenRequest`,
+  authUrl: `${LocalApi}/createAblyToken`,
 });
 
 export default function useAblyChannel(channelName, callbackOnMessage) {

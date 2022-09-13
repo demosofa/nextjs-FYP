@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { IncomingMessage, ServerResponse } from "http";
 import Cookies from "cookies";
 import { Token } from ".";
-import { convertTime } from "../utils";
+import { convertTime } from "../shared";
 
 const setCookieToken = (
   req:

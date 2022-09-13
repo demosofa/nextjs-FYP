@@ -1,7 +1,7 @@
 import { order } from "../../../../controllers";
 import { isAuthentication } from "../../../../helpers";
 
-async function orderId(req, res) {
+async function shipperId(req, res) {
   switch (req.method.toLowerCase()) {
     case "get":
       await order.checkQR(req, res);
@@ -9,4 +9,4 @@ async function orderId(req, res) {
   }
 }
 
-export default isAuthentication(orderId);
+export default isAuthentication(shipperId);
