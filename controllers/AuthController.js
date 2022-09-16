@@ -11,7 +11,7 @@ class AccountController {
 
   login = async (req, res) => {
     const { username, password } = req.body;
-    const check = await this.unit.Account.getOne({ username });
+    const check = await this.unit.Account.getOne({ username }).lean();
     if (!check)
       return res
         .status(300)
@@ -40,7 +40,7 @@ class AccountController {
     const { account, userInfo } = req.body;
     const isExisted = await this.unit.Account.getOne({
       username: account.username,
-    });
+    }).lean();
     if (isExisted)
       return res.status(300).json({
         message: "There is already existed account with this username",

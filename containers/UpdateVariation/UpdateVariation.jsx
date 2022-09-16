@@ -82,47 +82,55 @@ export default function UpdateVariation({ productId, setToggle }) {
           </tr>
         </thead>
         <tbody>
-          {storedVariations?.map((variation, index) => {
-            return (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td onClick={(e) => setVariationImage(index)}>
-                  {variation.image && (
-                    <img
-                      alt="product"
-                      src={variation.image.url}
-                      style={{ width: "100px", height: "80px" }}
-                    ></img>
-                  )}
-                </td>
-                <td>
-                  <input
-                    value={variation.sku}
-                    onChange={(e) =>
-                      handleEditVariation({ sku: e.target.value }, index)
-                    }
-                  ></input>
-                </td>
-                <td>{variation.types.map((type) => type.name).join("/")}</td>
-                <td>
-                  <input
-                    value={variation.price}
-                    onChange={(e) =>
-                      handleEditVariation({ price: e.target.value }, index)
-                    }
-                  ></input>
-                </td>
-                <td>
-                  <input
-                    value={variation.quantity}
-                    onChange={(e) =>
-                      handleEditVariation({ quantity: e.target.value }, index)
-                    }
-                  ></input>
-                </td>
-              </tr>
-            );
-          })}
+          {storedVariations?.length ? (
+            storedVariations.map((variation, index) => {
+              return (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td onClick={(e) => setVariationImage(index)}>
+                    {variation.image && (
+                      <img
+                        alt="product"
+                        src={variation.image.url}
+                        style={{ width: "100px", height: "80px" }}
+                      ></img>
+                    )}
+                  </td>
+                  <td>
+                    <input
+                      value={variation.sku}
+                      onChange={(e) =>
+                        handleEditVariation({ sku: e.target.value }, index)
+                      }
+                    ></input>
+                  </td>
+                  <td>{variation.types.map((type) => type.name).join("/")}</td>
+                  <td>
+                    <input
+                      value={variation.price}
+                      onChange={(e) =>
+                        handleEditVariation({ price: e.target.value }, index)
+                      }
+                    ></input>
+                  </td>
+                  <td>
+                    <input
+                      value={variation.quantity}
+                      onChange={(e) =>
+                        handleEditVariation({ quantity: e.target.value }, index)
+                      }
+                    ></input>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center">
+                There is any variations for this product
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
       <button type="button" onClick={handleSaveVariation}>

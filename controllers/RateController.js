@@ -6,15 +6,15 @@ class RateController {
   }
   getRating = async (req, res) => {
     try {
-      const { ratings } = await this.unit.Account.getById(
-        req.user.accountId
-      ).populate({
-        path: "ratings",
-        match: {
-          product: req.query.id,
-        },
-        select: "rating",
-      });
+      const { ratings } = await this.unit.Account.getById(req.user.accountId)
+        .populate({
+          path: "ratings",
+          match: {
+            product: req.query.id,
+          },
+          select: "rating",
+        })
+        .lean();
       return res.status(200).json(ratings[0]);
     } catch (error) {
       return res.status(500).json({ message: error });
@@ -29,7 +29,7 @@ class RateController {
       const prevRate = await this.unit.Rate.getOne({
         product: productId,
         account: accountId,
-      });
+      }).lean();
 
       const update = await this.unit.Rate.updateOne(
         { product: productId, account: accountId },

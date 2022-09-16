@@ -95,23 +95,31 @@ function Shipper() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>
-                  <Checkbox.Item value={order._id}></Checkbox.Item>
-                </td>
-                <td>{order._id}</td>
-                <td>${order.total}</td>
-                <td>
-                  <Form.Link
-                    target="_blank"
-                    href={`https://maps.google.com/maps?q=${order.address}`}
-                  >
-                    {order.address}
-                  </Form.Link>
+            {orders.length ? (
+              orders.map((order) => (
+                <tr key={order._id}>
+                  <td>
+                    <Checkbox.Item value={order._id}></Checkbox.Item>
+                  </td>
+                  <td>{order._id}</td>
+                  <td>${order.total}</td>
+                  <td>
+                    <Form.Link
+                      target="_blank"
+                      href={`https://maps.google.com/maps?q=${order.address}`}
+                    >
+                      {order.address}
+                    </Form.Link>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center">
+                  Currently, there is any customer ordering
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </Checkbox>

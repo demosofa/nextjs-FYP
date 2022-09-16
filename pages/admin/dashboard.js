@@ -76,25 +76,33 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {data?.map((product, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>
-                  <img
-                    className="h-20 w-28"
-                    src={product.image}
-                    alt="product"
-                  ></img>
+            {data.length ? (
+              data.map((product, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <img
+                      className="h-20 w-28"
+                      src={product.image}
+                      alt="product"
+                    ></img>
+                  </td>
+                  <td>{product._id}</td>
+                  <td>
+                    <p className="line-clamp-1 hover:line-clamp-none">
+                      {product.title}
+                    </p>
+                  </td>
+                  <td>{product.total}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center">
+                  No customer has bought anything
                 </td>
-                <td>{product._id}</td>
-                <td>
-                  <p className="line-clamp-1 hover:line-clamp-none">
-                    {product.title}
-                  </p>
-                </td>
-                <td>{product.total}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

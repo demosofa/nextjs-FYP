@@ -8,6 +8,7 @@ import { useState } from "react";
 import QrScanner from "react-qr-scanner";
 import dynamic from "next/dynamic";
 import { addNotification } from "../../redux/reducer/notificationSlice";
+import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
@@ -83,6 +84,11 @@ function SellerPage() {
     );
   return (
     <div className="manage_table">
+      <Head>
+        <title>Seller page</title>
+        <meta name="description" content="Seller page" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <button onClick={() => setShowScanner(true)}>
         Get Shipper order information
       </button>
@@ -97,26 +103,34 @@ function SellerPage() {
           </tr>
         </thead>
         <tbody>
-          {data.map((order, index) => (
-            <tr key={order._id}>
-              <td>{index + 1}</td>
-              <td>{order._id}</td>
-              <td>${order.total}</td>
-              <td>
-                {new Date(order.validatedAt).toLocaleString("en-US", {
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                  timeZone: "Asia/Ho_Chi_Minh",
-                })}
-              </td>
-              <td>
-                <button onClick={() => setViewOrderItem(order.orderItems)}>
-                  View List item
-                </button>
+          {data.length ? (
+            data.map((order, index) => (
+              <tr key={order._id}>
+                <td>{index + 1}</td>
+                <td>{order._id}</td>
+                <td>${order.total}</td>
+                <td>
+                  {new Date(order.validatedAt).toLocaleString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                    timeZone: "Asia/Ho_Chi_Minh",
+                  })}
+                </td>
+                <td>
+                  <button onClick={() => setViewOrderItem(order.orderItems)}>
+                    View List item
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="text-center">
+                Currently, seller has yet validated any shipper order
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       {viewOrderItem && (

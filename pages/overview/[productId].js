@@ -112,7 +112,9 @@ export default function Overview({ product }) {
     <div className="page-overview">
       <Head>
         <title>{product.title}</title>
+        <meta name="description" content={product.description} />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Breadcrumb categories={product.categories} />
       <div className="container-info">

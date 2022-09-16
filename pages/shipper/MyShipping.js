@@ -85,39 +85,47 @@ function MyShipping() {
           </tr>
         </thead>
         <tbody>
-          {data.map((order, index) => (
-            <tr key={order._id}>
-              <td>{index + 1}</td>
-              <td>{order._id}</td>
-              <td>{order.status}</td>
-              <td>
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href={`https://maps.google.com/maps?q=${order.address}`}
-                >
-                  {order.address}
-                </a>
-              </td>
-              <td>{order.customer.user.phoneNumber}</td>
-              <td>${order.total}</td>
-              <td className="flex flex-col items-center">
-                <button onClick={() => setViewOrder(order.orderItems)}>
-                  View List item
-                </button>
-                {order.status === "progress" && (
-                  <button onClick={() => handleShowQR(order._id)}>
-                    Show QR to seller
-                  </button>
-                )}
-                <Link href={`/shipping/${order._id}`}>
-                  <a className="flex items-center justify-center rounded-lg bg-amber-600 p-2">
-                    Manage Progress
+          {data.length ? (
+            data.map((order, index) => (
+              <tr key={order._id}>
+                <td>{index + 1}</td>
+                <td>{order._id}</td>
+                <td>{order.status}</td>
+                <td>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`https://maps.google.com/maps?q=${order.address}`}
+                  >
+                    {order.address}
                   </a>
-                </Link>
+                </td>
+                <td>{order.customer.user.phoneNumber}</td>
+                <td>${order.total}</td>
+                <td className="flex flex-col items-center">
+                  <button onClick={() => setViewOrder(order.orderItems)}>
+                    View List item
+                  </button>
+                  {order.status === "progress" && (
+                    <button onClick={() => handleShowQR(order._id)}>
+                      Show QR to seller
+                    </button>
+                  )}
+                  <Link href={`/shipping/${order._id}`}>
+                    <a className="flex items-center justify-center rounded-lg bg-amber-600 p-2">
+                      Manage Progress
+                    </a>
+                  </Link>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" className="text-center">
+                Go to this <Link href="/">page</Link> and accept orders first
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       {viewOrder && (

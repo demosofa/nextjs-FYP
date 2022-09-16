@@ -25,7 +25,9 @@ class CategoryController {
     return res.status(200).json(categories);
   };
   create = async (req, res) => {
-    const Category = await this.unit.Category.getOne({ name: req.body.name });
+    const Category = await this.unit.Category.getOne({
+      name: req.body.name,
+    }).lean();
     if (Category)
       return res.status(300).json({
         message: "there is already an existed category",
@@ -36,7 +38,9 @@ class CategoryController {
     return res.status(200).json(created);
   };
   addSubCategory = async (req, res) => {
-    const check = await this.unit.Category.getOne({ name: req.body.name });
+    const check = await this.unit.Category.getOne({
+      name: req.body.name,
+    }).lean();
     if (check)
       return res
         .status(500)
@@ -52,7 +56,7 @@ class CategoryController {
     return res.status(200).json(category);
   };
   update = async (req, res) => {
-    const Category = await this.unit.Category.getById(req.query.id);
+    const Category = await this.unit.Category.getById(req.query.id).lean();
     if (!Category)
       return res.status(300).json({
         message: "there is any existed category",

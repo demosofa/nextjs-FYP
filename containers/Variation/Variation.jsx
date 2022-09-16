@@ -36,44 +36,54 @@ export default function Variation() {
           </tr>
         </thead>
         <tbody>
-          {variations.map((variation, index) => {
-            if (!variation.types.length) return undefined;
-            return (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>
-                  <input
-                    value={variation.sku}
-                    onChange={(e) =>
-                      dispatch(editVariation({ index, sku: e.target.value }))
-                    }
-                  ></input>
-                </td>
-                <td>{variation.types.join("/")}</td>
-                <td>
-                  <input
-                    value={variation.price}
-                    onChange={(e) =>
-                      dispatch(editVariation({ index, price: e.target.value }))
-                    }
-                  ></input>
-                </td>
-                <td>
-                  <input
-                    value={variation.quantity}
-                    onChange={(e) =>
-                      dispatch(
-                        editVariation({ index, quantity: e.target.value })
-                      )
-                    }
-                  ></input>
-                </td>
-                <td onClick={() => dispatch(deleteVariation(index))}>
-                  <GiTrashCan />
-                </td>
-              </tr>
-            );
-          })}
+          {variations?.length ? (
+            variations.map((variation, index) => {
+              if (!variation.types.length) return undefined;
+              return (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <input
+                      value={variation.sku}
+                      onChange={(e) =>
+                        dispatch(editVariation({ index, sku: e.target.value }))
+                      }
+                    ></input>
+                  </td>
+                  <td>{variation.types.join("/")}</td>
+                  <td>
+                    <input
+                      value={variation.price}
+                      onChange={(e) =>
+                        dispatch(
+                          editVariation({ index, price: e.target.value })
+                        )
+                      }
+                    ></input>
+                  </td>
+                  <td>
+                    <input
+                      value={variation.quantity}
+                      onChange={(e) =>
+                        dispatch(
+                          editVariation({ index, quantity: e.target.value })
+                        )
+                      }
+                    ></input>
+                  </td>
+                  <td onClick={() => dispatch(deleteVariation(index))}>
+                    <GiTrashCan />
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan="5" className="text-center">
+                Please add variants first so variation can be generated
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
