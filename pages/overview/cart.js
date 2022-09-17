@@ -71,7 +71,7 @@ export default function Cart() {
       </Head>
       <div className="cart__lst">
         {cart.products.length ? (
-          cart.map((item) => (
+          cart.products.map((item) => (
             <Animation.Zoom key={item.title + item.variationId}>
               <Link href={`/overview/${item.productId}`}>
                 <a className="cart__product ux-card">
