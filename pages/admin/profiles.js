@@ -105,35 +105,45 @@ export default function ManageProfiles() {
           </tr>
         </thead>
         <tbody>
-          {data.map((profile, index) => (
-            <tr key={profile._id}>
-              <td>{index + 1}</td>
-              <td>{profile._id}</td>
-              <td>{profile.username}</td>
-              <td>
-                <select
-                  defaultValue={profile.role}
-                  onChange={(e) => handleChangeRole(e, index)}
-                >
-                  {["guest", "shipper"].map((role) => (
-                    <option key={role} value={role}>
-                      {role}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <div>Email: {profile.user.email}</div>
-                <div>Phone Number: {profile.user.phoneNumber}</div>
-              </td>
-              <td>
-                <button onClick={() => handleBlocOrUnblockkUser(index)}>
-                  {profile.blocked ? "Unblock" : "Block"}
-                </button>
-                <button onClick={() => handleDeleteUser(index)}>Delete</button>
+          {data.length ? (
+            data.map((profile, index) => (
+              <tr key={profile._id}>
+                <td>{index + 1}</td>
+                <td>{profile._id}</td>
+                <td>{profile.username}</td>
+                <td>
+                  <select
+                    defaultValue={profile.role}
+                    onChange={(e) => handleChangeRole(e, index)}
+                  >
+                    {["guest", "shipper"].map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <div>Email: {profile.user.email}</div>
+                  <div>Phone Number: {profile.user.phoneNumber}</div>
+                </td>
+                <td>
+                  <button onClick={() => handleBlockUser(index)}>
+                    {profile.blocked ? "Unblock" : "Block"}
+                  </button>
+                  <button onClick={() => handleDeleteUser(index)}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center">
+                No guest has resgitered our page
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

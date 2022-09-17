@@ -105,30 +105,38 @@ export default function MyOrder() {
               </tr>
             </thead>
             <tbody>
-              {data.map((order, index) => (
-                <tr key={order._id}>
-                  <td>{index + 1}</td>
-                  <td>{order._id}</td>
-                  <td>{order.status}</td>
-                  <td>
-                    {new Date(order.createdAt).toLocaleString("en-US", {
-                      timeZone: "Asia/Ho_Chi_Minh",
-                    })}
-                  </td>
-                  <td>${order.total}</td>
-                  <td>{order.shipper?.username}</td>
-                  <td>
-                    <button onClick={() => setViewOrder(order.orderItems)}>
-                      View order items
-                    </button>
-                    {order.status === "pending" && (
-                      <button onClick={() => setDisplayCancel(order)}>
-                        Cancel Order
+              {data.length ? (
+                data.map((order, index) => (
+                  <tr key={order._id}>
+                    <td>{index + 1}</td>
+                    <td>{order._id}</td>
+                    <td>{order.status}</td>
+                    <td>
+                      {new Date(order.createdAt).toLocaleString("en-US", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </td>
+                    <td>${order.total}</td>
+                    <td>{order.shipper?.username}</td>
+                    <td>
+                      <button onClick={() => setViewOrder(order.orderItems)}>
+                        View order items
                       </button>
-                    )}
+                      {order.status === "pending" && (
+                        <button onClick={() => setDisplayCancel(order)}>
+                          Cancel Order
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="7" className="text-center">
+                    Currently there is any orders that meet this filter
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         )}
