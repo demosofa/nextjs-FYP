@@ -1,6 +1,6 @@
 import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
 import { expireStorage } from "../../utils";
-import { addCart, removeCart } from "../reducer/cartSlice";
+import { addCart, removeCart } from "../reducer/cartSlice1";
 
 const cartListenerMiddleware = createListenerMiddleware();
 cartListenerMiddleware.startListening({

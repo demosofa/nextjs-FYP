@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { cart, notification, variant, variation } from "./reducer";
 import { apiSlice } from "./api";
-import cartListenerMiddleware from "./middleware/cartStorage";
+import cartListenerMiddleware from "./middleware/cartStorage1";
 import { expireStorage } from "../utils";
 
 function loadState(name) {
