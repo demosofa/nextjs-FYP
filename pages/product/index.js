@@ -121,7 +121,7 @@ function ProductCRUD() {
             {products.length ? (
               products.map((product, index) => {
                 return (
-                  <tr key={index}>
+                  <tr key={product._id}>
                     <td>{index + 1}</td>
                     <td>
                       <img

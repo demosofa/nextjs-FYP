@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
 import { Animation, Form, Icon, Increment } from "../../components";
-import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice1";
+import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { expireStorage, retryAxios, Validate } from "../../utils";
