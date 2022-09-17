@@ -61,63 +61,67 @@ export default function Cart() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="cart__lst">
-        {cart.products.map((item) => (
-          <Animation.Zoom key={item.title + item.variationId}>
-            <Link href={`/overview/${item.productId}`}>
-              <a className="cart__product ux-card">
-                <div className="cart__product__info">
-                  <img alt="product" src={item.image}></img>
-                  <div className="product__info">
-                    <div className="info product__title">
-                      <span>Title: </span>
-                      {item.title}
-                    </div>
-                    <div className="info product__option">
-                      <span>Option: </span>
-                      {item.options.join(", ")}
-                    </div>
-                    <div className="info product__price">
-                      <span>Price: </span>
-                      {item.price} $
+        {cart.products.length ? (
+          cart.products.map((item) => (
+            <Animation.Zoom key={item.title + item.variationId}>
+              <Link href={`/overview/${item.productId}`}>
+                <a className="cart__product ux-card">
+                  <div className="cart__product__info">
+                    <img alt="product" src={item.image}></img>
+                    <div className="product__info">
+                      <div className="info product__title">
+                        <span>Title: </span>
+                        {item.title}
+                      </div>
+                      <div className="info product__option">
+                        <span>Option: </span>
+                        {item.options.join(", ")}
+                      </div>
+                      <div className="info product__price">
+                        <span>Price: </span>
+                        {item.price} $
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="change__quantity">
-                  <Increment
-                    value={item.quantity}
-                    setValue={(value) => {
-                      if (item.title) {
-                        dispatch(
-                          addCart({
-                            ...item,
-                            quantity: value,
-                            total: Math.round(value * item.price),
-                          })
-                        );
-                      }
-                    }}
-                    style={{ width: "100px" }}
-                  />
-                  <div className="info">
-                    <span>Total: </span> {item.total} $
+                  <div className="change__quantity">
+                    <Increment
+                      value={item.quantity}
+                      setValue={(value) => {
+                        if (item.title) {
+                          dispatch(
+                            addCart({
+                              ...item,
+                              quantity: value,
+                              total: Math.round(value * item.price),
+                            })
+                          );
+                        }
+                      }}
+                      style={{ width: "100px" }}
+                    />
+                    <div className="info">
+                      <span>Total: </span> {item.total} $
+                    </div>
                   </div>
-                </div>
-                <Icon
-                  className="remove__product"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dispatch(removeCart(item));
-                  }}
-                  style={{ padding: 0 }}
-                >
-                  <IoIosClose />
-                </Icon>
-              </a>
-            </Link>
-          </Animation.Zoom>
-        ))}
+                  <Icon
+                    className="remove__product"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      dispatch(removeCart(item));
+                    }}
+                    style={{ padding: 0 }}
+                  >
+                    <IoIosClose />
+                  </Icon>
+                </a>
+              </Link>
+            </Animation.Zoom>
+          ))
+        ) : (
+          <label>There is any cart</label>
+        )}
       </div>
       <div className="summary ux-card">
         <div>

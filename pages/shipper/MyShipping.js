@@ -10,26 +10,26 @@ import { withAuth } from "../../helpers";
 const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
 
 export const getServerSideProps = withAuth(async ({ req }, role) => {
-  let initData = null;
+  let data = null;
   try {
     const response = await axios.get(`${LocalApi}/shipper`, {
       headers: {
         Cookie: req.headers.cookie,
       },
     });
-    initData = response.data;
+    data = response.data;
   } catch (error) {
     console.log(error.message);
   }
   return {
     props: {
-      initData,
+      data,
       role,
     },
   };
 });
 
-export default function MyShipping({ initData }) {
+export default function MyShipping({ data }) {
   const [viewOrder, setViewOrder] = useState(null);
   const [showQR, setShowQR] = useState(null);
   const dispatch = useDispatch();
@@ -63,39 +63,47 @@ export default function MyShipping({ initData }) {
           </tr>
         </thead>
         <tbody>
-          {initData.map((order, index) => (
-            <tr key={order._id}>
-              <td>{index + 1}</td>
-              <td>{order._id}</td>
-              <td>{order.status}</td>
-              <td>
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href={`https://maps.google.com/maps?q=${order.address}`}
-                >
-                  {order.address}
-                </a>
-              </td>
-              <td>{order.customer.user.phoneNumber}</td>
-              <td>${order.total}</td>
-              <td className="flex flex-col items-center">
-                <button onClick={() => setViewOrder(order.orderItems)}>
-                  View List item
-                </button>
-                {order.status === "progress" && (
-                  <button onClick={() => handleShowQR(order._id)}>
-                    Show QR to seller
-                  </button>
-                )}
-                <Link href={`/shipping/${order._id}`}>
-                  <a className="flex items-center justify-center rounded-lg bg-amber-600 p-2">
-                    Manage Progress
+          {data.length ? (
+            data.map((order, index) => (
+              <tr key={order._id}>
+                <td>{index + 1}</td>
+                <td>{order._id}</td>
+                <td>{order.status}</td>
+                <td>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`https://maps.google.com/maps?q=${order.address}`}
+                  >
+                    {order.address}
                   </a>
-                </Link>
+                </td>
+                <td>{order.customer.user.phoneNumber}</td>
+                <td>${order.total}</td>
+                <td className="flex flex-col items-center">
+                  <button onClick={() => setViewOrder(order.orderItems)}>
+                    View List item
+                  </button>
+                  {order.status === "progress" && (
+                    <button onClick={() => handleShowQR(order._id)}>
+                      Show QR to seller
+                    </button>
+                  )}
+                  <Link href={`/shipping/${order._id}`}>
+                    <a className="flex items-center justify-center rounded-lg bg-amber-600 p-2">
+                      Manage Progress
+                    </a>
+                  </Link>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" className="text-center">
+                Go to this <Link href="/">page</Link> and accept orders first
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       {viewOrder && (

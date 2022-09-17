@@ -5,7 +5,7 @@ class SellerController {
     this.unit = new unit();
   }
   todayValidated = async (req, res) => {
-    const currentDate = new Date().getDate();
+    const currentDate = new Date();
     try {
       const datas = await this.unit.Order.getAll({
         validatedAt: { $gte: currentDate },

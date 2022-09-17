@@ -38,7 +38,7 @@ class ShipperController {
       _id: orderId,
     })
       .populate({ path: "shipper", select: ["username"] })
-      .populate("products")
+      .populate("orderItems")
       .lean();
     return res.status(200).json(order);
   };

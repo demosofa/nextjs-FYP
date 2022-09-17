@@ -173,7 +173,12 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
           )}
         </div>
       )}
-      {toggle.add && <CategoryInput callback={handleAddSubCategory} />}
+      {toggle.add && (
+        <CategoryInput
+          callback={handleAddSubCategory}
+          setToggle={() => setToggle((prev) => ({ ...prev, add: false }))}
+        />
+      )}
       {loading && <Loading.Text />}
       {toggle.more && (
         <div className={styles.sub_categories_container}>

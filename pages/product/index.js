@@ -108,64 +108,72 @@ export default function ProductCRUD({ value }) {
             </tr>
           </thead>
           <tbody>
-            {products?.map((product, index) => {
-              return (
-                <tr key={product._id}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <img
-                      alt="product"
-                      src={product.images[0].url}
-                      style={{ width: "100px", height: "80px" }}
-                    ></img>
-                  </td>
-                  <td>
-                    <p className="line-clamp-1 hover:line-clamp-none">
-                      {product.title}
-                    </p>
-                  </td>
-                  <td>
-                    <select
-                      defaultValue={product.status}
-                      onChange={(e) => handleStatus(e, index)}
-                    >
-                      <option value="active">active</option>
-                      <option value="non-active">non-active</option>
-                      <option value="out">out</option>
-                    </select>
-                  </td>
-                  <td>
-                    <p>
-                      Created at:{" "}
-                      {new Date(product.createdAt).toLocaleString("en-US", {
-                        timeZone: "Asia/Ho_Chi_Minh",
-                      })}
-                    </p>
-                    <p>
-                      Updated at:{" "}
-                      {new Date(product.updatedAt).toLocaleString("en-US", {
-                        timeZone: "Asia/Ho_Chi_Minh",
-                      })}
-                    </p>
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => router.push(`/overview/${product._id}`)}
-                    >
-                      Preview
-                    </button>
-                    <button
-                      onClick={() =>
-                        router.push(`product/update/${product._id}`)
-                      }
-                    >
-                      Edit
-                    </button>
-                    <button onClick={() => setRemove(index)}>Remove</button>
-                  </td>
-                </tr>
-              );
-            })}
+            {products.length ? (
+              products.map((product, index) => {
+                return (
+                  <tr key={product._id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <img
+                        alt="product"
+                        src={product.images[0].url}
+                        style={{ width: "100px", height: "80px" }}
+                      ></img>
+                    </td>
+                    <td>
+                      <p className="line-clamp-1 hover:line-clamp-none">
+                        {product.title}
+                      </p>
+                    </td>
+                    <td>
+                      <select
+                        defaultValue={product.status}
+                        onChange={(e) => handleStatus(e, index)}
+                      >
+                        <option value="active">active</option>
+                        <option value="non-active">non-active</option>
+                        <option value="out">out</option>
+                      </select>
+                    </td>
+                    <td>
+                      <p>
+                        Created at:{" "}
+                        {new Date(product.createdAt).toLocaleString("en-US", {
+                          timeZone: "Asia/Ho_Chi_Minh",
+                        })}
+                      </p>
+                      <p>
+                        Updated at:{" "}
+                        {new Date(product.updatedAt).toLocaleString("en-US", {
+                          timeZone: "Asia/Ho_Chi_Minh",
+                        })}
+                      </p>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => router.push(`/overview/${product._id}`)}
+                      >
+                        Preview
+                      </button>
+                      <button
+                        onClick={() =>
+                          router.push(`product/update/${product._id}`)
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button onClick={() => setRemove(index)}>Remove</button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  Please add new products
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         {remove !== null && (
