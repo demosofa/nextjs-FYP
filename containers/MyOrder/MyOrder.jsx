@@ -8,7 +8,7 @@ import useSWR from "swr";
 import Select from "react-select";
 import { Form, Loading } from "../../components";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function MyOrder() {
   const [displayCancel, setDisplayCancel] = useState(null);

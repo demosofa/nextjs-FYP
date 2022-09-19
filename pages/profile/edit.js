@@ -8,7 +8,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import axios from "axios";
 import Head from "next/head";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export const getServerSideProps = withAuth(async ({ req }, role) => {
   let profile = null;

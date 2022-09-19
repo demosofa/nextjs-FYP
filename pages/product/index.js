@@ -6,11 +6,11 @@ import { useRouter } from "next/router";
 import { Pagination, Container, Search } from "../../components";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Notification } from "../../Layout";
+import { Notification } from "../../layouts";
 import { retryAxiosBackend } from "../../helpers";
 import { retryAxios } from "../../utils";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export async function getServerSideProps({ req, res, query }) {
   let value = null;
@@ -185,15 +185,17 @@ export default function ProductCRUD({ value }) {
           />
         )}
       </div>
-      <Pagination
-        totalPageCount={value.pageCounted}
-        currentPage={query.page}
-        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
-      >
-        <Pagination.Arrow>
-          <Pagination.Number />
-        </Pagination.Arrow>
-      </Pagination>
+      {value.pageCounted ? (
+        <Pagination
+          totalPageCount={value.pageCounted}
+          currentPage={query.page}
+          setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+        >
+          <Pagination.Arrow>
+            <Pagination.Number />
+          </Pagination.Arrow>
+        </Pagination>
+      ) : null}
     </div>
   );
 }

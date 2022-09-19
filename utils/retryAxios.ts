@@ -1,6 +1,6 @@
 import { AxiosStatic, AxiosInstance } from "axios";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function retryAxios(axiosInstance: AxiosStatic | AxiosInstance) {
   axiosInstance.interceptors.response.use(undefined, async (error) => {

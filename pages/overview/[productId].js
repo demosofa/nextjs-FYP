@@ -15,10 +15,10 @@ import { Comment, Rating } from "../../containers";
 import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
-import { expireStorage, retryAxios, Validate } from "../../utils";
+import { retryAxios, Validate } from "../../utils";
 import axios from "axios";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export async function getServerSideProps({ params }) {
   const data = await fetch(`${LocalApi}/product/${params.productId}`);
@@ -81,24 +81,15 @@ export default function Overview({ product }) {
   const handleOrder = async (e) => {
     e.preventDefault();
     retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
     try {
       let products = [generateCart()];
       new Validate(address).isEmpty().isNotSpecial();
-      await axios.post(
-        `${LocalApi}/order`,
-        {
-          products,
-          total: products[0].total,
-          quantity: products[0].quantity,
-          address,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await axios.post(`${LocalApi}/order`, {
+        products,
+        total: products[0].total,
+        quantity: products[0].quantity,
+        address,
+      });
       setDisplay(false);
     } catch (error) {}
   };

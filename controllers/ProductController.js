@@ -1,7 +1,7 @@
 import axios from "axios";
 import UnitOfWork from "./services/UnitOfWork";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 class ProductController {
   constructor(unit = UnitOfWork) {

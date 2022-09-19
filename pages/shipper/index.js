@@ -6,12 +6,12 @@ import { useDispatch } from "react-redux";
 import { withAuth } from "../../helpers";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { Checkbox, Form, Loading } from "../../components";
+import { Checkbox, Form, Loading, Pagination } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { retryAxios } from "../../utils";
 import { convertTime } from "../../shared";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export const getServerSideProps = withAuth(async ({ req }, role) => {
   let lstOrder = null;
@@ -35,6 +35,7 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
 
 export default function Shipper({ lstOrder }) {
   const [checkOrder, setCheckOrder] = useState([]);
+  const [query, setQuery] = useState({ page: 1, sort: "status" });
 
   const fetcher = async (config) => {
     retryAxios(axios);
@@ -45,7 +46,7 @@ export default function Shipper({ lstOrder }) {
   const router = useRouter();
   const { data: orders, error } = useSWR(
     {
-      url: `${LocalApi}/order`,
+      url: `${LocalApi}/order?page=${query.page}&sort=${query.sort}`,
     },
     fetcher,
     {
@@ -138,7 +139,20 @@ export default function Shipper({ lstOrder }) {
           </tbody>
         </table>
       </Checkbox>
-      <button onClick={handleSubmit}>Submit</button>
+      {orders.length ? (
+        <div>
+          <Pagination
+            totalPageCount={10}
+            currentPage={query.page}
+            setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+          >
+            <Pagination.Arrow>
+              <Pagination.Number />
+            </Pagination.Arrow>
+          </Pagination>
+          <button onClick={handleSubmit}>Submit</button>
+        </div>
+      ) : null}
     </div>
   );
 }

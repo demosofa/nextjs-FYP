@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FileUpload, TagsInput, Form, Container } from "../../../components";
 import { Variation, Variant, SelectCategory } from "../../../containers";
-import { Notification } from "../../../Layout";
+import { Notification } from "../../../layouts";
 import { retryAxios, Validate, uploadApi } from "../../../utils";
 import { Media } from "../../_app";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,7 +14,7 @@ import { addNotification } from "../../../redux/reducer/notificationSlice";
 import Select from "react-select";
 import dynamic from "next/dynamic";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function CreateForm() {
   const variants = useSelector((state) => state.variant);

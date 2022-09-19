@@ -4,7 +4,7 @@ import Link from "next/link";
 import Head from "next/head";
 import { MyOrder } from "../../containers";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export const getServerSideProps = withAuth(async ({ req }, role) => {
   let initData = null;

@@ -9,7 +9,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { retryAxios } from "../../utils";
 import Head from "next/head";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function Dashboard() {
   const fetcher = async (config) => {

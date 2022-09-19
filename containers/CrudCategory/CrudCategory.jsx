@@ -8,7 +8,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { BiDotsVertical } from "react-icons/bi";
 import styles from "./crudcategory.module.scss";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function CrudCategory({ maxTree = 3 }) {
   const dispatch = useDispatch();

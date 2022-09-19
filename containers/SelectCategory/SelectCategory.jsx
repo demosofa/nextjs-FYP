@@ -3,7 +3,7 @@ import Select from "react-select";
 import { Loading } from "../../components";
 import { useAxiosLoad } from "../../hooks";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function SelectCategory({
   index = 0,

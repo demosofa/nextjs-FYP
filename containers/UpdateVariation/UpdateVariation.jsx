@@ -8,7 +8,7 @@ import { retryAxios } from "../../utils";
 import { AiOutlineCheck } from "react-icons/ai";
 import styles from "./updatevariation.module.scss";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function UpdateVariation({ productId, setToggle }) {
   const [storedVariations, setStoredVariations] = useState([]);

@@ -2,14 +2,16 @@ import axios from "axios";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { Loading } from "../../components";
+import { Loading, Pagination } from "../../components";
 import { retryAxios } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
+import { useState } from "react";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function ManageProfiles() {
+  const [query, setQuery] = useState({ page: 1, sort: "status", filter: "" });
   const dispatch = useDispatch();
   const router = useRouter();
   const fetcher = async (config) => {
@@ -19,7 +21,7 @@ export default function ManageProfiles() {
   };
   const { data, error, mutate } = useSWR(
     {
-      url: `${LocalApi}/admin/profiles`,
+      url: `${LocalApi}/admin/profiles?page=${query.page}&sort=${query.sort}&filter=${query.filter}`,
     },
     fetcher,
     {
@@ -146,6 +148,16 @@ export default function ManageProfiles() {
           )}
         </tbody>
       </table>
+      <Pagination
+        className="mt-8"
+        totalPageCount={10}
+        currentPage={query.page}
+        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+      >
+        <Pagination.Arrow>
+          <Pagination.Number />
+        </Pagination.Arrow>
+      </Pagination>
     </div>
   );
 }

@@ -3,25 +3,14 @@ import { useRouter } from "next/router";
 import { Badge, Search } from "../../components";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import styles from "./Navbar.module.css";
 import { useState } from "react";
+import RouterAuth from "../../containers/RouterAuth/RouterAuth";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
-
-export default function Navbar({ arrLink = [{ title: "", link: "" }] }) {
+export default function Navbar({ arrLink }) {
   const [search, setSearch] = useState("");
   const cart = useSelector((state) => state.cart);
   const router = useRouter();
-  const handleLogout = async () => {
-    try {
-      await axios.post(`${LocalApi}/auth/logout`);
-      localStorage.clear();
-      router.reload();
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <div className={styles.nav}>
       <div className={styles.bar}>
@@ -35,7 +24,7 @@ export default function Navbar({ arrLink = [{ title: "", link: "" }] }) {
         />
       </div>
       <div className={styles.bar}>
-        {arrLink.map(
+        {arrLink?.map(
           (link, index) =>
             link.title && (
               <Link key={index} href={link.path}>
@@ -45,19 +34,10 @@ export default function Navbar({ arrLink = [{ title: "", link: "" }] }) {
         )}
       </div>
       <div className={styles.bar}>
-        {localStorage.getItem("permission") ? (
-          <>
-            <Link href="/profile">My Profile</Link>
-            <span onClick={handleLogout} style={{ cursor: "pointer" }}>
-              Logout
-            </span>
-          </>
-        ) : (
-          <>
-            <Link href="/login">Login</Link>
-            <Link href="/register">Register</Link>
-          </>
+        {localStorage.getItem("permission") && (
+          <Link href="/profile">My Profile</Link>
         )}
+        <RouterAuth />
         <Link href="/overview/cart">
           <a>
             <Badge value={cart.products.length}>

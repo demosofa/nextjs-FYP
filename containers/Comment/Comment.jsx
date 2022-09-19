@@ -10,7 +10,7 @@ import decoder from "jwt-decode";
 import styles from "./comment.module.scss";
 import pusherJs from "pusher-js";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API + "/comments";
+const LocalApi = process.env.NEXT_PUBLIC_API + "/comments";
 
 export default function Comment({ url, maxTree = 3 }) {
   const [params, setParams] = useState({

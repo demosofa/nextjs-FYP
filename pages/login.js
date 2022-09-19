@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Form } from "../components";
-import { Notification } from "../Layout";
+import { Notification } from "../layouts";
 import { expireStorage, Validate } from "../utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/reducer/notificationSlice";
 import Head from "next/head";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function Login() {
   const [input, setInput] = useState({

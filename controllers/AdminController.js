@@ -9,9 +9,27 @@ class AdminController {
 
   getAllProfile = async (req, res) => {
     try {
+      const { search, page, sort, filter } = req.query;
+      let filterOptions = {};
+      if (search)
+        filterOptions = {
+          ...filterOptions,
+          title: { $regex: search, $options: "i" },
+        };
+      if (filter)
+        filterOptions = {
+          ...filterOptions,
+          status: filter,
+        };
       const lstProfile = await this.unit.Account.getAll({
         role: { $ne: Role.admin },
+        ...filterOptions,
       })
+        .skip((page - 1) * 10)
+        .limit(10)
+        .sort({
+          [sort]: "asc",
+        })
         .populate({ path: "user", select: ["email", "phoneNumber"] })
         .lean();
       return res.status(200).json(lstProfile);

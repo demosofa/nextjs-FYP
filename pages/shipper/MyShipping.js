@@ -3,11 +3,12 @@ import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { retryAxios } from "../../utils";
+import { Pagination } from "../../components";
 import { useState } from "react";
 import Head from "next/head";
 import { withAuth } from "../../helpers";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export const getServerSideProps = withAuth(async ({ req }, role) => {
   let data = null;
@@ -31,6 +32,7 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
 
 export default function MyShipping({ data }) {
   const [viewOrder, setViewOrder] = useState(null);
+  const [query, setQuery] = useState({ page: 1, sort: "status", filter: "" });
   const [showQR, setShowQR] = useState(null);
   const dispatch = useDispatch();
   const handleShowQR = async (orderId) => {
@@ -106,6 +108,15 @@ export default function MyShipping({ data }) {
           )}
         </tbody>
       </table>
+      <Pagination
+        totalPageCount={10}
+        currentPage={query.page}
+        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+      >
+        <Pagination.Arrow>
+          <Pagination.Number />
+        </Pagination.Arrow>
+      </Pagination>
       {viewOrder && (
         <>
           <div className="backdrop" onClick={() => setViewOrder(null)}></div>

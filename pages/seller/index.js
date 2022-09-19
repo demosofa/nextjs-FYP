@@ -3,14 +3,14 @@ import useSWRImmutable from "swr/immutable";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { Checkbox, Loading } from "../../components";
-import { expireStorage, retryAxios } from "../../utils";
+import { retryAxios } from "../../utils";
 import { useState } from "react";
 import QrScanner from "react-qr-scanner";
 import dynamic from "next/dynamic";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function SellerPage() {
   const [viewOrderItem, setViewOrderItem] = useState();
@@ -20,13 +20,7 @@ function SellerPage() {
   const [scannedUrl, setScannedUrl] = useState();
   const fetcher = async (config) => {
     retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios(config);
     return response.data;
   };
   const router = useRouter();

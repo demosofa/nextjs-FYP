@@ -9,7 +9,7 @@ import { addNotification } from "../../../redux/reducer/notificationSlice";
 import { withAuth } from "../../../helpers";
 import { retryAxios } from "../../../utils";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export const getServerSideProps = withAuth(async ({ req, params }, role) => {
   let value = null;

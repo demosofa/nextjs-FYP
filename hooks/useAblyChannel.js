@@ -1,7 +1,7 @@
 import Ably from "ably/promises";
 import { useMemo, useEffect } from "react";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 const ablyFE = new Ably.Realtime.Promise({
   authUrl: `${LocalApi}/createAblyToken`,
 });
