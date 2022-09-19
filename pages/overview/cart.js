@@ -10,7 +10,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function Cart() {
   const [display, setDisplay] = useState(false);

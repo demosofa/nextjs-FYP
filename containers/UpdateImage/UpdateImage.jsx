@@ -11,7 +11,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Role } from "../../shared";
 import styles from "./updateimage.module.scss";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function UpdateImage({ productId, setToggle }) {
   const [storedImages, setStoredImages] = useState([]);

@@ -10,7 +10,7 @@ import { Role } from "../../shared";
 import styles from "./crudcategory.module.scss";
 import { useRouter } from "next/router";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function CrudCategory({ maxTree = 3 }) {
   const dispatch = useDispatch();

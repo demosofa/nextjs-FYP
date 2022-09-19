@@ -4,7 +4,7 @@ import { createContext } from "react";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 import "../styles/_globals.scss";
-import Layout from "../Layout";
+import Layout from "../layouts";
 
 export const Media = createContext();
 

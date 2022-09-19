@@ -6,15 +6,16 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { Checkbox, Form, Loading } from "../../components";
+import { Checkbox, Form, Loading, Pagination } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
 import { convertTime } from "../../shared";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function Shipper() {
   const [checkOrder, setCheckOrder] = useState([]);
+  const [query, setQuery] = useState({ page: 1, sort: "status" });
 
   const fetcher = async (config) => {
     retryAxios(axios);
@@ -31,7 +32,7 @@ function Shipper() {
   const router = useRouter();
   const { data: orders, error } = useSWR(
     {
-      url: `${LocalApi}/order`,
+      url: `${LocalApi}/order?page=${query.page}&sort=${query.sort}`,
     },
     fetcher,
     {
@@ -123,7 +124,20 @@ function Shipper() {
           </tbody>
         </table>
       </Checkbox>
-      <button onClick={handleSubmit}>Submit</button>
+      {orders.length ? (
+        <div>
+          <Pagination
+            totalPageCount={10}
+            currentPage={query.page}
+            setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+          >
+            <Pagination.Arrow>
+              <Pagination.Number />
+            </Pagination.Arrow>
+          </Pagination>
+          <button onClick={handleSubmit}>Submit</button>
+        </div>
+      ) : null}
     </div>
   );
 }

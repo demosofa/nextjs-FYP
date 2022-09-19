@@ -9,7 +9,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Role } from "../../shared";
 import Head from "next/head";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function EditProfile() {
   const [data, setData] = useState();

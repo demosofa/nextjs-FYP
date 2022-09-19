@@ -11,8 +11,14 @@ class OrderController {
     return res.status(200).json(order);
   };
   lstOrder = async (req, res) => {
+    const { page, sort } = req.query;
     const lstOrder = await this.unit.Order.getAll()
       .where("status", "pending")
+      .skip((page - 1) * 10)
+      .limit(10)
+      .sort({
+        [sort]: "asc",
+      })
       .populate({
         path: "customer",
         select: ["username"],

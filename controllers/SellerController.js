@@ -5,11 +5,17 @@ class SellerController {
     this.unit = new unit();
   }
   todayValidated = async (req, res) => {
+    const { page, sort } = req.query;
     const currentDate = new Date();
     try {
       const datas = await this.unit.Order.getAll({
         validatedAt: { $gte: currentDate },
       })
+        .skip((page - 1) * 10)
+        .limit(10)
+        .sort({
+          [sort]: "asc",
+        })
         .populate("orderItems")
         .populate({ path: "shipper", select: "username" })
         .lean();

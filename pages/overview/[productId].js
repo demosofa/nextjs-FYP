@@ -18,7 +18,7 @@ import Head from "next/head";
 import { expireStorage, retryAxios, Validate } from "../../utils";
 import axios from "axios";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export async function getServerSideProps({ params }) {
   const data = await fetch(`${LocalApi}/product/${params.productId}`);

@@ -1,6 +1,6 @@
 import { AxiosStatic, AxiosInstance } from "axios";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default async function uploadApi(
   axios: AxiosInstance | AxiosStatic,

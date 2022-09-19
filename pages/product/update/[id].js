@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
 import { Role } from "../../../shared";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function UpdateProduct() {
   const [product, setProduct] = useState();

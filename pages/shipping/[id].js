@@ -14,7 +14,7 @@ import { Role } from "../../shared";
 import QrScanner from "react-qr-scanner";
 import Head from "next/head";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function ShippingProgress() {
   const [showQR, setShowQR] = useState(null);
@@ -127,21 +127,29 @@ function ShippingProgress() {
         onResult={handleCheckStep}
       ></ProgressBar>
       {showQR !== null && (
-        <img className="w-40" src={showQR} alt="QR code"></img>
+        <>
+          <div className="backdrop" onClick={() => setShowQR(null)}></div>
+          <div className="form_center">
+            <img src={showQR} alt="QR code"></img>
+          </div>
+        </>
       )}
       {showScanner && (
-        <div>
-          <button onClick={() => setShowScanner((prev) => !prev)}>
-            Show Scanner
-          </button>
-          <QrScanner
-            facingMode="front"
-            delay={500}
-            onError={(err) => dispatch(addNotification({ message: err }))}
-            onScan={handleScan}
-            className="h-80 w-80"
-          />
-        </div>
+        <>
+          <div className="backdrop" onClick={() => setShowScanner(false)}></div>
+          <div className="form_center">
+            <button onClick={() => setShowScanner((prev) => !prev)}>
+              Show Scanner
+            </button>
+            <QrScanner
+              facingMode="front"
+              delay={500}
+              onError={(err) => dispatch(addNotification({ message: err }))}
+              onScan={handleScan}
+              className="h-80 w-80"
+            />
+          </div>
+        </>
       )}
     </div>
   );

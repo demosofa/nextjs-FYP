@@ -10,7 +10,7 @@ import dynamic from "next/dynamic";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function SellerPage() {
   const [viewOrderItem, setViewOrderItem] = useState();

@@ -6,14 +6,15 @@ import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
-import { Loading } from "../../components";
+import { Loading, Pagination } from "../../components";
 import { useState } from "react";
 import Head from "next/head";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function MyShipping() {
   const [viewOrder, setViewOrder] = useState(null);
+  const [query, setQuery] = useState({ page: 1, sort: "status", filter: "" });
   const [showQR, setShowQR] = useState(null);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -30,7 +31,7 @@ function MyShipping() {
   };
   const { data, error } = useSWR(
     {
-      url: `${LocalApi}/shipper`,
+      url: `${LocalApi}/shipper?page=${query.page}&sort=${query.sort}&filter=${query.filter}`,
     },
     fetcher,
     {
@@ -128,6 +129,15 @@ function MyShipping() {
           )}
         </tbody>
       </table>
+      <Pagination
+        totalPageCount={10}
+        currentPage={query.page}
+        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+      >
+        <Pagination.Arrow>
+          <Pagination.Number />
+        </Pagination.Arrow>
+      </Pagination>
       {viewOrder && (
         <>
           <div className="backdrop" onClick={() => setViewOrder(null)}></div>

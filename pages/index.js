@@ -7,8 +7,8 @@ import { Animation, Loading, Timer } from "../components";
 import { useAxiosLoad } from "../hooks";
 import styles from "../styles/Home.module.scss";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
-const LocalUrl = process.env.NEXT_PUBLIC_LOCAL_URL;
+const LocalApi = process.env.NEXT_PUBLIC_API;
+const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
 
 export async function getServerSideProps({ query }) {
   let products = null;

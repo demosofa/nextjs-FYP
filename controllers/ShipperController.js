@@ -5,9 +5,21 @@ class ShipperController {
     this.unit = new unit();
   }
   MyShipping = async (req, res) => {
+    const { page, sort, filter } = req.query;
+    let filterOptions = {};
+    if (filter)
+      filterOptions = {
+        ...filterOptions,
+        status: filter,
+      };
     const lstShipping = await this.unit.Order.getAll({
       shipper: req.user.accountId,
     })
+      .skip((page - 1) * 10)
+      .limit(10)
+      .sort({
+        [sort]: "asc",
+      })
       .populate({
         path: "customer",
         select: ["username", "user"],

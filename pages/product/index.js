@@ -9,10 +9,10 @@ import { expireStorage, retryAxios } from "../../utils";
 import { useAuthLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Notification } from "../../Layout";
+import { Notification } from "../../layouts";
 import { Role } from "../../shared";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function ProductCRUD() {
   const [remove, setRemove] = useState(null);
@@ -195,15 +195,17 @@ function ProductCRUD() {
           />
         )}
       </div>
-      <Pagination
-        totalPageCount={totalPageCount}
-        currentPage={query.page}
-        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
-      >
-        <Pagination.Arrow>
-          <Pagination.Number />
-        </Pagination.Arrow>
-      </Pagination>
+      {totalPageCount ? (
+        <Pagination
+          totalPageCount={totalPageCount}
+          currentPage={query.page}
+          setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+        >
+          <Pagination.Arrow>
+            <Pagination.Number />
+          </Pagination.Arrow>
+        </Pagination>
+      ) : null}
     </div>
   );
 }

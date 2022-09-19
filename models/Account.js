@@ -1,4 +1,4 @@
-const Role = require("../shared/Role");
+import Role from "../shared/Role";
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 

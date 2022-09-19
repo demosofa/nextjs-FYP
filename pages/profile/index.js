@@ -8,7 +8,7 @@ import { Role } from "../../shared";
 import Head from "next/head";
 import { MyOrder } from "../../containers";
 
-const LocalApi = process.env.NEXT_PUBLIC_LOCAL_API;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function MyProfile() {
   const router = useRouter();
