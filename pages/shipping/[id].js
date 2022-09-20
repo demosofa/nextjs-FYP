@@ -9,14 +9,17 @@ import { convertTime } from "../../shared";
 import { Loading } from "../../components";
 import { ProgressBar } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Role } from "../../shared";
 import QrScanner from "react-qr-scanner";
 import Head from "next/head";
+import { AblyFe } from "../../layouts";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function ShippingProgress() {
+  const { ably } = useContext(AblyFe);
+  const channel = useRef();
   const [showQR, setShowQR] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
   const auth = useState(() => {
@@ -55,6 +58,11 @@ function ShippingProgress() {
     }
   );
 
+  useEffect(() => {
+    if (!channel.current && order)
+      channel.current = ably.channels.get(order.customer);
+  }, [order]);
+
   const handleShowQr = async () => {
     if (showQR !== null) setShowQR(null);
     else {
@@ -87,6 +95,12 @@ function ShippingProgress() {
       if (auth === Role.guest) {
         setShowScanner(true);
       } else if (auth === Role.shipper || auth === Role.admin) {
+        channel.current.publish({
+          name: "shipping",
+          data: `Your order ${
+            order._id
+          } has moved to ${value.toUpperCase()} state `,
+        });
         handleShowQr();
       }
     }

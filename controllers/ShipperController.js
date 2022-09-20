@@ -25,7 +25,7 @@ class ShipperController {
         select: ["username", "user"],
         populate: {
           path: "user",
-          select: ["phoneNumber"],
+          select: ["phoneNumber", "username"],
         },
       })
       .populate("orderItems")

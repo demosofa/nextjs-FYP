@@ -79,6 +79,7 @@ function MyShipping() {
             <th>No.</th>
             <th>Order Id</th>
             <th>Status</th>
+            <th>Customer</th>
             <th>Address</th>
             <th>Phone Number</th>
             <th>Total Value</th>
@@ -92,6 +93,7 @@ function MyShipping() {
                 <td>{index + 1}</td>
                 <td>{order._id}</td>
                 <td>{order.status}</td>
+                <td>{order.customer.username}</td>
                 <td>
                   <a
                     target="_blank"
