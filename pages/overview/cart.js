@@ -58,7 +58,6 @@ export default function Cart() {
     <div className="cart__container">
       <Head>
         <title>Shopping Cart</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="cart__lst">
         {cart.products.length ? (

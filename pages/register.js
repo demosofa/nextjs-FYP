@@ -29,7 +29,6 @@ export default function Register() {
     <div className="login-page">
       <Head>
         <title>Register</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="background"></div>
       <div className="login-container">
