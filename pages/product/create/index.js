@@ -113,7 +113,6 @@ function CreateForm() {
     <>
       <Head>
         <title>Create Product</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Notification />
       <Form

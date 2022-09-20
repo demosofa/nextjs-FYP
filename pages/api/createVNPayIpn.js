@@ -1,11 +1,11 @@
-function VNPayIpn(req, res) {
+export default function VNPayIpn(req, res) {
   var vnp_Params = req.query;
   var secureHash = vnp_Params["vnp_SecureHash"];
 
   delete vnp_Params["vnp_SecureHash"];
   delete vnp_Params["vnp_SecureHashType"];
 
-  vnp_Params = sortObject(vnp_Params);
+  // vnp_Params = sortObject(vnp_Params);
   var secretKey = process.env.vnp_HashSecret;
   var querystring = require("qs");
   var signData = querystring.stringify(vnp_Params, { encode: false });
