@@ -71,7 +71,6 @@ function UpdateProduct() {
     <Form style={{ maxWidth: "800px" }} onSubmit={handleSubmit}>
       <Head>
         <title>Update Product</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Form.Title style={{ fontSize: "20px" }}>Update Product</Form.Title>
       <Form.Item style={{ flexDirection: "column" }}>

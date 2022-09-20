@@ -1,4 +1,4 @@
-function VNPayReturn(req, res) {
+export default function VNPayReturn(req, res) {
   var vnp_Params = req.query;
 
   var secureHash = vnp_Params["vnp_SecureHash"];

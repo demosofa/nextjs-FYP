@@ -83,7 +83,6 @@ function ProductCRUD() {
     <div className="product-crud__container">
       <Head>
         <title>Manage Product</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Notification />
       <Container.Flex>
