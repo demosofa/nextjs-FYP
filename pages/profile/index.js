@@ -54,7 +54,16 @@ function MyProfile() {
           </dl>
           <dl className="flex items-center justify-between">
             <dt>Date of Birth:</dt>
-            <dd>{data.dateOfBirth}</dd>
+            <dd>
+              {
+                new Date(data.dateOfBirth)
+                  .toISOString()
+                  .toLocaleString("en-US", {
+                    timeZone: "Asia/Ho_Chi_Minh",
+                  })
+                  .split("T")[0]
+              }
+            </dd>
           </dl>
           <dl className="flex items-center justify-between">
             <dt>Gender:</dt>
