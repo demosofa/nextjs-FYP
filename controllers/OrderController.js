@@ -6,7 +6,9 @@ class OrderController {
     this.unit = new unit();
   }
   getOrder = async (req, res) => {
-    const order = await this.unit.Order.getById(req.query.id).lean();
+    const order = await this.unit.Order.getById(req.query.id)
+      .populate({ path: "customer", select: "username" })
+      .lean();
     if (!order) return res.status(500).json("Fail to get order");
     return res.status(200).json(order);
   };

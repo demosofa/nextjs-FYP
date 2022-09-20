@@ -58,7 +58,14 @@ export default function EditProfile({ profile }) {
         <Form.Item>
           <Form.Title>Date of Birth</Form.Title>
           <Form.Input
-            value={data.dateOfBirth}
+            value={
+              new Date(data.dateOfBirth)
+                .toISOString()
+                .toLocaleString("en-US", {
+                  timeZone: "Asia/Ho_Chi_Minh",
+                })
+                .split("T")[0]
+            }
             type="date"
             onChange={(e) =>
               setData((prev) => ({ ...prev, dateOfBirth: e.target.value }))

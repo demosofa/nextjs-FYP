@@ -7,10 +7,11 @@ import { convertTime } from "../../shared";
 import { Loading } from "../../components";
 import { ProgressBar } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Role } from "../../shared";
 import QrScanner from "react-qr-scanner";
 import Head from "next/head";
+import { AblyFe } from "../../layouts";
 import { withAuth } from "../../helpers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -36,6 +37,8 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
 });
 
 export default function ShippingProgress({ initData, auth }) {
+  const { ably } = useContext(AblyFe);
+  const channel = useRef();
   const [showQR, setShowQR] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
   const fetcher = async (config) => {
@@ -63,6 +66,11 @@ export default function ShippingProgress({ initData, auth }) {
       },
     }
   );
+
+  useEffect(() => {
+    if (!channel.current && order)
+      channel.current = ably.channels.get(order.customer.username);
+  }, [order]);
 
   const handleShowQr = async () => {
     if (showQR !== null) setShowQR(null);
@@ -96,6 +104,12 @@ export default function ShippingProgress({ initData, auth }) {
       if (auth === Role.guest) {
         setShowScanner(true);
       } else if (auth === Role.shipper || auth === Role.admin) {
+        channel.current.publish({
+          name: "shipping",
+          data: `Your order ${
+            order._id
+          } has moved to ${value.toUpperCase()} state `,
+        });
         handleShowQr();
       }
     }
