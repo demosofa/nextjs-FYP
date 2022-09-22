@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { forwardRef } from "react";
 import RouterAuth from "../../containers/RouterAuth/RouterAuth";
 
 export default function Sidebar({ children, className, ...props }) {
@@ -9,6 +11,10 @@ export default function Sidebar({ children, className, ...props }) {
       <nav
         className={`relative flex flex-col items-center justify-start gap-[0.75em] overflow-y-auto rounded-lg p-[0.75em]`}
       >
+        {typeof window !== "undefined" &&
+          localStorage.getItem("accessToken") && (
+            <Link href="/profile">My Profile</Link>
+          )}
         {children}
         <RouterAuth />
       </nav>
@@ -16,13 +22,17 @@ export default function Sidebar({ children, className, ...props }) {
   );
 }
 
-Sidebar.Item = function SidebarItem({ children, className, ...props }) {
+Sidebar.Item = forwardRef(function SidebarItem(
+  { children, className, ...props },
+  ref
+) {
   return (
-    <div
+    <a
+      ref={ref}
       className={`flex w-full cursor-pointer items-center justify-center gap-[1em] rounded-lg bg-[#d0d6db40] p-[0.5em] transition-all hover:bg-[#037dff10]  ${className}`}
       {...props}
     >
       {children}
-    </div>
+    </a>
   );
-};
+});

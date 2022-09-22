@@ -1,13 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [
-  {
-    sku: "",
-    types: [],
-    price: 0,
-    quantity: 0,
-  },
-];
+/** @type {({ sku: string, types: string[], price: number, quantity: number }[])} */
+const initialState = [];
 
 const variation = createSlice({
   initialState,

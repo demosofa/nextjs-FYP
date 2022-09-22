@@ -72,7 +72,7 @@ function Shipper() {
         dispatch(addNotification({ message: "Success receive orders" }));
         router.push("/");
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
       return data;
     }, false);

@@ -31,23 +31,19 @@ export default function General({ children, arrLink }) {
             <Search />
             {arrLink?.map(({ title, path, icon }) => (
               <Link key={title} href={path}>
-                <a className="w-full">
-                  <Sidebar.Item className="!justify-start">
-                    {icon && <Icon>{icon}</Icon>}
-                    {title}
-                  </Sidebar.Item>
-                </a>
+                <Sidebar.Item className="!justify-start">
+                  {icon && <Icon>{icon}</Icon>}
+                  {title}
+                </Sidebar.Item>
               </Link>
             ))}
             <Link href="/overview/cart">
-              <a className="w-full">
-                <Sidebar.Item className="!justify-start">
-                  <Icon>
-                    <AiOutlineShoppingCart />
-                  </Icon>
-                  My Cart
-                </Sidebar.Item>
-              </a>
+              <Sidebar.Item className="!justify-start">
+                <Icon>
+                  <AiOutlineShoppingCart />
+                </Icon>
+                My Cart
+              </Sidebar.Item>
             </Link>
           </Sidebar>
         ) : (

@@ -13,8 +13,20 @@
   background-color: orangered;
 }
 
-.toast_message.warning {
+.success {
+  background-color: chartreuse;
+}
+
+.link {
+  background-color: aqua;
+}
+
+.warning {
   background-color: yellow;
+}
+
+.error{
+  background-color: brown;
 }
 
 .toast_message > span {

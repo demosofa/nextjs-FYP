@@ -1,6 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import pushCart from "../async/pushCart";
 
+/**
+ * @typedef {({
+ *  productId: string,
+ *  variationId: string,
+ *  title: string,
+ *  image: string,
+ *  options: string[],
+ *  quantity: number,
+ *  price: number,
+ *  total: number,
+ *})} Product
+ */
+
+/** @type {({ products: Product[], total: number, quantity: number })} */
 const initialState = {
   products: [],
   total: 0,

@@ -129,7 +129,7 @@ class ProductController {
         populate: "types",
       })
       .lean();
-    if (!products) return res.status(404).json({ errorMessage: "Not Found" });
+    if (!products) return res.status(404).json({ message: "Not Found" });
     const productCounted = await this.unit.Product.countData(
       filterOptions
     ).lean();

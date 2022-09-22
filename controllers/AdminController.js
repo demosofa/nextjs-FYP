@@ -10,7 +10,7 @@ class AdminController {
   getAllProfile = async (req, res) => {
     try {
       const { search, page, sort, filter } = req.query;
-      let filterOptions = {};
+      let filterOptions = { role: { $ne: Role.admin } };
       if (search)
         filterOptions = {
           ...filterOptions,
@@ -21,10 +21,7 @@ class AdminController {
           ...filterOptions,
           status: filter,
         };
-      const lstProfile = await this.unit.Account.getAll({
-        role: { $ne: Role.admin },
-        ...filterOptions,
-      })
+      const lstProfile = await this.unit.Account.getAll(filterOptions)
         .skip((page - 1) * 10)
         .limit(10)
         .sort({
@@ -32,7 +29,12 @@ class AdminController {
         })
         .populate({ path: "user", select: ["email", "phoneNumber"] })
         .lean();
-      return res.status(200).json(lstProfile);
+      if (!lstProfile) throw new Error("Fail to load profiles");
+      const countProfiles = await this.unit.Account.countData(
+        filterOptions
+      ).lean();
+      const pageCounted = Math.ceil(countProfiles / 10);
+      return res.status(200).json({ lstProfile, pageCounted });
     } catch (error) {
       return res.status(500).json({ message: error });
     }

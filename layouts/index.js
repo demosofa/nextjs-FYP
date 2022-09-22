@@ -37,10 +37,10 @@ export default function Layout({ children, routerPath }) {
       ably.current.channels.get(accountId).subscribe(({ name, data }) => {
         switch (name) {
           case "shipping":
-            dispatch(addNotification({ message: data }));
+            dispatch(addNotification({ ...data }));
             break;
           case "comment":
-            dispatch(addNotification({ message: data }));
+            dispatch(addNotification({ ...data }));
             break;
         }
       });
