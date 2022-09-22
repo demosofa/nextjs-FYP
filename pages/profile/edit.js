@@ -37,7 +37,7 @@ function EditProfile() {
       await axios.put(`${LocalApi}/profile`, data);
       router.back();
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 

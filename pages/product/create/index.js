@@ -13,6 +13,7 @@ import { editAllVariations } from "../../../redux/reducer/variationSlice";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
 import Select from "react-select";
 import dynamic from "next/dynamic";
+import { deleteAllVariant } from "../../../redux/reducer/variantSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -82,6 +83,7 @@ function CreateForm() {
       await axios.post(`${LocalApi}/product`, newInput, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
+      dispatch(deleteAllVariant());
       router.back();
     } catch (error) {
       const arrPublic_id = uploaded.map((item) => item.public_id);
@@ -89,7 +91,7 @@ function CreateForm() {
         path: "store",
         files: arrPublic_id,
       });
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 
@@ -268,7 +270,14 @@ function CreateForm() {
 
         <Form.Item style={{ justifyContent: "flex-start" }}>
           <Form.Submit>Submit</Form.Submit>
-          <Form.Button onClick={() => setInput(null)}>Cancel</Form.Button>
+          <Form.Button
+            onClick={() => {
+              dispatch(deleteAllVariant());
+              router.back();
+            }}
+          >
+            Cancel
+          </Form.Button>
         </Form.Item>
       </Form>
     </>

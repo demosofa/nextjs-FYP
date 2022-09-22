@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const initialState = [{ id: null, name: "", options: [] }];
+/** @type {({ id: string, name: string, options: string[] }[])} */
+export const initialState = [];
 
 const variant = createSlice({
   initialState,
@@ -25,8 +26,12 @@ const variant = createSlice({
     deleteVariant(state, { payload }) {
       return state.filter((_, index) => index !== payload);
     },
+    deleteAllVariant() {
+      return [];
+    },
   },
 });
 
 export default variant.reducer;
-export const { addVariant, editVariant, deleteVariant } = variant.actions;
+export const { addVariant, editVariant, deleteVariant, deleteAllVariant } =
+  variant.actions;

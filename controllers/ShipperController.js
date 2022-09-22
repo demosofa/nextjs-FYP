@@ -6,15 +6,13 @@ class ShipperController {
   }
   MyShipping = async (req, res) => {
     const { page, sort, filter } = req.query;
-    let filterOptions = {};
+    let filterOptions = { shipper: req.user.accountId };
     if (filter)
       filterOptions = {
         ...filterOptions,
         status: filter,
       };
-    const lstShipping = await this.unit.Order.getAll({
-      shipper: req.user.accountId,
-    })
+    const lstShipping = await this.unit.Order.getAll(filterOptions)
       .skip((page - 1) * 10)
       .limit(10)
       .sort({
@@ -30,18 +28,12 @@ class ShipperController {
       })
       .populate("orderItems")
       .lean();
-    return res.status(200).json(lstShipping);
-  };
-  countMyShipping = async (req, res) => {
-    try {
-      const count = await this.unit.Order.countData({
-        shipper: req.user.accountId,
-        status: "progress",
-      }).lean();
-      return res.status(200).json(count);
-    } catch (error) {
-      return res.status(500).json("Fail to count data");
-    }
+    if (!lstShipping) return res.status(404).json({ message: "Not Found" });
+    const countMyShipping = await this.unit.Order.countData(
+      filterOptions
+    ).lean();
+    const pageCounted = Math.ceil(countMyShipping / 10);
+    return res.status(200).json({ lstShipping, pageCounted });
   };
   checkQR = async (req, res) => {
     const { id, orderId } = req.query;

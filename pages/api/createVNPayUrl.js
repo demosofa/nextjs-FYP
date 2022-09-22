@@ -1,4 +1,6 @@
 import { isAuthentication } from "../../helpers";
+import dateFormat from "dateformat";
+import { sortObject } from "../../shared";
 
 async function createVNPayUrl(req, res) {
   switch (req.method.toLowerCase()) {
@@ -9,8 +11,6 @@ async function createVNPayUrl(req, res) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
 
-      var dateFormat = await import("dateformat");
-
       var tmnCode = process.env.vnp_TmnCode;
       var secretKey = process.env.vnp_HashSecret;
       var vnpUrl = process.env.vnp_Url;
@@ -19,7 +19,7 @@ async function createVNPayUrl(req, res) {
       var date = new Date();
 
       var createDate = dateFormat(date, "yyyymmddHHmmss");
-      var orderId = dateFormat(date, "HHmmss");
+      var orderId = req.body.orderId;
       var amount = req.body.amount;
       var bankCode = req.body.bankCode;
 
@@ -57,6 +57,7 @@ async function createVNPayUrl(req, res) {
       var signed = hmac.update(Buffer.from(signData, "utf-8")).digest("hex");
       vnp_Params["vnp_SecureHash"] = signed;
       vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
+      console.log(vnpUrl);
 
       return res.redirect(vnpUrl);
   }

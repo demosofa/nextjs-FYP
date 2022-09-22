@@ -7,14 +7,7 @@ export default function notification({ ...props }) {
   return (
     <div className={styles.container} {...props}>
       {notifications.map((item) => {
-        return (
-          <ToastMessage
-            key={item.id}
-            id={item.id}
-            message={item.message}
-            timeout={10000}
-          />
-        );
+        return <ToastMessage key={item.id} {...item} />;
       })}
     </div>
   );

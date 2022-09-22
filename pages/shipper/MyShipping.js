@@ -45,13 +45,13 @@ function MyShipping() {
 
   const handleShowQR = async (orderId) => {
     try {
-      const data = await fetcher({
+      const linkQR = await fetcher({
         url: `${LocalApi}/order/${orderId}`,
         method: "put",
       });
-      setShowQR(data);
+      setShowQR(linkQR);
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 
@@ -87,8 +87,8 @@ function MyShipping() {
           </tr>
         </thead>
         <tbody>
-          {data.length ? (
-            data.map((order, index) => (
+          {data.lstShipping.length ? (
+            data.lstShipping.map((order, index) => (
               <tr key={order._id}>
                 <td>{index + 1}</td>
                 <td>{order._id}</td>
@@ -132,7 +132,8 @@ function MyShipping() {
         </tbody>
       </table>
       <Pagination
-        totalPageCount={10}
+        className="mt-8"
+        totalPageCount={data.pageCounted}
         currentPage={query.page}
         setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
       >

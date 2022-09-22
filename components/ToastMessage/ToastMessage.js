@@ -3,7 +3,13 @@ import { useDispatch } from "react-redux";
 import { removeNotification } from "../../redux/reducer/notificationSlice";
 import styles from "./ToastMessage.module.css";
 
-export default function ToastMessage({ id, type, message, timeout, ...props }) {
+export default function ToastMessage({
+  id,
+  type = "success",
+  message,
+  timeout = 10000,
+  ...props
+}) {
   const ToastRef = useRef();
   const dispatch = useDispatch();
   useEffect(() => {
@@ -19,13 +25,13 @@ export default function ToastMessage({ id, type, message, timeout, ...props }) {
     }, (0.2 * timeout) / 100);
   }, [timeout, id]);
   return (
-    <div
+    <a
       ref={ToastRef}
       className={`${styles.toast_message} ${styles[type]}`}
       {...props}
     >
       <span>{message}</span>
       <progress className={styles.progress} max="100"></progress>
-    </div>
+    </a>
   );
 }

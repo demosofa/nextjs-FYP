@@ -22,25 +22,25 @@ export default function RouterAuth() {
       localStorage.clear();
       router.reload();
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 
   return (
     <>
-      {(typeof window !== "undefined" &&
-        localStorage.getItem("accessToken") && (
+      {typeof window !== "undefined" &&
+        ((localStorage.getItem("accessToken") && (
           <>
             <a onClick={handleLogout} style={{ cursor: "pointer" }}>
               Logout
             </a>
           </>
         )) || (
-        <>
-          <Link href="/login">Login</Link>
-          <Link href="/register">Register</Link>
-        </>
-      )}
+          <>
+            <Link href="/login">Login</Link>
+            <Link href="/register">Register</Link>
+          </>
+        ))}
     </>
   );
 }
