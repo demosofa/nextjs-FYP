@@ -56,17 +56,22 @@ export default function useUpload({
   );
 
   const handleDelete = useCallback(
-    (e: MouseEvent, index: number) => {
-      e.stopPropagation();
+    (index?: number, e?: MouseEvent) => {
+      e?.stopPropagation();
       run.current = false;
-      setFiles((prev) => prev.filter((_, i) => i !== index));
-      setPreviews((prev) => prev.filter((_, i) => i !== index));
+      if (index !== undefined) {
+        setFiles((prev) => prev.filter((_, i) => i !== index));
+        setPreviews((prev) => prev.filter((_, i) => i !== index));
+      } else {
+        setFiles([]);
+        setPreviews([]);
+      }
     },
     [files, previews]
   );
 
   const handleOpenPreview = useCallback(
-    (e: MouseEvent, index: number) => {
+    (index: number, e: MouseEvent) => {
       e.stopPropagation();
       if (e.detail > 1) {
         const popup = window.open("", files[index].name);

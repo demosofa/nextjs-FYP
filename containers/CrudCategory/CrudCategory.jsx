@@ -29,7 +29,7 @@ export default function CrudCategory({ maxTree = 3 }) {
       });
       setCategories((prev) => [response.data, ...prev]);
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 
@@ -91,7 +91,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
       setCurrentCategory((prev) => ({ ...prev, name }));
       setToggle((prev) => ({ ...prev, edit: false }));
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 
@@ -101,7 +101,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
       await axios.delete(`${LocalApi}/category/${currentCategory._id}`);
       setDelete();
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 
@@ -115,7 +115,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
       setCategories((prev) => [...prev, response.data]);
       setToggle((prev) => ({ ...prev, add: false }));
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 

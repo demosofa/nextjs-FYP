@@ -38,10 +38,10 @@ export default function MyShipping({ data }) {
   const handleShowQR = async (orderId) => {
     retryAxios(axios);
     try {
-      const response = await axios.put(`${LocalApi}/order/${orderId}`);
-      setShowQR(response.data);
+      const linkQR = (await axios.put(`${LocalApi}/order/${orderId}`)).data;
+      setShowQR(linkQR);
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 
@@ -66,8 +66,8 @@ export default function MyShipping({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data.length ? (
-            data.map((order, index) => (
+          {data.lstShipping.length ? (
+            data.lstShipping.map((order, index) => (
               <tr key={order._id}>
                 <td>{index + 1}</td>
                 <td>{order._id}</td>
@@ -103,7 +103,7 @@ export default function MyShipping({ data }) {
             ))
           ) : (
             <tr>
-              <td colSpan="7" className="text-center">
+              <td colSpan="8" className="text-center">
                 Go to this <Link href="/">page</Link> and accept orders first
               </td>
             </tr>
@@ -111,7 +111,8 @@ export default function MyShipping({ data }) {
         </tbody>
       </table>
       <Pagination
-        totalPageCount={10}
+        className="mt-8"
+        totalPageCount={data.pageCounted}
         currentPage={query.page}
         setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
       >

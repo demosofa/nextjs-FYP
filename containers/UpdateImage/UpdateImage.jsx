@@ -80,7 +80,7 @@ export default function UpdateImage({ productId, setToggle }) {
         path: "store",
         files: arrPublic_id,
       });
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 

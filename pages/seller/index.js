@@ -48,7 +48,7 @@ function SellerPage() {
         setViewOrder(result);
         setShowScanner(false);
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     }
   };
@@ -61,7 +61,7 @@ function SellerPage() {
       });
       setViewOrder(null);
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 

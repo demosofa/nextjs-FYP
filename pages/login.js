@@ -36,7 +36,7 @@ export default function Login() {
       expireStorage.setItem("permission", permission);
       router.back();
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
   useEffect(() => {

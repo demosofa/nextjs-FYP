@@ -64,7 +64,7 @@ export default function UpdateVariation({ productId, setToggle }) {
       });
       setToggle(null);
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 

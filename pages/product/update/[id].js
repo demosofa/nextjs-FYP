@@ -48,7 +48,7 @@ export default function UpdateProduct({ value }) {
       });
       router.back();
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 

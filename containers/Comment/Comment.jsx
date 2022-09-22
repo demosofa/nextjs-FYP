@@ -8,7 +8,6 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
 import decoder from "jwt-decode";
 import styles from "./comment.module.scss";
-import pusherJs from "pusher-js";
 
 const LocalApi = process.env.NEXT_PUBLIC_API + "/comments";
 
@@ -46,7 +45,7 @@ export default function Comment({ url, maxTree = 3 }) {
         setComments((prev) => [response.data, ...prev]);
         controller.current = null;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     }
   };
@@ -116,7 +115,7 @@ function CommentTab({
         setToggle((prev) => ({ ...prev, edit: false }));
         controller.current = null;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     }
   };
@@ -133,7 +132,7 @@ function CommentTab({
         setDelete();
         controller.current = null;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     }
   };
@@ -150,20 +149,6 @@ function CommentTab({
     },
     deps: [toggle.more],
   });
-
-  // useEffect(() => {
-  //   const pusher = new pusherJs(process.env.NEXT_PUBLIC_key, {
-  //     cluster: process.env.NEXT_PUBLIC_cluster,
-  //   });
-  //   console.log(parentCommentId);
-  //   const channel = pusher.subscribe(`reply-to-${parentCommentId}`);
-  //   channel.bind("reply", function (data) {
-  //     dispatch(addNotification({ message: data.message }));
-  //   });
-  //   return () => {
-  //     pusher.unsubscribe(`reply-to-${parentCommentId}`);
-  //   };
-  // }, []);
 
   return (
     <div className={styles.container} {...props}>
@@ -302,7 +287,7 @@ function CommentReply({
         setToggle(false);
         controller.current = null;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     }
   };

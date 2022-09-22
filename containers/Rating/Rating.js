@@ -42,7 +42,7 @@ export default function Rating({ url }) {
         data.rating = rating;
         return data;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
         return data;
       }
     });

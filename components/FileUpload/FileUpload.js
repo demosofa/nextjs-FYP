@@ -114,7 +114,7 @@ FileUpload.Show = function ShowFiles({ children, animate = "Fade", ...props }) {
             <div
               key={files[index].name}
               style={{ width: "100%" }}
-              onClick={(e) => handleOpenPreview(e, index)}
+              onClick={(e) => handleOpenPreview(index, e)}
             >
               <div className={styles.img_container}>
                 <img
@@ -122,7 +122,7 @@ FileUpload.Show = function ShowFiles({ children, animate = "Fade", ...props }) {
                   src={preview.includes("image") ? preview : ""}
                 ></img>
                 <AiOutlineClose
-                  onClick={(e) => handleDelete(e, index)}
+                  onClick={(e) => handleDelete(index, e)}
                   onMouseEnter={(e) =>
                     (e.target.parentElement.style.opacity = 0.8)
                   }

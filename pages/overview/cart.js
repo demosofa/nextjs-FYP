@@ -50,7 +50,7 @@ export default function Cart() {
       setDisplay(false);
       router.back();
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
 

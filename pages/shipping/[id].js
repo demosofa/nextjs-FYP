@@ -13,8 +13,10 @@ import QrScanner from "react-qr-scanner";
 import Head from "next/head";
 import { AblyFe } from "../../layouts";
 import { withAuth } from "../../helpers";
+import VnPay from "../../containers/VnPay/VnPay";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
+const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
 
 export const getServerSideProps = withAuth(async ({ req }, role) => {
   let initData = null;
@@ -82,7 +84,7 @@ export default function ShippingProgress({ initData, auth }) {
         });
         setShowQR(data);
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     }
   };
@@ -94,7 +96,7 @@ export default function ShippingProgress({ initData, auth }) {
           url: `${LocalApi}/order/${scanData.text}`,
         });
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     }
   };
@@ -106,9 +108,13 @@ export default function ShippingProgress({ initData, auth }) {
       } else if (auth === Role.shipper || auth === Role.admin) {
         channel.current.publish({
           name: "shipping",
-          data: `Your order ${
-            order._id
-          } has moved to ${value.toUpperCase()} state `,
+          data: {
+            message: `Your order ${
+              order._id
+            } has moved to ${value.toUpperCase()} state `,
+            type: "link",
+            href: `${LocalUrl}/shipping/${order._id}`,
+          },
         });
         handleShowQr();
       }
@@ -149,6 +155,7 @@ export default function ShippingProgress({ initData, auth }) {
         pass={order.status}
         onResult={handleCheckStep}
       ></ProgressBar>
+      <VnPay order={order} />
       {showQR !== null && (
         <>
           <div className="backdrop" onClick={() => setShowQR(null)}></div>

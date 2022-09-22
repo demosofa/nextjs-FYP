@@ -43,7 +43,7 @@ export default function MyOrder() {
         const index = data.findIndex((item) => item._id === orderId);
         data[index].status = "cancel";
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
         return data;
       }
     }, false);
@@ -58,7 +58,7 @@ export default function MyOrder() {
         });
         return data;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
         return data;
       }
     }, false);

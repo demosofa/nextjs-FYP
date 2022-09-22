@@ -37,41 +37,44 @@ export default function ManageProfiles() {
     mutate(async (data) => {
       try {
         await fetcher({
-          url: `${LocalApi}/admin/profiles/${data[index]._id}`,
+          url: `${LocalApi}/admin/profiles/${data.lstProfile[index]._id}`,
           method: "patch",
           data: { role: e.target.value },
         });
-        data[index].role = e.target.value;
+        data.lstProfile[index].role = e.target.value;
         return data;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     });
   };
 
   const handleBlocOrUnblockkUser = (index) => {
     mutate(async (data) => {
-      retryAxios(axios);
       try {
-        await axios.put(`${LocalApi}/admin/profiles/${data[index]._id}`, {
-          blocked: !data[index].blocked,
+        await fetcher({
+          url: `${LocalApi}/admin/profiles/${data.lstProfile[index]._id}`,
+          data: { blocked: !data.lstProfile[index].blocked },
+          method: "put",
         });
-        data[index].blocked = !data[index].blocked;
+        data.lstProfile[index].blocked = true;
         return data;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     });
   };
   const handleDeleteUser = (index) => {
     mutate(async (data) => {
-      retryAxios(axios);
       try {
-        await axios.delete(`${LocalApi}/admin/profiles/${data[index]._id}`);
-        data = data.filter((_, i) => i !== index);
+        await fetcher({
+          url: `${LocalApi}/admin/profiles/${data.lstProfile[index]._id}`,
+          method: "delete",
+        });
+        data.lstProfile = data.lstProfile.filter((_, i) => i !== index);
         return data;
       } catch (error) {
-        dispatch(addNotification({ message: error.message }));
+        dispatch(addNotification({ message: error.message, type: "error" }));
       }
     });
   };
@@ -107,8 +110,8 @@ export default function ManageProfiles() {
           </tr>
         </thead>
         <tbody>
-          {data.length ? (
-            data.map((profile, index) => (
+          {data.lstProfile.length ? (
+            data.lstProfile.map((profile, index) => (
               <tr key={profile._id}>
                 <td>{index + 1}</td>
                 <td>{profile._id}</td>
@@ -130,7 +133,7 @@ export default function ManageProfiles() {
                   <div>Phone Number: {profile.user.phoneNumber}</div>
                 </td>
                 <td>
-                  <button onClick={() => handleBlockUser(index)}>
+                  <button onClick={() => handleBlocOrUnblockkUser(index)}>
                     {profile.blocked ? "Unblock" : "Block"}
                   </button>
                   <button onClick={() => handleDeleteUser(index)}>
@@ -150,7 +153,7 @@ export default function ManageProfiles() {
       </table>
       <Pagination
         className="mt-8"
-        totalPageCount={10}
+        totalPageCount={data.pageCounted}
         currentPage={query.page}
         setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
       >

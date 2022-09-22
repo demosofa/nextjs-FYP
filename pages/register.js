@@ -71,7 +71,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
       });
       moveTo();
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
   return (
@@ -188,7 +188,7 @@ function FormAccount({ info, moveTo, ...props }) {
       dispatch(addNotification({ message: "Success Register" }));
       router.push("/");
     } catch (error) {
-      dispatch(addNotification({ message: error.message }));
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
   return (
