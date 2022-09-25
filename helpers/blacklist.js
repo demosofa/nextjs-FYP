@@ -1,21 +1,27 @@
+/**@type {{accountId: string, expire: Date}[]} */
 let blacklist = [];
 
 export default {
   blacklist,
-  isInBlackList: (data) => {
-    if (blacklist.includes(data)) return true;
-    return false;
+  isInBlackList: (accountId) => {
+    const index = blacklist.findIndex((item) => item.accountId === accountId);
+    if (index === -1) return 0;
+    const expireTime = blacklist[index].expire;
+    if (expireTime && expireTime.getMilliseconds < Date.now) {
+      blacklist.splice(index, 1);
+      return -1;
+    } else return 1;
   },
-  addToBlackList: (data) => {
-    if (blacklist.includes(data)) return;
-    blacklist.push(data);
+  addToBlackList: (accountId, expire = null) => {
+    const index = blacklist.findIndex((item) => item.accountId === accountId);
+    if (index !== -1) return;
+    blacklist.push({ accountId, expire });
     return;
   },
-  removeFromBlackList: (data) => {
-    if (blacklist.includes(data)) {
-      blacklist = blacklist.filter((item) => item !== data);
-      return;
-    }
+  removeFromBlackList: (accountId) => {
+    const index = blacklist.findIndex((item) => item.accountId === accountId);
+    if (index === -1) return;
+    blacklist.splice(index, 1);
     return;
   },
 };

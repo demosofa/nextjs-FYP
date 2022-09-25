@@ -1,11 +1,12 @@
 import type { NextApiHandler, NextApiResponse } from "next";
 import Request from "./type";
 import { Token, blacklist } from "./";
+const Account = require("../models/Account");
 
 export default function isAuthentication(
   handler: NextApiHandler
 ): NextApiHandler {
-  return (req: Request, res: NextApiResponse): unknown => {
+  return async (req: Request, res: NextApiResponse) => {
     const authProp = req.headers.authorization;
     if (!authProp) return res.status(401).end();
     const currentAccessToken = authProp.split(" ")[1];
@@ -20,10 +21,18 @@ export default function isAuthentication(
         role: value.role,
         accountId: value.accountId,
       };
-      if (blacklist.isInBlackList(req.user.accountId))
-        return res
-          .status(403)
-          .json({ message: "This account has been blocked" });
+      const check = blacklist.isInBlackList(req.user.accountId);
+      if (check === 1)
+        return res.status(403).json("This account has been blocked");
+      else if (check === -1) {
+        try {
+          await Account.findByIdAndUpdate(value.accountId, {
+            $set: { blocked: false },
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
       return handler(req, res);
     } catch (err) {
       return res.status(401).json({ message: "Token is expired" });
