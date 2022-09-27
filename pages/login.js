@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/reducer/notificationSlice";
 import Head from "next/head";
+import Link from "next/link";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -79,9 +80,18 @@ export default function Login() {
             </Form.Item>
             <Form.Submit>Login</Form.Submit>
           </Form>
-          <Form.Button onClick={() => router.push("/register")}>
-            Register
-          </Form.Button>
+          <p>
+            Forgot Password?{" "}
+            <Link href="/forgot_password">
+              <a className="font-bold hover:text-orange-500">Reset Password</a>
+            </Link>
+          </p>
+          <p>
+            New here?{" "}
+            <Link href="/register">
+              <a className="font-bold hover:text-orange-500">Register</a>
+            </Link>
+          </p>
         </div>
       </div>
       <Notification />

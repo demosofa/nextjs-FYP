@@ -94,34 +94,11 @@ Form.Submit = function FormSubmit({ children, ...props }) {
   );
 };
 
-Form.Link = function FormLink({ children, ...restProp }) {
-  return (
-    <a href="" className={styles.form__link} {...restProp}>
-      {children}
-    </a>
-  );
-};
-
 Form.Button = function FormButton({ children, ...restProp }) {
   return (
     <a className={styles.form__button} {...restProp}>
       {children}
     </a>
-  );
-};
-Form.Message = function FormMessage({ children, ...restProps }) {
-  return (
-    <p className={styles.form__message} {...restProps}>
-      {children}
-    </p>
-  );
-};
-
-Form.ErrorMessage = function FormError({ children, ...restProp }) {
-  return (
-    <p className={styles.form__errorMsg} {...restProp}>
-      {children}{" "}
-    </p>
   );
 };
 
@@ -151,6 +128,30 @@ Form.Option = function FormOption({ children, ...props }) {
     </option>
   );
 };
+
+// Form.Link = function FormLink({ children, ...restProp }) {
+//   return (
+//     <a href="" className={styles.form__link} {...restProp}>
+//       {children}
+//     </a>
+//   );
+// };
+
+// Form.Message = function FormMessage({ children, ...restProps }) {
+//   return (
+//     <p className={styles.form__message} {...restProps}>
+//       {children}
+//     </p>
+//   );
+// };
+
+// Form.ErrorMessage = function FormError({ children, ...restProp }) {
+//   return (
+//     <p className={styles.form__errorMsg} {...restProp}>
+//       {children}{" "}
+//     </p>
+//   );
+// };
 
 // Form.Checkbox = forwardRef(function ({ children, ...restProp }, ref) {
 //   return (
