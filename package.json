@@ -46,6 +46,7 @@
     "@types/cookies": "^0.7.7",
     "@types/formidable": "^2.0.5",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/nodemailer": "^6.4.6",
     "@types/qrcode": "^1.5.0",
     "autoprefixer": "^10.4.8",
     "cross-env": "^7.0.3",
