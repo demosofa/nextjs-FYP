@@ -25,5 +25,8 @@ module.exports = {
       // => @media (min-width: 1536px) { ... }
     },
   },
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   plugins: [require("@tailwindcss/line-clamp")],
 };

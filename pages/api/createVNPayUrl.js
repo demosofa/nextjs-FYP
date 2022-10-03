@@ -1,6 +1,7 @@
 import { isAuthentication } from "../../helpers";
 import dateFormat from "dateformat";
 import { sortObject } from "../../shared";
+import NextCors from "nextjs-cors";
 
 async function createVNPayUrl(req, res) {
   switch (req.method.toLowerCase()) {
@@ -37,7 +38,7 @@ async function createVNPayUrl(req, res) {
       // vnp_Params['vnp_Merchant'] = ''
       vnp_Params["vnp_Locale"] = locale;
       vnp_Params["vnp_CurrCode"] = currCode;
-      vnp_Params["vnp_TxnRef"] = orderId;
+      vnp_Params["vnp_TxnRef"] = orderId + "+" + Date.now();
       vnp_Params["vnp_OrderInfo"] = orderInfo;
       vnp_Params["vnp_OrderType"] = orderType;
       vnp_Params["vnp_Amount"] = amount * 100;
@@ -59,7 +60,14 @@ async function createVNPayUrl(req, res) {
       vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
       console.log(vnpUrl);
 
-      return res.redirect(vnpUrl);
+      await NextCors(req, res, {
+        // Options
+        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+        origin: "*",
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+      });
+
+      return res.status(200).json(vnpUrl);
   }
 }
 

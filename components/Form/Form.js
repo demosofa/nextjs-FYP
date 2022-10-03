@@ -129,13 +129,13 @@ Form.Option = function FormOption({ children, ...props }) {
   );
 };
 
-// Form.Link = function FormLink({ children, ...restProp }) {
-//   return (
-//     <a href="" className={styles.form__link} {...restProp}>
-//       {children}
-//     </a>
-//   );
-// };
+Form.Link = function FormLink({ children, ...restProp }) {
+  return (
+    <a href="" className={styles.form__link} {...restProp}>
+      {children}
+    </a>
+  );
+};
 
 // Form.Message = function FormMessage({ children, ...restProps }) {
 //   return (

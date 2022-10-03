@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form } from "../components";
 import { addNotification } from "../redux/reducer/notificationSlice";
+import { Validate } from "../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -18,7 +19,17 @@ export default function ForgotPassword() {
   const handleSubmitSendEmail = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${LocalApi}/auth/forgotPwd`, input);
+      Object.entries(input).forEach((entry) => {
+        switch (entry[0]) {
+          case "username":
+            new Validate(entry[1]).isEmpty();
+          case "email":
+            new Validate(entry[1]).isEmpty().isEmail();
+            break;
+        }
+      });
+      const res = await axios.post(`${LocalApi}/auth/forgotPwd`, input);
+      dispatch(addNotification({ message: res.data, type: "success" }));
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
     }

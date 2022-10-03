@@ -3,7 +3,11 @@ import bcrypt from "bcrypt";
 import Cookies from "cookies";
 import { setCookieToken, Token } from "../helpers";
 import { convertTime } from "../shared";
-import { createTestAccount, createTransport } from "nodemailer";
+import {
+  createTestAccount,
+  createTransport,
+  getTestMessageUrl,
+} from "nodemailer";
 
 class AccountController {
   constructor(unit = UnitOfWork) {
@@ -89,27 +93,29 @@ class AccountController {
               expiresIn: "15m",
             });
             const resetLink = `${process.env.NEXT_PUBLIC_DOMAIN}/reset_password/${_id}/${token}`;
-            console.log(resetLink);
-            // let testAccount = await createTestAccount();
+            let testAccount = await createTestAccount();
             let transporter = createTransport({
               host: "smtp.ethereal.email",
               port: 587,
               secure: false, // true for 465, false for other ports
               auth: {
-                user: process.env.Username, // generated ethereal user
-                pass: process.env.Password, // generated ethereal password
+                user: testAccount.user, // generated ethereal user
+                pass: testAccount.pass, // generated ethereal password
               },
             });
             let info = await transporter.sendMail({
-              from: `"Fred Foo 👻" <${process.env.Name}>`, // sender address
+              from: `"Fred Foo 👻" <${testAccount.user}>`, // sender address
               to: user.email, // list of receivers
               subject: "Hello ✔", // Subject line
               text: "Hello world?", // plain text body
-              html: `<b>Please click this link for starting reset password process <a>${resetLink}</a></b>`, // html body
+              html: `<b>Please click this link for starting reset password process <a href=${resetLink}>This is the link for starting reset password</a></b>`, // html body
             });
+            console.log("Preview URL: %s", getTestMessageUrl(info));
           }
         });
+      return res.status(200).json("Success send reset link to ur email");
     } catch (error) {
+      console.log(error);
       return res.status(500).json("Fail to check account existent");
     }
   };
@@ -143,17 +149,17 @@ class AccountController {
           const { _id } = Token.verifyToken(token, secret);
           if (id === _id) {
             const validPass = await bcrypt.compare(pwd, hashPassword);
-            if (validPass) {
+            if (!validPass) {
               let newHashPassword = await bcrypt.hash(pwd, 10);
               await this.unit.Account.updateById(id, {
                 $set: { hashPassword: newHashPassword },
               });
-              return res.redirect("/");
+              return res.redirect("/login");
             } else throw new Error("Fail to set new password account");
           } else throw new Error("Fail to set new password account");
         });
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json(error.message);
     }
   };
 }
