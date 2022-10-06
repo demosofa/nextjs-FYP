@@ -9,18 +9,18 @@ import { convertTime } from "../../shared";
 import { Loading } from "../../components";
 import { ProgressBar } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Role } from "../../shared";
 import QrScanner from "react-qr-scanner";
 import Head from "next/head";
-import { AblyFe } from "../../layouts";
 import VnPay from "../../containers/VnPay/VnPay";
+import { useAblyContext } from "../../contexts/AblyContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
 
 function ShippingProgress() {
-  const { ably } = useContext(AblyFe);
+  const { ably } = useAblyContext();
   const channel = useRef();
   const [showQR, setShowQR] = useState(null);
   const [showScanner, setShowScanner] = useState(false);

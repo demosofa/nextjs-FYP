@@ -4,48 +4,20 @@ import Footer from "./Footer/Footer";
 import Notification from "./Notification/Notification";
 import Dashboard from "./Dashboard";
 import General from "./General";
-import { createContext, useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { AdminRole, ShipperRole, SellerRole } from "./routes";
 import { expireStorage } from "../utils";
 import parser from "jwt-decode";
 import { isStringStartWith, Role } from "../shared";
-import { Realtime } from "ably/promises";
-import { useDispatch } from "react-redux";
-import { addNotification } from "../redux/reducer/notificationSlice";
-
-const LocalApi = process.env.NEXT_PUBLIC_API;
-const AblyFe = createContext();
 
 export default function Layout({ children, routerPath }) {
-  const ably = useRef();
-  const { role, accountId } = useMemo(() => {
-    let decoded;
+  const { role } = useMemo(() => {
     if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
-      decoded = parser(expireStorage.getItem("accessToken"));
-      if (!ably.current)
-        ably.current = new Realtime.Promise({
-          authUrl: `${LocalApi}/createAblyToken`,
-        });
+      let decoded = parser(expireStorage.getItem("accessToken"));
       return decoded;
     }
     return { accountId: "", role: "" };
   }, [routerPath]);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (ably.current && accountId) {
-      ably.current.channels.get(accountId).subscribe(({ name, data }) => {
-        switch (name) {
-          case "shipping":
-            dispatch(addNotification({ ...data }));
-            break;
-          case "comment":
-            dispatch(addNotification({ ...data }));
-            break;
-        }
-      });
-    }
-  }, [ably.current, accountId]);
 
   const TargetLayout = useMemo(() => {
     if (isStringStartWith(routerPath, ["/admin", "/product"])) return Dashboard;
@@ -53,10 +25,7 @@ export default function Layout({ children, routerPath }) {
       return General;
   }, [routerPath]);
 
-  const child = (
-    <AblyFe.Provider value={{ ably: ably.current }}>{children}</AblyFe.Provider>
-  );
-  if (!TargetLayout) return child;
+  if (!TargetLayout) return children;
   return (
     <TargetLayout
       arrLink={
@@ -68,9 +37,9 @@ export default function Layout({ children, routerPath }) {
           : []
       }
     >
-      {child}
+      {children}
     </TargetLayout>
   );
 }
 
-export { Navbar, Sidebar, Footer, Notification, AblyFe };
+export { Navbar, Sidebar, Footer, Notification };

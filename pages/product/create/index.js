@@ -1,19 +1,19 @@
 import axios from "axios";
 import Head from "next/head";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FileUpload, TagsInput, Form, Container } from "../../../components";
 import { Variation, Variant, SelectCategory } from "../../../containers";
 import { Notification } from "../../../layouts";
 import { retryAxios, Validate, uploadApi } from "../../../utils";
-import { Media } from "../../_app";
 import { useSelector, useDispatch } from "react-redux";
 import { editAllVariations } from "../../../redux/reducer/variationSlice";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
 import Select from "react-select";
 import dynamic from "next/dynamic";
 import { deleteAllVariant } from "../../../redux/reducer/variantSlice";
+import { useMediaContext } from "../../../contexts/MediaContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -34,7 +34,7 @@ function CreateForm() {
     quantity: 0,
   });
 
-  const { device, Devices } = useContext(Media);
+  const { device, Devices } = useMediaContext();
 
   const validateInput = () => {
     const { title, description, status, manufacturer, price, quantity } = input;
@@ -95,22 +95,17 @@ function CreateForm() {
     }
   };
 
-  const handleSelectedCategories = useCallback(
-    (index, categoryId) => {
-      setInput((prev) => {
-        const { images, ...other } = prev;
-        const clone = JSON.parse(JSON.stringify(other));
-        if (!categoryId) {
-          const updatedCategories = clone.categories.filter(
-            (_, i) => i < index
-          );
-          clone.categories = updatedCategories;
-        } else clone.categories[index] = categoryId;
-        return { ...clone, images };
-      });
-    },
-    [input.categories]
-  );
+  const handleSelectedCategories = useCallback((index, categoryId) => {
+    setInput((prev) => {
+      const { images, ...other } = prev;
+      const clone = JSON.parse(JSON.stringify(other));
+      if (!categoryId) {
+        const updatedCategories = clone.categories.filter((_, i) => i < index);
+        clone.categories = updatedCategories;
+      } else clone.categories[index] = categoryId;
+      return { ...clone, images };
+    });
+  }, []);
   return (
     <>
       <Head>

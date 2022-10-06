@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCart } from "../../redux/reducer/cartSlice";
 import {
@@ -12,11 +12,11 @@ import {
   Form,
 } from "../../components";
 import { Comment, Rating } from "../../containers";
-import { Media } from "../_app";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
 import { expireStorage, retryAxios, Validate } from "../../utils";
 import axios from "axios";
+import { useMediaContext } from "../../contexts/MediaContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -45,7 +45,7 @@ export default function Overview({ product }) {
     return product.variations[index];
   }, [options, product.variations]);
 
-  const { device, Devices } = useContext(Media);
+  const { device, Devices } = useMediaContext();
 
   const dispatch = useDispatch();
   const generateCart = () => {

@@ -29,28 +29,29 @@ export default function Navbar({ arrLink }) {
         />
       </div>
       <div className={styles.bar}>
-        {linkNav?.map(
-          (link, index) =>
-            link.title && (
-              <Link key={index} href={link.path}>
-                <a className="pl-2 pr-2">{link.title}</a>
-              </Link>
-            )
+        {linkNav?.map((link, index) =>
+          link.title ? (
+            <Link key={index} href={link.path}>
+              <a className="pl-2 pr-2">{link.title}</a>
+            </Link>
+          ) : null
         )}
-        <Dropdown
-          className="pl-3"
-          where="left"
-          title={<div className="text-white">Other</div>}
-        >
-          {linkDrop?.map(
-            (link, index) =>
-              link.title && (
-                <Link key={index} href={link.path}>
-                  <a className="whitespace-nowrap text-black">{link.title}</a>
-                </Link>
-              )
-          )}
-        </Dropdown>
+        {linkDrop.length ? (
+          <Dropdown
+            className="pl-3"
+            where="left"
+            title={<div className="text-white">Other</div>}
+          >
+            {linkDrop?.map(
+              (link, index) =>
+                link.title && (
+                  <Link key={index} href={link.path}>
+                    <a className="whitespace-nowrap text-black">{link.title}</a>
+                  </Link>
+                )
+            )}
+          </Dropdown>
+        ) : null}
       </div>
       <div className={styles.bar}>
         {localStorage.getItem("accessToken") && (
