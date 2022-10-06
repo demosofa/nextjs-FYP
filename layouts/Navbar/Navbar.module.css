@@ -15,5 +15,8 @@
   align-items: center;
   background-color: transparent;
   color: whitesmoke;
-  gap: 20px
+}
+
+.bar > * {
+  padding: 5px 10px;
 }

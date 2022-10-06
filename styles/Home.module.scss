@@ -5,11 +5,13 @@
 
 .main {
   min-height: 100vh;
-  padding: 4rem 0;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 40px
+  gap: 40px;
+  @include mq("phone-wide"){
+    align-items: center;
+  }
 }
 
 .footer {

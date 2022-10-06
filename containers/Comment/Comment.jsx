@@ -97,7 +97,6 @@ function CommentTab({
     const { accountId } = decoder(accessToken);
     return accountId === data.author._id;
   })[0];
-  const [offDropdown, setOffDropdown] = useState(false);
   const [comments, setComments] = useState([]);
   const controller = useRef();
   const dispatch = useDispatch();
@@ -171,12 +170,7 @@ function CommentTab({
       <div className={styles.tab_container}>
         <Avatar text={currentComment.author.username}></Avatar>
         {isAuthor && !toggle.edit && (
-          <Dropdown
-            icon={<BiDotsVertical />}
-            toggle={offDropdown}
-            setToggle={setOffDropdown}
-            onMouseLeave={() => setOffDropdown(false)}
-          >
+          <Dropdown icon={<BiDotsVertical />} hoverable={true}>
             <div
               onClick={() =>
                 setToggle((prev) => ({ ...prev, edit: !prev.edit }))

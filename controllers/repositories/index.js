@@ -12,6 +12,7 @@ import FileRepository from "./FileRepository";
 import CommentRepository from "./CommentRespository";
 import ShipperRespository from "./ShipperRespository";
 import RateRepository from "./RateRepository";
+import NotificationRepository from "./NotificationRepository";
 
 export {
   ProdcutRepository,
@@ -28,4 +29,5 @@ export {
   CommentRepository,
   ShipperRespository,
   RateRepository,
+  NotificationRepository,
 };

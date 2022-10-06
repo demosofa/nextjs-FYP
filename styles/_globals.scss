@@ -17,6 +17,9 @@
   --blue-shade-one: #548bcf;
   --blue-shade-two: #e5f1ff;
   --blue-shade-three: #2e8eff;
+	--light-orange: #F98340;
+	--red-orange: #F71442;
+	--linear-orange-red: repeating-linear-gradient(to right, #F98340, #F71442);
 }
 
 *, *:before, *:after {
@@ -163,8 +166,8 @@ a {
 	}
 	
 	thead {
+		background: var(--linear-orange-red);
 		th {
-			background-color: #55608f;
 			color: #fff;
 		}
 	}

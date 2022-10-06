@@ -8,7 +8,7 @@ import { createContext, useEffect, useMemo, useRef } from "react";
 import { AdminRole, ShipperRole, SellerRole } from "./routes";
 import { expireStorage } from "../utils";
 import parser from "jwt-decode";
-import { Role } from "../shared";
+import { isStringStartWith, Role } from "../shared";
 import { Realtime } from "ably/promises";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/reducer/notificationSlice";
@@ -48,8 +48,9 @@ export default function Layout({ children, routerPath }) {
   }, [ably.current, accountId]);
 
   const TargetLayout = useMemo(() => {
-    if (["/admin/dashboard", "/product"].includes(routerPath)) return Dashboard;
-    else if (!["/login", "/register"].includes(routerPath)) return General;
+    if (isStringStartWith(routerPath, ["/admin", "/product"])) return Dashboard;
+    else if (!isStringStartWith(routerPath, ["/login", "/register"]))
+      return General;
   }, [routerPath]);
 
   const child = (

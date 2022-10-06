@@ -31,8 +31,8 @@ export default function MyOrder() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.response.status === 300) return router.back();
-        else if (err.response.status === 401) return router.push("/login");
+        if (err.status === 300) return router.back();
+        else if (err.status === 401) return router.push("/login");
         else
           return dispatch(
             addNotification({ message: err.message, type: "error" })

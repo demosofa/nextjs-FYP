@@ -22,8 +22,8 @@
         flex: 4
       }
       .slider{
-        width: 180px;
-          height: 60px;
+        width: 100%;
+        height: 100px;
         @include mq("tablet"){
           width: 60px; height: 180px;
         }
@@ -36,7 +36,7 @@
       flex: 1;
     }
     > .product-info {
-      @include flex(10px, column);
+      @include flex(30px, column);
       flex: 1;
 
       & .btn-add-to-cart{
@@ -48,6 +48,7 @@
         font-family: "Open Sans", sans-serif;
         font-size: larger;
         font-weight: 600;
+        border: none;
         @include mq("tablet-wide"){
           font-size: medium
         }

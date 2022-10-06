@@ -18,4 +18,9 @@
   padding-left:80px;
   padding-right: 80px;
   padding-top: 50px;
+  padding-bottom: 50px;
+  @include mq("tablet"){
+    padding-left: 0;
+    padding-right: 0;
+  }
 }

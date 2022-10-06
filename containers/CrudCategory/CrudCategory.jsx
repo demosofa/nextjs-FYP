@@ -95,7 +95,6 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
     more: false,
   });
   const [currentCategory, setCurrentCategory] = useState(data);
-  const [offDropdown, setOffDropdown] = useState(false);
   const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
   const { loading } = useAxiosLoad({
@@ -181,12 +180,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
           <div className={styles.tab_container}>
             {currentCategory.name}
             {!toggle.edit && (
-              <Dropdown
-                icon={<BiDotsVertical />}
-                toggle={offDropdown}
-                setToggle={setOffDropdown}
-                onMouseLeave={() => setOffDropdown(false)}
-              >
+              <Dropdown icon={<BiDotsVertical />} hoverable={true}>
                 <div
                   onClick={() =>
                     setToggle((prev) => ({ ...prev, edit: !prev.edit }))

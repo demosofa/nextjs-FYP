@@ -127,7 +127,7 @@ export default function Overview({ product }) {
             className="slider"
             config={{
               vertical: device === Devices.phone ? true : false,
-              slides: { perView: 1 },
+              slides: { perView: 3 },
             }}
           >
             {product.images.map((image, index) => (
@@ -141,11 +141,11 @@ export default function Overview({ product }) {
           </Slider>
         </div>
         <div className="product-info">
-          <label>{product.title}</label>
+          <label className="text-2xl">{product.title}</label>
           <div>
             <label>{product.rateCount}</label>
           </div>
-          {product.time && <Timer value={product.time} />}
+          {product.time && <Timer value={new Date(product.time).getTime()} />}
 
           <div className="flex gap-3">
             <label>Price: </label>
@@ -165,7 +165,7 @@ export default function Overview({ product }) {
                 key={variant._id}
                 type="radio"
                 name={variant.name}
-                className="flex justify-between"
+                className="flex h-fit justify-between"
                 setChecked={(value) =>
                   setOptions((prev) => {
                     const clone = prev.concat();
@@ -177,13 +177,19 @@ export default function Overview({ product }) {
                 {variant.name}
                 {variant.options.map((item, index) => {
                   return (
-                    <div key={item._id} style={{ width: "fit-content" }}>
+                    <div className="mx-2 w-full" key={item._id}>
                       <Checkbox.Item
+                        className="peer hidden"
+                        id={item.name}
                         value={`${variant.name}: ${item.name}`}
                         defaultChecked={index === 0}
+                      />
+                      <label
+                        className="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-gray-200 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                        htmlFor={item.name}
                       >
                         {item.name}
-                      </Checkbox.Item>
+                      </label>
                     </div>
                   );
                 })}

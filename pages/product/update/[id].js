@@ -105,7 +105,15 @@ function UpdateProduct() {
         <Form.Title>TimeStamp</Form.Title>
         <Form.Input
           type="date"
-          value={product.time}
+          value={
+            product.time &&
+            new Date(product.time)
+              .toISOString()
+              .toLocaleString("en-US", {
+                timeZone: "Asia/Ho_Chi_Minh",
+              })
+              .split("T")[0]
+          }
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, time: e.target.value }))
           }
