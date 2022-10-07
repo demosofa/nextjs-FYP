@@ -24,6 +24,7 @@ const Product = new Schema(
     variants: [{ type: Schema.Types.ObjectId, ref: "Variant" }],
     variations: [{ type: Schema.Types.ObjectId, ref: "Variation" }],
     manufacturer: { type: String, required: true },
+    sold: { type: Number, default: 0 },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
   { timestamps: true }

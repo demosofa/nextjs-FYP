@@ -4,6 +4,7 @@
 @import "./home";
 @import "./overview";
 @import "./login.scss";
+@import "./crudcategory.module.scss";
 @import "./mixin.scss";
 
 // @tailwind base;
@@ -17,6 +18,9 @@
   --blue-shade-one: #548bcf;
   --blue-shade-two: #e5f1ff;
   --blue-shade-three: #2e8eff;
+	--light-orange: #F98340;
+	--red-orange: #F71442;
+	--linear-orange-red: repeating-linear-gradient(to right, #F98340, #F71442);
 }
 
 *, *:before, *:after {
@@ -62,6 +66,12 @@ a {
 	}
 	&_row{
 		justify-content: center;
+	}
+}
+
+.flat_dl{
+	& dl {
+		display: flex;
 	}
 }
 
@@ -163,8 +173,8 @@ a {
 	}
 	
 	thead {
+		background: var(--linear-orange-red);
 		th {
-			background-color: #55608f;
 			color: #fff;
 		}
 	}
@@ -215,8 +225,7 @@ a {
 		margin-bottom:15px;
 	}
 	.table td{
-		text-align: right;
-		padding-left: 50%;
+		// padding-left: 50%;
 		text-align: right;
 		position: relative;
 	}

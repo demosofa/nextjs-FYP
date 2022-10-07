@@ -1,13 +1,30 @@
-import { Sidebar } from ".";
+import { Notification, Sidebar } from ".";
 import Link from "next/link";
-import { Icon } from "../components";
-import { AiOutlineHome } from "react-icons/ai";
+import { Animation, Icon } from "../components";
+import { AiOutlineHome, AiOutlineArrowRight } from "react-icons/ai";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 
 function Dashboard({ children, arrLink }) {
+  const [toggle, setToggle] = useState(false);
   return (
     <>
-      <Sidebar className="group w-[80px] hover:w-80">
+      <Icon
+        className={`fixed ${
+          toggle ? "left-20" : "left-4"
+        } hidden !h-[auto] !w-[auto] bg-[#f0f2f5] p-2 sm:visible`}
+        onClick={() => setToggle(!toggle)}
+      >
+        <Animation.Rotate state={toggle} deg={180}>
+          <AiOutlineArrowRight />
+        </Animation.Rotate>
+      </Icon>
+
+      <Sidebar
+        className={`group w-[80px] hover:w-80 ${
+          toggle ? "sm:left-0" : "sm:left-[-10rem]"
+        }`}
+      >
         <Link href="/">
           <a>
             <Icon>
@@ -28,6 +45,7 @@ function Dashboard({ children, arrLink }) {
         ))}
       </Sidebar>
       <div className="body">{children}</div>
+      <Notification />
     </>
   );
 }

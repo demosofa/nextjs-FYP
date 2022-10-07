@@ -3,7 +3,7 @@ import { useInterval } from "../../hooks";
 import { convertTime } from "../../shared";
 import styles from "./timer.module.scss";
 
-export default function Timer({ value, setExpire }) {
+export default function Timer({ value, setExpire, className, ...props }) {
   const [counter, setCounter] = useState(() => {
     const time = convertTime(value, true);
     return {
@@ -38,7 +38,7 @@ export default function Timer({ value, setExpire }) {
     }
   }, 1000);
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} ${className}`} {...props}>
       <div className={styles.unit + ` day`}>
         {(counter.day < 10 ? "0" : "") + counter.day}
       </div>

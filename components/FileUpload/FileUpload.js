@@ -12,6 +12,7 @@ export default function FileUpload({
   limitFiles = 10,
   maxByMB = 5,
   children,
+  className,
   ...props
 }) {
   const {
@@ -43,7 +44,7 @@ export default function FileUpload({
         handleOpenPreview,
       }}
     >
-      <div className={styles.drop_zone} {...props}>
+      <div className={`${styles.drop_zone} ${className}`} {...props}>
         {Children.toArray(children).map((child) => child)}
       </div>
     </Kits.Provider>

@@ -7,6 +7,52 @@ class AdminController {
     this.unit = new unit();
   }
 
+  getAllOrder = async (req, res) => {
+    try {
+      const { page, sort, filter } = req.query;
+      let filterOptions = {};
+      if (filter)
+        filterOptions = {
+          ...filterOptions,
+          status: filter,
+        };
+
+      const lstOrder = await this.unit.Order.getAll(filterOptions)
+        .skip((page - 1) * 10)
+        .limit(10)
+        .sort({
+          [sort]: "asc",
+        })
+        .populate("orderItems")
+        .lean();
+      if (!lstOrder) throw new Error("Fail to load profiles");
+      const countOrder = await this.unit.Order.countData(filterOptions).lean();
+      const pageCounted = Math.ceil(countOrder / 10);
+      return res.status(200).json({ lstOrder, pageCounted });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  };
+
+  changeOrderStatus = async (req, res) => {
+    const { status } = req.body;
+    await this.unit.Order.updateById(req.query.id, { $set: { status } });
+    return res.status(200).end();
+  };
+
+  deleteOrder = async (req, res) => {
+    try {
+      const deleted = await this.unit.Order.deleteOne({
+        _id: req.body.Id,
+        status: { $in: ["progress", "pending", "cancel"] },
+      });
+      if (!deleted) throw new Error("Fail to delete Order");
+      return res.status(200).end();
+    } catch (error) {
+      return res.status(500).json(error.message);
+    }
+  };
+
   getAllProfile = async (req, res) => {
     try {
       const { search, page, sort, filter } = req.query;

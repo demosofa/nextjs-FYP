@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Badge, Search } from "../../components";
+import { Badge, Dropdown, Search } from "../../components";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import styles from "./Navbar.module.css";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import RouterAuth from "../../containers/RouterAuth/RouterAuth";
 
 export default function Navbar({ arrLink }) {
+  const [linkNav, linkDrop] = useMemo(() => {
+    let linkInNav = arrLink.slice(0, 4);
+    let linkInDrop = arrLink.slice(4);
+    return [linkInNav, linkInDrop];
+  }, [arrLink]);
   const [search, setSearch] = useState("");
   const cart = useSelector((state) => state.cart);
   const router = useRouter();
@@ -24,14 +29,29 @@ export default function Navbar({ arrLink }) {
         />
       </div>
       <div className={styles.bar}>
-        {arrLink?.map(
-          (link, index) =>
-            link.title && (
-              <Link key={index} href={link.path}>
-                <a>{link.title}</a>
-              </Link>
-            )
+        {linkNav?.map((link, index) =>
+          link.title ? (
+            <Link key={index} href={link.path}>
+              <a className="pl-2 pr-2">{link.title}</a>
+            </Link>
+          ) : null
         )}
+        {linkDrop.length ? (
+          <Dropdown
+            className="pl-3"
+            where="left"
+            title={<div className="text-white">Other</div>}
+          >
+            {linkDrop?.map(
+              (link, index) =>
+                link.title && (
+                  <Link key={index} href={link.path}>
+                    <a className="whitespace-nowrap text-black">{link.title}</a>
+                  </Link>
+                )
+            )}
+          </Dropdown>
+        ) : null}
       </div>
       <div className={styles.bar}>
         {localStorage.getItem("permission") && (

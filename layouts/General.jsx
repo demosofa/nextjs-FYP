@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Navbar, Sidebar, Footer, Notification } from ".";
 import { Icon, Search } from "../components";
 import {
@@ -6,11 +6,11 @@ import {
   AiOutlineShoppingCart,
   AiOutlineHome,
 } from "react-icons/ai";
-import { Media } from "../pages/_app";
 import Link from "next/link";
+import { useMediaContext } from "../contexts/MediaContext";
 
 export default function General({ children, arrLink }) {
-  const { device, Devices } = useContext(Media);
+  const { device, Devices } = useMediaContext();
   const [toggle, setToggle] = useState(false);
   return (
     <>

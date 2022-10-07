@@ -1,15 +1,18 @@
 .wrapper{
   display: flex;
   gap: 6px;
+  background: var(--linear-orange-red);
+  border-radius: 8px;
+  max-width: fit-content;
+  color: whitesmoke;
+  font-size: larger;
+  padding: 2px 8px;
   > .unit{
     padding: 4px;
     border-radius: 6px;
-    background-color: orangered;
-    color: white;
   }
   > .seperate{
     padding: 3px;
     border-radius: 6px;
-    background-color: grey;
   }
 }

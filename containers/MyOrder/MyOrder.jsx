@@ -25,8 +25,8 @@ export default function MyOrder() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.response.status === 300) return router.back();
-        else if (err.response.status === 401) return router.push("/login");
+        if (err.status === 300) return router.back();
+        else if (err.status === 401) return router.push("/login");
         else
           return dispatch(
             addNotification({ message: err.message, type: "error" })
@@ -47,23 +47,22 @@ export default function MyOrder() {
         data[index].status = "cancel";
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
-        return data;
       }
+      return data;
     }, false);
   };
 
   const handleFilter = ({ value }) => {
     mutate(async (data) => {
       try {
-        const data = await fetcher({
+        data = await fetcher({
           url: `${LocalApi}/profile/order`,
           params: { status: value },
         });
-        return data;
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
-        return data;
       }
+      return data;
     }, false);
   };
 

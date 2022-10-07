@@ -17,6 +17,7 @@
   > .variant{
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 10%;
     > input{
       flex: 1;

@@ -30,8 +30,8 @@ function SellerPage() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.response.status === 300) return router.back();
-        else if (err.response.status === 401) return router.push("/login");
+        if (err.status === 300) return router.back();
+        else if (err.status === 401) return router.push("/login");
         else
           return dispatch(
             addNotification({ message: err.message, type: "error" })
@@ -178,7 +178,7 @@ function SellerPage() {
         <>
           <div className="backdrop" onClick={() => setShowScanner(false)}></div>
           <QrScanner
-            facingMode="front"
+            facingMode="rear"
             delay={500}
             onError={(err) => dispatch(addNotification({ message: err }))}
             onScan={handleScan}

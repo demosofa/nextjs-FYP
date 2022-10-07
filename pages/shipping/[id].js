@@ -7,13 +7,13 @@ import { convertTime } from "../../shared";
 import { Loading } from "../../components";
 import { ProgressBar } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Role } from "../../shared";
 import QrScanner from "react-qr-scanner";
 import Head from "next/head";
-import { AblyFe } from "../../layouts";
 import { withAuth } from "../../helpers";
 import VnPay from "../../containers/VnPay/VnPay";
+import { useAblyContext } from "../../contexts/AblyContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
@@ -39,7 +39,7 @@ export const getServerSideProps = withAuth(async ({ req }, role) => {
 });
 
 export default function ShippingProgress({ initData, auth }) {
-  const { ably } = useContext(AblyFe);
+  const { ably } = useAblyContext();
   const channel = useRef();
   const [showQR, setShowQR] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
@@ -62,8 +62,8 @@ export default function ShippingProgress({ initData, auth }) {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.response.status === 300) return router.back();
-        else if (err.response.status === 401) return router.push("/login");
+        if (err.status === 300) return router.back();
+        else if (err.status === 401) return router.push("/login");
         else
           return dispatch(
             addNotification({ message: err.message, type: "error" })

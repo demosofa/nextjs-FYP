@@ -104,6 +104,7 @@ export default function UpdateImage({ productId, setToggle }) {
   return (
     <div>
       <FileUpload
+        className="!max-w-full"
         setPrevFiles={(images) => setNewImages(images)}
         maxByMB={10 - currentSize}
       >
@@ -161,11 +162,7 @@ function StoredImage({
       onMouseLeave={() => setDisplayOpts(false)}
       {...props}
     >
-      <img
-        style={{ width: "100%" }}
-        alt="product"
-        src={previews[0] || image.url}
-      ></img>
+      <img alt="product" src={previews[0] || image.url} />
       {displayOpts && (
         <div className={styles.img_option}>
           <input

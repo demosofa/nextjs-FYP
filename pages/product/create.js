@@ -1,19 +1,18 @@
 import axios from "axios";
 import Head from "next/head";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
-import { FileUpload, TagsInput, Form, Container } from "../../../components";
-import { Variation, Variant, SelectCategory } from "../../../containers";
-import { Notification } from "../../../layouts";
-import { retryAxios, Validate, uploadApi } from "../../../utils";
-import { Media } from "../../_app";
+import { FileUpload, TagsInput, Form, Container } from "../../components";
+import { Variation, Variant, SelectCategory } from "../../containers";
+import { retryAxios, Validate, uploadApi } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
-import { editAllVariations } from "../../../redux/reducer/variationSlice";
-import { addNotification } from "../../../redux/reducer/notificationSlice";
+import { editAllVariations } from "../../redux/reducer/variationSlice";
+import { addNotification } from "../../redux/reducer/notificationSlice";
 import Select from "react-select";
 import dynamic from "next/dynamic";
-import { deleteAllVariant } from "../../../redux/reducer/variantSlice";
+import { deleteAllVariant } from "../../redux/reducer/variantSlice";
+import { useMediaContext } from "../../contexts/MediaContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -34,7 +33,7 @@ function CreateForm() {
     quantity: 0,
   });
 
-  const { device, Devices } = useContext(Media);
+  const { device, Devices } = useMediaContext();
 
   const validateInput = () => {
     const { title, description, status, manufacturer, price, quantity } = input;
@@ -92,28 +91,22 @@ function CreateForm() {
     }
   };
 
-  const handleSelectedCategories = useCallback(
-    (index, categoryId) => {
-      setInput((prev) => {
-        const { images, ...other } = prev;
-        const clone = JSON.parse(JSON.stringify(other));
-        if (!categoryId) {
-          const updatedCategories = clone.categories.filter(
-            (_, i) => i < index
-          );
-          clone.categories = updatedCategories;
-        } else clone.categories[index] = categoryId;
-        return { ...clone, images };
-      });
-    },
-    [input.categories]
-  );
+  const handleSelectedCategories = useCallback((index, categoryId) => {
+    setInput((prev) => {
+      const { images, ...other } = prev;
+      const clone = JSON.parse(JSON.stringify(other));
+      if (!categoryId) {
+        const updatedCategories = clone.categories.filter((_, i) => i < index);
+        clone.categories = updatedCategories;
+      } else clone.categories[index] = categoryId;
+      return { ...clone, images };
+    });
+  }, []);
   return (
     <>
       <Head>
         <title>Create Product</title>
       </Head>
-      <Notification />
       <Form
         className="create_edit"
         onSubmit={handleSubmit}
@@ -122,7 +115,7 @@ function CreateForm() {
           maxWidth: "none",
           width: "auto",
           margin:
-            (device === Devices.pc && "0 10%") ||
+            (device === Devices.pc && "0 9%") ||
             (device === Devices.tablet && "0 7%") ||
             "0",
         }}
@@ -131,7 +124,9 @@ function CreateForm() {
         <Container.Flex
           style={{ flex: 1.8, flexDirection: "column", gap: "25px" }}
         >
-          <Container.Flex style={{ justifyContent: "space-between" }}>
+          <Container.Flex
+            style={{ justifyContent: "space-between", flexWrap: "wrap" }}
+          >
             <Form.Item>
               <Form.Title>Title</Form.Title>
               <Form.Input
@@ -157,7 +152,9 @@ function CreateForm() {
             </Form.Item>
           </Container.Flex>
 
-          <Container.Flex style={{ justifyContent: "space-between" }}>
+          <Container.Flex
+            style={{ justifyContent: "space-between", flexWrap: "wrap" }}
+          >
             <Form.Item>
               <Form.Title>Category</Form.Title>
               <SelectCategory
@@ -190,7 +187,7 @@ function CreateForm() {
           <Container.Flex
             style={{
               justifyContent: "space-between",
-              gap: "50px",
+              flexWrap: "wrap",
             }}
           >
             <FileUpload
@@ -213,7 +210,9 @@ function CreateForm() {
                 </label>
               </FileUpload.Input>
             </FileUpload>
-            <Container.Flex style={{ flexDirection: "column" }}>
+            <Container.Flex
+              style={{ flexDirection: "column", width: "fit-content" }}
+            >
               <Form.Item>
                 <Form.Title>Manufacturer</Form.Title>
                 <Form.Input

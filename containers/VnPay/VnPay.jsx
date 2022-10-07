@@ -17,10 +17,12 @@ export default function VnPay({ order, ...props }) {
     language: "vn",
   });
   const dispatch = useDispatch();
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     retryAxios(axios);
     try {
-      await axios.post(`${LocalApi}/createVNPayUrl`, input);
+      const res = await axios.post(`${LocalApi}/createVNPayUrl`, input);
+      window.location.href = res.data;
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
@@ -63,7 +65,6 @@ export default function VnPay({ order, ...props }) {
           <option value="VISA"> Thanh toan qua VISA/MASTER</option>
         </select>
       </Form.Item>
-      {JSON.stringify(input)}
       <Form.Submit>Submit</Form.Submit>
     </Form>
   );

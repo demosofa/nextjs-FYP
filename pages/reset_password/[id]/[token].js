@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form } from "../../../components";
@@ -16,6 +17,7 @@ export async function getServerSideProps({ params }) {
       props: {
         id,
         email,
+        token: params.token,
       },
     };
   } catch (error) {
@@ -25,9 +27,10 @@ export async function getServerSideProps({ params }) {
   }
 }
 
-export default function ResetPassword({ id, email }) {
+export default function ResetPassword({ id, email, token }) {
   const [input, setInput] = useState({ pwd: "", repeatPwd: "" });
   const dispatch = useDispatch();
+  const router = useRouter();
   const handleSubmitChangePwd = async (e) => {
     e.preventDefault();
     try {
@@ -42,7 +45,8 @@ export default function ResetPassword({ id, email }) {
             break;
         }
       });
-      await axios.post(`${LocalApi}/auth/resetPwd/${id}/${email}`, { pwd });
+      await axios.post(`${LocalApi}/auth/resetPwd/${id}/${token}`, { pwd });
+      router.replace("/login");
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
     }

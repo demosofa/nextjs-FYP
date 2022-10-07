@@ -53,7 +53,10 @@ export default function UpdateProduct({ value }) {
   };
 
   return (
-    <Form style={{ maxWidth: "800px" }} onSubmit={handleSubmit}>
+    <Form
+      style={{ maxWidth: "800px", margin: "20px auto" }}
+      onSubmit={handleSubmit}
+    >
       <Head>
         <title>Update Product</title>
       </Head>
@@ -90,17 +93,33 @@ export default function UpdateProduct({ value }) {
         <Form.Title>TimeStamp</Form.Title>
         <Form.Input
           type="date"
-          value={product.time}
+          value={
+            product.time &&
+            new Date(product.time)
+              .toISOString()
+              .toLocaleString("en-US", {
+                timeZone: "Asia/Ho_Chi_Minh",
+              })
+              .split("T")[0]
+          }
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, time: e.target.value }))
           }
         ></Form.Input>
       </Form.Item>
-      <div className="card" onClick={() => setToggle("image")}>
-        Update Product Image
-      </div>
-      <div className="card" onClick={() => setToggle("variation")}>
-        Update Product Variation
+      <div className="flex w-full gap-4 sm:gap-0">
+        <div
+          className="card flex-1 cursor-pointer items-center"
+          onClick={() => setToggle("image")}
+        >
+          Update Product Image
+        </div>
+        <div
+          className="card flex-1 cursor-pointer items-center"
+          onClick={() => setToggle("variation")}
+        >
+          Update Product Variation
+        </div>
       </div>
       {(toggle !== null && toggle === "image" && (
         <UpdateImage productId={router.query?.id} setToggle={setToggle} />
@@ -108,7 +127,10 @@ export default function UpdateProduct({ value }) {
         (toggle === "variation" && (
           <UpdateVariation productId={router.query?.id} setToggle={setToggle} />
         ))}
-      <Form.Submit>Submit</Form.Submit>
+      <Form.Item>
+        <Form.Submit>Submit</Form.Submit>
+        <Form.Button onClick={() => router.back()}>Cancel</Form.Button>
+      </Form.Item>
     </Form>
   );
 }

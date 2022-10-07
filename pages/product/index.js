@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { Pagination, Container, Search } from "../../components";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Notification } from "../../layouts";
 import { retryAxiosBackend } from "../../helpers";
 import { retryAxios } from "../../utils";
 
@@ -74,9 +73,13 @@ export default function ProductCRUD({ value }) {
       <Head>
         <title>Manage Product</title>
       </Head>
-      <Notification />
-      <Container.Flex>
-        <button onClick={() => router.push(`product/create`)}>Create</button>
+      <Container.Flex className="flex-wrap">
+        <button
+          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-2 py-1 text-white"
+          onClick={() => router.push(`product/create`)}
+        >
+          Create
+        </button>
         <Search
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -119,8 +122,8 @@ export default function ProductCRUD({ value }) {
                         style={{ width: "100px", height: "80px" }}
                       ></img>
                     </td>
-                    <td>
-                      <p className="line-clamp-1 hover:line-clamp-none">
+                    <td className="group">
+                      <p className="line-clamp-1 group-hover:line-clamp-none">
                         {product.title}
                       </p>
                     </td>

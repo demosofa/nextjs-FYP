@@ -66,29 +66,33 @@ export default function Home({ products, categories, pageCounted }) {
                 key={category._id}
                 href={{ pathname: "/", query: { category: category.name } }}
               >
-                <a>{category.name}</a>
+                <a className="text-center">{category.name}</a>
               </Link>
             ))}
           </Animation.Fade>
         </div>
         <div className="grid">
-          <Animation.Zoom className="card">
+          <Animation.Zoom className="card cursor-pointer">
             {lstProduct?.map((item) => (
               <Link href={`/overview/${item._id}`} key={item.title}>
-                <a>
-                  {item.time && <Timer value={item.time} />}
+                <a className="relative">
+                  {item.time && new Date(item.time).getTime() > Date.now() && (
+                    <Timer
+                      className="absolute top-0 left-0"
+                      value={new Date(item.time).getTime()}
+                    />
+                  )}
                   <div>
                     <img
                       alt="product"
                       src={item.images[0].url}
-                      style={{ height: "175px", borderRadius: "10px" }}
+                      style={{ height: "170px", borderRadius: "10px" }}
                     ></img>
-                    <div className="flex justify-center">
-                      <label className="text-sm line-clamp-1">
-                        {item.title}
-                      </label>
-                      <span>{item.price ? item.price : "optional"} $</span>
-                    </div>
+                    <label className="text-sm line-clamp-1">{item.title}</label>
+                    <span className="float-left">
+                      {item.price ? item.price : "optional"} $
+                    </span>
+                    <span className="float-right">Sold: </span>
                   </div>
                 </a>
               </Link>

@@ -1,16 +1,17 @@
 @import "../../styles/mixin.scss";
 .dropdown {
-  & .btn_dropdown{
     position: relative;
-  }
+    cursor: pointer;
   & .dropdown_content{
     position: absolute;
-    background-color: aquamarine;
+    background-color: whitesmoke;
+    border: 2px solid var(--light-orange);
     border-radius: 7px;
     padding: 5px;
-    @include flex(0, column, center);
+    z-index: 10;
+    @include flex(0, column, column);
 
-    & div{
+    > * {
       width: 100%;
       border-radius: inherit;
       background-color: transparent;
@@ -18,7 +19,8 @@
       @include flex(0, row, center);
 
       &:hover {
-        background-color: aqua;
+        background-color: var(--light-orange);
+        color: white
       }
     }
   }

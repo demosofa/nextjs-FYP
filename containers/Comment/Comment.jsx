@@ -93,7 +93,6 @@ function CommentTab({
     const { username } = decoder(permission);
     return username === data.author.username;
   })[0];
-  const [offDropdown, setOffDropdown] = useState(false);
   const [comments, setComments] = useState([]);
   const controller = useRef();
   const dispatch = useDispatch();
@@ -155,12 +154,7 @@ function CommentTab({
       <div className={styles.tab_container}>
         <Avatar text={currentComment.author.username}></Avatar>
         {isAuthor && !toggle.edit && (
-          <Dropdown
-            icon={<BiDotsVertical />}
-            toggle={offDropdown}
-            setToggle={setOffDropdown}
-            onMouseLeave={() => setOffDropdown(false)}
-          >
+          <Dropdown icon={<BiDotsVertical />} hoverable={true}>
             <div
               onClick={() =>
                 setToggle((prev) => ({ ...prev, edit: !prev.edit }))
@@ -248,7 +242,7 @@ function CommentInput({ data = "", callback, setToggle = undefined }) {
   const [input, setInput] = useState(data);
 
   return (
-    <div className="edit-container">
+    <div className="flex flex-col gap-4">
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}

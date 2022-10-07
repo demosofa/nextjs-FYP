@@ -16,7 +16,7 @@ export default function Checkbox({
 
   return (
     <Kits.Provider value={{ checks, setChecks, type, name }}>
-      <fieldset style={{ border: "none" }} {...props}>
+      <fieldset style={{ border: "none", padding: 0 }} {...props}>
         {children}
       </fieldset>
     </Kits.Provider>
