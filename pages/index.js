@@ -66,7 +66,7 @@ export default function Home({ products, categories, pageCounted }) {
                 key={category._id}
                 href={{ pathname: "/", query: { category: category.name } }}
               >
-                <a>{category.name}</a>
+                <a className="text-center">{category.name}</a>
               </Link>
             ))}
           </Animation.Fade>

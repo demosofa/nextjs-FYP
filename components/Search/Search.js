@@ -5,7 +5,7 @@ export default function Search({ onClick, ...props }) {
   return (
     <div className={styles.search_wrapper}>
       <input {...props} />
-      <BiSearchAlt2 style={{ color: "blue" }} onClick={onClick} />
+      <BiSearchAlt2 style={{ color: "orangered" }} onClick={onClick} />
     </div>
   );
 }

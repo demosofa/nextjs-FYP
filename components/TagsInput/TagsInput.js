@@ -6,6 +6,7 @@ export default function TagsInput({
   prevTags = [],
   setPrevTags = new Function(),
   filter = [],
+  className,
   ...props
 }) {
   const [text, setText] = useState("");
@@ -37,8 +38,7 @@ export default function TagsInput({
   };
 
   return (
-    <div className={style.container}>
-      {/* {JSON.stringify(tags)} */}
+    <div className={`${style.container} ${className}`}>
       {tags.map((tag, index) => {
         return (
           <div key={index} className={style.tag} {...props}>

@@ -91,8 +91,8 @@ function Dashboard() {
                     ></img>
                   </td>
                   <td>{product._id}</td>
-                  <td>
-                    <p className="line-clamp-1 hover:line-clamp-none">
+                  <td className="group">
+                    <p className="line-clamp-1 group-hover:line-clamp-none">
                       {product.title}
                     </p>
                   </td>

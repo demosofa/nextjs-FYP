@@ -55,6 +55,14 @@ Order.post(
     await mongoose.models.OrderItem.deleteMany({
       _id: { $in: doc.orderItems },
     });
+    await mongoose.models.Account.updateOne(
+      { _id: doc.customer },
+      {
+        $pull: {
+          orders: doc._id,
+        },
+      }
+    );
   }
 );
 

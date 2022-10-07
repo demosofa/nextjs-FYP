@@ -13,16 +13,6 @@ export default function ContainerComponent({ children, ...restProps }) {
   );
 }
 
-ContainerComponent.Absolute = function ContainerAbsolute({
-  children,
-  ...restProps
-}) {
-  return (
-    <div {...restProps} className={styles.container__absolute}>
-      {children}
-    </div>
-  );
-};
 ContainerComponent.Flex = function ContainerFlex({
   children,
   className,

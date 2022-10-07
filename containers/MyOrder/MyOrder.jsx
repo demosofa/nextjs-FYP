@@ -53,23 +53,22 @@ export default function MyOrder() {
         data[index].status = "cancel";
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
-        return data;
       }
+      return data;
     }, false);
   };
 
   const handleFilter = ({ value }) => {
     mutate(async (data) => {
       try {
-        const data = await fetcher({
+        data = await fetcher({
           url: `${LocalApi}/profile/order`,
           params: { status: value },
         });
-        return data;
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
-        return data;
       }
+      return data;
     }, false);
   };
 

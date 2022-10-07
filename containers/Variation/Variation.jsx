@@ -24,7 +24,7 @@ export default function Variation() {
   }, [variants]);
 
   return (
-    <div style={{ padding: "5px" }}>
+    <div style={{ padding: "5px", overflowX: "auto" }}>
       <table className="table">
         <thead>
           <tr>

@@ -43,7 +43,7 @@ class AdminController {
   deleteOrder = async (req, res) => {
     try {
       const deleted = await this.unit.Order.deleteOne({
-        _id: req.query.Id,
+        _id: req.body.Id,
         status: { $in: ["progress", "pending", "cancel"] },
       });
       if (!deleted) throw new Error("Fail to delete Order");

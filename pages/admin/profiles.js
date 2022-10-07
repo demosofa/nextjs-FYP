@@ -52,10 +52,10 @@ export default function ManageProfiles() {
           data: { role: e.target.value },
         });
         data.lstProfile[index].role = e.target.value;
-        return data;
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
+      return data;
     });
   };
 
@@ -68,10 +68,10 @@ export default function ManageProfiles() {
           method: "put",
         });
         data.lstProfile[index].blocked = true;
-        return data;
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
+      return data;
     });
   };
   const handleDeleteUser = (index) => {
@@ -82,10 +82,10 @@ export default function ManageProfiles() {
           method: "delete",
         });
         data.lstProfile = data.lstProfile.filter((_, i) => i !== index);
-        return data;
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
+      return data;
     });
   };
 

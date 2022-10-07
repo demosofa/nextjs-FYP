@@ -6,6 +6,7 @@ import {
 } from "react-icons/md";
 import { AiOutlineProfile } from "react-icons/ai";
 import { BsBoxSeam, BsCartPlus } from "react-icons/bs";
+import { TbShoppingCartDiscount } from "react-icons/tb";
 
 const ShipperRole = [
   { title: "List pending Order", path: "/shipper", icon: <BsCartPlus /> },
@@ -35,6 +36,11 @@ const AdminRole = [
     title: "Category Management",
     path: "/admin/category",
     icon: <MdOutlineCategory />,
+  },
+  {
+    title: "Manage Order",
+    path: "/admin/order",
+    icon: <TbShoppingCartDiscount />,
   },
   {
     title: "Manage Account",

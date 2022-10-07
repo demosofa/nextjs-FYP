@@ -69,76 +69,95 @@ export default function UpdateVariation({ productId, setToggle }) {
 
   if (loading) return <Loading.Text />;
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Image</th>
-            <th>Sku</th>
-            <th>Type</th>
-            <th>price</th>
-            <th>quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          {storedVariations?.length ? (
-            storedVariations.map((variation, index) => {
-              return (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td onClick={(e) => setVariationImage(index)}>
-                    {variation.image && (
-                      <img
-                        alt="product"
-                        src={variation.image.url}
-                        style={{ width: "100px", height: "80px" }}
-                      ></img>
-                    )}
-                  </td>
-                  <td>
-                    <input
-                      value={variation.sku}
-                      onChange={(e) =>
-                        handleEditVariation({ sku: e.target.value }, index)
-                      }
-                    ></input>
-                  </td>
-                  <td>{variation.types.map((type) => type.name).join("/")}</td>
-                  <td>
-                    <input
-                      value={variation.price}
-                      onChange={(e) =>
-                        handleEditVariation({ price: e.target.value }, index)
-                      }
-                    ></input>
-                  </td>
-                  <td>
-                    <input
-                      value={variation.quantity}
-                      onChange={(e) =>
-                        handleEditVariation({ quantity: e.target.value }, index)
-                      }
-                    ></input>
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
+    <div className="mt-4 flex flex-col gap-6">
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
             <tr>
-              <td colSpan="6" className="text-center">
-                There is any variations for this product
-              </td>
+              <th>No.</th>
+              <th>Image</th>
+              <th>Sku</th>
+              <th>Type</th>
+              <th>price</th>
+              <th>quantity</th>
             </tr>
-          )}
-        </tbody>
-      </table>
-      <button type="button" onClick={handleSaveVariation}>
-        Save Variation
-      </button>
-      <button type="button" onClick={() => setToggle(null)}>
-        Cancel
-      </button>
+          </thead>
+          <tbody>
+            {storedVariations?.length ? (
+              storedVariations.map((variation, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td onClick={(e) => setVariationImage(index)}>
+                      {variation.image && (
+                        <img
+                          alt="product"
+                          src={variation.image.url}
+                          style={{ width: "100px", height: "80px" }}
+                        ></img>
+                      )}
+                    </td>
+                    <td>
+                      <input
+                        value={variation.sku}
+                        onChange={(e) =>
+                          handleEditVariation({ sku: e.target.value }, index)
+                        }
+                      ></input>
+                    </td>
+                    <td>
+                      {variation.types.map((type) => type.name).join("/")}
+                    </td>
+                    <td>
+                      <input
+                        value={variation.price}
+                        onChange={(e) =>
+                          handleEditVariation({ price: e.target.value }, index)
+                        }
+                      ></input>
+                    </td>
+                    <td>
+                      <input
+                        value={variation.quantity}
+                        onChange={(e) =>
+                          handleEditVariation(
+                            { quantity: e.target.value },
+                            index
+                          )
+                        }
+                      ></input>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  There is any variations for this product
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="flex gap-6">
+        <button
+          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-4 py-3 text-sm font-semibold text-white"
+          type="button"
+          onClick={handleSaveVariation}
+        >
+          Save Variation
+        </button>
+        <button
+          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-4 py-3 text-sm font-semibold text-white"
+          type="button"
+          onClick={() => setToggle(null)}
+        >
+          Cancel
+        </button>
+      </div>
+
       {variationImage !== null && (
         <div className={styles.img_selector}>
           <Checkbox
