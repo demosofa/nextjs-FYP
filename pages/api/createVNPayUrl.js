@@ -3,6 +3,8 @@ import dateFormat from "dateformat";
 import { sortObject } from "../../shared";
 import NextCors from "nextjs-cors";
 
+const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
+
 async function createVNPayUrl(req, res) {
   switch (req.method.toLowerCase()) {
     case "post":
@@ -15,7 +17,7 @@ async function createVNPayUrl(req, res) {
       var tmnCode = process.env.vnp_TmnCode;
       var secretKey = process.env.vnp_HashSecret;
       var vnpUrl = process.env.vnp_Url;
-      var returnUrl = process.env.vnp_ReturnUrl;
+      var returnUrl = LocalUrl + "success";
 
       var date = new Date();
 

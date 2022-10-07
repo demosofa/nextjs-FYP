@@ -29,15 +29,21 @@ export default function Variants() {
               }
             ></input>
 
-            <TagsInput
-              prevTags={variant.options}
-              setPrevTags={(tags) => {
-                dispatch(editVariant({ index, options: tags }));
-              }}
-            ></TagsInput>
-            <Icon onClick={() => dispatch(deleteVariant(index))}>
-              <GiTrashCan />
-            </Icon>
+            <div className="flex w-full flex-wrap">
+              <TagsInput
+                className="flex-2"
+                prevTags={variant.options}
+                setPrevTags={(tags) => {
+                  dispatch(editVariant({ index, options: tags }));
+                }}
+              ></TagsInput>
+              <Icon
+                className="flex-1"
+                onClick={() => dispatch(deleteVariant(index))}
+              >
+                <GiTrashCan />
+              </Icon>
+            </div>
           </div>
         );
       })}

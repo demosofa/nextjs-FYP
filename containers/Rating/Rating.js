@@ -48,11 +48,10 @@ export default function Rating({ url }) {
       try {
         await fetcher({ url, method: "put", data: { rating } });
         data.rating = rating;
-        return data;
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
-        return data;
       }
+      return data;
     });
   };
 

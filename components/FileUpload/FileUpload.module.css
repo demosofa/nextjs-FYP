@@ -1,6 +1,6 @@
 .drop_zone {
   position: relative;
-  max-width: 400px;
+  max-width: 500px;
   max-height: 100%;
   padding: 10px;
   border: 2px dashed black;

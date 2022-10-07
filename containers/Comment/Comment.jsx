@@ -258,7 +258,7 @@ function CommentInput({ data = "", callback, setToggle = undefined }) {
   const [input, setInput] = useState(data);
 
   return (
-    <div className="edit-container">
+    <div className="flex flex-col gap-4">
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}

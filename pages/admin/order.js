@@ -8,6 +8,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { convertTime } from "../../shared";
 import { expireStorage, retryAxios } from "../../utils";
 import { BiDownArrow } from "react-icons/bi";
+import { IoMdTrash } from "react-icons/io";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -26,7 +27,7 @@ export default function ManageOrder() {
   };
   const dispatch = useDispatch();
   const router = useRouter();
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     { url: `${LocalApi}/admin/order?page=${query.page}&sort=${query.sort}` },
     fetcher,
     {
@@ -43,14 +44,34 @@ export default function ManageOrder() {
     }
   );
 
-  console.log(data);
+  const handleDeleteOrder = (Id) => {
+    mutate(async (data) => {
+      try {
+        await fetcher({
+          url: `${LocalApi}/admin/order`,
+          method: "delete",
+          data: { Id },
+        });
+        data.lstOrder = data.lstOrder.filter((order) => order._id !== Id);
+      } catch (error) {
+        dispatch(addNotification({ message: error.message, type: "error" }));
+      }
+      return data;
+    }, false);
+  };
 
   if (!data || error) return <Loading.Text />;
   return (
     <div>
       <div className="grid">
         {data.lstOrder.map((order) => (
-          <div key={order._id} className="card">
+          <div key={order._id} className="card flat_dl relative">
+            {order.status === "cancel" ? (
+              <IoMdTrash
+                className="absolute right-4"
+                onClick={() => handleDeleteOrder(order._id)}
+              />
+            ) : null}
             <dl>
               <dt>Id</dt>
               <dd>{order._id}</dd>
