@@ -1,18 +1,6 @@
-.img_selector{
-  width: 500px;
-  height: 350px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 13;
-  border-radius: 15px;
-  background-color: white;
-  gap: 15px;
-}
 .radio_img{
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 20rem;
   overflow-x: auto;
   display: flex;
   gap: 15px;
@@ -20,13 +8,21 @@
 }
 
 .checked{
-  border: 2px solid aquamarine;
+  position: relative;
+  border: 2px solid orangered;
   & .icon{
-    font-size: small;
-    color: aquamarine;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: larger;
+    color: orangered;
   }
 }
 
 .unchecked{
   border: 2px solid gainsboro;
+  & .icon{
+    display: none;
+  }
 }
