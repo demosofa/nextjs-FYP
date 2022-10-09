@@ -11,7 +11,7 @@ import {
 
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
 
-class AccountController {
+class AuthController {
   constructor(unit = UnitOfWork) {
     this.unit = new unit();
   }
@@ -166,4 +166,4 @@ class AccountController {
   };
 }
 
-export default new AccountController();
+export default new AuthController();
