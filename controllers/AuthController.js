@@ -9,6 +9,8 @@ import {
   getTestMessageUrl,
 } from "nodemailer";
 
+const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
+
 class AuthController {
   constructor(unit = UnitOfWork) {
     this.unit = new unit();
@@ -92,7 +94,7 @@ class AuthController {
       setCookieToken(req, res);
       return res.status(200).end();
     } catch (error) {
-      return res.redirect(401, "http://localhost:3000/login");
+      return res.redirect(401, `${LocalUrl}/login`);
     }
   };
 

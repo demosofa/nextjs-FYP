@@ -1,6 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // async redirects() {
+  //   return [{ source: "/login", destination: "/login", permanent: true }];
+  // },
 };
 
-module.exports = nextConfig;
+const runtimeCaching = require("next-pwa/cache");
+
+const withPWA = require("next-pwa")({
+  dest: "public",
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
+  runtimeCaching,
+});
+
+module.exports = withPWA(nextConfig);

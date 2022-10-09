@@ -160,47 +160,55 @@ export default function UpdateVariation({ productId, setToggle }) {
       </div>
 
       {variationImage !== null && (
-        <div className={styles.img_selector}>
-          <Checkbox
-            className={styles.radio_img}
-            name="image"
-            type="radio"
-            setChecked={(value) => setSelectedImage(value[0])}
-          >
-            <Animation.Fade>
-              {storedImages?.map((image) => {
-                return (
-                  <Fragment key={image._id}>
-                    <Checkbox.Item
-                      id={image._id}
-                      value={image}
-                      style={{ display: "none" }}
-                    ></Checkbox.Item>
-                    <label
-                      htmlFor={image._id}
-                      className={
-                        [image].includes(selectedImage)
-                          ? styles.checked
-                          : styles.unchecked
-                      }
-                      style={{ width: "fit-content" }}
-                    >
-                      <img
-                        style={{ width: "80px", height: "60px" }}
-                        src={image.url}
-                      ></img>
-                      {[image].includes(selectedImage) && (
-                        <AiOutlineCheck className={styles.icon} />
-                      )}
-                    </label>
-                  </Fragment>
-                );
-              })}
-            </Animation.Fade>
-          </Checkbox>
-          <button onClick={handleChangeImage}>Save</button>
-          <button onClick={() => setVariationImage(null)}>Cancel</button>
-        </div>
+        <>
+          <div className="backdrop" onClick={() => setVariationImage(null)} />
+          <div className="form_center w-[500px] max-w-full">
+            <Checkbox
+              className={styles.radio_img}
+              name="image"
+              type="radio"
+              setChecked={(value) => setSelectedImage(value[0])}
+            >
+              <Animation.Fade>
+                {storedImages?.map((image) => {
+                  return (
+                    <Fragment key={image._id}>
+                      <label
+                        className={
+                          [image].includes(selectedImage)
+                            ? styles.checked
+                            : styles.unchecked
+                        }
+                        style={{
+                          display: "block",
+                          width: "100px",
+                          height: "80px",
+                        }}
+                      >
+                        <Checkbox.Item
+                          value={image}
+                          style={{ display: "none" }}
+                        ></Checkbox.Item>
+                        <img className="h-full w-full" src={image.url}></img>
+                        {[image].includes(selectedImage) && (
+                          <div className="absolute top-0 left-0 h-full w-full bg-white/70">
+                            <AiOutlineCheck
+                              width="50%"
+                              height="50%"
+                              className={styles.icon}
+                            />
+                          </div>
+                        )}
+                      </label>
+                    </Fragment>
+                  );
+                })}
+              </Animation.Fade>
+            </Checkbox>
+            <button onClick={handleChangeImage}>Save</button>
+            <button onClick={() => setVariationImage(null)}>Cancel</button>
+          </div>
+        </>
       )}
     </div>
   );
