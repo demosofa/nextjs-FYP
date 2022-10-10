@@ -9,7 +9,7 @@ import { expireStorage, retryAxios } from "../../../utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
-import { Role } from "../../../shared";
+import { Role, dateFormat } from "../../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -108,15 +108,7 @@ function UpdateProduct() {
         <Form.Title>TimeStamp</Form.Title>
         <Form.Input
           type="date"
-          value={
-            product.time &&
-            new Date(product.time)
-              .toISOString()
-              .toLocaleString("en-US", {
-                timeZone: "Asia/Ho_Chi_Minh",
-              })
-              .split("T")[0]
-          }
+          value={product.time && dateFormat(product.time)}
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, time: e.target.value }))
           }

@@ -8,7 +8,7 @@
   }
   & .read{
     position: absolute; 
-    bottom: 0; 
+    bottom: -10px; 
     left: 0;
     width: 100%; 
     text-align: center; 
@@ -23,8 +23,13 @@
     }
 
     & button {
-      color: orangered;
+      padding: 5px 10px;
+      border-radius: 16px;
+      border: 1px solid peru;
+      background-color: white;
+      color: peru;
       &:hover {
+        background-color: rgb(243 244 246 /1);
         color: burlywood
       }
     }

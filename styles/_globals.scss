@@ -41,25 +41,6 @@ a {
   text-decoration: none;
 }
 
-.grid {
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
-  // flex-wrap: wrap;
-  // max-width: 800px;
-  @include grid(15px)
-}
-
-// .flex{
-//   @include flex(20px);
-// 	&.column{
-// 		flex-direction: column;
-// 	}
-// 	&.wrap{
-// 		flex-wrap: wrap;
-// 	}
-// }
-
 .center{
 	&_col{
 		align-items: center;
@@ -71,7 +52,9 @@ a {
 
 .flat_dl{
 	& dl {
+		width: 100%;
 		display: flex;
+		justify-content: flex-start;
 	}
 }
 
@@ -81,7 +64,6 @@ a {
   display: flex;
 	flex-direction: column;
 	background-color: #FFF;
-	overflow: hidden;
   text-align: left;
   color: inherit;
   text-decoration: none;
@@ -90,7 +72,7 @@ a {
   transition: color 0.15s ease, border-color 0.15s ease;
   max-width: 500px;
   box-shadow: 0 5px 10px 0 rgba(#000, .15);
-  padding: 12px 7px;
+  padding: 12px 8px;
 }
 
 .card:hover,
@@ -106,7 +88,6 @@ a {
 }
 
 .card p {
-  margin: 0;
   font-size: 1.25rem;
   line-height: 1.5;
 }

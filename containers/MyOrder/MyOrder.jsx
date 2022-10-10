@@ -73,8 +73,9 @@ export default function MyOrder() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <Select
+        className="max-w-[120px]"
         defaultValue={{ value: "shipping", label: "Shipping" }}
         onChange={handleFilter}
         options={[
@@ -87,7 +88,7 @@ export default function MyOrder() {
         ]}
       />
       <div
-        className="card manage_table relative w-full"
+        className="manage_table relative w-full overflow-x-auto"
         style={{ maxWidth: "none" }}
       >
         {!data || error ? (

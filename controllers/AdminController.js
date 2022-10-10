@@ -60,7 +60,7 @@ class AdminController {
       if (search)
         filterOptions = {
           ...filterOptions,
-          title: { $regex: search, $options: "i" },
+          $text: { $search: search },
         };
       if (filter)
         filterOptions = {

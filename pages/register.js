@@ -33,17 +33,23 @@ export default function Register() {
       <div className="background"></div>
       <div className="login-container">
         <Slider
-          config={{ slides: { preView: 1 }, drag: false }}
-          setInstance={setInstance}
-          style={{ maxWidth: "500px", borderRadius: "8px" }}
+          config={{
+            slides: { preView: 1 },
+            drag: false,
+            created: (slide) => {
+              setInstance(slide);
+            },
+          }}
         >
-          <FormInfo
-            key={0}
-            info={info}
-            setInfo={setInfo}
-            moveTo={() => instance?.next()}
-          />
-          <FormAccount key={1} info={info} moveTo={() => instance?.prev()} />
+          <Slider.Content className="max-w-[500px] rounded-2xl">
+            <FormInfo
+              key={0}
+              info={info}
+              setInfo={setInfo}
+              moveTo={() => instance?.next()}
+            />
+            <FormAccount key={1} info={info} moveTo={() => instance?.prev()} />
+          </Slider.Content>
         </Slider>
       </div>
       <Notification />
@@ -60,6 +66,9 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
         switch (entry[0]) {
           case "fullname":
             new Validate(entry[1]).isEmpty().isNotSpecial();
+            break;
+          case "dateOfBirth":
+            new Validate(entry[1]).isEmpty();
             break;
           case "email":
             new Validate(entry[1]).isEmpty().isEmail();

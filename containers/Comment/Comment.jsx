@@ -171,14 +171,16 @@ function CommentTab({
         <Avatar text={currentComment.author.username}></Avatar>
         {isAuthor && !toggle.edit && (
           <Dropdown icon={<BiDotsVertical />} hoverable={true}>
-            <div
-              onClick={() =>
-                setToggle((prev) => ({ ...prev, edit: !prev.edit }))
-              }
-            >
-              Edit
-            </div>
-            <div onClick={handleDelete}>Delete</div>
+            <Dropdown.Content className="right-0">
+              <div
+                onClick={() =>
+                  setToggle((prev) => ({ ...prev, edit: !prev.edit }))
+                }
+              >
+                Edit
+              </div>
+              <div onClick={handleDelete}>Delete</div>
+            </Dropdown.Content>
           </Dropdown>
         )}
       </div>

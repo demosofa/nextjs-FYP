@@ -30,6 +30,13 @@ const Product = new Schema(
   { timestamps: true }
 );
 
+Product.index({
+  title: "text",
+  description: "text",
+  tags: "text",
+  manufacturer: "text",
+});
+
 Product.post(
   "findOneAndDelete",
   { document: false, query: true },

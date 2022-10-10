@@ -2,7 +2,7 @@ import axios from "axios";
 import useSWRImmutable from "swr/immutable";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { Checkbox, Loading } from "../../components";
+import { Checkbox, Loading, Pagination } from "../../components";
 import { expireStorage, retryAxios } from "../../utils";
 import { useState } from "react";
 import QrScanner from "react-qr-scanner";
@@ -13,6 +13,7 @@ import Head from "next/head";
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function SellerPage() {
+  const [page, setPage] = useState(1);
   const [viewOrderItem, setViewOrderItem] = useState();
   const [showScanner, setShowScanner] = useState(false);
   const [viewOrder, setViewOrder] = useState();
@@ -31,8 +32,8 @@ function SellerPage() {
   };
   const router = useRouter();
   const dispatch = useDispatch();
-  const { data, error, mutate } = useSWRImmutable(
-    { url: `${LocalApi}/seller` },
+  const { data, error } = useSWRImmutable(
+    { url: `${LocalApi}/seller?page=${page}` },
     fetcher,
     {
       onError(err, key, config) {
@@ -86,56 +87,72 @@ function SellerPage() {
       ></Loading>
     );
   return (
-    <div className="manage_table">
+    <div className="flex flex-col gap-6">
       <Head>
         <title>Seller page</title>
         <meta name="description" content="Seller page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <button onClick={() => setShowScanner(true)}>
+      <button
+        className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white"
+        onClick={() => setShowScanner(true)}
+      >
         Get Shipper order information
       </button>
-      <table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Id</th>
-            <th>total</th>
-            <th>Validated At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length ? (
-            data.map((order, index) => (
-              <tr key={order._id}>
-                <td>{index + 1}</td>
-                <td>{order._id}</td>
-                <td>${order.total}</td>
-                <td>
-                  {new Date(order.validatedAt).toLocaleString("en-US", {
-                    hour: "numeric",
-                    minute: "numeric",
-                    hour12: true,
-                    timeZone: "Asia/Ho_Chi_Minh",
-                  })}
-                </td>
-                <td>
-                  <button onClick={() => setViewOrderItem(order.orderItems)}>
-                    View List item
-                  </button>
+      <div className="manage_table">
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Id</th>
+              <th>total</th>
+              <th>Validated At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.lstValidated.length ? (
+              data.lstValidated.map((order, index) => (
+                <tr key={order._id}>
+                  <td>{index + 1}</td>
+                  <td>{order._id}</td>
+                  <td>${order.total}</td>
+                  <td>
+                    {new Date(order.validatedAt).toLocaleString("en-US", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                      timeZone: "Asia/Ho_Chi_Minh",
+                    })}
+                  </td>
+                  <td>
+                    <button onClick={() => setViewOrderItem(order.orderItems)}>
+                      View List item
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="text-center">
+                  Currently, seller has yet validated any shipper order
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="5" className="text-center">
-                Currently, seller has yet validated any shipper order
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <Pagination
+        totalPageCount={data.pageCounted}
+        currentPage={page}
+        setCurrentPage={setPage}
+      >
+        <Pagination.Arrow>
+          <Pagination.Number />
+        </Pagination.Arrow>
+      </Pagination>
+
       {viewOrderItem && (
         <>
           <div

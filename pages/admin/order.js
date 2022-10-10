@@ -63,9 +63,9 @@ export default function ManageOrder() {
   if (!data || error) return <Loading.Text />;
   return (
     <div>
-      <div className="grid">
+      <div className="flex flex-wrap justify-around">
         {data.lstOrder.map((order) => (
-          <div key={order._id} className="card flat_dl relative">
+          <div key={order._id} className="card flat_dl relative mt-5 h-fit">
             {order.status === "cancel" ? (
               <IoMdTrash
                 className="absolute right-4"
@@ -73,30 +73,32 @@ export default function ManageOrder() {
               />
             ) : null}
             <dl>
-              <dt>Id</dt>
+              <dt className="font-bold">Id:</dt>
               <dd>{order._id}</dd>
             </dl>
             <dl>
-              <dt>Status</dt>
+              <dt className="font-bold">Status:</dt>
               <dd>{order.status}</dd>
             </dl>
             <dl>
-              <dt>Created At</dt>
+              <dt className="font-bold">Created At:</dt>
               <dd>{order.createdAt}</dd>
             </dl>
-            <Dropdown icon={<BiDownArrow />} hoverable={true}>
-              {order.orderItems.map((item) => (
-                <div key={item._id}>
-                  <dl>
-                    <dt>Name</dt>
-                    <dd>{item.title}</dd>
-                  </dl>
-                  <dl>
-                    <dt>Amount</dt>
-                    <dd>{item.total}</dd>
-                  </dl>
-                </div>
-              ))}
+            <Dropdown icon={<BiDownArrow />}>
+              <Dropdown.Content className="!relative">
+                {order.orderItems.map((item) => (
+                  <div key={item._id} className="flat_dl">
+                    <dl>
+                      <dt className="font-semibold">Name:</dt>
+                      <dd>{item.title}</dd>
+                    </dl>
+                    <dl>
+                      <dt className="font-semibold">Amount:</dt>
+                      <dd>{item.total}</dd>
+                    </dl>
+                  </div>
+                ))}
+              </Dropdown.Content>
             </Dropdown>
           </div>
         ))}

@@ -85,7 +85,7 @@ function ProductCRUD() {
       </Head>
       <Container.Flex className="flex-wrap">
         <button
-          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-2 py-1 text-white"
+          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white"
           onClick={() => router.push(`product/create`)}
         >
           Create

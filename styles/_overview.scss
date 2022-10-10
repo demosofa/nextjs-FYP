@@ -34,6 +34,7 @@
       height: inherit;
       width: 100%;
       flex: 1;
+      border-radius: 16px
     }
     > .product-info {
       @include flex(30px, column);

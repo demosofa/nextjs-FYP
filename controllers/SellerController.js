@@ -8,9 +8,8 @@ class SellerController {
     const { page, sort } = req.query;
     const currentDate = new Date();
     try {
-      const datas = await this.unit.Order.getAll({
-        validatedAt: { $gte: currentDate },
-      })
+      let filterOptions = { validatedAt: { $gte: currentDate } };
+      const lstValidated = await this.unit.Order.getAll(filterOptions)
         .skip((page - 1) * 10)
         .limit(10)
         .sort({
@@ -19,7 +18,12 @@ class SellerController {
         .populate("orderItems")
         .populate({ path: "shipper", select: "username" })
         .lean();
-      return res.status(200).json(datas);
+      const orderCounted = await this.unit.Order.countData({
+        status: "shipping",
+        ...filterOptions,
+      }).lean();
+      const pageCounted = Math.ceil(orderCounted / 10);
+      return res.status(200).json({ lstValidated, pageCounted });
     } catch (error) {
       return res.status(500).json("Fail to get data");
     }

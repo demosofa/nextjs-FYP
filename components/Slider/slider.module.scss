@@ -1,0 +1,6 @@
+.arrow{
+  @apply absolute top-[50%] z-10  flex h-8 w-8 translate-y-[-50%] items-center justify-center rounded-[50%] font-semibold bg-orange-600 text-white border-0 text-base;
+  &:hover{
+    @apply text-orange-400 bg-gray-200
+  }
+}

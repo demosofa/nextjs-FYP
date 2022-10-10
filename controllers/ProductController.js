@@ -34,7 +34,7 @@ class ProductController {
     if (search)
       filterOptions = {
         ...filterOptions,
-        title: { $regex: search, $options: "i" },
+        $text: { $search: search },
       };
     if (category) {
       const result = await this.unit.Category.getOne({ name: category }).lean();
@@ -97,7 +97,7 @@ class ProductController {
     if (search)
       filterOptions = {
         ...filterOptions,
-        title: { $regex: search, $options: "i" },
+        $text: { $search: search },
       };
     if (category) {
       const result = await this.unit.Category.getOne({ name: category });

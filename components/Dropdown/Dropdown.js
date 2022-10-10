@@ -8,7 +8,6 @@ export default function Dropdown({
   isShow = false,
   clickable = true,
   hoverable = false,
-  where = "right",
   children,
   onClick,
   onMouseEnter,
@@ -36,11 +35,15 @@ export default function Dropdown({
     >
       {title && <span>{title}</span>}
       {icon && <Icon>{icon}</Icon>}
-      {toggle && (
-        <div className={styles.dropdown_content} style={{ [where]: 0 }}>
-          {children}
-        </div>
-      )}
+      {toggle && children}
     </div>
   );
 }
+
+Dropdown.Content = function DropdownContent({ children, className, ...props }) {
+  return (
+    <div className={`${styles.dropdown_content} ${className}`} {...props}>
+      {children}
+    </div>
+  );
+};

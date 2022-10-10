@@ -12,6 +12,10 @@ module.exports = {
         2: "2 2 0%",
       },
     },
+    gridTemplateColumns: {
+      fit: "repeat(auto-fit, minmax(150px, 0.15fr))",
+      "fit-2": "repeat(auto-fit, minmax(180px, 0.15fr))",
+    },
     screens: {
       sm: { max: "767px" },
       // => @media (min-width: 640px and max-width: 767px) { ... }

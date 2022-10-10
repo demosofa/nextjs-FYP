@@ -42,14 +42,18 @@ export default function Navbar({ arrLink }) {
             where="left"
             title={<div className="text-white">Other</div>}
           >
-            {linkDrop?.map(
-              (link, index) =>
-                link.title && (
-                  <Link key={index} href={link.path}>
-                    <a className="whitespace-nowrap text-black">{link.title}</a>
-                  </Link>
-                )
-            )}
+            <Dropdown.Content className="right-0">
+              {linkDrop?.map(
+                (link, index) =>
+                  link.title && (
+                    <Link key={index} href={link.path}>
+                      <a className="whitespace-nowrap text-black">
+                        {link.title}
+                      </a>
+                    </Link>
+                  )
+              )}
+            </Dropdown.Content>
           </Dropdown>
         ) : null}
       </div>

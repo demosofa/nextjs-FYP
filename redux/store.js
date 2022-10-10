@@ -1,7 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { cart, notification, variant, variation } from "./reducer";
+import {
+  cart,
+  notification,
+  variant,
+  variation,
+  recentlyViewed,
+} from "./reducer";
 import { apiSlice } from "./api";
-import cartListenerMiddleware from "./middleware/cartStorage";
+import { cartStorage, recentlyViewedStorage } from "./middleware";
 import { expireStorage } from "../utils";
 
 function loadState(name) {
@@ -23,12 +29,17 @@ export const store = configureStore({
     notification,
     variant,
     variation,
+    recentlyViewed,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
       apiSlice.middleware,
-      cartListenerMiddleware.middleware,
+      cartStorage.middleware,
+      recentlyViewedStorage.middleware,
     ]),
-  preloadedState: { cart: loadState("cart") },
+  preloadedState: {
+    cart: loadState("cart"),
+    recentlyViewed: loadState("recentlyViewed"),
+  },
 });

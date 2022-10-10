@@ -1,4 +1,8 @@
 @import "./mixin.scss";
+
+$price-tag__height: 30px;
+$price-tag__width-after: 10px;
+
 .container {
   padding: 0 2rem;
 }
@@ -11,6 +15,34 @@
   gap: 40px;
   @include mq("phone-wide"){
     align-items: center;
+  }
+}
+
+.price_tag {
+  max-width: fit-content;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  height: $price-tag__height;
+  border-radius: 8px 8px 8px 0;
+  background: #ed6663;
+  z-index: 99;
+  position: absolute;
+  top: -15px;
+  left: -$price-tag__width-after;
+
+  &::after {
+    content: '';
+    position: absolute;
+    border-left: $price-tag__width-after solid transparent;
+    border-top: 10px solid #a72c29;
+    left: 0px;
+    top: 30px;
+  }
+
+  &_price {
+    margin-left: $price-tag__width-after;
+    color: #fff;
   }
 }
 
@@ -71,10 +103,3 @@
   height: 1em;
   margin-left: 0.5rem;
 }
-
-// @media (max-width: 600px) {
-//   .grid {
-//     width: 100%;
-//     flex-direction: column;
-//   }
-// }

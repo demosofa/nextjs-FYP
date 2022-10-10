@@ -20,6 +20,8 @@ const Account = new Schema(
   { timestamps: true, discriminatorKey: "Shipper" }
 );
 
+Account.index({ username: "text" });
+
 Account.post(
   "findOneAndDelete",
   { document: false, query: true },

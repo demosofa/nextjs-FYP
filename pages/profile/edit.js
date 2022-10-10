@@ -6,7 +6,7 @@ import { Checkbox, Form, Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { retryAxios } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Role } from "../../shared";
+import { Role, dateFormat } from "../../shared";
 import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -70,14 +70,7 @@ function EditProfile() {
         <Form.Item>
           <Form.Title>Date of Birth</Form.Title>
           <Form.Input
-            value={
-              new Date(data.dateOfBirth)
-                .toISOString()
-                .toLocaleString("en-US", {
-                  timeZone: "Asia/Ho_Chi_Minh",
-                })
-                .split("T")[0]
-            }
+            value={dateFormat(data.dateOfBirth)}
             type="date"
             onChange={(e) =>
               setData((prev) => ({ ...prev, dateOfBirth: e.target.value }))

@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
+import Head from "next/head";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addCart } from "../../redux/reducer/cartSlice";
 import {
   ImageMagnifier,
   Checkbox,
@@ -12,11 +13,12 @@ import {
   Form,
 } from "../../components";
 import { Comment, Rating } from "../../containers";
-import { addNotification } from "../../redux/reducer/notificationSlice";
-import Head from "next/head";
 import { expireStorage, retryAxios, Validate } from "../../utils";
-import axios from "axios";
 import { useMediaContext } from "../../contexts/MediaContext";
+import { addCart } from "../../redux/reducer/cartSlice";
+import { addNotification } from "../../redux/reducer/notificationSlice";
+import { addViewed } from "../../redux/reducer/recentlyViewedSlice";
+import Link from "next/link";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -100,13 +102,29 @@ export default function Overview({ product }) {
         }
       );
       setDisplay(false);
-    } catch (error) {}
+    } catch (error) {
+      dispatch(addNotification({ message: error.message, type: "error" }));
+    }
   };
 
   useEffect(() => {
     if (targetVariation && targetVariation.image)
       setTargetImage(targetVariation.image.url);
   }, [options, product.images, targetVariation]);
+
+  useEffect(() => {
+    const { title, images, price, avgRating } = product;
+    const thumbnail = images[0].url;
+    dispatch(
+      addViewed({
+        title,
+        thumbnail,
+        price,
+        rate: avgRating,
+        url: window.location.href,
+      })
+    );
+  }, [product]);
 
   return (
     <>
@@ -123,22 +141,25 @@ export default function Overview({ product }) {
               src={targetImage}
               style={{ width: "100%", height: "350px" }}
               className="product-img"
-            ></ImageMagnifier>
+            />
             <Slider
               className="slider"
               config={{
                 vertical: device === Devices.phone ? true : false,
-                slides: { perView: 3 },
+                slides: { perView: 4, spacing: 12 },
               }}
             >
-              {product.images.map((image, index) => (
-                <img
-                  alt="variation"
-                  key={index}
-                  src={image.url}
-                  onMouseEnter={() => setTargetImage(image.url)}
-                ></img>
-              ))}
+              <Slider.Content>
+                {product.images.map((image, index) => (
+                  <img
+                    className="rounded-lg"
+                    alt="variation"
+                    key={index}
+                    src={image.url}
+                    onMouseEnter={() => setTargetImage(image.url)}
+                  />
+                ))}
+              </Slider.Content>
             </Slider>
           </div>
           <div className="product-info">
@@ -191,7 +212,7 @@ export default function Overview({ product }) {
                           defaultChecked={index === 0}
                         />
                         <label
-                          className="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-gray-200 bg-white font-bold text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-orange-600 peer-checked:text-white dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                          className="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-gray-200 bg-white font-bold text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-orange-600 peer-checked:text-white"
                           htmlFor={item.name}
                         >
                           {item.name}
@@ -244,6 +265,21 @@ export default function Overview({ product }) {
               </p>
             </ReadMoreLess>
           </dd>
+          <dl className="flex items-center">
+            <dt className="text-lg font-medium">Tags: </dt>
+            <dd>
+              {product.tags.map((tag, index) => {
+                return (
+                  <Fragment key={tag}>
+                    <Link href={{ pathname: "/", query: { search: tag } }}>
+                      <a>#{tag}</a>
+                    </Link>
+                    {index < product.tags - 1 ? ", " : null}
+                  </Fragment>
+                );
+              })}
+            </dd>
+          </dl>
         </dl>
 
         <Rating url={`${LocalApi}/rating/${product._id}`} />

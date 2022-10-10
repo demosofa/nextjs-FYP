@@ -8,10 +8,13 @@ import {
 } from "react-icons/ai";
 import Link from "next/link";
 import { useMediaContext } from "../contexts/MediaContext";
+import { useRouter } from "next/router";
 
 export default function General({ children, arrLink }) {
   const { device, Devices } = useMediaContext();
+  const [search, setSearch] = useState("");
   const [toggle, setToggle] = useState(false);
+  const router = useRouter();
   return (
     <>
       {(device === Devices.pc && <Navbar arrLink={arrLink} />) ||
@@ -28,7 +31,11 @@ export default function General({ children, arrLink }) {
                 </Icon>
               </a>
             </Link>
-            <Search />
+            <Search
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onClick={() => router.push({ pathname: "/", query: { search } })}
+            />
             {arrLink?.map(({ title, path, icon }) => (
               <Link key={title} href={path}>
                 <Sidebar.Item className="!justify-start">

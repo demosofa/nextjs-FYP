@@ -2,7 +2,7 @@ import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Animation, Loading, Timer } from "../components";
 import { useAxiosLoad } from "../hooks";
 import styles from "../styles/Home.module.scss";
@@ -59,7 +59,7 @@ export default function Home({ products, categories, pageCounted }) {
 
       <main className={styles.main}>
         <div className="trending"></div>
-        <div className="grid">
+        <div className="grid grid-cols-fit gap-3">
           <Animation.Fade className="card">
             {categories?.map((category) => (
               <Link
@@ -71,31 +71,44 @@ export default function Home({ products, categories, pageCounted }) {
             ))}
           </Animation.Fade>
         </div>
-        <div className="grid">
-          <Animation.Zoom className="card cursor-pointer">
+        <div className="grid grid-cols-fit-2 gap-4">
+          <Animation.Zoom className="card relative mt-2 cursor-pointer">
             {lstProduct?.map((item) => (
-              <Link href={`/overview/${item._id}`} key={item.title}>
-                <a className="relative">
-                  {item.time && new Date(item.time).getTime() > Date.now() && (
-                    <Timer
-                      className="absolute top-0 left-0"
-                      value={new Date(item.time).getTime()}
-                    />
-                  )}
-                  <div>
-                    <img
-                      alt="product"
-                      src={item.images[0].url}
-                      style={{ height: "170px", borderRadius: "10px" }}
-                    ></img>
-                    <label className="text-sm line-clamp-1">{item.title}</label>
-                    <span className="float-left">
-                      {item.price ? item.price : "optional"} $
-                    </span>
-                    <span className="float-right">Sold: </span>
-                  </div>
-                </a>
-              </Link>
+              <Fragment key={item.title}>
+                <div className={styles.price_tag}>
+                  <p className={styles.price_tag_price}>
+                    {item.sale
+                      ? item.sale
+                      : item.price
+                      ? item.price
+                      : "optional"}{" "}
+                    đ
+                  </p>
+                </div>
+                <Link href={`/overview/${item._id}`}>
+                  <a>
+                    {item.time &&
+                      new Date(item.time).getTime() > Date.now() && (
+                        <Timer
+                          className="absolute top-0 left-0"
+                          value={new Date(item.time).getTime()}
+                        />
+                      )}
+
+                    <div>
+                      <img
+                        alt="product"
+                        src={item.images[0].url}
+                        style={{ height: "170px", borderRadius: "10px" }}
+                      ></img>
+                      <label className="text-sm line-clamp-1">
+                        {item.title}
+                      </label>
+                      <span className="float-right">Sold: </span>
+                    </div>
+                  </a>
+                </Link>
+              </Fragment>
             ))}
           </Animation.Zoom>
         </div>

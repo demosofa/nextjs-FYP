@@ -102,65 +102,67 @@ export default function ManageProfiles() {
     );
 
   return (
-    <div className="manage_table">
-      <Head>
-        <title>Manage Profiles</title>
-        <meta name="description" content="Manage Profiles" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Id</th>
-            <th>User Name</th>
-            <th>Role</th>
-            <th>Contact</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.lstProfile.length ? (
-            data.lstProfile.map((profile, index) => (
-              <tr key={profile._id}>
-                <td>{index + 1}</td>
-                <td>{profile._id}</td>
-                <td>{profile.username}</td>
-                <td>
-                  <select
-                    defaultValue={profile.role}
-                    onChange={(e) => handleChangeRole(e, index)}
-                  >
-                    {["guest", "shipper"].map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <div>Email: {profile.user.email}</div>
-                  <div>Phone Number: {profile.user.phoneNumber}</div>
-                </td>
-                <td>
-                  <button onClick={() => handleBlockUser(index)}>
-                    {profile.blocked ? "Unblock" : "Block"}
-                  </button>
-                  <button onClick={() => handleDeleteUser(index)}>
-                    Delete
-                  </button>
+    <div>
+      <div className="manage_table">
+        <Head>
+          <title>Manage Profiles</title>
+          <meta name="description" content="Manage Profiles" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <table>
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Id</th>
+              <th>User Name</th>
+              <th>Role</th>
+              <th>Contact</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.lstProfile.length ? (
+              data.lstProfile.map((profile, index) => (
+                <tr key={profile._id}>
+                  <td>{index + 1}</td>
+                  <td>{profile._id}</td>
+                  <td>{profile.username}</td>
+                  <td>
+                    <select
+                      defaultValue={profile.role}
+                      onChange={(e) => handleChangeRole(e, index)}
+                    >
+                      {["guest", "shipper"].map((role) => (
+                        <option key={role} value={role}>
+                          {role}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <div>Email: {profile.user.email}</div>
+                    <div>Phone Number: {profile.user.phoneNumber}</div>
+                  </td>
+                  <td>
+                    <button onClick={() => handleBlockUser(index)}>
+                      {profile.blocked ? "Unblock" : "Block"}
+                    </button>
+                    <button onClick={() => handleDeleteUser(index)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  No guest has resgitered our page
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center">
-                No guest has resgitered our page
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
       <Pagination
         className="mt-8"
         totalPageCount={data.pageCounted}

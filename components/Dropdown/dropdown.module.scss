@@ -16,7 +16,7 @@
       border-radius: inherit;
       background-color: transparent;
       padding: 2px 4px;
-      @include flex(0, row, center);
+      @include flex(0, column, center);
 
       &:hover {
         background-color: var(--light-orange);
