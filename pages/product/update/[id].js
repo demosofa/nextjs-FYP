@@ -5,7 +5,7 @@ import { Form, Loading } from "../../../components";
 import { UpdateImage, UpdateVariation } from "../../../containers";
 import dynamic from "next/dynamic";
 import { useAuthLoad } from "../../../hooks";
-import { expireStorage, retryAxios } from "../../../utils";
+import { expireStorage, retryAxios, Validate } from "../../../utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
@@ -29,12 +29,35 @@ function UpdateProduct() {
   });
 
   const dispatch = useDispatch();
+  const validateInput = () => {
+    const { description, price, quantity, sale, time } = input;
+    let target = { description, price, quantity };
+    if (sale && time) target = { ...target, sale, time };
+    Object.entries(target).forEach((entry) => {
+      switch (entry[0]) {
+        case "description":
+          new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
+          break;
+        case "time":
+          new Validate(entry[1]).isEmpty();
+          break;
+        case "sale":
+        case "price":
+          new Validate(entry[1]).isEmpty().isVND();
+          break;
+        case "quantity":
+          new Validate(entry[1]).isEmpty().isNumber();
+          break;
+      }
+    });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { _id, description, quantity, sale, time } = product;
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
+      validateInput();
       await axios.put(
         `${LocalApi}/product`,
         { _id, description, quantity, sale, time },

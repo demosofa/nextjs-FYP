@@ -9,6 +9,7 @@ import axios from "axios";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -87,7 +88,7 @@ export default function Cart() {
                       </div>
                       <div className="info product__price">
                         <span>Price: </span>
-                        {item.price} $
+                        {currencyFormat(item.price)}
                       </div>
                     </div>
                   </div>
@@ -109,7 +110,7 @@ export default function Cart() {
                       style={{ width: "100px" }}
                     />
                     <div className="info">
-                      <span>Total: </span> {item.total} $
+                      <span>Total: </span> {currencyFormat(item.total)}
                     </div>
                   </div>
                   <Icon
@@ -135,13 +136,13 @@ export default function Cart() {
         <div>
           <dl className="sub-total">
             <dt>Sub Total</dt>
-            <dd>{cart.total}$</dd>
+            <dd>{currencyFormat(cart.total)}</dd>
             <dt>Shipping fee</dt>
-            <dd>{cart.quantity * 0.5}$</dd>
+            <dd>{currencyFormat(cart.quantity * 0.5)}</dd>
           </dl>
           <dl className="total">
             <dt>Total</dt>
-            <dd>{cart.total + cart.quantity * 0.5}$</dd>
+            <dd>{currencyFormat(cart.total + cart.quantity * 0.5)}</dd>
           </dl>
           <button onClick={() => setDisplay(true)}>Checkout</button>
         </div>

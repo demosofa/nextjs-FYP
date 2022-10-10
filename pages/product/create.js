@@ -40,6 +40,7 @@ function CreateForm() {
     Object.entries({
       title,
       description,
+      status,
       manufacturer,
       price,
       quantity,
@@ -56,6 +57,8 @@ function CreateForm() {
           new Validate(entry[1]).isEmpty();
           break;
         case "price":
+          new Validate(entry[1]).isEmpty().isVND();
+          break;
         case "quantity":
           new Validate(entry[1]).isEmpty().isNumber();
           break;
@@ -124,12 +127,8 @@ function CreateForm() {
         }}
       >
         <Form.Title style={{ fontSize: "20px" }}>Create Product</Form.Title>
-        <Container.Flex
-          style={{ flex: 1.8, flexDirection: "column", gap: "25px" }}
-        >
-          <Container.Flex
-            style={{ justifyContent: "space-between", flexWrap: "wrap" }}
-          >
+        <div className="flex flex-1.8 flex-col gap-6">
+          <div className="flex flex-wrap justify-between">
             <Form.Item>
               <Form.Title>Title</Form.Title>
               <Form.Input
@@ -153,11 +152,9 @@ function CreateForm() {
                 ]}
               />
             </Form.Item>
-          </Container.Flex>
+          </div>
 
-          <Container.Flex
-            style={{ justifyContent: "space-between", flexWrap: "wrap" }}
-          >
+          <div className="flex flex-wrap justify-between">
             <Form.Item>
               <Form.Title>Category</Form.Title>
               <SelectCategory
@@ -174,7 +171,7 @@ function CreateForm() {
                 }
               />
             </Form.Item>
-          </Container.Flex>
+          </div>
 
           <Form.Item style={{ flexDirection: "column" }}>
             <Form.Title>Description</Form.Title>
@@ -187,12 +184,7 @@ function CreateForm() {
             <label>{`${input.description.length}/1000`}</label>
           </Form.Item>
 
-          <Container.Flex
-            style={{
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-            }}
-          >
+          <div className="flex flex-wrap justify-between">
             <FileUpload
               prevFiles={input.images}
               setPrevFiles={(images) =>
@@ -213,9 +205,7 @@ function CreateForm() {
                 </label>
               </FileUpload.Input>
             </FileUpload>
-            <Container.Flex
-              style={{ flexDirection: "column", width: "fit-content" }}
-            >
+            <div className="flex w-fit flex-col">
               <Form.Item>
                 <Form.Title>Manufacturer</Form.Title>
                 <Form.Input
@@ -248,8 +238,8 @@ function CreateForm() {
                   }
                 ></Form.Input>
               </Form.Item>
-            </Container.Flex>
-          </Container.Flex>
+            </div>
+          </div>
 
           <Variant />
           <Form.Button
@@ -265,7 +255,7 @@ function CreateForm() {
             Apply Price and Quantity to all Variations
           </Form.Button>
           <Variation />
-        </Container.Flex>
+        </div>
 
         <Form.Item style={{ justifyContent: "flex-start" }}>
           <Form.Submit>Submit</Form.Submit>

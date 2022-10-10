@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { Dropdown, Loading } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { convertTime } from "../../shared";
+import { convertTime, currencyFormat, dateFormat } from "../../shared";
 import { expireStorage, retryAxios } from "../../utils";
 import { BiDownArrow } from "react-icons/bi";
 import { IoMdTrash } from "react-icons/io";
@@ -34,12 +34,9 @@ export default function ManageOrder() {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.response.status === 300) return router.back();
-        else if (err.response.status === 401) return router.push("/login");
-        else
-          return dispatch(
-            addNotification({ message: err.message, type: "error" })
-          );
+        if (err.status === 300) router.back();
+        else if (err.status === 401) router.push("/login");
+        else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
   );
@@ -74,7 +71,7 @@ export default function ManageOrder() {
             ) : null}
             <dl>
               <dt className="font-bold">Id:</dt>
-              <dd>{order._id}</dd>
+              <dd className="whitespace-pre-line line-clamp-1">{order._id}</dd>
             </dl>
             <dl>
               <dt className="font-bold">Status:</dt>
@@ -82,7 +79,7 @@ export default function ManageOrder() {
             </dl>
             <dl>
               <dt className="font-bold">Created At:</dt>
-              <dd>{order.createdAt}</dd>
+              <dd>{dateFormat(order.createdAt)}</dd>
             </dl>
             <Dropdown icon={<BiDownArrow />}>
               <Dropdown.Content className="!relative">
@@ -90,11 +87,11 @@ export default function ManageOrder() {
                   <div key={item._id} className="flat_dl">
                     <dl>
                       <dt className="font-semibold">Name:</dt>
-                      <dd>{item.title}</dd>
+                      <dd className="line-clamp-1">{item.title}</dd>
                     </dl>
                     <dl>
                       <dt className="font-semibold">Amount:</dt>
-                      <dd>{item.total}</dd>
+                      <dd>{currencyFormat(item.total)}</dd>
                     </dl>
                   </div>
                 ))}

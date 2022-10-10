@@ -9,7 +9,7 @@ import useSWRImmutable from "swr/immutable";
 import { Checkbox, Form, Loading, Pagination } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
-import { convertTime } from "../../shared";
+import { convertTime, currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -39,12 +39,9 @@ function Shipper() {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
-        else
-          return dispatch(
-            addNotification({ message: err.message, type: "error" })
-          );
+        if (err.status === 300) router.back();
+        else if (err.status === 401) router.push("/login");
+        else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
   );
@@ -82,7 +79,7 @@ function Shipper() {
   };
 
   return (
-    <div>
+    <div className="px-24 sm:p-4 md:px-10">
       <Head>
         <title>List pending order</title>
         <meta name="description" content="List pending order" />
@@ -106,7 +103,7 @@ function Shipper() {
                     <Checkbox.Item value={order._id}></Checkbox.Item>
                   </td>
                   <td>{order._id}</td>
-                  <td>${order.total}</td>
+                  <td>{currencyFormat(order.total)}</td>
                   <td>
                     <Form.Link
                       target="_blank"

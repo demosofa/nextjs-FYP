@@ -34,12 +34,9 @@ export default function Rating({ url }) {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     onError(err, key, config) {
-      if (err.status === 300) return router.back();
-      else if (err.status === 401) return router.push("/login");
-      else
-        return dispatch(
-          addNotification({ message: err.message, type: "error" })
-        );
+      if (err.status === 300) router.back();
+      else if (err.status === 401) router.push("/login");
+      else dispatch(addNotification({ message: err.message, type: "error" }));
     },
   });
 

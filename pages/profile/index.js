@@ -4,11 +4,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Loading, Slider } from "../../components";
 import { useAuthLoad } from "../../hooks";
-import { Role, dateFormat } from "../../shared";
+import { Role, dateFormat, currencyFormat } from "../../shared";
 import Head from "next/head";
 import { MyOrder } from "../../containers";
 import { useSelector } from "react-redux";
 import { useMediaContext } from "../../contexts/MediaContext";
+import styles from "../../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -57,7 +58,7 @@ function MyProfile() {
       ></Loading>
     );
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 px-24 sm:p-4 md:px-10">
       <Head>
         <title>My Profile</title>
         <meta name="description" content="My Profile" />
@@ -82,7 +83,7 @@ function MyProfile() {
         </dl>
         <dl>
           <dt className="font-semibold">Email:</dt>
-          <dd>{data.email}</dd>
+          <dd className="line-clamp-1">{data.email}</dd>
         </dl>
         <Link href="/profile/edit">
           <a className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white">
@@ -103,21 +104,35 @@ function MyProfile() {
                       : device === Devices.tablet
                       ? 4
                       : device === Devices.phone && 3,
-                  spacing: 12,
+                  spacing: 20,
                 },
               }}
             >
               <Slider.Arrow>
-                <Slider.Content>
+                <Slider.Content className="p-4">
                   {recentlyViewed?.map((item) => (
                     <a
                       key={item.title}
                       href={item.url}
-                      className="card mt-2 h-fit min-h-0 !max-w-[140px] cursor-pointer"
+                      className="card relative mt-2 h-fit min-h-0 !max-w-[140px] cursor-pointer !overflow-visible"
                     >
-                      <img alt="product" src={item.thumbnail} />
-                      <label className="line-clamp-1">{item.title}</label>
-                      <span>{item.price}</span>
+                      <div className={styles.price_tag}>
+                        <p className={styles.price_tag_price}>
+                          {currencyFormat(item.sale ? item.sale : item.price) ||
+                            "optional"}
+                        </p>
+                      </div>
+                      <div>
+                        <img
+                          alt="product"
+                          src={item.thumbnail}
+                          style={{ height: "170px", borderRadius: "10px" }}
+                        ></img>
+                        <label className="text-sm line-clamp-1">
+                          {item.title}
+                        </label>
+                        <span className="float-right">Sold: </span>
+                      </div>
                     </a>
                   ))}
                 </Slider.Content>

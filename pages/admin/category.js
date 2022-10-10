@@ -47,6 +47,7 @@ export default function CrudCategory({ maxTree = 3 }) {
     const accessToken = expireStorage.getItem("accessToken");
     retryAxios(axios);
     try {
+      if (!name) throw new Error("Please fill category name");
       const response = await axios.post(
         `${LocalApi}/category`,
         { name, isFirstLevel: "true" },
@@ -122,6 +123,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
   const handleEditSave = async ({ name }) => {
     retryAxios(axios);
     try {
+      if (!name) throw new Error("Please fill category name");
       await axios.patch(
         `${LocalApi}/category/${currentCategory._id}`,
         { name },
@@ -155,6 +157,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
   const handleAddSubCategory = async ({ name }) => {
     retryAxios(axios);
     try {
+      if (!name) throw new Error("Please fill category name");
       const response = await axios.put(
         `${LocalApi}/category/${currentCategory._id}`,
         { name },
@@ -206,7 +209,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
         )}
       </div>
       {maxTree > 0 && (
-        <div className="flex items-center gap-6 border-t py-2 px-3 dark:border-gray-600">
+        <div className="flex items-center gap-6 border-t py-2 px-3 dark:border-gray-600 sm:gap-2">
           <button
             className={styles.btn}
             onClick={() =>
@@ -262,15 +265,15 @@ function CategoryInput({
   const [input, setInput] = useState(data);
 
   return (
-    <div className="relative mb-4 inline-flex w-full rounded-lg border border-gray-500 bg-white">
+    <div className="relative mb-4 inline-flex w-full flex-wrap justify-between rounded-lg border border-gray-500 bg-white">
       <input
-        className="flex-2 rounded-lg border-0 bg-white p-2.5 text-sm text-gray-900 focus:outline-none"
+        className="rounded-lg border-0 bg-white p-2.5 text-sm text-gray-900 focus:outline-none"
         value={input.name}
         onChange={(e) =>
           setInput((prev) => ({ ...prev, name: e.target.value }))
         }
       ></input>
-      <div className="flex items-center gap-6 border-t py-2 px-3">
+      <div className="flex items-center gap-6 border-t py-2 px-3 sm:gap-2">
         <button className={styles.btn} onClick={() => callback(input)}>
           Save
         </button>

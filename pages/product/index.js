@@ -83,7 +83,7 @@ function ProductCRUD() {
       <Head>
         <title>Manage Product</title>
       </Head>
-      <Container.Flex className="flex-wrap">
+      <div className="flex flex-wrap gap-4">
         <button
           className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white"
           onClick={() => router.push(`product/create`)}
@@ -91,6 +91,7 @@ function ProductCRUD() {
           Create
         </button>
         <Search
+          className="!ml-0"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onClick={() => setQuery((prev) => ({ ...prev, search }))}
@@ -104,9 +105,8 @@ function ProductCRUD() {
             { value: "non-active", label: "Non Active" },
             { value: "out", label: "Out of stock" },
           ]}
-          className="ml-3"
         />
-      </Container.Flex>
+      </div>
       <div className="manage_table">
         <table>
           <thead>
@@ -229,10 +229,10 @@ function Remove({ index, product, setProducts, setRemove }) {
       <Container.BackDrop onClick={(e) => setRemove(null)}></Container.BackDrop>
       <Container.MiddleInner className="form_center">
         <label>{`Are you sure to Remove ${product.title}?`}</label>
-        <Container.Flex style={{ gap: "10px" }}>
+        <div className="flex gap-3">
           <button onClick={handleRemove}>Yes</button>
           <button onClick={() => setRemove(null)}>No</button>
-        </Container.Flex>
+        </div>
       </Container.MiddleInner>
     </>
   );

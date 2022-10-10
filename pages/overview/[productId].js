@@ -19,6 +19,7 @@ import { addCart } from "../../redux/reducer/cartSlice";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { addViewed } from "../../redux/reducer/recentlyViewedSlice";
 import Link from "next/link";
+import { currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -175,12 +176,13 @@ export default function Overview({ product }) {
             <div className="flex items-center gap-3">
               <label className="text-lg font-medium">Price: </label>
               <span>
-                {targetVariation
-                  ? targetVariation.price
-                  : product.time
-                  ? product.sale
-                  : product.price}{" "}
-                $
+                {currencyFormat(
+                  targetVariation
+                    ? targetVariation.price
+                    : product.time
+                    ? product.sale
+                    : product.price
+                )}
               </span>
             </div>
 

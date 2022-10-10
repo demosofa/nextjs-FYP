@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { Animation, Loading, Timer } from "../components";
 import { useAxiosLoad } from "../hooks";
+import { currencyFormat } from "../shared";
 import styles from "../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -77,12 +78,8 @@ export default function Home({ products, categories, pageCounted }) {
               <Fragment key={item.title}>
                 <div className={styles.price_tag}>
                   <p className={styles.price_tag_price}>
-                    {item.sale
-                      ? item.sale
-                      : item.price
-                      ? item.price
-                      : "optional"}{" "}
-                    đ
+                    {currencyFormat(item.sale ? item.sale : item.price) ||
+                      "optional"}
                   </p>
                 </div>
                 <Link href={`/overview/${item._id}`}>

@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./_container.module.scss";
 
-// 1. define the default component
 export default function ContainerComponent({ children, ...restProps }) {
   return (
     <div
@@ -12,48 +11,6 @@ export default function ContainerComponent({ children, ...restProps }) {
     </div>
   );
 }
-
-ContainerComponent.Flex = function ContainerFlex({
-  children,
-  className,
-  justify = "none",
-  align = "none",
-  style,
-  ...restProps
-}) {
-  return (
-    <div
-      {...restProps}
-      style={{ justifyContent: justify, alignItems: align, ...style }}
-      className={`${styles.container__flex} ${className}`}
-    >
-      {children}
-    </div>
-  );
-};
-
-ContainerComponent.Grid = function ContainerGrid({
-  children,
-  columns = 3,
-  ...restProps
-}) {
-  return (
-    <div className={styles.container__grid} {...restProps}>
-      {children}
-    </div>
-  );
-};
-
-ContainerComponent.GridThreeColumns = function ContainerThreeColumns({
-  children,
-  ...props
-}) {
-  return (
-    <div className={styles.container__gridThreeColumns} {...props}>
-      {children}
-    </div>
-  );
-};
 
 ContainerComponent.BackDrop = function ContainerBackDrop({
   children,

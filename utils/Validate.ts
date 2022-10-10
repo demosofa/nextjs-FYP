@@ -55,4 +55,9 @@ export default class Validate {
       throw new Error("this input is not like password");
     return this;
   }
+  isVND() {
+    const num = parseInt(this.input);
+    if (num % 1000 === 0) return this;
+    throw new Error("this input is not VND currency");
+  }
 }

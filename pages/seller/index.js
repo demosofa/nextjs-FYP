@@ -9,6 +9,7 @@ import QrScanner from "react-qr-scanner";
 import dynamic from "next/dynamic";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
+import { currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -37,12 +38,9 @@ function SellerPage() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
-        else
-          return dispatch(
-            addNotification({ message: err.message, type: "error" })
-          );
+        if (err.status === 300) router.back();
+        else if (err.status === 401) router.push("/login");
+        else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
   );
@@ -87,14 +85,14 @@ function SellerPage() {
       ></Loading>
     );
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 px-24 sm:p-4 md:px-10">
       <Head>
         <title>Seller page</title>
         <meta name="description" content="Seller page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <button
-        className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white"
+        className="max-w-fit cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white"
         onClick={() => setShowScanner(true)}
       >
         Get Shipper order information
@@ -116,7 +114,7 @@ function SellerPage() {
                 <tr key={order._id}>
                   <td>{index + 1}</td>
                   <td>{order._id}</td>
-                  <td>${order.total}</td>
+                  <td>{currencyFormat(order.total)}</td>
                   <td>
                     {new Date(order.validatedAt).toLocaleString("en-US", {
                       hour: "numeric",
@@ -189,7 +187,7 @@ function SellerPage() {
                       </p>
                     </td>
                     <td>{item.quantity}</td>
-                    <td>${item.total}</td>
+                    <td>{currencyFormat(item.total)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -244,8 +242,8 @@ function SellerPage() {
                     </p>
                   </td>
                   <td>{item.quantity}</td>
-                  <td>${item.price}</td>
-                  <td>${item.total}</td>
+                  <td>{currencyFormat(item.price)}</td>
+                  <td>{currencyFormat(item.total)}</td>
                 </tr>
               ))}
             </tbody>

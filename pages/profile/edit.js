@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Checkbox, Form, Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
-import { retryAxios } from "../../utils";
+import { retryAxios, Validate } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Role, dateFormat } from "../../shared";
 import Head from "next/head";
@@ -30,10 +30,32 @@ function EditProfile() {
     roles: [Role.admin, Role.guest, Role.shipper],
   });
 
+  const validateInput = () => {
+    const { dateOfBirth, phoneNumber, email } = data;
+    Object.entries({
+      dateOfBirth,
+      phoneNumber,
+      email,
+    }).forEach((entry) => {
+      switch (entry[0]) {
+        case "dateOfBirth":
+          new Validate(entry[1]).isEmpty();
+          break;
+        case "phoneNumber":
+          new Validate(entry[1]).isEmpty().isPhone();
+          break;
+        case "email":
+          new Validate(entry[1]).isEmpty().isEmail();
+          break;
+      }
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     retryAxios(axios);
     try {
+      validateInput();
       await axios.put(`${LocalApi}/profile`, data);
       router.back();
     } catch (error) {

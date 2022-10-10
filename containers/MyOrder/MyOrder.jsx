@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Select from "react-select";
 import { Form, Loading } from "../../components";
+import { currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -31,12 +32,9 @@ export default function MyOrder() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
-        else
-          return dispatch(
-            addNotification({ message: err.message, type: "error" })
-          );
+        if (err.status === 300) router.back();
+        else if (err.status === 401) router.push("/login");
+        else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
   );
@@ -125,7 +123,7 @@ export default function MyOrder() {
                         timeZone: "Asia/Ho_Chi_Minh",
                       })}
                     </td>
-                    <td>${order.total}</td>
+                    <td>{currencyFormat(order.total)}</td>
                     <td>{order.shipper?.username}</td>
                     <td>
                       <button onClick={() => setViewOrder(order.orderItems)}>
@@ -201,7 +199,7 @@ export default function MyOrder() {
                       </td>
                       <td>{item.options.join(", ")}</td>
                       <td>{item.quantity}</td>
-                      <td>${item.total}</td>
+                      <td>{currencyFormat(item.total)}</td>
                     </tr>
                   ))}
                 </tbody>

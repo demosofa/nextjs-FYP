@@ -22,8 +22,9 @@ export default function FeaturedInfo({ children, url, ...props }) {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    if (response.data.length)
+    if (response.data.length > 1) {
       setPerc((response.data[1].total * 100) / response.data[0].total - 100);
+    }
     return response.data;
   };
   const dispatch = useDispatch();
@@ -33,19 +34,16 @@ export default function FeaturedInfo({ children, url, ...props }) {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     onError(err, key, config) {
-      if (err.status === 300) return router.back();
-      else if (err.status === 401) return router.push("/login");
-      else
-        return dispatch(
-          addNotification({ message: err.message, type: "error" })
-        );
+      if (err.status === 300) router.back();
+      else if (err.status === 401) router.push("/login");
+      else dispatch(addNotification({ message: err.message, type: "error" }));
     },
   });
 
   return (
     <div className={`${styles.featuredItem}`} {...props}>
       <span className={`${styles.featuredTitle}`}>{children}</span>
-      {data?.length ? (
+      {data?.length > 1 ? (
         <div className={`${styles.featuredMoneyContainer}`}>
           <span className={`${styles.featuredMoney}`}>{data[1].total}</span>
           <span className={`${styles.featuredMoneyRate}`}>

@@ -33,12 +33,9 @@ export default function ManageProfiles() {
     {
       onError(err, key, config) {
         console.log(err);
-        if (err.status === 300) return router.back();
-        else if (err.status === 401) return router.push("/login");
-        else
-          return dispatch(
-            addNotification({ message: err.message, type: "error" })
-          );
+        if (err.status === 300) router.back();
+        else if (err.status === 401) router.push("/login");
+        else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
   );
@@ -102,7 +99,7 @@ export default function ManageProfiles() {
     );
 
   return (
-    <div>
+    <div className="px-24 sm:p-4 md:px-10">
       <div className="manage_table">
         <Head>
           <title>Manage Profiles</title>

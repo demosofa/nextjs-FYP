@@ -9,6 +9,7 @@ module.exports = {
   theme: {
     extend: {
       flex: {
+        1.8: "1.8 1.8 0%",
         2: "2 2 0%",
       },
     },
