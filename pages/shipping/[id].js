@@ -163,7 +163,9 @@ function ShippingProgress() {
               Show Scanner
             </button>
             <QrScanner
-              facingMode="front"
+              constraints={{
+                facingMode: "environment",
+              }}
               delay={500}
               onError={(err) => dispatch(addNotification({ message: err }))}
               onScan={handleScan}

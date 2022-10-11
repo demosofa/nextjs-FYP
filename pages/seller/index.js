@@ -199,7 +199,9 @@ function SellerPage() {
         <>
           <div className="backdrop" onClick={() => setShowScanner(false)}></div>
           <QrScanner
-            facingMode="rear"
+            constraints={{
+              facingMode: "environment",
+            }}
             delay={500}
             onError={(err) => dispatch(addNotification({ message: err }))}
             onScan={handleScan}
