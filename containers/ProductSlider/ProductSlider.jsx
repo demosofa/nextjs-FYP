@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Slider } from "../../components";
 import { useMediaContext } from "../../contexts/MediaContext";
 import { currencyFormat } from "../../shared";
@@ -35,11 +36,9 @@ export default function ProductSlider({ products }) {
                   </p>
                 </div>
                 <div>
-                  <img
-                    alt="product"
-                    src={item.thumbnail}
-                    style={{ height: "170px", borderRadius: "10px" }}
-                  ></img>
+                  <div className="relative h-36 w-full rounded-xl">
+                    <Image alt="product" src={item.thumbnail} layout="fill" />
+                  </div>
                   <label className="text-sm line-clamp-1">{item.title}</label>
                   <span className="float-right">Sold: </span>
                 </div>

@@ -8,6 +8,7 @@ import useSWR from "swr";
 import Select from "react-select";
 import { Form, Loading } from "../../components";
 import { currencyFormat } from "../../shared";
+import { ItemsFromOrder } from "../";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -94,7 +95,7 @@ export default function MyOrder() {
               left: "50%",
               transform: `translate(-50%, -50%)`,
             }}
-          ></Loading>
+          />
         ) : (
           <table>
             <thead>
@@ -164,41 +165,7 @@ export default function MyOrder() {
           </>
         )}
         {viewOrder && (
-          <>
-            <div className="backdrop" onClick={() => setViewOrder(null)}></div>
-            <div className="form_center">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>No.</th>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Options</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {viewOrder.map((item, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>
-                        <img src={item.image} alt="order-item"></img>
-                      </td>
-                      <td>
-                        <p className="text-xs line-clamp-1 hover:line-clamp-none">
-                          {item.title}
-                        </p>
-                      </td>
-                      <td>{item.options.join(", ")}</td>
-                      <td>{item.quantity}</td>
-                      <td>{currencyFormat(item.total)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+          <ItemsFromOrder viewOrder={viewOrder} setViewOrder={setViewOrder} />
         )}
       </div>
     </div>

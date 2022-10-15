@@ -61,7 +61,7 @@ export default function Increment({
           e.preventDefault();
           e.stopPropagation();
         }}
-      ></input>
+      />
 
       <Icon style={{ width: "50px", height: "50px" }}>
         <AiOutlinePlus

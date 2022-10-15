@@ -21,6 +21,7 @@ import { addViewed } from "../../redux/reducer/recentlyViewedSlice";
 import Link from "next/link";
 import { currencyFormat } from "../../shared";
 import { useObserver } from "../../hooks";
+import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -154,19 +155,19 @@ export default function Overview({ product }) {
         </Head>
         <div className="container-info">
           <div className="preview-product">
-            <ImageMagnifier
-              src={targetImage}
-              style={{ width: "100%", height: "350px" }}
-              className="product-img"
-            />
+            {device === Devices.phone ? null : (
+              <ImageMagnifier src={targetImage} className="product-img" />
+            )}
             <Slider
               className="slider"
               config={{
-                vertical: device === Devices.phone ? true : false,
-                slides: { perView: 4, spacing: 12 },
+                slides: {
+                  perView: device === Devices.phone ? 1 : 4,
+                  spacing: 12,
+                },
               }}
             >
-              <Slider.Content>
+              <Slider.Content className="h-20 sm:h-60">
                 {product.images.map((image, index) => (
                   <img
                     className="rounded-lg"

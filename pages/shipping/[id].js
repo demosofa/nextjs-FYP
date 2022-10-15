@@ -154,7 +154,7 @@ function ShippingProgress() {
           left: "50%",
           transform: `translate(-50%, -50%)`,
         }}
-      ></Loading>
+      />
     );
   return (
     <div className="flex flex-col items-center justify-center">
@@ -173,7 +173,7 @@ function ShippingProgress() {
         <>
           <div className="backdrop" onClick={() => setShowQR(null)}></div>
           <div className="form_center">
-            <img src={showQR} alt="QR code"></img>
+            <img src={showQR} alt="QR code" />
           </div>
         </>
       )}

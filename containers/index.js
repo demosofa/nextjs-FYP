@@ -10,3 +10,4 @@ export { default as MyOrder } from "./MyOrder/MyOrder";
 export { default as Rating } from "./Rating/Rating";
 export { default as ProductSlider } from "./ProductSlider/ProductSlider";
 export { default as Notification } from "./Notification/Notification";
+export { default as ItemsFromOrder } from "./ItemsFromOrder/ItemsFromOrder";

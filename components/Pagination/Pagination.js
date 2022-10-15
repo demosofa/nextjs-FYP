@@ -77,7 +77,7 @@ Pagination.Input = function InputPagination({ children, ...props }) {
         }
       }}
       {...props}
-    ></input>
+    />
   );
 };
 

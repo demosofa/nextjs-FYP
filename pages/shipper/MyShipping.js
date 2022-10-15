@@ -10,6 +10,7 @@ import { Loading, Pagination } from "../../components";
 import { useState } from "react";
 import Head from "next/head";
 import { currencyFormat } from "../../shared";
+import { ItemsFromOrder } from "../../containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -65,7 +66,7 @@ function MyShipping() {
           left: "50%",
           transform: `translate(-50%, -50%)`,
         }}
-      ></Loading>
+      />
     );
   return (
     <div className="px-24 sm:p-4 md:px-10">
@@ -145,47 +146,13 @@ function MyShipping() {
         </Pagination.Arrow>
       </Pagination>
       {viewOrder && (
-        <>
-          <div className="backdrop" onClick={() => setViewOrder(null)}></div>
-          <div className="form_center">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Image</th>
-                  <th>Title</th>
-                  <th>Options</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {viewOrder.map((item, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <img src={item.image} alt="order-item"></img>
-                    </td>
-                    <td>
-                      <p className="line-clamp-1 hover:line-clamp-none">
-                        {item.title}
-                      </p>
-                    </td>
-                    <td>{item.options.join(", ")}</td>
-                    <td>{item.quantity}</td>
-                    <td>{currencyFormat(item.total)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
+        <ItemsFromOrder viewOrder={viewOrder} setViewOrder={setViewOrder} />
       )}
       {showQR && (
         <>
           <div className="backdrop" onClick={() => setShowQR(null)}></div>
           <div className="form_center">
-            <img src={showQR} alt="QR code"></img>
+            <img src={showQR} alt="QR code" />
           </div>
         </>
       )}

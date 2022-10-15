@@ -10,6 +10,7 @@ import { useAuthLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Role } from "../../shared";
+import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -76,7 +77,7 @@ function ProductCRUD() {
           left: "50%",
           transform: `translate(-50%, -50%)`,
         }}
-      ></Loading>
+      />
     );
   return (
     <div className="product-crud__container">
@@ -126,11 +127,13 @@ function ProductCRUD() {
                   <tr key={product._id}>
                     <td>{index + 1}</td>
                     <td>
-                      <img
+                      <Image
+                        className="rounded-lg"
                         alt="product"
                         src={product.images[0].url}
-                        style={{ width: "100px", height: "80px" }}
-                      ></img>
+                        width="100px"
+                        height="90px"
+                      />
                     </td>
                     <td className="group">
                       <p className="line-clamp-1 group-hover:line-clamp-none">

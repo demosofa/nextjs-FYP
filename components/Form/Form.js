@@ -76,7 +76,7 @@ Form.Password = forwardRef(function FormPassword(
           type={show ? "text" : "password"}
           {...restProp}
           onCopy={(e) => e.preventDefault()}
-        ></input>
+        />
         <Icon onClick={() => setShow(!show)} style={{ marginLeft: "-30px" }}>
           {show ? <RiEye2Line /> : <RiEyeCloseLine />}
         </Icon>

@@ -66,7 +66,7 @@ FileUpload.Input = function InputUpload({ children, ...props }) {
           event.target.value = null;
         }}
         {...props}
-      ></input>
+      />
       {children}
     </>
   );
@@ -97,7 +97,12 @@ FileUpload.Drag = function DragUpload({ children, ...props }) {
   );
 };
 
-FileUpload.Show = function ShowFiles({ children, animate = "Fade", ...props }) {
+FileUpload.Show = function ShowFiles({
+  children,
+  animate = "Fade",
+  className,
+  ...props
+}) {
   const { loading, previews, files, handleDelete, handleOpenPreview } =
     useContext(Kits);
   const Animate = useRef(Animation[animate]);
@@ -109,7 +114,7 @@ FileUpload.Show = function ShowFiles({ children, animate = "Fade", ...props }) {
           <Loading />
         </div>
       )}
-      <Animate.current className={styles.preview} {...props}>
+      <Animate.current className={`${styles.preview} ${className}`} {...props}>
         {previews.map((preview, index) => {
           return (
             <div
@@ -121,7 +126,7 @@ FileUpload.Show = function ShowFiles({ children, animate = "Fade", ...props }) {
                 <img
                   alt="Preview"
                   src={preview.includes("image") ? preview : ""}
-                ></img>
+                />
                 <AiOutlineClose
                   onClick={(e) => handleDelete(index, e)}
                   onMouseEnter={(e) =>

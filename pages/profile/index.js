@@ -55,7 +55,7 @@ function MyProfile() {
           left: "50%",
           transform: `translate(-50%, -50%)`,
         }}
-      ></Loading>
+      />
     );
   return (
     <div className="flex flex-col gap-10 px-24 sm:p-4 md:px-10">

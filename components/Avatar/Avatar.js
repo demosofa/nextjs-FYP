@@ -9,7 +9,7 @@ export default function Avatar({ size, src, text = null, isOnline = null }) {
           alt="Avatar"
           style={{ width: size, height: size }}
           src={src}
-        ></img>
+        />
         {isOnline == null ? null : (
           <div
             className={

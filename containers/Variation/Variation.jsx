@@ -48,7 +48,7 @@ export default function Variation() {
                       onChange={(e) =>
                         dispatch(editVariation({ index, sku: e.target.value }))
                       }
-                    ></input>
+                    />
                   </td>
                   <td>{variation.types.join("/")}</td>
                   <td>
@@ -59,7 +59,7 @@ export default function Variation() {
                           editVariation({ index, price: e.target.value })
                         )
                       }
-                    ></input>
+                    />
                   </td>
                   <td>
                     <input
@@ -69,7 +69,7 @@ export default function Variation() {
                           editVariation({ index, quantity: e.target.value })
                         )
                       }
-                    ></input>
+                    />
                   </td>
                   <td onClick={() => dispatch(deleteVariation(index))}>
                     <GiTrashCan />

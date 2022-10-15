@@ -96,11 +96,15 @@ export default function Home({ products, categories, pageCounted, query }) {
                       )}
 
                     <div>
-                      <img
-                        alt="product"
-                        src={item.thumbnail}
-                        style={{ height: "170px", borderRadius: "10px" }}
-                      ></img>
+                      <div className="relative h-40 w-full">
+                        <Image
+                          className="rounded-xl"
+                          alt="product"
+                          src={item.thumbnail}
+                          layout="fill"
+                          objectFit="contain"
+                        />
+                      </div>
                       <label className="text-sm line-clamp-1">
                         {item.title}
                       </label>
@@ -114,7 +118,10 @@ export default function Home({ products, categories, pageCounted, query }) {
         </div>
         {loading && <Loading.Text />}
         {pageLeft > 1 && (
-          <button className="w-fit pt-1 pl-2 mx-auto" onClick={() => setCurrentPage((prev) => prev + 1)}>
+          <button
+            className="main_btn mx-auto"
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
             More Products
           </button>
         )}

@@ -87,7 +87,7 @@ function UpdateProduct() {
           left: "50%",
           transform: `translate(-50%, -50%)`,
         }}
-      ></Loading>
+      />
     );
 
   return (

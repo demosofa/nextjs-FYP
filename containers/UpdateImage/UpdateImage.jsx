@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Role } from "../../shared";
 import styles from "./updateimage.module.scss";
+import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -105,7 +106,7 @@ export default function UpdateImage({ productId, setToggle }) {
   return (
     <div>
       <FileUpload
-        className="!max-w-full"
+        className="h-80 !max-w-full"
         setPrevFiles={(images) => setNewImages(images)}
         maxByMB={10 - currentSize}
       >
@@ -117,11 +118,11 @@ export default function UpdateImage({ productId, setToggle }) {
                 image={image}
                 handleUpdateImage={handleUpdateImage}
                 handleDeleteImage={(e) => handleDeleteImage(e, index)}
-              ></StoredImage>
+              />
             );
           })}
         </Animation.Zoom>
-        <FileUpload.Show></FileUpload.Show>
+        <FileUpload.Show />
         <FileUpload.Input
           id="file_input"
           multiple
@@ -134,12 +135,18 @@ export default function UpdateImage({ productId, setToggle }) {
           </label>
         </FileUpload.Input>
       </FileUpload>
-      <button type="button" onClick={handleSaveImage}>
-        Save
-      </button>
-      <button type="button" onClick={() => setToggle(null)}>
-        Cancel
-      </button>
+      <div className="mt-2 flex gap-5">
+        <button className="main_btn" type="button" onClick={handleSaveImage}>
+          Save
+        </button>
+        <button
+          className="main_btn"
+          type="button"
+          onClick={() => setToggle(null)}
+        >
+          Cancel
+        </button>
+      </div>
     </div>
   );
 }
@@ -163,7 +170,7 @@ function StoredImage({
       onMouseLeave={() => setDisplayOpts(false)}
       {...props}
     >
-      <img alt="product" src={previews[0] || image.url} />
+      <Image alt="product" src={previews[0] || image.url} layout="fill" />
       {displayOpts && (
         <div className={styles.img_option}>
           <input
@@ -174,7 +181,7 @@ function StoredImage({
             onClick={(event) => {
               event.target.value = null;
             }}
-          ></input>
+          />
           <Icon htmlFor={image._id}>
             <BiUpload></BiUpload>
           </Icon>

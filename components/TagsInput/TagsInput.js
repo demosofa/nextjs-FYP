@@ -62,7 +62,7 @@ export default function TagsInput({
             setActive(true);
           }}
           onKeyUp={handleInput}
-        ></input>
+        />
         {filter.length !== 0 && (
           <button
             onClick={() => {

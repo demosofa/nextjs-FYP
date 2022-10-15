@@ -31,7 +31,7 @@ export default function Variants() {
               onChange={(e) =>
                 dispatch(editVariant({ index, name: e.target.value }))
               }
-            ></input>
+            />
 
             <div className="flex w-full flex-wrap">
               <TagsInput

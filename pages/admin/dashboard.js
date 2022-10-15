@@ -49,7 +49,7 @@ function Dashboard() {
           left: "50%",
           transform: `translate(-50%, -50%)`,
         }}
-      ></Loading>
+      />
     );
   return (
     <div className="flex flex-col gap-10">
@@ -93,7 +93,7 @@ function Dashboard() {
                       className="h-20 w-28"
                       src={product.image}
                       alt="product"
-                    ></img>
+                    />
                   </td>
                   <td>{product._id}</td>
                   <td className="group">

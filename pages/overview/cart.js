@@ -76,7 +76,7 @@ export default function Cart() {
               <Link href={`/overview/${item.productId}`}>
                 <a className="cart__product ux-card">
                   <div className="cart__product__info">
-                    <img alt="product" src={item.image}></img>
+                    <img alt="product" src={item.image} />
                     <div className="product__info">
                       <div className="info product__title">
                         <span>Title: </span>

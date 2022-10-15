@@ -40,10 +40,10 @@ export default function Slider({ config = {}, children }) {
 Slider.Content = function SliderContent({ children, className, ...props }) {
   const { sliderRef } = useContext(Kits);
   return (
-    <div ref={sliderRef} className={className + " keen-slider"} {...props}>
+    <div ref={sliderRef} className={"keen-slider " + className} {...props}>
       {children.map((child) => {
         return cloneElement(child, {
-          className: child.props.className + " keen-slider__slide",
+          className: "keen-slider__slide " + child.props.className,
         });
       })}
     </div>

@@ -57,7 +57,7 @@ function Shipper() {
           left: "50%",
           transform: `translate(-50%, -50%)`,
         }}
-      ></Loading>
+      />
     );
 
   const handleSubmit = async () => {

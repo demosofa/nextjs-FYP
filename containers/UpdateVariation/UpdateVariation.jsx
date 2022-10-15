@@ -8,6 +8,7 @@ import { retryAxios } from "../../utils";
 import { AiOutlineCheck } from "react-icons/ai";
 import { Role } from "../../shared";
 import styles from "./updatevariation.module.scss";
+import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -90,11 +91,12 @@ export default function UpdateVariation({ productId, setToggle }) {
                     <td>{index + 1}</td>
                     <td onClick={(e) => setVariationImage(index)}>
                       {variation.image && (
-                        <img
+                        <Image
                           alt="product"
                           src={variation.image.url}
-                          style={{ width: "100px", height: "80px" }}
-                        ></img>
+                          width="100px"
+                          height="90px"
+                        />
                       )}
                     </td>
                     <td>
@@ -103,7 +105,7 @@ export default function UpdateVariation({ productId, setToggle }) {
                         onChange={(e) =>
                           handleEditVariation({ sku: e.target.value }, index)
                         }
-                      ></input>
+                      />
                     </td>
                     <td>
                       {variation.types.map((type) => type.name).join("/")}
@@ -114,7 +116,7 @@ export default function UpdateVariation({ productId, setToggle }) {
                         onChange={(e) =>
                           handleEditVariation({ price: e.target.value }, index)
                         }
-                      ></input>
+                      />
                     </td>
                     <td>
                       <input
@@ -125,7 +127,7 @@ export default function UpdateVariation({ productId, setToggle }) {
                             index
                           )
                         }
-                      ></input>
+                      />
                     </td>
                   </tr>
                 );
@@ -143,14 +145,14 @@ export default function UpdateVariation({ productId, setToggle }) {
 
       <div className="flex gap-6">
         <button
-          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-4 py-3 text-sm font-semibold text-white"
+          className="main_btn"
           type="button"
           onClick={handleSaveVariation}
         >
           Save Variation
         </button>
         <button
-          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-4 py-3 text-sm font-semibold text-white"
+          className="main_btn"
           type="button"
           onClick={() => setToggle(null)}
         >
@@ -179,6 +181,7 @@ export default function UpdateVariation({ productId, setToggle }) {
                             : styles.unchecked
                         }
                         style={{
+                          position: "relative",
                           display: "block",
                           width: "100px",
                           height: "80px",
@@ -187,8 +190,8 @@ export default function UpdateVariation({ productId, setToggle }) {
                         <Checkbox.Item
                           value={image}
                           style={{ display: "none" }}
-                        ></Checkbox.Item>
-                        <img className="h-full w-full" src={image.url}></img>
+                        />
+                        <Image src={image.url} layout="fill" />
                         {[image].includes(selectedImage) && (
                           <div className="absolute top-0 left-0 h-full w-full bg-white/70">
                             <AiOutlineCheck

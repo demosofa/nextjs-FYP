@@ -61,7 +61,7 @@ export default function ManageOrder() {
   if (!data || error) return <Loading.Text />;
   return (
     <div>
-      <div className="flex flex-wrap gap-8 pl-5">
+      <div className="flex flex-wrap gap-8 pl-5 sm:justify-center">
         {data.lstOrder.length ? (
           data.lstOrder.map((order) => (
             <div key={order._id} className="card flat_dl relative mt-2 h-fit">

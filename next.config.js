@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  images: {
+    domains: ["res.cloudinary.com"],
+  },
   // async redirects() {
   //   return [{ source: "/login", destination: "/login", permanent: true }];
   // },

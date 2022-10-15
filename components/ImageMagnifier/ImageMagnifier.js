@@ -2,7 +2,13 @@ import { useState, useRef, useCallback } from "react";
 import { useResize } from "../../hooks";
 import { compareToRange } from "../../utils";
 
-export default function ImageMagnifier({ zoom = 2, src, style, ...props }) {
+export default function ImageMagnifier({
+  zoom = 2,
+  src,
+  style,
+  className,
+  ...props
+}) {
   const maginfier = useRef();
   const [offset, setOffset] = useState();
   const [track, setTrack] = useState(false);
@@ -39,23 +45,23 @@ export default function ImageMagnifier({ zoom = 2, src, style, ...props }) {
 
   return (
     <div
-      className="image__magnifier"
-      style={{ ...style, position: "relative" }}
+      className="relative"
       onMouseEnter={() => setTrack(true)}
       onMouseMove={(e) => track && handleMaginfier(e)}
       onMouseLeave={() => setTrack(false)}
     >
-      <img alt="magnifier" ref={target} src={src} {...props}></img>
+      <img
+        className={` ${className}`}
+        alt="magnifier"
+        ref={target}
+        src={src}
+        {...props}
+      />
       {track && (
         <div
           ref={maginfier}
-          className="maginfier"
+          className="absolute top-0 h-20 w-20 cursor-none"
           style={{
-            position: "absolute",
-            width: "80px",
-            height: "80px",
-            top: 0,
-            cursor: "none",
             border: "1px solid white",
             borderRadius: "50%",
             backgroundImage: `url(${src})`,

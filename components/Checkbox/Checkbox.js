@@ -53,7 +53,7 @@ Checkbox.Item = function Item({
         value={value}
         onChange={handleCheck}
         checked={checks.includes(value)}
-      ></input>
+      />
       {children}
     </>
   );

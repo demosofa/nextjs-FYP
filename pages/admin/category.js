@@ -40,7 +40,7 @@ export default function CrudCategory({ maxTree = 3 }) {
           left: "50%",
           transform: `translate(-50%, -50%)`,
         }}
-      ></Loading>
+      />
     );
 
   const handleAddCategory = async ({ name }) => {
@@ -272,7 +272,7 @@ function CategoryInput({
         onChange={(e) =>
           setInput((prev) => ({ ...prev, name: e.target.value }))
         }
-      ></input>
+      />
       <div className="flex items-center gap-6 border-t py-2 px-3 sm:gap-2">
         <button className={styles.btn} onClick={() => callback(input)}>
           Save
