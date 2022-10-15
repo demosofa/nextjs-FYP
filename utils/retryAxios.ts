@@ -16,7 +16,7 @@ export default function retryAxios(
     ) {
       try {
         const response = await axios.post(`${LocalApi}/auth/refreshToken`);
-        const accessToken = await response.data;
+        const accessToken = response.data;
         expireStorage.setItem("accessToken", accessToken);
         const config = {
           ...error.config,

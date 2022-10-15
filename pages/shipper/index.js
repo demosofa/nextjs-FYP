@@ -30,7 +30,7 @@ function Shipper() {
   };
   const dispatch = useDispatch();
   const router = useRouter();
-  const { data: orders, error } = useSWR(
+  const { data, error } = useSWR(
     {
       url: `${LocalApi}/order?page=${query.page}&sort=${query.sort}`,
     },
@@ -48,7 +48,7 @@ function Shipper() {
 
   const { mutate } = useSWRImmutable({ url: `${LocalApi}/shipper` }, fetcher);
 
-  if (!orders || error)
+  if (!data || error)
     return (
       <Loading
         style={{
@@ -96,11 +96,11 @@ function Shipper() {
             </tr>
           </thead>
           <tbody>
-            {orders.length ? (
-              orders.map((order) => (
+            {data.lstOrder.length ? (
+              data.lstOrder.map((order) => (
                 <tr key={order._id}>
                   <td>
-                    <Checkbox.Item value={order._id}></Checkbox.Item>
+                    <Checkbox.Item value={order._id} />
                   </td>
                   <td>{order._id}</td>
                   <td>{currencyFormat(order.total)}</td>
@@ -124,10 +124,10 @@ function Shipper() {
           </tbody>
         </table>
       </Checkbox>
-      {orders.length ? (
-        <div>
+      {data.lstOrder.length ? (
+        <div className="mt-8">
           <Pagination
-            totalPageCount={10}
+            totalPageCount={data.pageCounted}
             currentPage={query.page}
             setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
           >

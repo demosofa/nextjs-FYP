@@ -4,6 +4,26 @@ class SellerController {
   constructor(unit = UnitOfWork) {
     this.unit = new unit();
   }
+  compareYesterday = async (req, res) => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    try {
+      const income = await this.unit.Order.aggregate()
+        .match({ createdAt: { $gte: yesterday } })
+        .project({
+          day: { $dayOfMonth: "$validatedAt" },
+          sales: "$total",
+        })
+        .group({
+          _id: "$day",
+          total: { $sum: "$sales" },
+        })
+        .sort({ _id: 1 });
+      res.status(200).json(income);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  };
   todayValidated = async (req, res) => {
     const { page, sort } = req.query;
     const currentDate = new Date();

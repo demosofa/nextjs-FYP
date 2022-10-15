@@ -6,7 +6,7 @@ import { Loading, Slider } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { Role, dateFormat, currencyFormat } from "../../shared";
 import Head from "next/head";
-import { MyOrder } from "../../containers";
+import { MyOrder, ProductSlider } from "../../containers";
 import { useSelector } from "react-redux";
 import { useMediaContext } from "../../contexts/MediaContext";
 import styles from "../../styles/Home.module.scss";
@@ -95,49 +95,7 @@ function MyProfile() {
         <label>Recently Viewed Products</label>
         {recentlyViewed.length ? (
           <div className="relative">
-            <Slider
-              config={{
-                slides: {
-                  perView:
-                    device === Devices.pc
-                      ? 7
-                      : device === Devices.tablet
-                      ? 4
-                      : device === Devices.phone && 3,
-                  spacing: 20,
-                },
-              }}
-            >
-              <Slider.Arrow>
-                <Slider.Content className="p-4">
-                  {recentlyViewed?.map((item) => (
-                    <a
-                      key={item.title}
-                      href={item.url}
-                      className="card relative mt-2 h-fit min-h-0 !max-w-[140px] cursor-pointer !overflow-visible"
-                    >
-                      <div className={styles.price_tag}>
-                        <p className={styles.price_tag_price}>
-                          {currencyFormat(item.sale ? item.sale : item.price) ||
-                            "optional"}
-                        </p>
-                      </div>
-                      <div>
-                        <img
-                          alt="product"
-                          src={item.thumbnail}
-                          style={{ height: "170px", borderRadius: "10px" }}
-                        ></img>
-                        <label className="text-sm line-clamp-1">
-                          {item.title}
-                        </label>
-                        <span className="float-right">Sold: </span>
-                      </div>
-                    </a>
-                  ))}
-                </Slider.Content>
-              </Slider.Arrow>
-            </Slider>
+            <ProductSlider products={recentlyViewed} />
           </div>
         ) : (
           <label>You haven&apos; t visited any products</label>

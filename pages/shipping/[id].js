@@ -42,7 +42,11 @@ function ShippingProgress() {
   };
   const dispatch = useDispatch();
   const router = useRouter();
-  const { data: order, error } = useSWR(
+  const {
+    data: order,
+    error,
+    mutate,
+  } = useSWR(
     router.isReady
       ? {
           url: `${LocalApi}/order/${router.query.id}`,
@@ -97,12 +101,30 @@ function ShippingProgress() {
       if (auth === Role.guest) {
         setShowScanner(true);
       } else if (auth === Role.shipper || auth === Role.admin) {
+        const content = `Your order ${
+          order._id
+        } has moved to ${value.toUpperCase()} state `;
+        mutate(async (data) => {
+          await fetcher({
+            url: `${LocalApi}/order/${order._id}`,
+            method: "patch",
+            data: { status: value },
+          });
+          await fetcher({
+            url: `${LocalApi}/notify`,
+            method: "post",
+            data: {
+              to: order.customer,
+              content,
+            },
+          });
+          data.status = value;
+          return data;
+        }, false);
         channel.current.publish({
           name: "shipping",
           data: {
-            message: `Your order ${
-              order._id
-            } has moved to ${value.toUpperCase()} state `,
+            message: content,
             type: "link",
             href: `${LocalUrl}/shipping/${order._id}`,
           },
@@ -163,9 +185,6 @@ function ShippingProgress() {
               Show Scanner
             </button>
             <QrScanner
-              constraints={{
-                facingMode: "environment",
-              }}
               delay={500}
               onError={(err) => dispatch(addNotification({ message: err }))}
               onScan={handleScan}

@@ -1,10 +1,18 @@
 import { useRef, useCallback, DependencyList } from "react";
 
-export default function useObserver({callback, isMany = true, deps = [], options}:{
-  callback: (entry: IntersectionObserverEntry, observer: IntersectionObserver) => void, //function for handling each entry
-  isMany: boolean, //true or false if the target ref is Array or one
-  deps: DependencyList, //Array for useCallback dependencies
-  options?: IntersectionObserverInit, //config for object IntersectionObserver
+export default function useObserver({
+  callback,
+  isMany = true,
+  deps = [],
+  options,
+}: {
+  callback: (
+    entry: IntersectionObserverEntry,
+    observer: IntersectionObserver
+  ) => void; //function for handling each entry
+  isMany: boolean; //true or false if the target ref is Array or one
+  deps: DependencyList; //Array for useCallback dependencies
+  options?: IntersectionObserverInit; //config for object IntersectionObserver
 }) {
   const observer = useRef<IntersectionObserver>(null);
   return useCallback((nodes: any) => {
@@ -23,5 +31,5 @@ export default function useObserver({callback, isMany = true, deps = [], options
         ? [...nodes.children].forEach((node) => observer.current.observe(node))
         : observer.current.observe(nodes);
     }
-  }, [callback, isMany, options, ...deps]);
+  }, deps);
 }

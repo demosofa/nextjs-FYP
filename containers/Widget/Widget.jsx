@@ -8,10 +8,16 @@ import {
   HiOutlineArrowNarrowDown,
   HiOutlineArrowNarrowUp,
 } from "react-icons/hi";
-import styles from "./featuredinfo.module.scss";
+import styles from "./widget.module.scss";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 
-export default function FeaturedInfo({ children, url, ...props }) {
+export default function Widget({
+  children,
+  url,
+  description,
+  className,
+  ...props
+}) {
   const [perc, setPerc] = useState();
   const fetcher = async (config) => {
     retryAxios(axios);
@@ -41,29 +47,26 @@ export default function FeaturedInfo({ children, url, ...props }) {
   });
 
   return (
-    <div className={`${styles.featuredItem}`} {...props}>
-      <span className={`${styles.featuredTitle}`}>{children}</span>
+    <div className={`${styles.widgetItem} ${className}`} {...props}>
+      <span className={`${styles.widgetTitle}`}>{children}</span>
       {data?.length > 1 ? (
-        <div className={`${styles.featuredMoneyContainer}`}>
-          <span className={`${styles.featuredMoney}`}>{data[1].total}</span>
-          <span className={`${styles.featuredMoneyRate}`}>
+        <div className={`${styles.widgetNumberContainer}`}>
+          <span className={`${styles.widgetNumber}`}>{data[1].total}</span>
+          <span className={`${styles.widgetNumberRate}`}>
             %{Math.floor(perc)}{" "}
             {perc < 0 ? (
               <HiOutlineArrowNarrowDown
-                className={`${styles.featuredIcon} ${styles.negative}`}
+                className={`${styles.widgetIcon} ${styles.negative}`}
               />
             ) : (
-              <HiOutlineArrowNarrowUp className={`${styles.featuredIcon}`} />
+              <HiOutlineArrowNarrowUp className={`${styles.widgetIcon}`} />
             )}
           </span>
         </div>
       ) : (
-        <div
-          className="skeleton"
-          style={{ height: "40px", width: "30%" }}
-        ></div>
+        <div className="skeleton h-10 w-[30%]" />
       )}
-      <span className={`${styles.featuredSub}`}>Compare to last month</span>
+      <span className={`${styles.widgetSub}`}>{description}</span>
     </div>
   );
 }

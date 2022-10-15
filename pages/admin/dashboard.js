@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { Loading } from "../../components";
-import { FeaturedInfo } from "../../containers";
+import { Widget } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
 import Head from "next/head";
@@ -59,10 +59,18 @@ function Dashboard() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex justify-around">
-        <FeaturedInfo url={`${LocalApi}/admin/income`}>Revenue</FeaturedInfo>
-        <FeaturedInfo url={`${LocalApi}/admin/profitMonthly`}>
+        <Widget
+          url={`${LocalApi}/admin/income`}
+          description="Compare to last month"
+        >
+          Revenue
+        </Widget>
+        <Widget
+          url={`${LocalApi}/admin/profitMonthly`}
+          description="Compare to last month"
+        >
           Profit
-        </FeaturedInfo>
+        </Widget>
       </div>
       <div className="manage_table">
         <table>

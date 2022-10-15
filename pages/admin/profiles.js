@@ -59,10 +59,22 @@ export default function ManageProfiles() {
   const handleBlockUser = (index) => {
     mutate(async (data) => {
       try {
+        const profile = data.lstProfile[index];
         await fetcher({
-          url: `${LocalApi}/admin/profiles/${data.lstProfile[index]._id}`,
-          data: { blocked: !data.lstProfile[index].blocked },
+          url: `${LocalApi}/admin/profiles/${profile._id}`,
+          data: { blocked: !profile.blocked },
           method: "put",
+        });
+        const content = `Your Profile has been ${
+          profile.blocked ? "unblocked" : "blocked"
+        }`;
+        await fetcher({
+          url: `${LocalApi}/notify`,
+          method: "post",
+          data: {
+            to: profile._id,
+            content,
+          },
         });
         data.lstProfile[index].blocked = true;
       } catch (error) {

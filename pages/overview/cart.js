@@ -138,7 +138,7 @@ export default function Cart() {
             <dt>Sub Total</dt>
             <dd>{currencyFormat(cart.total)}</dd>
             <dt>Shipping fee</dt>
-            <dd>{currencyFormat(cart.quantity * 0.5)}</dd>
+            <dd>{currencyFormat(cart.quantity * 1000)}</dd>
           </dl>
           <dl className="total">
             <dt>Total</dt>

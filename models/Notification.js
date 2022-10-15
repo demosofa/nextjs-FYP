@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Notification = new Schema(
   {
-    from: { type: String, required: true },
-    to: { type: String, required: true },
+    from: { type: Schema.Types.ObjectId, ref: "Account", required: true },
+    to: { type: Schema.Types.ObjectId, ref: "Account", required: true },
     content: { type: String, required: true },
     isRead: { type: Boolean, default: false },
   },

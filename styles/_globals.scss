@@ -58,6 +58,10 @@ a {
 	}
 }
 
+.main_btn{
+	@apply max-w-fit cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white shadow-md transition-all hover:px-4 hover:py-3 hover:text-sm 
+}
+
 .card {
   // margin: 1rem;
   // padding: 1.5rem;

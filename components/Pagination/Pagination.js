@@ -6,9 +6,10 @@ const Kits = createContext();
 
 export default function Pagination({
   totalPageCount,
-  children,
   currentPage,
   setCurrentPage,
+  children,
+  className,
   ...props
 }) {
   return (
@@ -19,7 +20,7 @@ export default function Pagination({
         totalPageCount,
       }}
     >
-      <div className={styles.container} {...props}>
+      <div className={`${styles.container} ${className}`} {...props}>
         {children}
       </div>
     </Kits.Provider>

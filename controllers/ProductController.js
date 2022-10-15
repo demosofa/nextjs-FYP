@@ -29,8 +29,9 @@ class ProductController {
   };
 
   getAll = async (req, res) => {
-    const { page, search, sort, category } = req.query;
+    let { page, search, sort, category } = req.query;
     let filterOptions = {};
+    if (!page) page = 1;
     if (search)
       filterOptions = {
         ...filterOptions,
@@ -40,26 +41,33 @@ class ProductController {
       const result = await this.unit.Category.getOne({ name: category }).lean();
       filterOptions = { ...filterOptions, categories: result._id };
     }
-    const products = await this.unit.Product.getAll(filterOptions)
-      .where("status", "active")
-      .skip((page - 1) * 10)
-      .limit(10)
+    const products = await this.unit.Product.aggregate()
+      .match({
+        status: "active",
+        ...filterOptions,
+      })
       .sort({
         [sort]: "asc",
       })
-      .select([
-        "_id",
-        "images",
-        "categories",
-        "title",
-        "rating",
-        "time",
-        "sale",
-        "price",
-      ])
-      .populate({ path: "images", select: "url" })
-      .populate("categories", "name")
-      .lean();
+      .skip((page - 1) * 10)
+      .limit(10)
+      .project({
+        image: { $first: "$images" },
+        title: 1,
+        avgRating: 1,
+        price: 1,
+        sale: 1,
+        time: 1,
+      })
+      .lookup({
+        from: "files",
+        localField: "image",
+        foreignField: "_id",
+        as: "image",
+      })
+      .unwind("image")
+      .addFields({ thumbnail: "$image.url" })
+      .project({ image: 0 });
     const productCounted = await this.unit.Product.countData({
       status: "active",
       ...filterOptions,

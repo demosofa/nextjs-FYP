@@ -15,7 +15,11 @@ export default function Variants() {
     <div className={styles.container}>
       <div className={styles.title}>
         <label>Variant</label>
-        <button type="button" onClick={() => dispatch(addVariant())}>
+        <button
+          className="main_btn"
+          type="button"
+          onClick={() => dispatch(addVariant())}
+        >
           Add Variant
         </button>
       </div>

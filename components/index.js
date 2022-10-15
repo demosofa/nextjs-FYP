@@ -19,6 +19,7 @@ export { default as Increment } from "./Increment/Increment";
 export { default as Slider } from "./Slider/Slider";
 export { default as Timer } from "./Timer/Timer";
 export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb";
+export { default as QRreader } from "./QRreader/QRreader";
 
 export {
   Animation,

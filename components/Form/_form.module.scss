@@ -48,10 +48,10 @@
     text-transform: capitalize;
     font-weight: 600;
     cursor: pointer;
-    border: 1px solid #e8eced;
-    border-radius: 15px;
+    border: 2px solid #e8eced;
+    border-radius: 12px;
     text-align: center;
-    padding: 7px;
+    padding: 8px 10px;
     &:hover {
       background: linear-gradient(to right, #F98340, #F71442);
       transition: all 0.15s linear;

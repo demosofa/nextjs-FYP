@@ -85,7 +85,7 @@ function ProductCRUD() {
       </Head>
       <div className="flex flex-wrap gap-4">
         <button
-          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white"
+          className="main_btn"
           onClick={() => router.push(`product/create`)}
         >
           Create

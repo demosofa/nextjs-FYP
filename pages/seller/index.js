@@ -3,6 +3,7 @@ import useSWRImmutable from "swr/immutable";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { Checkbox, Loading, Pagination } from "../../components";
+import { Widget } from "../../containers";
 import { expireStorage, retryAxios } from "../../utils";
 import { useState } from "react";
 import QrScanner from "react-qr-scanner";
@@ -10,6 +11,7 @@ import dynamic from "next/dynamic";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
 import { currencyFormat } from "../../shared";
+import { useMediaContext } from "../../contexts/MediaContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -20,6 +22,7 @@ function SellerPage() {
   const [viewOrder, setViewOrder] = useState();
   const [checkOrder, setCheckOrder] = useState([]);
   const [scannedUrl, setScannedUrl] = useState();
+  const { device, Devices } = useMediaContext();
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -63,11 +66,13 @@ function SellerPage() {
 
   const handleSubmit = async () => {
     try {
-      await fetcher({
-        url: `${LocalApi}/seller/${scannedUrl}`,
-        method: "patch",
-      });
-      setViewOrder(null);
+      if (checkOrder.length === viewOrder.orderItems.length) {
+        await fetcher({
+          url: `${LocalApi}/seller/${scannedUrl}`,
+          method: "patch",
+        });
+        setViewOrder(null);
+      } else throw new Error("You are missing checked items");
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
@@ -91,54 +96,62 @@ function SellerPage() {
         <meta name="description" content="Seller page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <button
-        className="max-w-fit cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white"
-        onClick={() => setShowScanner(true)}
-      >
+      <button className="main_btn" onClick={() => setShowScanner(true)}>
         Get Shipper order information
       </button>
-      <div className="manage_table">
-        <table>
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Id</th>
-              <th>total</th>
-              <th>Validated At</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.lstValidated.length ? (
-              data.lstValidated.map((order, index) => (
-                <tr key={order._id}>
-                  <td>{index + 1}</td>
-                  <td>{order._id}</td>
-                  <td>{currencyFormat(order.total)}</td>
-                  <td>
-                    {new Date(order.validatedAt).toLocaleString("en-US", {
-                      hour: "numeric",
-                      minute: "numeric",
-                      hour12: true,
-                      timeZone: "Asia/Ho_Chi_Minh",
-                    })}
-                  </td>
-                  <td>
-                    <button onClick={() => setViewOrderItem(order.orderItems)}>
-                      View List item
-                    </button>
+      <div>
+        <div className="manage_table">
+          <table>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Id</th>
+                <th>total</th>
+                <th>Validated At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.lstValidated.length ? (
+                data.lstValidated.map((order, index) => (
+                  <tr key={order._id}>
+                    <td>{index + 1}</td>
+                    <td>{order._id}</td>
+                    <td>{currencyFormat(order.total)}</td>
+                    <td>
+                      {new Date(order.validatedAt).toLocaleString("en-US", {
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => setViewOrderItem(order.orderItems)}
+                      >
+                        View List item
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center">
+                    Currently, seller has yet validated any shipper order
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="text-center">
-                  Currently, seller has yet validated any shipper order
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* <Widget
+          className="max-w-[200px]"
+          url={`${LocalApi}/seller/income`}
+          description="Compare to yester"
+        >
+          Sale Status
+        </Widget> */}
       </div>
 
       <Pagination
@@ -199,9 +212,6 @@ function SellerPage() {
         <>
           <div className="backdrop" onClick={() => setShowScanner(false)}></div>
           <QrScanner
-            constraints={{
-              facingMode: "environment",
-            }}
             delay={500}
             onError={(err) => dispatch(addNotification({ message: err }))}
             onScan={handleScan}

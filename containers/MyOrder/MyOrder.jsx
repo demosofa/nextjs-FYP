@@ -85,10 +85,7 @@ export default function MyOrder() {
           { value: "cancel", label: "Cancel" },
         ]}
       />
-      <div
-        className="manage_table relative w-full overflow-x-auto"
-        style={{ maxWidth: "none" }}
-      >
+      <div className="manage_table relative min-h-max w-full overflow-x-auto">
         {!data || error ? (
           <Loading
             style={{
@@ -130,7 +127,7 @@ export default function MyOrder() {
                         View order items
                       </button>
                       {order.status === "pending" && (
-                        <button onClick={() => setDisplayCancel(order)}>
+                        <button onClick={() => setDisplayCancel(order._id)}>
                           Cancel Order
                         </button>
                       )}
@@ -154,13 +151,9 @@ export default function MyOrder() {
               onClick={() => setDisplayCancel(null)}
             ></div>
             <Form className="form_center">
-              <Form.Title>
-                Are you sure to cancel {displayCancel._id}
-              </Form.Title>
+              <Form.Title>Are you sure to cancel {displayCancel}</Form.Title>
               <Form.Item>
-                <Form.Button
-                  onClick={() => handleCancelOrder(displayCancel._id)}
-                >
+                <Form.Button onClick={() => handleCancelOrder(displayCancel)}>
                   YES
                 </Form.Button>
                 <Form.Button onClick={() => setDisplayCancel(null)}>

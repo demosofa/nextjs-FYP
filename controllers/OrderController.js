@@ -24,7 +24,11 @@ class OrderController {
         select: ["username"],
       })
       .lean();
-    return res.status(200).json(lstOrder);
+    const orderCounted = await this.unit.Order.countData({
+      status: "pending",
+    }).lean();
+    const pageCounted = Math.ceil(orderCounted / 10);
+    return res.status(200).json({ lstOrder, pageCounted });
   };
   getQR = async (req, res) => {
     const url = `${req.query.id}/${req.user.accountId}`;

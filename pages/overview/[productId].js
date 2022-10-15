@@ -12,7 +12,7 @@ import {
   Breadcrumb,
   Form,
 } from "../../components";
-import { Comment, Rating } from "../../containers";
+import { Comment, ProductSlider, Rating } from "../../containers";
 import { expireStorage, retryAxios, Validate } from "../../utils";
 import { useMediaContext } from "../../contexts/MediaContext";
 import { addCart } from "../../redux/reducer/cartSlice";
@@ -20,6 +20,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { addViewed } from "../../redux/reducer/recentlyViewedSlice";
 import Link from "next/link";
 import { currencyFormat } from "../../shared";
+import { useObserver } from "../../hooks";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -38,6 +39,8 @@ export default function Overview({ product }) {
   const [quantity, setQuantity] = useState(1);
   const [address, setAddress] = useState("");
   const [display, setDisplay] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [similiarProducts, setSimiliarProducts] = useState([]);
   const [options, setOptions] = useState([]);
   const targetVariation = useMemo(() => {
     const index = product.variations.findIndex((item) =>
@@ -49,6 +52,19 @@ export default function Overview({ product }) {
   }, [options, product.variations]);
 
   const { device, Devices } = useMediaContext();
+  const observerRef = useObserver({
+    isMany: false,
+    callback: async (_, observer) => {
+      if (!loading && !similiarProducts.length) {
+        setLoading(true);
+        const response = await axios.get(`${LocalApi}/product/all`, {
+          params: { category: product.categories.at(-1).name },
+        });
+        setSimiliarProducts(response.data.products);
+        setLoading(false);
+      } else observer.disconnect();
+    },
+  });
 
   const dispatch = useDispatch();
   const generateCart = () => {
@@ -287,6 +303,11 @@ export default function Overview({ product }) {
         <Rating url={`${LocalApi}/rating/${product._id}`} />
 
         <Comment url={`${LocalApi}/product/${product._id}/comment`} />
+        <div ref={observerRef} className="w-full">
+          {!loading && similiarProducts?.length ? (
+            <ProductSlider products={similiarProducts} />
+          ) : null}
+        </div>
 
         {display && (
           <>

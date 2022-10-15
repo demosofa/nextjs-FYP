@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Badge, Dropdown, Search } from "../../components";
+import { Notification } from "../../containers";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { FaBell } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import styles from "./Navbar.module.css";
 import { useMemo, useState } from "react";
@@ -59,7 +61,18 @@ export default function Navbar({ arrLink }) {
       </div>
       <div className={styles.bar}>
         {localStorage.getItem("accessToken") && (
-          <Link href="/profile">My Profile</Link>
+          <>
+            <Link href="/profile">My Profile</Link>
+            <Dropdown
+              icon={<FaBell color="white" />}
+              hoverable={true}
+              clickable={false}
+            >
+              <Dropdown.Content>
+                <Notification />
+              </Dropdown.Content>
+            </Dropdown>
+          </>
         )}
         <RouterAuth />
         <Link href="/overview/cart">

@@ -9,3 +9,4 @@ export { default as admin } from "./AdminController";
 export { default as rate } from "./RateController";
 export { default as seller } from "./SellerController";
 export { default as shipper } from "./ShipperController";
+export { default as notification } from "./NotificationController";
