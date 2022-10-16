@@ -1,8 +1,6 @@
-export default function dateFormat(date) {
-  return new Date(date)
-    .toISOString()
-    .toLocaleString("en-US", {
-      timeZone: "Asia/Ho_Chi_Minh",
-    })
-    .split("T")[0];
+import { format } from "date-fns";
+
+export default function dateFormat(date, includeTime = false) {
+  date = format(new Date(date), "dd/MM/yyyy hh:mm aaaaa'm'");
+  return includeTime ? date : date.split(" ")[0];
 }

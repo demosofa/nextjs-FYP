@@ -4,7 +4,7 @@ import Head from "next/head";
 import Select from "react-select";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Pagination, Container, Search, Loading } from "../../components";
+import { Pagination, Search, Loading } from "../../components";
 import { expireStorage, retryAxios } from "../../utils";
 import { useAuthLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
@@ -229,14 +229,14 @@ function Remove({ index, product, setProducts, setRemove }) {
   };
   return (
     <>
-      <Container.BackDrop onClick={(e) => setRemove(null)}></Container.BackDrop>
-      <Container.MiddleInner className="form_center">
+      <div className="backdrop" onClick={(e) => setRemove(null)}></div>
+      <div className="form_center">
         <label>{`Are you sure to Remove ${product.title}?`}</label>
         <div className="flex gap-3">
           <button onClick={handleRemove}>Yes</button>
           <button onClick={() => setRemove(null)}>No</button>
         </div>
-      </Container.MiddleInner>
+      </div>
     </>
   );
 }

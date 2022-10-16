@@ -192,16 +192,22 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
           <div className={styles.tab_container}>
             {currentCategory.name}
             {!toggle.edit && (
-              <Dropdown icon={<BiDotsVertical />} hoverable={true}>
+              <Dropdown component={<BiDotsVertical />} hoverable={true}>
                 <Dropdown.Content className="right-0">
                   <div
+                    className="text-black hover:bg-orange-400 hover:text-white"
                     onClick={() =>
                       setToggle((prev) => ({ ...prev, edit: !prev.edit }))
                     }
                   >
                     Edit
                   </div>
-                  <div onClick={handleDelete}>Delete</div>
+                  <div
+                    className="text-black hover:bg-orange-400 hover:text-white"
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </div>
                 </Dropdown.Content>
               </Dropdown>
             )}

@@ -85,10 +85,13 @@ export default function ManageOrder() {
                 <dt className="font-bold">Created At:</dt>
                 <dd>{dateFormat(order.createdAt)}</dd>
               </dl>
-              <Dropdown icon={<BiDownArrow />}>
+              <Dropdown component={<BiDownArrow />}>
                 <Dropdown.Content className="!relative">
                   {order.orderItems.map((item) => (
-                    <div key={item._id} className="flat_dl">
+                    <div
+                      key={item._id}
+                      className="flat_dl hover:border-2 hover:border-orange-400"
+                    >
                       <dl>
                         <dt className="font-semibold">Name:</dt>
                         <dd className="line-clamp-1">{item.title}</dd>

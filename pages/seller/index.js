@@ -2,11 +2,10 @@ import axios from "axios";
 import useSWRImmutable from "swr/immutable";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { Checkbox, Loading, Pagination } from "../../components";
+import { Checkbox, Loading, Pagination, QRreader } from "../../components";
 import { Widget } from "../../containers";
 import { expireStorage, retryAxios } from "../../utils";
 import { useState } from "react";
-import QrScanner from "react-qr-scanner";
 import dynamic from "next/dynamic";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
@@ -49,13 +48,12 @@ function SellerPage() {
   );
 
   const handleScan = async (scanData) => {
-    if (scanData && scanData !== "") {
+    if (scanData) {
       try {
         const result = await fetcher({
-          url: `${LocalApi}/seller/${scanData.text}`,
+          url: `${LocalApi}/seller/${scanData}`,
         });
-        // window.location.href = scanData.text;
-        setScannedUrl(scanData.text);
+        setScannedUrl(scanData);
         setViewOrder(result);
         setShowScanner(false);
       } catch (error) {
@@ -96,7 +94,13 @@ function SellerPage() {
         <meta name="description" content="Seller page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <button className="main_btn" onClick={() => setShowScanner(true)}>
+      <button
+        className="main_btn"
+        onClick={() => {
+          setShowScanner(true);
+          setViewOrder(null);
+        }}
+      >
         Get Shipper order information
       </button>
       <div>
@@ -211,11 +215,9 @@ function SellerPage() {
       {showScanner && (
         <>
           <div className="backdrop" onClick={() => setShowScanner(false)}></div>
-          <QrScanner
-            delay={500}
-            onError={(err) => dispatch(addNotification({ message: err }))}
-            onScan={handleScan}
-            className="form_center"
+          <QRreader
+            onScanSuccess={handleScan}
+            className="form_center w-full max-w-lg !p-0 sm:max-w-none"
           />
         </>
       )}
@@ -260,7 +262,9 @@ function SellerPage() {
               ))}
             </tbody>
           </table>
-          <button onClick={handleSubmit}>Validate</button>
+          <button className="main_btn mt-2" onClick={handleSubmit}>
+            Validate
+          </button>
         </Checkbox>
       )}
     </div>

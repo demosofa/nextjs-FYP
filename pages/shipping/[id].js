@@ -6,12 +6,11 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { expireStorage, retryAxios } from "../../utils";
 import { convertTime } from "../../shared";
-import { Loading } from "../../components";
+import { Loading, QRreader } from "../../components";
 import { ProgressBar } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useEffect, useRef, useState } from "react";
 import { Role } from "../../shared";
-import QrScanner from "react-qr-scanner";
 import Head from "next/head";
 import VnPay from "../../containers/VnPay/VnPay";
 import { useAblyContext } from "../../contexts/AblyContext";
@@ -26,8 +25,10 @@ function ShippingProgress() {
   const [showScanner, setShowScanner] = useState(false);
   const auth = useState(() => {
     const accessToken = expireStorage.getItem("accessToken");
-    const { role } = decoder(accessToken);
-    return role;
+    if (accessToken) {
+      const { role } = decoder(accessToken);
+      return role;
+    }
   })[0];
   const fetcher = async (config) => {
     retryAxios(axios);
@@ -85,11 +86,12 @@ function ShippingProgress() {
   };
 
   const handleScan = async (scanData) => {
-    if (scanData && scanData !== "") {
+    if (scanData) {
       try {
         const result = await fetcher({
-          url: `${LocalApi}/order/${scanData.text}`,
+          url: `${LocalApi}/order/${scanData}`,
         });
+        setShowScanner(false);
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
@@ -184,11 +186,9 @@ function ShippingProgress() {
             <button onClick={() => setShowScanner((prev) => !prev)}>
               Show Scanner
             </button>
-            <QrScanner
-              delay={500}
-              onError={(err) => dispatch(addNotification({ message: err }))}
-              onScan={handleScan}
-              className="h-80 w-80"
+            <QRreader
+              onScanSuccess={handleScan}
+              className="w-full max-w-lg !p-0 sm:max-w-none"
             />
           </div>
         </>

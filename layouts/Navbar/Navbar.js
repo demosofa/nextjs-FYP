@@ -41,15 +41,14 @@ export default function Navbar({ arrLink }) {
         {linkDrop.length ? (
           <Dropdown
             className="pl-3"
-            where="left"
-            title={<div className="text-white">Other</div>}
+            component={<div className="text-white">Other</div>}
           >
             <Dropdown.Content className="right-0">
               {linkDrop?.map(
                 (link, index) =>
                   link.title && (
                     <Link key={index} href={link.path}>
-                      <a className="whitespace-nowrap text-black">
+                      <a className="whitespace-nowrap text-center text-black hover:bg-orange-400 hover:text-white">
                         {link.title}
                       </a>
                     </Link>
@@ -63,15 +62,7 @@ export default function Navbar({ arrLink }) {
         {localStorage.getItem("accessToken") && (
           <>
             <Link href="/profile">My Profile</Link>
-            <Dropdown
-              icon={<FaBell color="white" />}
-              hoverable={true}
-              clickable={false}
-            >
-              <Dropdown.Content>
-                <Notification />
-              </Dropdown.Content>
-            </Dropdown>
+            <Notification component={<FaBell color="white" />} />
           </>
         )}
         <RouterAuth />

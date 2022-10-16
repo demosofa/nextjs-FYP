@@ -11,11 +11,12 @@ class OrderController {
     return res.status(200).json(order);
   };
   lstOrder = async (req, res) => {
-    const { page, sort } = req.query;
+    let { page, sort, limit } = req.query;
+    if (!limit) limit = 10;
     const lstOrder = await this.unit.Order.getAll()
       .where("status", "pending")
-      .skip((page - 1) * 10)
-      .limit(10)
+      .skip((page - 1) * limit)
+      .limit(limit)
       .sort({
         [sort]: "asc",
       })
@@ -27,7 +28,7 @@ class OrderController {
     const orderCounted = await this.unit.Order.countData({
       status: "pending",
     }).lean();
-    const pageCounted = Math.ceil(orderCounted / 10);
+    const pageCounted = Math.ceil(orderCounted / limit);
     return res.status(200).json({ lstOrder, pageCounted });
   };
   getQR = async (req, res) => {

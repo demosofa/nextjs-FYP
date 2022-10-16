@@ -1,10 +1,8 @@
 import { useState } from "react";
-import Icon from "../Icon/Icon";
 import styles from "./dropdown.module.scss";
 
 export default function Dropdown({
-  title,
-  icon,
+  component,
   isShow = false,
   clickable = true,
   hoverable = false,
@@ -33,8 +31,7 @@ export default function Dropdown({
         if (hoverable) setToggle(false);
       }}
     >
-      {title && <span>{title}</span>}
-      {icon && <Icon>{icon}</Icon>}
+      {component}
       {toggle && children}
     </div>
   );

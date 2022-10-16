@@ -170,9 +170,10 @@ function CommentTab({
       <div className={styles.tab_container}>
         <Avatar text={currentComment.author.username}></Avatar>
         {isAuthor && !toggle.edit && (
-          <Dropdown icon={<BiDotsVertical />} hoverable={true}>
+          <Dropdown component={<BiDotsVertical />} hoverable={true}>
             <Dropdown.Content className="right-0">
               <div
+                className="text-black hover:bg-orange-400 hover:text-white"
                 onClick={() =>
                   setToggle((prev) => ({ ...prev, edit: !prev.edit }))
                 }

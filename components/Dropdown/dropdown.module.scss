@@ -14,14 +14,7 @@
     > * {
       width: 100%;
       border-radius: inherit;
-      background-color: transparent;
-      padding: 2px 4px;
-      @include flex(0, column, center);
-
-      &:hover {
-        background-color: var(--light-orange);
-        color: white
-      }
+      padding: 3px 5px;
     }
   }
 }

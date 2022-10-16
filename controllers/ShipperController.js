@@ -5,16 +5,17 @@ class ShipperController {
     this.unit = new unit();
   }
   MyShipping = async (req, res) => {
-    const { page, sort, filter } = req.query;
+    let { page, sort, filter, limit } = req.query;
     let filterOptions = { shipper: req.user.accountId };
     if (filter)
       filterOptions = {
         ...filterOptions,
         status: filter,
       };
+    if (!limit) limit = 10;
     const lstShipping = await this.unit.Order.getAll(filterOptions)
-      .skip((page - 1) * 10)
-      .limit(10)
+      .skip((page - 1) * limit)
+      .limit(limit)
       .sort({
         [sort]: "asc",
       })
@@ -32,7 +33,7 @@ class ShipperController {
     const countMyShipping = await this.unit.Order.countData(
       filterOptions
     ).lean();
-    const pageCounted = Math.ceil(countMyShipping / 10);
+    const pageCounted = Math.ceil(countMyShipping / limit);
     return res.status(200).json({ lstShipping, pageCounted });
   };
   checkQR = async (req, res) => {

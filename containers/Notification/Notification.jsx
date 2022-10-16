@@ -2,14 +2,14 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import useSWRInfinite from "swr/infinite";
-import { expireStorage, retryAxios } from "../../utils";
-import { dateFormat } from "../../shared";
+import { expireStorage, retryAxios, timeAgo } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Loading } from "../../components";
+import { Loading, Dropdown } from "../../components";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
+const PAGE_SIZE = 10;
 
-export default function Notification({ className, ...props }) {
+export default function Notification({ className, component, ...props }) {
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -28,6 +28,7 @@ export default function Notification({ className, ...props }) {
       url: `${LocalApi}/notify`,
       params: {
         page: size + 1,
+        limit: PAGE_SIZE,
       },
     }),
     fetcher,
@@ -39,7 +40,7 @@ export default function Notification({ className, ...props }) {
       },
     }
   );
-  console.log(data);
+
   const notifications = data ? [].concat(...data) : [];
   const handleRead = (index) => {
     mutate(async (data) => {
@@ -63,31 +64,47 @@ export default function Notification({ className, ...props }) {
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
 
-  if (isLoadingInitialData) return <Loading />;
+  if (isLoadingInitialData) return <Loading.Dots />;
   return (
-    <div className={`${className}`}>
-      {notifications.length
-        ? notifications.map((item, index) => (
-            <div key={index} onClick={() => handleRead(item._id)} {...props}>
-              <label>
-                <span>from {item.from.username}</span>
-                <span>at {dateFormat(item.createdAt)}</span>
-              </label>
-              <p>{item.content}</p>
-            </div>
-          ))
-        : null}
+    <Dropdown component={component} hoverable={true} clickable={false}>
+      <Dropdown.Content className="right-0">
+        {notifications.length
+          ? notifications.map((item, index) => (
+              <div
+                className="w-full hover:shadow-md"
+                key={index}
+                onClick={() => handleRead(item._id)}
+                {...props}
+              >
+                <label>
+                  from{" "}
+                  <span className="text-base font-medium">
+                    {item.from.username}
+                  </span>
+                </label>
+                <label>
+                  {" "}
+                  at{" "}
+                  <span className="text-base font-medium">
+                    {timeAgo(item.createdAt)}
+                  </span>
+                </label>
+                <p>{item.content}</p>
+              </div>
+            ))
+          : null}
 
-      <button
-        disabled={isLoadingMore || isReachingEnd}
-        onClick={() => setSize(size + 1)}
-      >
-        {isLoadingMore
-          ? "loading..."
-          : isReachingEnd
-          ? "no more notifications"
-          : "load more"}
-      </button>
-    </div>
+        <button
+          disabled={isLoadingMore || isReachingEnd}
+          onClick={() => setSize(size + 1)}
+        >
+          {isLoadingMore
+            ? "loading..."
+            : isReachingEnd
+            ? "no more notifications"
+            : "load more"}
+        </button>
+      </Dropdown.Content>
+    </Dropdown>
   );
 }

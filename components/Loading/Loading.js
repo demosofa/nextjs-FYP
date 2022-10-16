@@ -3,7 +3,7 @@ import styles from "./_loading.module.scss";
 export default function Loading({ className, ...props }) {
   return (
     <div {...props}>
-      <div className={styles.load_rotate + ` ${className}`}></div>
+      <div className={styles.rotate + ` ${className}`}></div>
     </div>
   );
 }
@@ -24,6 +24,19 @@ Loading.Text = function LoadingText({
           {char}
         </div>
       ))}
+    </div>
+  );
+};
+
+Loading.Dots = function LoadingDots() {
+  return (
+    <div className="wrapper">
+      <span className="dot"></span>
+      <div className="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
   );
 };

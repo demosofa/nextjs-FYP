@@ -9,17 +9,18 @@ class AdminController {
 
   getAllOrder = async (req, res) => {
     try {
-      const { page, sort, filter } = req.query;
+      let { page, sort, filter, limit } = req.query;
       let filterOptions = {};
       if (filter)
         filterOptions = {
           ...filterOptions,
           status: filter,
         };
+      if (!limit) limit = 10;
 
       const lstOrder = await this.unit.Order.getAll(filterOptions)
-        .skip((page - 1) * 10)
-        .limit(10)
+        .skip((page - 1) * limit)
+        .limit(limit)
         .sort({
           [sort]: "asc",
         })
@@ -27,7 +28,7 @@ class AdminController {
         .lean();
       if (!lstOrder) throw new Error("Fail to load profiles");
       const countOrder = await this.unit.Order.countData(filterOptions).lean();
-      const pageCounted = Math.ceil(countOrder / 10);
+      const pageCounted = Math.ceil(countOrder / limit);
       return res.status(200).json({ lstOrder, pageCounted });
     } catch (error) {
       return res.status(500).json(error);
@@ -55,7 +56,7 @@ class AdminController {
 
   getAllProfile = async (req, res) => {
     try {
-      const { search, page, sort, filter } = req.query;
+      let { search, page, sort, filter, limit } = req.query;
       let filterOptions = { role: { $ne: Role.admin } };
       if (search)
         filterOptions = {
@@ -67,9 +68,10 @@ class AdminController {
           ...filterOptions,
           status: filter,
         };
+      if (!limit) limit = 10;
       const lstProfile = await this.unit.Account.getAll(filterOptions)
-        .skip((page - 1) * 10)
-        .limit(10)
+        .skip((page - 1) * limit)
+        .limit(limit)
         .sort({
           [sort]: "asc",
         })
@@ -79,7 +81,7 @@ class AdminController {
       const countProfiles = await this.unit.Account.countData(
         filterOptions
       ).lean();
-      const pageCounted = Math.ceil(countProfiles / 10);
+      const pageCounted = Math.ceil(countProfiles / limit);
       return res.status(200).json({ lstProfile, pageCounted });
     } catch (error) {
       return res.status(500).json({ message: error });
@@ -155,6 +157,24 @@ class AdminController {
         .group({ _id: "$month", total: { $sum: "$profit" } })
         .sort({ _id: 1 });
       return res.status(200).json(profit);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  };
+
+  newUsers = async (req, res) => {
+    const previousMonth = new Date(
+      new Date().setMonth(new Date().getMonth() - 2)
+    );
+    try {
+      const accounts = await this.unit.Account.aggregate()
+        .match({ createdAt: { $gte: previousMonth } })
+        .project({
+          month: { $month: "$createdAt" },
+        })
+        .group({ _id: "$month", total: { $sum: 1 } })
+        .sort({ _id: 1 });
+      return res.status(200).json(accounts);
     } catch (error) {
       return res.status(500).json(error);
     }

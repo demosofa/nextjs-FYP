@@ -1,13 +1,11 @@
 import Animation from "./Animation/Animation";
 import Avatar from "./Avatar/Avatar";
-import Carousel from "./Carousel/Carousel";
 import Checkbox from "./Checkbox/Checkbox";
 import FileUpload from "./FileUpload/FileUpload";
 import ImageMagnifier from "./ImageMagnifier/ImageMagnifier";
 import Pagination from "./Pagination/Pagination";
 import TagsInput from "./TagsInput/TagsInput";
 import ToastMessage from "./ToastMessage/ToastMessage";
-export { default as Container } from "./Container/Container";
 export { default as Icon } from "./Icon/Icon";
 export { default as Loading } from "./Loading/Loading";
 export { default as Badge } from "./Badge/Badge";
@@ -24,7 +22,6 @@ export { default as QRreader } from "./QRreader/QRreader";
 export {
   Animation,
   Avatar,
-  Carousel,
   Checkbox,
   FileUpload,
   ImageMagnifier,

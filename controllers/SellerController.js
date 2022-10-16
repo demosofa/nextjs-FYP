@@ -25,13 +25,14 @@ class SellerController {
     }
   };
   todayValidated = async (req, res) => {
-    const { page, sort } = req.query;
+    let { page, sort, limit } = req.query;
     const currentDate = new Date();
     try {
       let filterOptions = { validatedAt: { $gte: currentDate } };
+      if (!limit) limit = 10;
       const lstValidated = await this.unit.Order.getAll(filterOptions)
-        .skip((page - 1) * 10)
-        .limit(10)
+        .skip((page - 1) * limit)
+        .limit(limit)
         .sort({
           [sort]: "asc",
         })
@@ -42,7 +43,7 @@ class SellerController {
         status: "shipping",
         ...filterOptions,
       }).lean();
-      const pageCounted = Math.ceil(orderCounted / 10);
+      const pageCounted = Math.ceil(orderCounted / limit);
       return res.status(200).json({ lstValidated, pageCounted });
     } catch (error) {
       return res.status(500).json("Fail to get data");

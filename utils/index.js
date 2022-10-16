@@ -6,5 +6,6 @@ export { default as markdown } from "./markdown";
 export { default as cssToReact } from "./cssToReact";
 export { default as retryAxios } from "./retryAxios";
 export { default as uploadApi } from "./uploadApi";
+export { default as timeAgo } from "./timeAgo";
 export { default as Validate } from "./Validate";
 export { default as expireStorage } from "./expireStorage";

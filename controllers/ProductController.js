@@ -29,7 +29,7 @@ class ProductController {
   };
 
   getAll = async (req, res) => {
-    let { page, search, sort, category } = req.query;
+    let { page, search, sort, category, limit } = req.query;
     let filterOptions = {};
     if (!page) page = 1;
     if (search)
@@ -41,6 +41,7 @@ class ProductController {
       const result = await this.unit.Category.getOne({ name: category }).lean();
       filterOptions = { ...filterOptions, categories: result._id };
     }
+    if (!limit) limit = 10;
     const products = await this.unit.Product.aggregate()
       .match({
         status: "active",
@@ -49,8 +50,8 @@ class ProductController {
       .sort({
         [sort]: "asc",
       })
-      .skip((page - 1) * 10)
-      .limit(10)
+      .skip((page - 1) * limit)
+      .limit(limit)
       .project({
         image: { $first: "$images" },
         title: 1,
@@ -72,7 +73,7 @@ class ProductController {
       status: "active",
       ...filterOptions,
     }).lean();
-    const pageCounted = Math.ceil(productCounted / 10);
+    const pageCounted = Math.ceil(productCounted / limit);
     return res.status(200).json({ products, pageCounted });
   };
 
@@ -100,7 +101,7 @@ class ProductController {
   };
 
   listManagedProduct = async (req, res) => {
-    const { page, search, sort, filter, category } = req.query;
+    let { page, search, sort, filter, category, limit } = req.query;
     let filterOptions = {};
     if (search)
       filterOptions = {
@@ -116,9 +117,10 @@ class ProductController {
         ...filterOptions,
         status: filter,
       };
+    if (!limit) limit = 10;
     const products = await this.unit.Product.getAll(filterOptions)
-      .skip((page - 1) * 10)
-      .limit(10)
+      .skip((page - 1) * limit)
+      .limit(limit)
       .sort({
         [sort]: "asc",
       })
@@ -141,7 +143,7 @@ class ProductController {
     const productCounted = await this.unit.Product.countData(
       filterOptions
     ).lean();
-    const pageCounted = Math.ceil(productCounted / 10);
+    const pageCounted = Math.ceil(productCounted / limit);
     return res.status(200).json({ products, pageCounted });
   };
 

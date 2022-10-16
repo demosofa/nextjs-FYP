@@ -1,35 +1,39 @@
 import {
-  Html5QrcodeScanner,
-  Html5QrcodeScannerConfig,
-  QrcodeSuccessCallback,
-  QrcodeErrorCallback,
+  Html5Qrcode,
+  Html5QrcodeCameraScanConfig,
+  Html5QrcodeResult,
+  Html5QrcodeError,
 } from "html5-qrcode";
 import { useEffect } from "react";
 
 const qrcodeRegionId = "html5qr-code-full-region";
-/**@param {({config: Html5QrcodeScannerConfig, onScanSuccess: QrcodeSuccessCallback, onScanFailure?: QrcodeErrorCallback})} */
+/**@param {({config: Html5QrcodeCameraScanConfig, onScanSuccess: (decodedText: string, result: Html5QrcodeResult, html5Qrcode: Html5Qrcode) => void, onScanFailure?: (errorMessage: string, error: Html5QrcodeError, html5Qrcode: Html5Qrcode) => void})} */
 export default function QRreader({
-  config,
+  config = { fps: 10, qrbox: { width: 200, height: 200 } },
   onScanSuccess,
   onScanFailure,
   ...props
 }) {
   useEffect(() => {
-    const html5QrcodeScanner = new Html5QrcodeScanner(
-      qrcodeRegionId,
+    const html5Qrcode = new Html5Qrcode(qrcodeRegionId);
+    html5Qrcode.start(
+      { facingMode: "environment" },
       config,
-      true
+      (text, result) => {
+        onScanSuccess(text, result, html5Qrcode);
+      },
+      (message, error) => {
+        onScanFailure(message, error, html5Qrcode);
+      }
     );
-    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-    // return async () => {
-    //   console.log("run this clear");
-    //   navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-    //     stream.getVideoTracks().forEach((track) => {
-    //       if (track.readyState == "live") track.stop();
-    //     });
-    //     html5QrcodeScanner.clear();
-    //   });
-    // };
+    return () => {
+      html5Qrcode
+        .stop()
+        .then(() => {
+          html5Qrcode.clear();
+        })
+        .catch((error) => {});
+    };
   }, [config]);
   return <div id={qrcodeRegionId} {...props} />;
 }

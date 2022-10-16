@@ -13,7 +13,7 @@ export default function AblyContext({ children }) {
   const { role, accountId } = useMemo(() => {
     if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
       let decoded = parser(expireStorage.getItem("accessToken"));
-      if (!ably.current)
+      if (!ably.current && decoded)
         ably.current = new Realtime.Promise({
           authUrl: `${LocalApi}/createAblyToken`,
         });

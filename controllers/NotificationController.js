@@ -7,19 +7,20 @@ class NotificationController {
 
   getAllForUser = async (req, res) => {
     try {
-      let { page, filter } = req.query;
+      let { page, filter, limit } = req.query;
       let filterOptions = { to: req.user.accountId };
       if (filter) filterOptions = { ...filterOptions, isRead: filter };
+      if (!limit) limit = 10;
       const notifications = await this.unit.Notification.getAll(filterOptions)
         .sort({ updatedAt: -1 })
-        .limit(5)
-        .skip((page - 1) * 5)
+        .skip((page - 1) * limit)
+        .limit(limit)
         .populate({ path: "from", select: "username" })
         .lean();
       // const notfifyCounted = await this.unit.Notification.countData(
       //   filterOptions
       // ).lean();
-      // const pageCounted = Math.ceil(notfifyCounted / 5);
+      // const pageCounted = Math.ceil(notfifyCounted / limit);
       return res.status(200).json(notifications);
     } catch (error) {
       return res.status(500).json(error);
