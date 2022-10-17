@@ -64,24 +64,20 @@ function MyProfile() {
         <meta name="description" content="My Profile" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="card flat_dl h-full min-h-0">
+      <div className="card h-full min-h-0">
         <dl>
           <dt className="font-semibold">Full Name:</dt>
           <dd>{data.fullname}</dd>
-        </dl>
-        <dl>
+
           <dt className="font-semibold">Date of Birth:</dt>
           <dd>{dateFormat(data.dateOfBirth)}</dd>
-        </dl>
-        <dl>
+
           <dt className="font-semibold">Gender:</dt>
           <dd>{data.gender}</dd>
-        </dl>
-        <dl>
+
           <dt className="font-semibold">Phone Number:</dt>
           <dd>{data.phoneNumber}</dd>
-        </dl>
-        <dl>
+
           <dt className="font-semibold">Email:</dt>
           <dd className="line-clamp-1">{data.email}</dd>
         </dl>

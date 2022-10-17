@@ -30,7 +30,7 @@ export default function Register() {
       <Head>
         <title>Register</title>
       </Head>
-      <div className="background"></div>
+      <div className="background" />
       <div className="login-container">
         <Slider
           config={{
@@ -96,7 +96,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           onChange={(e) =>
             setInfo((prev) => ({ ...prev, fullname: e.target.value }))
           }
-        ></Form.Input>
+        />
       </Form.Item>
 
       <Form.Item>
@@ -106,7 +106,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           onChange={(e) =>
             setInfo((prev) => ({ ...prev, dateOfBirth: e.target.value }))
           }
-        ></Form.Input>
+        />
       </Form.Item>
 
       <Form.Item>
@@ -116,7 +116,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           onChange={(e) =>
             setInfo((prev) => ({ ...prev, phoneNumber: e.target.value }))
           }
-        ></Form.Input>
+        />
       </Form.Item>
 
       <Form.Item>
@@ -126,7 +126,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
           onChange={(e) =>
             setInfo((prev) => ({ ...prev, email: e.target.value }))
           }
-        ></Form.Input>
+        />
       </Form.Item>
 
       <Form.Item
@@ -212,7 +212,7 @@ function FormAccount({ info, moveTo, ...props }) {
           onChange={(e) =>
             setInput((prev) => ({ ...prev, username: e.target.value }))
           }
-        ></Form.Input>
+        />
       </Form.Item>
       <Form.Item>
         <Form.Title>Password</Form.Title>

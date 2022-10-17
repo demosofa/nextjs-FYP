@@ -46,7 +46,7 @@ export default function TagsInput({
             <GrFormClose
               className={style.icon}
               onClick={() => handleDelete(index)}
-            ></GrFormClose>
+            />
           </div>
         );
       })}

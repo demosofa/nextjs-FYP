@@ -116,7 +116,7 @@ function UpdateProduct() {
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, quantity: e.target.value }))
           }
-        ></Form.Input>
+        />
       </Form.Item>
       <Form.Item>
         <Form.Title>Sale Price</Form.Title>
@@ -125,7 +125,7 @@ function UpdateProduct() {
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, sale: e.target.value }))
           }
-        ></Form.Input>
+        />
       </Form.Item>
       <Form.Item>
         <Form.Title>TimeStamp</Form.Title>
@@ -135,7 +135,7 @@ function UpdateProduct() {
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, time: e.target.value }))
           }
-        ></Form.Input>
+        />
       </Form.Item>
       <div className="flex w-full gap-4 sm:gap-0">
         <div

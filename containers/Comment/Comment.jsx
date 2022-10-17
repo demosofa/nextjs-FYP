@@ -180,7 +180,12 @@ function CommentTab({
               >
                 Edit
               </div>
-              <div onClick={handleDelete}>Delete</div>
+              <div
+                className="text-black hover:bg-orange-400 hover:text-white"
+                onClick={handleDelete}
+              >
+                Delete
+              </div>
             </Dropdown.Content>
           </Dropdown>
         )}
@@ -261,14 +266,30 @@ function CommentInput({ data = "", callback, setToggle = undefined }) {
   const [input, setInput] = useState(data);
 
   return (
-    <div className="flex flex-col gap-4">
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      ></textarea>
-      <div>
-        <button onClick={() => callback(input)}>Save</button>
-        {setToggle && <button onClick={() => setToggle(false)}>Cancel</button>}
+    <div className="mb-4 w-full rounded-lg border border-gray-200 bg-gray-50">
+      <div className="rounded-t-lg bg-white py-2 px-4">
+        <textarea
+          className="w-full resize-none border-0 bg-white px-0 text-sm text-gray-900 focus:ring-0"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+      </div>
+
+      <div className="flex items-center justify-between border-t py-2 px-3">
+        <button
+          className="inline-flex items-center rounded-lg bg-orange-700 py-2.5 px-4 text-center text-xs font-medium text-white hover:bg-orange-800 focus:ring-4 focus:ring-orange-200"
+          onClick={() => callback(input)}
+        >
+          Save
+        </button>
+        {setToggle && (
+          <button
+            className="inline-flex items-center rounded-lg bg-orange-700 py-2.5 px-4 text-center text-xs font-medium text-white hover:bg-orange-800 focus:ring-4 focus:ring-orange-200"
+            onClick={() => setToggle(false)}
+          >
+            Cancel
+          </button>
+        )}
       </div>
     </div>
   );

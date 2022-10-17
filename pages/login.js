@@ -54,7 +54,7 @@ export default function Login() {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
-        <div className="background"></div>
+        <div className="background" />
         <div className="login-container">
           <Form onSubmit={handleSubmit}>
             <Form.Title style={{ fontSize: "large", fontWeight: "600" }}>
@@ -67,7 +67,7 @@ export default function Login() {
                 onChange={(e) =>
                   setInput((prev) => ({ ...prev, username: e.target.value }))
                 }
-              ></Form.Input>
+              />
             </Form.Item>
             <Form.Item>
               <Form.Title>Password</Form.Title>

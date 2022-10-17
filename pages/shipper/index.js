@@ -135,7 +135,9 @@ function Shipper() {
               <Pagination.Number />
             </Pagination.Arrow>
           </Pagination>
-          <button onClick={handleSubmit}>Submit</button>
+          <button className="main_btn" onClick={handleSubmit}>
+            Submit
+          </button>
         </div>
       ) : null}
     </div>

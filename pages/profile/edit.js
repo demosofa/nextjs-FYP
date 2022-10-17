@@ -97,7 +97,7 @@ function EditProfile() {
             onChange={(e) =>
               setData((prev) => ({ ...prev, dateOfBirth: e.target.value }))
             }
-          ></Form.Input>
+          />
         </Form.Item>
         <Form.Item>
           <Form.Title>Gender</Form.Title>
@@ -124,7 +124,7 @@ function EditProfile() {
             onChange={(e) =>
               setData((prev) => ({ ...prev, phoneNumber: e.target.value }))
             }
-          ></Form.Input>
+          />
         </Form.Item>
         <Form.Item>
           <Form.Title>Email</Form.Title>
@@ -134,7 +134,7 @@ function EditProfile() {
             onChange={(e) =>
               setData((prev) => ({ ...prev, email: e.target.value }))
             }
-          ></Form.Input>
+          />
         </Form.Item>
       </div>
       <Form.Submit>Save</Form.Submit>

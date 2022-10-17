@@ -8,6 +8,7 @@ import { Widget } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
 import Head from "next/head";
+import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -89,10 +90,12 @@ function Dashboard() {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>
-                    <img
+                    <Image
                       className="h-20 w-28"
                       src={product.image}
                       alt="product"
+                      width="100px"
+                      height="90px"
                     />
                   </td>
                   <td>{product._id}</td>

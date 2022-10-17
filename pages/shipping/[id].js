@@ -173,7 +173,7 @@ function ShippingProgress() {
       <VnPay order={order} />
       {showQR !== null && (
         <>
-          <div className="backdrop" onClick={() => setShowQR(null)}></div>
+          <div className="backdrop" onClick={() => setShowQR(null)} />
           <div className="form_center">
             <img src={showQR} alt="QR code" />
           </div>
@@ -181,7 +181,7 @@ function ShippingProgress() {
       )}
       {showScanner && (
         <>
-          <div className="backdrop" onClick={() => setShowScanner(false)}></div>
+          <div className="backdrop" onClick={() => setShowScanner(false)} />
           <div className="form_center">
             <button onClick={() => setShowScanner((prev) => !prev)}>
               Show Scanner

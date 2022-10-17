@@ -29,7 +29,7 @@ class ProductController {
   };
 
   getAll = async (req, res) => {
-    let { page, search, sort, category, limit } = req.query;
+    let { page, search, sort, category, limit, filter } = req.query;
     let filterOptions = {};
     if (!page) page = 1;
     if (search)
@@ -37,6 +37,7 @@ class ProductController {
         ...filterOptions,
         $text: { $search: search },
       };
+    if (filter) filterOptions = { ...filterOptions, title: { $ne: filter } };
     if (category) {
       const result = await this.unit.Category.getOne({ name: category }).lean();
       filterOptions = { ...filterOptions, categories: result._id };

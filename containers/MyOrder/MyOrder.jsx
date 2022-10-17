@@ -147,10 +147,7 @@ export default function MyOrder() {
         )}
         {displayCancel && (
           <>
-            <div
-              className="backdrop"
-              onClick={() => setDisplayCancel(null)}
-            ></div>
+            <div className="backdrop" onClick={() => setDisplayCancel(null)} />
             <Form className="form_center">
               <Form.Title>Are you sure to cancel {displayCancel}</Form.Title>
               <Form.Item>

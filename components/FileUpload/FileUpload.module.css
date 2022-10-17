@@ -69,6 +69,7 @@
   color: var(--red-orange);
   cursor: pointer;
   right: 5%;
+  top: 0
 }
 
 .img_container {

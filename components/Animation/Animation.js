@@ -85,15 +85,49 @@ Animation.Zoom = function AnimateZoom({ children, zoom = 1, style, ...props }) {
 Animation.Width = function AnimateWidth({ children, style, ...props }) {
   const transition = useTransition(children, {
     keys: (item) => item.key,
-    from: { maxWidth: 0, opacity: 0 },
-    enter: { maxWidth: 200, opacity: 1 },
-    leave: { maxWidth: 0, opacity: 0 },
+    from: { maxWidth: 0 },
+    enter: { maxWidth: 200 },
+    leave: { maxWidth: 0 },
     config: { duration: 400 },
   });
   return transition(
     (prop, item) =>
       item && (
         <animated.div style={{ ...style, ...prop }} {...props}>
+          {item}
+        </animated.div>
+      )
+  );
+};
+
+Animation.Move = function AnimateMove({
+  children,
+  reverse = true,
+  className,
+  style,
+  ...props
+}) {
+  const transition = useTransition(children, {
+    keys: (item) => item.key,
+    from: {
+      transform: reverse ? "translateX(-100%)" : "translateX(100%)",
+      opacity: 0,
+    },
+    enter: { transform: "translateX(0%)", opacity: 1 },
+    leave: {
+      transform: reverse ? "translateX(50%)" : "translateX(-50%)",
+      opacity: 0,
+    },
+    config: { duration: 600 },
+  });
+  return transition(
+    (prop, item) =>
+      item && (
+        <animated.div
+          className={className}
+          style={{ ...style, ...prop }}
+          {...props}
+        >
           {item}
         </animated.div>
       )

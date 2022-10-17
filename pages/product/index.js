@@ -229,7 +229,7 @@ function Remove({ index, product, setProducts, setRemove }) {
   };
   return (
     <>
-      <div className="backdrop" onClick={(e) => setRemove(null)}></div>
+      <div className="backdrop" onClick={(e) => setRemove(null)} />
       <div className="form_center">
         <label>{`Are you sure to Remove ${product.title}?`}</label>
         <div className="flex gap-3">

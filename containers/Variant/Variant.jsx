@@ -27,25 +27,30 @@ export default function Variants() {
         return (
           <div className={styles.variant} key={variant.id}>
             <input
-              value={variant.name}
+              value={variant.name || " "}
               onChange={(e) =>
                 dispatch(editVariant({ index, name: e.target.value }))
               }
+              placeholder="input variant name"
             />
 
-            <div className="flex w-full flex-wrap">
+            <div className="flex flex-2 items-center">
               <TagsInput
                 className="flex-2"
                 prevTags={variant.options}
                 setPrevTags={(tags) => {
                   dispatch(editVariant({ index, options: tags }));
                 }}
-              ></TagsInput>
+              />
               <Icon
-                className="flex-1"
+                className="group ml-3 !h-fit !w-fit rounded-full bg-slate-200 hover:bg-slate-500"
                 onClick={() => dispatch(deleteVariant(index))}
               >
-                <GiTrashCan />
+                <GiTrashCan
+                  className="group-hover:text-white"
+                  size={25}
+                  style={{ margin: 7 }}
+                />
               </Icon>
             </div>
           </div>

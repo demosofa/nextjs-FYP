@@ -3,7 +3,7 @@ import styles from "./_loading.module.scss";
 export default function Loading({ className, ...props }) {
   return (
     <div {...props}>
-      <div className={styles.rotate + ` ${className}`}></div>
+      <div className={styles.rotate + ` ${className}`} />
     </div>
   );
 }

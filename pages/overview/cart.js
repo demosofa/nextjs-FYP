@@ -154,14 +154,12 @@ export default function Cart() {
             onClick={() => {
               setAddress(""), setDisplay(false);
             }}
-          ></div>
+          />
           <Form onSubmit={handleSubmit} className="form_center">
             <Form.Title>Please set form for your checkout</Form.Title>
             <Form.Item>
               <Form.Title>Your Address</Form.Title>
-              <Form.Input
-                onChange={(e) => setAddress(e.target.value)}
-              ></Form.Input>
+              <Form.Input onChange={(e) => setAddress(e.target.value)} />
             </Form.Item>
             <Form.Link
               target="_blank"

@@ -75,7 +75,7 @@ export default function Home({ products, categories, pageCounted, query }) {
             ))}
           </Animation.Fade>
         </div>
-        <div className="grid grid-cols-fit-2 gap-8">
+        <div className="grid grid-cols-fit-2 gap-6 sm:gap-4">
           <Animation.Zoom className="card relative mt-2 cursor-pointer">
             {lstProduct?.map((item) => (
               <Fragment key={item.title}>
@@ -96,7 +96,7 @@ export default function Home({ products, categories, pageCounted, query }) {
                       )}
 
                     <div>
-                      <div className="relative h-40 w-full">
+                      <div className="relative h-44 w-full">
                         <Image
                           className="rounded-xl"
                           alt="product"

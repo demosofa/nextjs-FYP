@@ -170,10 +170,7 @@ function SellerPage() {
 
       {viewOrderItem && (
         <>
-          <div
-            className="backdrop"
-            onClick={() => setViewOrderItem(null)}
-          ></div>
+          <div className="backdrop" onClick={() => setViewOrderItem(null)} />
           <div className="form_center">
             <table className="table">
               <thead>
@@ -214,7 +211,7 @@ function SellerPage() {
       )}
       {showScanner && (
         <>
-          <div className="backdrop" onClick={() => setShowScanner(false)}></div>
+          <div className="backdrop" onClick={() => setShowScanner(false)} />
           <QRreader
             onScanSuccess={handleScan}
             className="form_center w-full max-w-lg !p-0 sm:max-w-none"

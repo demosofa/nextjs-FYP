@@ -18,7 +18,9 @@ export default function ImageMagnifier({
 
   const target = useCallback(
     (node) => {
-      node && setOffset(node.getBoundingClientRect());
+      if (node) {
+        setOffset(node.getBoundingClientRect());
+      }
     },
     [resize]
   );
@@ -69,7 +71,7 @@ export default function ImageMagnifier({
             backgroundSize: `calc(${offset.width} * ${zoom}px)
                               calc(${offset.height} * ${zoom}px)`,
           }}
-        ></div>
+        />
       )}
     </div>
   );

@@ -5,18 +5,20 @@ const Kits = createContext();
 export default function Checkbox({
   children,
   checked = [],
-  setChecked = new Function(),
+  setChecked = null,
   type = "checkbox",
   name = "",
   ...props
 }) {
   const [checks, setChecks] = useState(checked);
 
-  useEffect(() => setChecked(checks), [checks]);
+  useEffect(() => {
+    if (typeof setChecked === "function") setChecked(checks);
+  }, [checks]);
 
   return (
     <Kits.Provider value={{ checks, setChecks, type, name }}>
-      <fieldset style={{ border: "none", padding: 0 }} {...props}>
+      <fieldset className="border-none" {...props}>
         {children}
       </fieldset>
     </Kits.Provider>

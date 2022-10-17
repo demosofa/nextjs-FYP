@@ -226,7 +226,7 @@ function CreateForm() {
                   onChange={(e) =>
                     setInput((prev) => ({ ...prev, price: e.target.value }))
                   }
-                ></Form.Input>
+                />
               </Form.Item>
 
               <Form.Item>
@@ -236,7 +236,7 @@ function CreateForm() {
                   onChange={(e) =>
                     setInput((prev) => ({ ...prev, quantity: e.target.value }))
                   }
-                ></Form.Input>
+                />
               </Form.Item>
             </div>
           </div>

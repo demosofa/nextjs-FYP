@@ -95,6 +95,7 @@ export default function Notification({ className, component, ...props }) {
           : null}
 
         <button
+          className="text-black"
           disabled={isLoadingMore || isReachingEnd}
           onClick={() => setSize(size + 1)}
         >

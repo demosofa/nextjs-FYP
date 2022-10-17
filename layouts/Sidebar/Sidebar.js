@@ -5,7 +5,7 @@ import RouterAuth from "../../containers/RouterAuth/RouterAuth";
 export default function Sidebar({ children, className, ...props }) {
   return (
     <aside
-      className={`fixed z-20 h-screen gap-5 bg-[#f0f2f5] p-4 text-[#445261] shadow-md transition-all ${className} overflow-y-auto`}
+      className={`fixed z-20 h-screen gap-5 overflow-y-auto bg-[#f0f2f5] p-4 text-[#445261] shadow-md transition-all ${className}`}
       {...props}
     >
       <nav

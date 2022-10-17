@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navbar, Sidebar, Footer, Notification } from ".";
-import { Icon, Search } from "../components";
+import { Animation, Icon, Search } from "../components";
 import {
   AiOutlineMenuFold,
   AiOutlineShoppingCart,
@@ -19,40 +19,44 @@ export default function General({ children, arrLink }) {
     <>
       {(device === Devices.pc && <Navbar arrLink={arrLink} />) ||
         (toggle ? (
-          <Sidebar className="sm:w-full md:w-80 ">
-            <AiOutlineMenuFold
-              className="absolute top-0 right-0 cursor-pointer"
-              onClick={() => setToggle((prev) => !prev)}
-            />
-            <Link href="/">
-              <a>
-                <Icon>
-                  <AiOutlineHome />
-                </Icon>
-              </a>
-            </Link>
-            <Search
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onClick={() => router.push({ pathname: "/", query: { search } })}
-            />
-            {arrLink?.map(({ title, path, icon }) => (
-              <Link key={title} href={path}>
+          <Animation.Move className="fixed z-20 h-screen gap-5 overflow-y-auto bg-[#f0f2f5] text-[#445261] shadow-md transition-all sm:w-full md:w-80">
+            <Sidebar className="w-full">
+              <AiOutlineMenuFold
+                className="absolute top-0 right-0 cursor-pointer"
+                onClick={() => setToggle((prev) => !prev)}
+              />
+              <Link href="/">
+                <a>
+                  <Icon>
+                    <AiOutlineHome />
+                  </Icon>
+                </a>
+              </Link>
+              <Search
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onClick={() =>
+                  router.push({ pathname: "/", query: { search } })
+                }
+              />
+              {arrLink?.map(({ title, path, icon }) => (
+                <Link key={title} href={path}>
+                  <Sidebar.Item className="!justify-start">
+                    {icon && <Icon>{icon}</Icon>}
+                    {title}
+                  </Sidebar.Item>
+                </Link>
+              ))}
+              <Link href="/overview/cart">
                 <Sidebar.Item className="!justify-start">
-                  {icon && <Icon>{icon}</Icon>}
-                  {title}
+                  <Icon>
+                    <AiOutlineShoppingCart />
+                  </Icon>
+                  My Cart
                 </Sidebar.Item>
               </Link>
-            ))}
-            <Link href="/overview/cart">
-              <Sidebar.Item className="!justify-start">
-                <Icon>
-                  <AiOutlineShoppingCart />
-                </Icon>
-                My Cart
-              </Sidebar.Item>
-            </Link>
-          </Sidebar>
+            </Sidebar>
+          </Animation.Move>
         ) : (
           <Icon
             style={{ position: "fixed", top: "10px", left: "10px" }}

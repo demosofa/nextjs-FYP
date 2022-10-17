@@ -150,7 +150,7 @@ function MyShipping() {
       )}
       {showQR && (
         <>
-          <div className="backdrop" onClick={() => setShowQR(null)}></div>
+          <div className="backdrop" onClick={() => setShowQR(null)} />
           <div className="form_center">
             <img src={showQR} alt="QR code" />
           </div>

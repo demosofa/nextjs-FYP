@@ -64,7 +64,7 @@ export default function ManageOrder() {
       <div className="flex flex-wrap gap-8 pl-5 sm:justify-center">
         {data.lstOrder.length ? (
           data.lstOrder.map((order) => (
-            <div key={order._id} className="card flat_dl relative mt-2 h-fit">
+            <div key={order._id} className="card relative mt-2 h-fit">
               {order.status === "cancel" ? (
                 <IoMdTrash
                   className="absolute right-4"
@@ -76,12 +76,10 @@ export default function ManageOrder() {
                 <dd className="whitespace-pre-line line-clamp-1">
                   {order._id}
                 </dd>
-              </dl>
-              <dl>
+
                 <dt className="font-bold">Status:</dt>
                 <dd>{order.status}</dd>
-              </dl>
-              <dl>
+
                 <dt className="font-bold">Created At:</dt>
                 <dd>{dateFormat(order.createdAt)}</dd>
               </dl>
@@ -90,13 +88,12 @@ export default function ManageOrder() {
                   {order.orderItems.map((item) => (
                     <div
                       key={item._id}
-                      className="flat_dl hover:border-2 hover:border-orange-400"
+                      className="hover:border-2 hover:border-orange-400"
                     >
                       <dl>
                         <dt className="font-semibold">Name:</dt>
                         <dd className="line-clamp-1">{item.title}</dd>
-                      </dl>
-                      <dl>
+
                         <dt className="font-semibold">Amount:</dt>
                         <dd>{currencyFormat(item.total)}</dd>
                       </dl>
@@ -122,10 +119,7 @@ export default function ManageOrder() {
       </Pagination>
       {displayDelete && (
         <>
-          <div
-            className="backdrop"
-            onClick={() => setDisplayCancel(null)}
-          ></div>
+          <div className="backdrop" onClick={() => setDisplayCancel(null)} />
           <Form className="form_center">
             <Form.Title>
               Are you sure to delete order {displayDelete}

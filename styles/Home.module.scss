@@ -4,7 +4,7 @@ $price-tag__height: 30px;
 $price-tag__width-after: 10px;
 
 .container {
-  padding: 0 2rem;
+  padding: 0 0.5rem;
 }
 
 .main {
@@ -13,9 +13,6 @@ $price-tag__width-after: 10px;
   display: flex;
   flex-direction: column;
   gap: 40px;
-  @include mq("phone-wide"){
-    align-items: center;
-  }
 }
 
 .price_tag {

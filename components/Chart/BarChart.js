@@ -95,7 +95,7 @@ export default function BarChart({ datas, row = null }) {
                 }`,
                 maxWidth: `${widthCol}px`,
               }}
-            ></div>
+            />
           );
         })}
       </div>

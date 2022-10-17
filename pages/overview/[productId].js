@@ -20,8 +20,6 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { addViewed } from "../../redux/reducer/recentlyViewedSlice";
 import Link from "next/link";
 import { currencyFormat } from "../../shared";
-import { useObserver } from "../../hooks";
-import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -53,19 +51,21 @@ export default function Overview({ product }) {
   }, [options, product.variations]);
 
   const { device, Devices } = useMediaContext();
-  const observerRef = useObserver({
-    isMany: false,
-    callback: async (_, observer) => {
-      if (!loading && !similiarProducts.length) {
-        setLoading(true);
-        const response = await axios.get(`${LocalApi}/product/all`, {
-          params: { category: product.categories.at(-1).name },
-        });
-        setSimiliarProducts(response.data.products);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${LocalApi}/product/all`, {
+        params: {
+          category: product.categories.at(-1).name,
+          filter: product.title,
+        },
+      })
+      .then((res) => {
+        setSimiliarProducts(res.data.products);
         setLoading(false);
-      } else observer.disconnect();
-    },
-  });
+      });
+  }, []);
 
   const dispatch = useDispatch();
   const generateCart = () => {
@@ -180,6 +180,7 @@ export default function Overview({ product }) {
               </Slider.Content>
             </Slider>
           </div>
+
           <div className="product-info">
             <label className="text-2xl">{product.title}</label>
             <div>
@@ -284,31 +285,31 @@ export default function Overview({ product }) {
               </p>
             </ReadMoreLess>
           </dd>
-          <dl className="flex items-center">
-            <dt className="text-lg font-medium">Tags: </dt>
-            <dd>
-              {product.tags.map((tag, index) => {
-                return (
-                  <Fragment key={tag}>
-                    <Link href={{ pathname: "/", query: { search: tag } }}>
-                      <a>#{tag}</a>
-                    </Link>
-                    {index < product.tags - 1 ? ", " : null}
-                  </Fragment>
-                );
-              })}
-            </dd>
-          </dl>
+
+          <dt className="w-fit text-lg font-medium">Tags: </dt>
+          <dd className="ml-2">
+            {product.tags.map((tag, index) => {
+              return (
+                <Fragment key={tag}>
+                  <Link href={{ pathname: "/", query: { search: tag } }}>
+                    <a>#{tag}</a>
+                  </Link>
+                  {index < product.tags - 1 ? ", " : null}
+                </Fragment>
+              );
+            })}
+          </dd>
         </dl>
 
         <Rating url={`${LocalApi}/rating/${product._id}`} />
 
         <Comment url={`${LocalApi}/product/${product._id}/comment`} />
-        <div ref={observerRef} className="w-full">
-          {!loading && similiarProducts?.length ? (
+
+        {!loading && similiarProducts?.length ? (
+          <div className="w-full">
             <ProductSlider products={similiarProducts} />
-          ) : null}
-        </div>
+          </div>
+        ) : null}
 
         {display && (
           <>
@@ -317,14 +318,12 @@ export default function Overview({ product }) {
               onClick={() => {
                 setAddress(""), setDisplay(false);
               }}
-            ></div>
+            />
             <Form onSubmit={handleOrder} className="form_center">
               <Form.Title>Please set form for your checkout</Form.Title>
               <Form.Item>
                 <Form.Title>Your Address</Form.Title>
-                <Form.Input
-                  onChange={(e) => setAddress(e.target.value)}
-                ></Form.Input>
+                <Form.Input onChange={(e) => setAddress(e.target.value)} />
               </Form.Item>
               <Form.Link
                 target="_blank"

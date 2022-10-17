@@ -15,7 +15,7 @@ export default function Avatar({ size, src, text = null, isOnline = null }) {
             className={
               isOnline ? styles.AvatarOnlineBadge : styles.AvatarOfflineBadge
             }
-          ></div>
+          />
         )}
       </div>
       {text && <span className={styles.AvatarName}>{text}</span>}

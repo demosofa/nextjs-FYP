@@ -3,7 +3,7 @@ import { currencyFormat } from "../../shared";
 export default function ItemsFromOrder({ viewOrder, setViewOrder }) {
   return (
     <>
-      <div className="backdrop" onClick={() => setViewOrder(null)}></div>
+      <div className="backdrop" onClick={() => setViewOrder(null)} />
       <div className="form_center max-h-[500px] overflow-y-auto !p-0">
         <table className="table">
           <thead>
