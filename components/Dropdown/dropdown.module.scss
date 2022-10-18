@@ -1,6 +1,7 @@
 @import "../../styles/mixin.scss";
 .dropdown {
     position: relative;
+    padding: 10px;
     cursor: pointer;
   & .dropdown_content{
     position: absolute;

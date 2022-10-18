@@ -1,18 +1,24 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { expireStorage, retryAxios } from "../../utils";
+import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import Select from "react-select";
-import { Form, Loading } from "../../components";
+import { Form, Loading, Search } from "../../components";
 import { currencyFormat } from "../../shared";
 import { ItemsFromOrder } from "../";
+import Link from "next/link";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function MyOrder() {
+  const [search, setSearch] = useState("");
+  const [params, setParams] = useState({
+    status: "",
+    search: "",
+  });
   const [displayCancel, setDisplayCancel] = useState(null);
   const [viewOrder, setViewOrder] = useState(null);
   const fetcher = async (config) => {
@@ -29,7 +35,10 @@ export default function MyOrder() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { data, error, mutate } = useSWR(
-    { url: `${LocalApi}/profile/order?status=shipping` },
+    {
+      url: `${LocalApi}/profile/order`,
+      params,
+    },
     fetcher,
     {
       onError(err, key, config) {
@@ -57,45 +66,36 @@ export default function MyOrder() {
     }, false);
   };
 
-  const handleFilter = ({ value }) => {
-    mutate(async (data) => {
-      try {
-        data = await fetcher({
-          url: `${LocalApi}/profile/order`,
-          params: { status: value },
-        });
-      } catch (error) {
-        dispatch(addNotification({ message: error.message, type: "error" }));
-      }
-      return data;
-    }, false);
-  };
-
   return (
     <div className="w-full">
-      <Select
-        className="max-w-[120px]"
-        defaultValue={{ value: "shipping", label: "Shipping" }}
-        onChange={handleFilter}
-        options={[
-          { value: "pending", label: "Pending" },
-          { value: "progress", label: "Progress" },
-          { value: "shipping", label: "Shipping" },
-          { value: "arrived", label: "Arrived" },
-          { value: "validated", label: "Validated" },
-          { value: "cancel", label: "Cancel" },
-        ]}
-      />
-      <div className="manage_table relative min-h-max w-full overflow-x-auto">
+      <div className="mb-3 flex justify-between">
+        <Search
+          className="max-w-fit"
+          placeholder="search shipper"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClick={() => setParams((prev) => ({ ...prev, search }))}
+        />
+        <Select
+          className="w-32"
+          defaultValue={{ value: "", label: "all" }}
+          onChange={({ value }) =>
+            setParams((prev) => ({ ...prev, status: value }))
+          }
+          options={[
+            { value: "", label: "all" },
+            { value: "pending", label: "Pending" },
+            { value: "progress", label: "Progress" },
+            { value: "shipping", label: "Shipping" },
+            { value: "arrived", label: "Arrived" },
+            { value: "validated", label: "Validated" },
+            { value: "cancel", label: "Cancel" },
+          ]}
+        />
+      </div>
+      <div className="manage_table min-h-max w-full overflow-x-auto">
         {!data || error ? (
-          <Loading
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: `translate(-50%, -50%)`,
-            }}
-          />
+          <Loading.Spinner className="mx-auto" />
         ) : (
           <table>
             <thead>
@@ -115,7 +115,13 @@ export default function MyOrder() {
                   <tr key={order._id}>
                     <td>{index + 1}</td>
                     <td>{order._id}</td>
-                    <td>{order.status}</td>
+                    <td>
+                      <Link href={`/shipping/${order._id}`}>
+                        <a className={tailwindStatus(order.status)}>
+                          {order.status}
+                        </a>
+                      </Link>
+                    </td>
                     <td>
                       {new Date(order.createdAt).toLocaleString("en-US", {
                         timeZone: "Asia/Ho_Chi_Minh",
@@ -124,11 +130,17 @@ export default function MyOrder() {
                     <td>{currencyFormat(order.total)}</td>
                     <td>{order.shipper?.username}</td>
                     <td>
-                      <button onClick={() => setViewOrder(order.orderItems)}>
+                      <button
+                        className="mr-5 whitespace-nowrap uppercase text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-none"
+                        onClick={() => setViewOrder(order.orderItems)}
+                      >
                         View order items
                       </button>
                       {order.status === "pending" && (
-                        <button onClick={() => setDisplayCancel(order._id)}>
+                        <button
+                          className="whitespace-nowrap uppercase text-red-600 hover:text-red-900 focus:underline focus:outline-none"
+                          onClick={() => setDisplayCancel(order._id)}
+                        >
                           Cancel Order
                         </button>
                       )}

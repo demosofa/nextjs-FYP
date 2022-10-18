@@ -42,11 +42,11 @@ export default function Notification({ className, component, ...props }) {
   );
 
   const notifications = data ? [].concat(...data) : [];
-  const handleRead = (index) => {
+  const handleRead = (Id) => {
     mutate(async (data) => {
       try {
         await fetcher({
-          url: `${LocalApi}/notify/${notifications[index]._id}`,
+          url: `${LocalApi}/notify/${Id}`,
           method: "patch",
           data: null,
         });
@@ -56,6 +56,22 @@ export default function Notification({ className, component, ...props }) {
       return data;
     });
   };
+
+  const handleDelete = (index) => {
+    mutate(async (data) => {
+      try {
+        await fetcher({
+          url: `${LocalApi}/notify/${notifications[index]._id}`,
+          method: "delete",
+        });
+        data.splice(index, 1);
+      } catch (error) {
+        dispatch(addNotification({ message: error.message, type: "error" }));
+      }
+      return data;
+    }, false);
+  };
+
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
     isLoadingInitialData ||
@@ -64,35 +80,37 @@ export default function Notification({ className, component, ...props }) {
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
 
-  if (isLoadingInitialData) return <Loading.Dots />;
   return (
     <Dropdown component={component} hoverable={true} clickable={false}>
-      <Dropdown.Content className="right-0">
-        {notifications.length
-          ? notifications.map((item, index) => (
-              <div
-                className="w-full hover:shadow-md"
-                key={index}
-                onClick={() => handleRead(item._id)}
-                {...props}
-              >
-                <label>
-                  from{" "}
-                  <span className="text-base font-medium">
-                    {item.from.username}
-                  </span>
-                </label>
-                <label>
-                  {" "}
-                  at{" "}
-                  <span className="text-base font-medium">
-                    {timeAgo(item.createdAt)}
-                  </span>
-                </label>
-                <p>{item.content}</p>
-              </div>
-            ))
-          : null}
+      <Dropdown.Content className="right-0 max-h-[85vh] w-64 overflow-y-auto !p-3">
+        {!isLoadingInitialData ? (
+          notifications.map((item, index) => (
+            <div
+              className="w-full text-gray-700 hover:shadow-md"
+              key={index}
+              onClick={() => handleRead(item._id)}
+              {...props}
+            >
+              <label>
+                from{" "}
+                <span className="text-base font-medium">
+                  {item.from.username}
+                </span>
+              </label>
+              <label>
+                {" "}
+                at{" "}
+                <span className="text-base font-medium">
+                  {timeAgo(item.createdAt)}
+                </span>
+              </label>
+              <p>{item.content}</p>
+              <button onClick={() => handleDelete(index)}>Delete</button>
+            </div>
+          ))
+        ) : (
+          <Loading.Spinner />
+        )}
 
         <button
           className="text-black"

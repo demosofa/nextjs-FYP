@@ -79,8 +79,8 @@ export default function UpdateVariation({ productId, setToggle }) {
               <th>Image</th>
               <th>Sku</th>
               <th>Type</th>
-              <th>price</th>
-              <th>quantity</th>
+              <th>Price</th>
+              <th>Quantity</th>
             </tr>
           </thead>
           <tbody>
@@ -88,8 +88,12 @@ export default function UpdateVariation({ productId, setToggle }) {
               storedVariations.map((variation, index) => {
                 return (
                   <tr key={index}>
-                    <td>{index + 1}</td>
+                    <td>
+                      <label>No.: </label>
+                      {index + 1}
+                    </td>
                     <td onClick={(e) => setVariationImage(index)}>
+                      <label>Image: </label>
                       {variation.image && (
                         <Image
                           alt="product"
@@ -100,6 +104,7 @@ export default function UpdateVariation({ productId, setToggle }) {
                       )}
                     </td>
                     <td>
+                      <label>Sku: </label>
                       <input
                         value={variation.sku}
                         onChange={(e) =>
@@ -108,9 +113,11 @@ export default function UpdateVariation({ productId, setToggle }) {
                       />
                     </td>
                     <td>
+                      <label>Type: </label>
                       {variation.types.map((type) => type.name).join("/")}
                     </td>
                     <td>
+                      <label>Price: </label>
                       <input
                         value={variation.price}
                         onChange={(e) =>
@@ -119,6 +126,7 @@ export default function UpdateVariation({ productId, setToggle }) {
                       />
                     </td>
                     <td>
+                      <label>Quantity: </label>
                       <input
                         value={variation.quantity}
                         onChange={(e) =>

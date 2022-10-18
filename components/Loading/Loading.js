@@ -8,6 +8,18 @@ export default function Loading({ className, ...props }) {
   );
 }
 
+Loading.Spinner = function LoadingSpinner({ className, ...props }) {
+  return (
+    <div className={className}>
+      <div className={styles.spinner} {...props}>
+        <div className={`${styles.circle} ${styles.one}`}></div>
+        <div className={`${styles.circle} ${styles.two}`}></div>
+        <div className={`${styles.circle} ${styles.three}`}></div>
+      </div>
+    </div>
+  );
+};
+
 Loading.Text = function LoadingText({
   text = "loading...",
   className,
@@ -28,14 +40,16 @@ Loading.Text = function LoadingText({
   );
 };
 
-Loading.Dots = function LoadingDots() {
+Loading.Dots = function LoadingDots({ className, ...props }) {
   return (
-    <div className="wrapper">
-      <span className="dot"></span>
-      <div className="dots">
-        <span></span>
-        <span></span>
-        <span></span>
+    <div className={className} {...props}>
+      <div className={styles.wrapper}>
+        <span className={styles.dot}></span>
+        <div className={styles.dots}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </div>
   );

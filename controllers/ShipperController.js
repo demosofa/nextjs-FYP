@@ -5,12 +5,17 @@ class ShipperController {
     this.unit = new unit();
   }
   MyShipping = async (req, res) => {
-    let { page, sort, filter, limit } = req.query;
+    let { page, sort, status, limit } = req.query;
     let filterOptions = { shipper: req.user.accountId };
-    if (filter)
+    if (!status)
       filterOptions = {
         ...filterOptions,
-        status: filter,
+        status: { $exists: true },
+      };
+    if (status)
+      filterOptions = {
+        ...filterOptions,
+        status,
       };
     if (!limit) limit = 10;
     const lstShipping = await this.unit.Order.getAll(filterOptions)

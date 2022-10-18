@@ -10,9 +10,10 @@ class UserController {
     return res.status(200).json(profile);
   };
   getMyOrder = async (req, res) => {
-    let { page, status, sort } = req.query;
+    let { page, search, status, sort } = req.query;
     if (!sort) sort = "status";
-    const { orders } = await this.unit.Account.getById(req.user.accountId)
+    if (!status) status = { $exists: true };
+    let { orders } = await this.unit.Account.getById(req.user.accountId)
       .select("orders")
       .populate({
         path: "orders",
@@ -31,10 +32,17 @@ class UserController {
           },
         },
         match: {
-          status,
+          status: status,
         },
       })
       .lean();
+    if (search)
+      orders = orders.filter((item) => {
+        const check = item.shipper.username
+          .toLowerCase()
+          .includes(search.toLowerCase());
+        return check;
+      });
     return res.status(200).json(orders);
   };
   updateProfile = async (req, res) => {

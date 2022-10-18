@@ -14,6 +14,7 @@ import { Role } from "../../shared";
 import Head from "next/head";
 import VnPay from "../../containers/VnPay/VnPay";
 import { useAblyContext } from "../../contexts/AblyContext";
+import { data } from "autoprefixer";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
@@ -26,8 +27,8 @@ function ShippingProgress() {
   const auth = useState(() => {
     const accessToken = expireStorage.getItem("accessToken");
     if (accessToken) {
-      const { role } = decoder(accessToken);
-      return role;
+      const { role, accountId } = decoder(accessToken);
+      return { role, accountId };
     }
   })[0];
   const fetcher = async (config) => {
@@ -100,37 +101,39 @@ function ShippingProgress() {
 
   const handleCheckStep = (value) => {
     if (value === "arrived") {
-      if (auth === Role.guest) {
+      if (auth.role === Role.guest) {
         setShowScanner(true);
-      } else if (auth === Role.shipper || auth === Role.admin) {
-        const content = `Your order ${
-          order._id
-        } has moved to ${value.toUpperCase()} state `;
-        mutate(async (data) => {
-          await fetcher({
-            url: `${LocalApi}/order/${order._id}`,
-            method: "patch",
-            data: { status: value },
-          });
-          await fetcher({
-            url: `${LocalApi}/notify`,
-            method: "post",
+      } else if (auth.role === Role.shipper || auth.role === Role.admin) {
+        if (order.status !== "arrived") {
+          const content = `Your order ${
+            order._id
+          } has moved to ${value.toUpperCase()} state `;
+          mutate(async (data) => {
+            await fetcher({
+              url: `${LocalApi}/order/${order._id}`,
+              method: "patch",
+              data: { status: value },
+            });
+            await fetcher({
+              url: `${LocalApi}/notify`,
+              method: "post",
+              data: {
+                to: order.customer,
+                content,
+              },
+            });
+            data.status = value;
+            return data;
+          }, false);
+          channel.current.publish({
+            name: "shipping",
             data: {
-              to: order.customer,
-              content,
+              message: content,
+              type: "link",
+              href: `${LocalUrl}/shipping/${order._id}`,
             },
           });
-          data.status = value;
-          return data;
-        }, false);
-        channel.current.publish({
-          name: "shipping",
-          data: {
-            message: content,
-            type: "link",
-            href: `${LocalUrl}/shipping/${order._id}`,
-          },
-        });
+        }
         handleShowQr();
       }
     }
@@ -142,7 +145,8 @@ function ShippingProgress() {
     { title: "shipping", allowed: false },
     {
       title: "arrived",
-      allowed: auth === Role.shipper || auth === Role.admin ? true : false,
+      allowed:
+        auth.role === Role.shipper || auth.role === Role.admin ? true : false,
     },
     { title: "validated", allowed: false },
   ];
@@ -169,8 +173,10 @@ function ShippingProgress() {
         steps={steps}
         pass={order.status}
         onResult={handleCheckStep}
-      ></ProgressBar>
-      <VnPay order={order} />
+      />
+      {auth.accountId === order.customer && data.status === "arrived" ? (
+        <VnPay order={order} />
+      ) : null}
       {showQR !== null && (
         <>
           <div className="backdrop" onClick={() => setShowQR(null)} />

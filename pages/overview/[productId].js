@@ -307,6 +307,7 @@ export default function Overview({ product }) {
 
         {!loading && similiarProducts?.length ? (
           <div className="w-full">
+            <p className="my-5">Similiar product you may want to check</p>
             <ProductSlider products={similiarProducts} />
           </div>
         ) : null}

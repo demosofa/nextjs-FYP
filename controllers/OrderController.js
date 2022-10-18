@@ -87,7 +87,7 @@ class OrderController {
     return res.status(200).end();
   };
   patchOrder = async (req, res) => {
-    const patched = this.unit.Order.updateById(req.query.id, {
+    await this.unit.Order.updateById(req.query.id, {
       $set: req.body,
     });
     return res.status(200).end();

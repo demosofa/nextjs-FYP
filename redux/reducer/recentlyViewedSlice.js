@@ -10,8 +10,10 @@ const recentlyViewed = createSlice({
     addViewed(state, { payload }) {
       const clone = JSON.parse(JSON.stringify(state));
       const result = clone.findIndex((item) => item.title === payload.title);
-      if (result === -1) clone.push(payload);
-      else {
+      if (result === -1) {
+        if (clone.length >= 10) clone.shift();
+        clone.push(payload);
+      } else {
         clone.thumbnail = payload.thumbnail;
         clone.rate = payload.rate;
         clone.price = payload.price;

@@ -166,18 +166,25 @@ function ProductCRUD() {
                     </td>
                     <td>
                       <button
+                        className="mr-5 whitespace-nowrap uppercase text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-none"
                         onClick={() => router.push(`/overview/${product._id}`)}
                       >
                         Preview
                       </button>
                       <button
+                        className="mr-5 whitespace-nowrap uppercase text-yellow-600 hover:text-yellow-900 focus:underline focus:outline-none"
                         onClick={() =>
                           router.push(`product/update/${product._id}`)
                         }
                       >
                         Edit
                       </button>
-                      <button onClick={() => setRemove(index)}>Remove</button>
+                      <button
+                        className="whitespace-nowrap uppercase text-red-600 hover:text-red-900 focus:underline focus:outline-none"
+                        onClick={() => setRemove(index)}
+                      >
+                        Remove
+                      </button>
                     </td>
                   </tr>
                 );

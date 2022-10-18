@@ -14,24 +14,16 @@ const Kits = createContext();
  * @param {KeenSliderOptions<{}, {}, KeenSliderHooks>} prop.config
  */
 export default function Slider({ config = {}, children }) {
-  const [currentSlide, setCurrentSlide] = useState();
   const [loading, setLoading] = useState(false);
   const [sliderRef, slide] = useKeenSlider({
     ...config,
-    slideChanged: (slider) => {
-      if (typeof config.slideChanged === "function")
-        config.slideChanged(slider);
-      setCurrentSlide(slider.track.details.rel);
-    },
     created: (slider) => {
       if (typeof config.created === "function") config.created(slider);
       setLoading(true);
     },
   });
   return (
-    <Kits.Provider
-      value={{ sliderRef, slide: slide.current, currentSlide, loading }}
-    >
+    <Kits.Provider value={{ sliderRef, slide: slide.current, loading }}>
       {children}
     </Kits.Provider>
   );
@@ -51,7 +43,9 @@ Slider.Content = function SliderContent({ children, className, ...props }) {
 };
 
 Slider.Arrow = function SliderArrow({ children, className, ...props }) {
-  const { loading, slide, currentSlide } = useContext(Kits);
+  const { loading, slide } = useContext(Kits);
+  const currentSlide = slide?.track.details.rel;
+  const slideLength = slide?.track.details.slides.length - 1;
   return (
     <div className={`relative ${className}`} {...props}>
       {children}
@@ -70,9 +64,7 @@ Slider.Arrow = function SliderArrow({ children, className, ...props }) {
           </button>
           <button
             className={` ${styles.arrow} right-0 mr-3 ${
-              currentSlide === slide?.track.details.slides.length - 1
-                ? "hidden"
-                : "block"
+              currentSlide === slideLength ? "hidden" : "block"
             }`}
             onClick={(e) => {
               e.stopPropagation();

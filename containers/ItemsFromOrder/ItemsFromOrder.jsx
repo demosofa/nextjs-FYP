@@ -19,18 +19,32 @@ export default function ItemsFromOrder({ viewOrder, setViewOrder }) {
           <tbody>
             {viewOrder.map((item, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
                 <td>
+                  <label>No.</label>
+                  {index + 1}
+                </td>
+                <td>
+                  <label>Image</label>
                   <img src={item.image} alt="order-item" />
                 </td>
                 <td>
+                  <label>Title</label>
                   <p className="text-xs line-clamp-1 hover:line-clamp-none">
                     {item.title}
                   </p>
                 </td>
-                <td>{item.options.join(", ")}</td>
-                <td>{item.quantity}</td>
-                <td>{currencyFormat(item.total)}</td>
+                <td>
+                  <label>Options</label>
+                  {item.options.join(", ")}
+                </td>
+                <td>
+                  <label>Quantity</label>
+                  {item.quantity}
+                </td>
+                <td>
+                  <label>Total</label>
+                  {currencyFormat(item.total)}
+                </td>
               </tr>
             ))}
           </tbody>

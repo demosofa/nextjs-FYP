@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { Checkbox, Form, Loading, Pagination } from "../../components";
+import { Checkbox, Loading, Pagination } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
 import { convertTime, currencyFormat } from "../../shared";
@@ -102,15 +102,24 @@ function Shipper() {
                   <td>
                     <Checkbox.Item value={order._id} />
                   </td>
-                  <td>{order._id}</td>
-                  <td>{currencyFormat(order.total)}</td>
                   <td>
-                    <Form.Link
+                    <label>Id</label>
+                    {order._id}
+                  </td>
+                  <td>
+                    <label>Total</label>
+                    {currencyFormat(order.total)}
+                  </td>
+                  <td>
+                    <label>Address</label>
+                    <a
+                      className="font-semibold text-blue-600 hover:text-blue-400"
                       target="_blank"
+                      rel="noreferrer"
                       href={`https://maps.google.com/maps?q=${order.address}`}
                     >
                       {order.address}
-                    </Form.Link>
+                    </a>
                   </td>
                 </tr>
               ))

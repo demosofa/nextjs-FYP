@@ -64,8 +64,8 @@ function MyProfile() {
         <meta name="description" content="My Profile" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="card h-full min-h-0">
-        <dl>
+      <div className="card h-full min-h-0 !px-5">
+        <dl className="mb-5">
           <dt className="font-semibold">Full Name:</dt>
           <dd>{data.fullname}</dd>
 

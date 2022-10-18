@@ -49,6 +49,7 @@ export default function ProgressBar({
           <div
             key={index}
             className={`${styles.step} ${step.active && styles.active}`}
+            style={{ cursor: step.allowed ? "pointer" : "not-allowed" }}
             data-desc={step.title}
             onClick={() => handleComplete(step, index)}
             {...props}

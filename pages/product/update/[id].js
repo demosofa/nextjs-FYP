@@ -121,7 +121,7 @@ function UpdateProduct() {
       <Form.Item>
         <Form.Title>Sale Price</Form.Title>
         <Form.Input
-          value={product.sale}
+          value={product.sale || " "}
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, sale: e.target.value }))
           }

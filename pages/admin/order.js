@@ -9,12 +9,14 @@ import { convertTime, currencyFormat, dateFormat } from "../../shared";
 import { expireStorage, retryAxios } from "../../utils";
 import { BiDownArrow } from "react-icons/bi";
 import { IoMdTrash } from "react-icons/io";
+import Head from "next/head";
+import Select from "react-select";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function ManageOrder() {
   const [displayDelete, setDisplayDelete] = useState();
-  const [query, setQuery] = useState({ page: 1, sort: "status", filter: "" });
+  const [query, setQuery] = useState({ page: 1, sort: "status", status: "" });
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -29,7 +31,9 @@ export default function ManageOrder() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { data, error, mutate } = useSWR(
-    { url: `${LocalApi}/admin/order?page=${query.page}&sort=${query.sort}` },
+    {
+      url: `${LocalApi}/admin/order?page=${query.page}&sort=${query.sort}&status=${query.status}`,
+    },
     fetcher,
     {
       refreshInterval: convertTime("5s").milisecond,
@@ -58,65 +62,91 @@ export default function ManageOrder() {
     }, false);
   };
 
-  if (!data || error) return <Loading.Text />;
+  const isLoadingInitialData = !data && !error;
   return (
     <div>
-      <div className="flex flex-wrap gap-8 pl-5 sm:justify-center">
-        {data.lstOrder.length ? (
-          data.lstOrder.map((order) => (
-            <div key={order._id} className="card relative mt-2 h-fit">
-              {order.status === "cancel" ? (
-                <IoMdTrash
-                  className="absolute right-4"
-                  onClick={() => setDisplayDelete(order._id)}
-                />
-              ) : null}
-              <dl>
-                <dt className="font-bold">Id:</dt>
-                <dd className="whitespace-pre-line line-clamp-1">
-                  {order._id}
-                </dd>
+      <Head>
+        <title>My Shipping</title>
+        <meta name="description" content="My Shipping" />
+      </Head>
+      <Select
+        className="w-32 sm:pl-3"
+        defaultValue={{ value: "", label: "all" }}
+        onChange={({ value }) =>
+          setQuery((prev) => ({ ...prev, status: value }))
+        }
+        options={[
+          { value: "", label: "all" },
+          { value: "pending", label: "Pending" },
+          { value: "progress", label: "Progress" },
+          { value: "shipping", label: "Shipping" },
+          { value: "arrived", label: "Arrived" },
+          { value: "validated", label: "Validated" },
+          { value: "cancel", label: "Cancel" },
+        ]}
+      />
+      {isLoadingInitialData ? (
+        <Loading.Text />
+      ) : (
+        <>
+          <div className="flex flex-wrap gap-8 pl-5 sm:justify-center sm:px-3">
+            {data.lstOrder.length ? (
+              data.lstOrder.map((order) => (
+                <div key={order._id} className="card relative mt-2 h-fit">
+                  {order.status === "cancel" ? (
+                    <IoMdTrash
+                      className="absolute right-4"
+                      onClick={() => setDisplayDelete(order._id)}
+                    />
+                  ) : null}
+                  <dl>
+                    <dt className="font-bold">Id:</dt>
+                    <dd className="whitespace-pre-line line-clamp-1">
+                      {order._id}
+                    </dd>
 
-                <dt className="font-bold">Status:</dt>
-                <dd>{order.status}</dd>
+                    <dt className="font-bold">Status:</dt>
+                    <dd>{order.status}</dd>
 
-                <dt className="font-bold">Created At:</dt>
-                <dd>{dateFormat(order.createdAt)}</dd>
-              </dl>
-              <Dropdown component={<BiDownArrow />}>
-                <Dropdown.Content className="!relative">
-                  {order.orderItems.map((item) => (
-                    <div
-                      key={item._id}
-                      className="hover:border-2 hover:border-orange-400"
-                    >
-                      <dl>
-                        <dt className="font-semibold">Name:</dt>
-                        <dd className="line-clamp-1">{item.title}</dd>
+                    <dt className="font-bold">Created At:</dt>
+                    <dd>{dateFormat(order.createdAt)}</dd>
+                  </dl>
+                  <Dropdown component={<BiDownArrow />}>
+                    <Dropdown.Content className="!relative">
+                      {order.orderItems.map((item) => (
+                        <div
+                          key={item._id}
+                          className="hover:border-2 hover:border-orange-400"
+                        >
+                          <dl>
+                            <dt className="font-semibold">Name:</dt>
+                            <dd className="line-clamp-1">{item.title}</dd>
 
-                        <dt className="font-semibold">Amount:</dt>
-                        <dd>{currencyFormat(item.total)}</dd>
-                      </dl>
-                    </div>
-                  ))}
-                </Dropdown.Content>
-              </Dropdown>
-            </div>
-          ))
-        ) : (
-          <label>There is no order</label>
-        )}
-      </div>
-      <Pagination
-        className="mt-5"
-        currentPage={query.page}
-        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
-        totalPageCount={data.pageCounted}
-      >
-        <Pagination.Arrow>
-          <Pagination.Number />
-        </Pagination.Arrow>
-      </Pagination>
+                            <dt className="font-semibold">Amount:</dt>
+                            <dd>{currencyFormat(item.total)}</dd>
+                          </dl>
+                        </div>
+                      ))}
+                    </Dropdown.Content>
+                  </Dropdown>
+                </div>
+              ))
+            ) : (
+              <label>There is no order</label>
+            )}
+          </div>
+          <Pagination
+            className="mt-5"
+            currentPage={query.page}
+            setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+            totalPageCount={data.pageCounted}
+          >
+            <Pagination.Arrow>
+              <Pagination.Number />
+            </Pagination.Arrow>
+          </Pagination>
+        </>
+      )}
       {displayDelete && (
         <>
           <div className="backdrop" onClick={() => setDisplayCancel(null)} />

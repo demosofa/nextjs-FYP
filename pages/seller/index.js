@@ -186,22 +186,34 @@ function SellerPage() {
               <tbody>
                 {viewOrderItem.map((item, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
                     <td>
+                      <label>No.</label>
+                      {index + 1}
+                    </td>
+                    <td>
+                      <label>Image</label>
                       <img src={item.image} alt="order-item" />
                     </td>
                     <td>
+                      <label>Title</label>
                       <p className="line-clamp-1 hover:line-clamp-none">
                         {item.title}
                       </p>
                     </td>
                     <td>
+                      <label>Options</label>
                       <p className="line-clamp-1 hover:line-clamp-none">
                         {item.options.join(", ")}
                       </p>
                     </td>
-                    <td>{item.quantity}</td>
-                    <td>{currencyFormat(item.total)}</td>
+                    <td>
+                      <label>Quantity</label>
+                      {item.quantity}
+                    </td>
+                    <td>
+                      <label>Total</label>
+                      {currencyFormat(item.total)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -242,19 +254,36 @@ function SellerPage() {
                   <td>
                     <Checkbox.Item value={item._id} />
                   </td>
-                  <td>{index + 1}</td>
-                  <td>{item._id}</td>
                   <td>
+                    <label>No.</label>
+                    {index + 1}
+                  </td>
+                  <td>
+                    <label>Id</label>
+                    {item._id}
+                  </td>
+                  <td>
+                    <label>Image</label>
                     <img src={item.image} alt="order-item" />
                   </td>
                   <td>
+                    <label>Title</label>
                     <p className="line-clamp-1 hover:line-clamp-none">
                       {item.title}
                     </p>
                   </td>
-                  <td>{item.quantity}</td>
-                  <td>{currencyFormat(item.price)}</td>
-                  <td>{currencyFormat(item.total)}</td>
+                  <td>
+                    <label>Quantity</label>
+                    {item.quantity}
+                  </td>
+                  <td>
+                    <label>Price</label>
+                    {currencyFormat(item.price)}
+                  </td>
+                  <td>
+                    <label>Total</label>
+                    {currencyFormat(item.total)}
+                  </td>
                 </tr>
               ))}
             </tbody>

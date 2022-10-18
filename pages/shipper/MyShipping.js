@@ -5,18 +5,19 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
+import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
 import { Loading, Pagination } from "../../components";
 import { useState } from "react";
 import Head from "next/head";
 import { currencyFormat } from "../../shared";
 import { ItemsFromOrder } from "../../containers";
+import Select from "react-select";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function MyShipping() {
   const [viewOrder, setViewOrder] = useState(null);
-  const [query, setQuery] = useState({ page: 1, sort: "status", filter: "" });
+  const [query, setQuery] = useState({ page: 1, sort: "status", status: "" });
   const [showQR, setShowQR] = useState(null);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -33,7 +34,7 @@ function MyShipping() {
   };
   const { data, error } = useSWR(
     {
-      url: `${LocalApi}/shipper?page=${query.page}&sort=${query.sort}&filter=${query.filter}`,
+      url: `${LocalApi}/shipper?page=${query.page}&sort=${query.sort}&status=${query.status}`,
     },
     fetcher,
     {
@@ -57,94 +58,126 @@ function MyShipping() {
     }
   };
 
-  if (!data || error)
-    return (
-      <Loading
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: `translate(-50%, -50%)`,
-        }}
-      />
-    );
+  const isLoadingInitialData = !data && !error;
+
   return (
     <div className="px-24 sm:p-4 md:px-10">
-      <div className="manage_table">
-        <Head>
-          <title>My Shipping</title>
-          <meta name="description" content="My Shipping" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <table>
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Order Id</th>
-              <th>Status</th>
-              <th>Customer</th>
-              <th>Address</th>
-              <th>Phone Number</th>
-              <th>Total Value</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.lstShipping.length ? (
-              data.lstShipping.map((order, index) => (
-                <tr key={order._id}>
-                  <td>{index + 1}</td>
-                  <td>{order._id}</td>
-                  <td>{order.status}</td>
-                  <td>{order.customer.username}</td>
-                  <td>
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href={`https://maps.google.com/maps?q=${order.address}`}
-                    >
-                      {order.address}
-                    </a>
-                  </td>
-                  <td>{order.customer.user.phoneNumber}</td>
-                  <td>{currencyFormat(order.total)}</td>
-                  <td className="flex flex-col items-center">
-                    <button onClick={() => setViewOrder(order.orderItems)}>
-                      View List item
-                    </button>
-                    {order.status === "progress" && (
-                      <button onClick={() => handleShowQR(order._id)}>
-                        Show QR to seller
-                      </button>
-                    )}
-                    <Link href={`/shipping/${order._id}`}>
-                      <a className="flex items-center justify-center rounded-lg bg-amber-600 p-2">
-                        Manage Progress
-                      </a>
-                    </Link>
-                  </td>
+      <Head>
+        <title>My Shipping</title>
+        <meta name="description" content="My Shipping" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Select
+        className="w-32"
+        defaultValue={{ value: "", label: "all" }}
+        onChange={({ value }) =>
+          setQuery((prev) => ({ ...prev, status: value }))
+        }
+        options={[
+          { value: "", label: "all" },
+          { value: "pending", label: "Pending" },
+          { value: "progress", label: "Progress" },
+          { value: "shipping", label: "Shipping" },
+          { value: "arrived", label: "Arrived" },
+          { value: "validated", label: "Validated" },
+          { value: "cancel", label: "Cancel" },
+        ]}
+      />
+      {isLoadingInitialData ? (
+        <Loading.Dots
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: `translate(-50%, -50%)`,
+          }}
+        />
+      ) : (
+        <>
+          <div className="manage_table">
+            <table>
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Order Id</th>
+                  <th>Status</th>
+                  <th>Customer</th>
+                  <th>Address</th>
+                  <th>Phone Number</th>
+                  <th>Total Value</th>
+                  <th>Action</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="8" className="text-center">
-                  Go to this <Link href="/">page</Link> and accept orders first
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      <Pagination
-        className="mt-8"
-        totalPageCount={data.pageCounted}
-        currentPage={query.page}
-        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
-      >
-        <Pagination.Arrow>
-          <Pagination.Number />
-        </Pagination.Arrow>
-      </Pagination>
+              </thead>
+              <tbody>
+                {data?.lstShipping.length ? (
+                  data?.lstShipping.map((order, index) => (
+                    <tr key={order._id}>
+                      <td>{index + 1}</td>
+                      <td>{order._id}</td>
+                      <td>
+                        <span className={tailwindStatus(order.status)}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td>{order.customer.username}</td>
+                      <td>
+                        <a
+                          className="font-semibold uppercase text-blue-600 hover:text-blue-400"
+                          target="_blank"
+                          rel="noreferrer"
+                          href={`https://maps.google.com/maps?q=${order.address}`}
+                        >
+                          {order.address}
+                        </a>
+                      </td>
+                      <td>{order.customer.user.phoneNumber}</td>
+                      <td>{currencyFormat(order.total)}</td>
+                      <td className="flex flex-col items-center">
+                        <button
+                          className="mr-5 whitespace-nowrap uppercase text-green-600 hover:text-green-900 focus:underline focus:outline-none"
+                          onClick={() => setViewOrder(order.orderItems)}
+                        >
+                          View List item
+                        </button>
+                        {order.status === "progress" && (
+                          <button
+                            className="mr-5 whitespace-nowrap uppercase text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-none"
+                            onClick={() => handleShowQR(order._id)}
+                          >
+                            Show QR to seller
+                          </button>
+                        )}
+                        <Link href={`/shipping/${order._id}`}>
+                          <a className="mr-5 whitespace-nowrap uppercase text-purple-600 hover:text-purple-900 focus:underline focus:outline-none">
+                            Manage Progress
+                          </a>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="8" className="text-center">
+                      Go to this <Link href="/">page</Link> and accept orders
+                      first
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <Pagination
+            className="mt-8"
+            totalPageCount={data.pageCounted}
+            currentPage={query.page}
+            setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+          >
+            <Pagination.Arrow>
+              <Pagination.Number />
+            </Pagination.Arrow>
+          </Pagination>
+        </>
+      )}
       {viewOrder && (
         <ItemsFromOrder viewOrder={viewOrder} setViewOrder={setViewOrder} />
       )}

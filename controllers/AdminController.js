@@ -9,12 +9,12 @@ class AdminController {
 
   getAllOrder = async (req, res) => {
     try {
-      let { page, sort, filter, limit } = req.query;
+      let { page, sort, status, limit } = req.query;
       let filterOptions = {};
-      if (filter)
+      if (status)
         filterOptions = {
           ...filterOptions,
-          status: filter,
+          status,
         };
       if (!limit) limit = 10;
 
@@ -56,17 +56,17 @@ class AdminController {
 
   getAllProfile = async (req, res) => {
     try {
-      let { search, page, sort, filter, limit } = req.query;
+      let { search, page, sort, status, limit } = req.query;
       let filterOptions = { role: { $ne: Role.admin } };
       if (search)
         filterOptions = {
           ...filterOptions,
           $text: { $search: search },
         };
-      if (filter)
+      if (status)
         filterOptions = {
           ...filterOptions,
-          status: filter,
+          status,
         };
       if (!limit) limit = 10;
       const lstProfile = await this.unit.Account.getAll(filterOptions)

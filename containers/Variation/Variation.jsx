@@ -33,6 +33,7 @@ export default function Variation() {
             <th>Type</th>
             <th>Price</th>
             <th>Quantity</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -41,8 +42,12 @@ export default function Variation() {
               if (!variation.types.length) return undefined;
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
                   <td>
+                    <label>No.</label>
+                    {index + 1}
+                  </td>
+                  <td>
+                    <label>Sku</label>
                     <input
                       value={variation.sku}
                       onChange={(e) =>
@@ -50,8 +55,12 @@ export default function Variation() {
                       }
                     />
                   </td>
-                  <td>{variation.types.join("/")}</td>
                   <td>
+                    <label>Type</label>
+                    {variation.types.join("/")}
+                  </td>
+                  <td>
+                    <label>Price</label>
                     <input
                       value={variation.price}
                       onChange={(e) =>
@@ -62,6 +71,7 @@ export default function Variation() {
                     />
                   </td>
                   <td>
+                    <label>Quantity</label>
                     <input
                       value={variation.quantity}
                       onChange={(e) =>
@@ -71,7 +81,10 @@ export default function Variation() {
                       }
                     />
                   </td>
-                  <td onClick={() => dispatch(deleteVariation(index))}>
+                  <td
+                    className="text-center"
+                    onClick={() => dispatch(deleteVariation(index))}
+                  >
                     <GiTrashCan />
                   </td>
                 </tr>
