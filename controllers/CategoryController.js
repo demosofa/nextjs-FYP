@@ -19,9 +19,9 @@ class CategoryController {
     return res.status(200).json(subCategories);
   };
   getCategoriesAreFirstLevel = async (req, res) => {
-    const categories = await this.unit.Category.getAll()
-      .where("isFirstLevel", "true")
-      .lean();
+    const categories = await this.unit.Category.getAll({
+      isFirstLevel: true,
+    }).lean();
     return res.status(200).json(categories);
   };
   create = async (req, res) => {

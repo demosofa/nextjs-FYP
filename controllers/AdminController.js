@@ -56,17 +56,17 @@ class AdminController {
 
   getAllProfile = async (req, res) => {
     try {
-      let { search, page, sort, status, limit } = req.query;
+      let { search, page, sort, role, limit } = req.query;
       let filterOptions = { role: { $ne: Role.admin } };
       if (search)
         filterOptions = {
           ...filterOptions,
           $text: { $search: search },
         };
-      if (status)
+      if (role)
         filterOptions = {
           ...filterOptions,
-          status,
+          role,
         };
       if (!limit) limit = 10;
       const lstProfile = await this.unit.Account.getAll(filterOptions)

@@ -1,7 +1,7 @@
 import Navbar from "./Navbar/Navbar";
 import Sidebar from "./Sidebar/Sidebar";
 import Footer from "./Footer/Footer";
-import Notification from "./Notification/Notification";
+import NotifyToast from "./NotifyToast/NotifyToast";
 import Dashboard from "./Dashboard";
 import General from "./General";
 import { useMemo } from "react";
@@ -42,4 +42,4 @@ export default function Layout({ children, routerPath }) {
   );
 }
 
-export { Navbar, Sidebar, Footer, Notification };
+export { Navbar, Sidebar, Footer, NotifyToast };

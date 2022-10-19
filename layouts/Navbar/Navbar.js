@@ -62,7 +62,15 @@ export default function Navbar({ arrLink }) {
         {localStorage.getItem("accessToken") && (
           <>
             <Link href="/profile">My Profile</Link>
-            <Notification component={<FaBell color="white" />} />
+            <Dropdown
+              component={<FaBell color="white" />}
+              hoverable={true}
+              clickable={false}
+            >
+              <Dropdown.Content className="right-0 max-h-[85vh] w-64 overflow-y-auto !p-3">
+                <Notification />
+              </Dropdown.Content>
+            </Dropdown>
           </>
         )}
         <RouterAuth />

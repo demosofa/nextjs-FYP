@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { Dropdown, Loading, Pagination, Form } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { convertTime, currencyFormat, dateFormat } from "../../shared";
-import { expireStorage, retryAxios } from "../../utils";
+import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
 import { BiDownArrow } from "react-icons/bi";
 import { IoMdTrash } from "react-icons/io";
 import Head from "next/head";
@@ -106,7 +106,11 @@ export default function ManageOrder() {
                     </dd>
 
                     <dt className="font-bold">Status:</dt>
-                    <dd>{order.status}</dd>
+                    <dd>
+                      <span className={tailwindStatus(order.status)}>
+                        {order.status}
+                      </span>
+                    </dd>
 
                     <dt className="font-bold">Created At:</dt>
                     <dd>{dateFormat(order.createdAt)}</dd>

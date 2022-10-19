@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Form } from "../components";
-import { Notification } from "../layouts";
+import { NotifyToast } from "../layouts";
 import { expireStorage, Validate } from "../utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -94,7 +94,7 @@ export default function Login() {
           </p>
         </div>
       </div>
-      <Notification />
+      <NotifyToast />
     </>
   );
 }

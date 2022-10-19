@@ -4,12 +4,12 @@ import { useDispatch } from "react-redux";
 import useSWRInfinite from "swr/infinite";
 import { expireStorage, retryAxios, timeAgo } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Loading, Dropdown } from "../../components";
+import { Loading } from "../../components";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const PAGE_SIZE = 10;
 
-export default function Notification({ className, component, ...props }) {
+export default function Notification({ className, ...props }) {
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -81,49 +81,47 @@ export default function Notification({ className, component, ...props }) {
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
 
   return (
-    <Dropdown component={component} hoverable={true} clickable={false}>
-      <Dropdown.Content className="right-0 max-h-[85vh] w-64 overflow-y-auto !p-3">
-        {!isLoadingInitialData ? (
-          notifications.map((item, index) => (
-            <div
-              className="w-full text-gray-700 hover:shadow-md"
-              key={index}
-              onClick={() => handleRead(item._id)}
-              {...props}
-            >
-              <label>
-                from{" "}
-                <span className="text-base font-medium">
-                  {item.from.username}
-                </span>
-              </label>
-              <label>
-                {" "}
-                at{" "}
-                <span className="text-base font-medium">
-                  {timeAgo(item.createdAt)}
-                </span>
-              </label>
-              <p>{item.content}</p>
-              <button onClick={() => handleDelete(index)}>Delete</button>
-            </div>
-          ))
-        ) : (
-          <Loading.Spinner />
-        )}
+    <div>
+      {!isLoadingInitialData ? (
+        notifications.map((item, index) => (
+          <div
+            className="w-full text-gray-700 hover:shadow-md"
+            key={index}
+            onClick={() => handleRead(item._id)}
+            {...props}
+          >
+            <label>
+              from{" "}
+              <span className="text-base font-medium">
+                {item.from.username}
+              </span>
+            </label>
+            <label>
+              {" "}
+              at{" "}
+              <span className="text-base font-medium">
+                {timeAgo(item.createdAt)}
+              </span>
+            </label>
+            <p>{item.content}</p>
+            <button onClick={() => handleDelete(index)}>Delete</button>
+          </div>
+        ))
+      ) : (
+        <Loading.Spinner />
+      )}
 
-        <button
-          className="text-black"
-          disabled={isLoadingMore || isReachingEnd}
-          onClick={() => setSize(size + 1)}
-        >
-          {isLoadingMore
-            ? "loading..."
-            : isReachingEnd
-            ? "no more notifications"
-            : "load more"}
-        </button>
-      </Dropdown.Content>
-    </Dropdown>
+      <button
+        className="text-black"
+        disabled={isLoadingMore || isReachingEnd}
+        onClick={() => setSize(size + 1)}
+      >
+        {isLoadingMore
+          ? "loading..."
+          : isReachingEnd
+          ? "no more notifications"
+          : "load more"}
+      </button>
+    </div>
   );
 }

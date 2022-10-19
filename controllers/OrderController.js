@@ -13,8 +13,10 @@ class OrderController {
   lstOrder = async (req, res) => {
     let { page, sort, limit } = req.query;
     if (!limit) limit = 10;
-    const lstOrder = await this.unit.Order.getAll()
-      .where("status", "pending")
+    const lstOrder = await this.unit.Order.getAll({
+      status: "pending",
+      customer: { $ne: req.user.accountId },
+    })
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({

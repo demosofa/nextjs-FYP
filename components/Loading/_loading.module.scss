@@ -22,7 +22,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
 }
 
 .spinner .circle {
@@ -92,46 +95,62 @@
   }
 }
 
-.wrapper{
-  width: 142px;
-  height: 40px;
-  margin: -20px 0 0 -71px;
-  background: white;
-  filter: contrast(20);
-}
-.dot{
-  width: 16px;
-  height: 16px;
-  filter: blur(4px);
-  background: #000;
-  border-radius: 50%;
-  transform: translateX(0);
-  animation: dot 2.8s infinite;
-}
-.dots{
-  transform: translateX(0);
-  margin-top: 12px;
-  margin-left: 31px;
-  animation: dots 2.8s infinite;
-  > span{
-    display: block;
-    float: left;
-    width: 16px;
-    height: 16px;
-    margin-left: 16px;
-    filter: blur(4px);
-    background: #000;
-    border-radius: 50%;
-  }
+.filter {
+  filter: contrast(5);
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 12px 0;
+  margin: 0 -5%;
+  overflow: hidden;
 }
 
-@keyframes dot{
-  50%{
-    transform: translateX(96px);
-  }
+.dot_shuttle {
+  position: relative;
+  left: -15px;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  background-color: black;
+  color: transparent;
+  margin: -1px 0;
+  filter: blur(2px);
 }
-@keyframes dots{
-  50%{
-    transform: translateX(-31px);
+
+.dot_shuttle::before, .dot_shuttle::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  background-color: black;
+  color: transparent;
+  filter: blur(2px);
+}
+
+.dot_shuttle::before {
+  left: 15px;
+  animation: dotShuttle 2s infinite ease-out;
+}
+
+.dot_shuttle::after {
+  left: 30px;
+}
+
+@keyframes dotShuttle {
+  0%,
+  50%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-45px);
+  }
+  75% {
+    transform: translateX(45px);
   }
 }

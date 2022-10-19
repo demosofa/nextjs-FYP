@@ -12,7 +12,7 @@ import Select from "react-select";
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function ManageProfiles() {
-  const [query, setQuery] = useState({ page: 1, sort: "status", status: "" });
+  const [query, setQuery] = useState({ page: 1, sort: "role", role: "" });
   const dispatch = useDispatch();
   const router = useRouter();
   const fetcher = async (config) => {
@@ -28,7 +28,7 @@ export default function ManageProfiles() {
   };
   const { data, error, mutate } = useSWR(
     {
-      url: `${LocalApi}/admin/profiles?page=${query.page}&sort=${query.sort}&status=${query.status}`,
+      url: `${LocalApi}/admin/profiles?page=${query.page}&sort=${query.sort}&role=${query.role}`,
     },
     fetcher,
     {
@@ -111,13 +111,12 @@ export default function ManageProfiles() {
       <Select
         className="w-32 sm:pl-3"
         defaultValue={{ value: "", label: "all" }}
-        onChange={({ value }) =>
-          setQuery((prev) => ({ ...prev, status: value }))
-        }
+        onChange={({ value }) => setQuery((prev) => ({ ...prev, role: value }))}
         options={[
           { value: "", label: "all" },
-          { value: "block", label: "Block" },
-          { value: "unblock", label: "Unblock" },
+          { value: "user", label: "User" },
+          { value: "shipper", label: "Shipper" },
+          { value: "seller", label: "Seller" },
         ]}
       />
       {isLoadingInitialData ? (

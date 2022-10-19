@@ -2,14 +2,13 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Loading, Slider } from "../../components";
+import { Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
-import { Role, dateFormat, currencyFormat } from "../../shared";
+import { Role, dateFormat } from "../../shared";
 import Head from "next/head";
 import { MyOrder, ProductSlider } from "../../containers";
 import { useSelector } from "react-redux";
 import { useMediaContext } from "../../contexts/MediaContext";
-import styles from "../../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -64,7 +63,7 @@ function MyProfile() {
         <meta name="description" content="My Profile" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="card h-full min-h-0 !px-5">
+      <div className="card mx-auto h-full min-h-0 !px-5">
         <dl className="mb-5">
           <dt className="font-semibold">Full Name:</dt>
           <dd>{data.fullname}</dd>

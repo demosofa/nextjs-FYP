@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navbar, Sidebar, Footer, Notification } from ".";
+import { Navbar, Sidebar, Footer, NotifyToast } from ".";
 import { Animation, Icon, Search } from "../components";
 import {
   AiOutlineMenuFold,
@@ -26,7 +26,7 @@ export default function General({ children, arrLink }) {
                 onClick={() => setToggle((prev) => !prev)}
               />
               <Link href="/">
-                <a>
+                <a onClick={() => setToggle(!toggle)}>
                   <Icon>
                     <AiOutlineHome />
                   </Icon>
@@ -41,14 +41,20 @@ export default function General({ children, arrLink }) {
               />
               {arrLink?.map(({ title, path, icon }) => (
                 <Link key={title} href={path}>
-                  <Sidebar.Item className="!justify-start">
+                  <Sidebar.Item
+                    className="!justify-start"
+                    onClick={() => setToggle(!toggle)}
+                  >
                     {icon && <Icon>{icon}</Icon>}
                     {title}
                   </Sidebar.Item>
                 </Link>
               ))}
               <Link href="/overview/cart">
-                <Sidebar.Item className="!justify-start">
+                <Sidebar.Item
+                  className="!justify-start"
+                  onClick={() => setToggle(!toggle)}
+                >
                   <Icon>
                     <AiOutlineShoppingCart />
                   </Icon>
@@ -67,7 +73,7 @@ export default function General({ children, arrLink }) {
         ))}
       <div className="body">{children}</div>
       <Footer />
-      <Notification />
+      <NotifyToast />
     </>
   );
 }

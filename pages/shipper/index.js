@@ -63,14 +63,15 @@ function Shipper() {
   const handleSubmit = async () => {
     mutate(async (data) => {
       try {
-        if (data)
+        if (data && checkOrder.length) {
           await fetcher({
             url: `${LocalApi}/shipper`,
             method: "put",
             data: { acceptedOrders: checkOrder },
           });
-        dispatch(addNotification({ message: "Success receive orders" }));
-        router.push("/");
+          dispatch(addNotification({ message: "Success receive orders" }));
+          router.push("/");
+        } else throw new Error("Please select orders");
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
@@ -113,7 +114,7 @@ function Shipper() {
                   <td>
                     <label>Address</label>
                     <a
-                      className="font-semibold text-blue-600 hover:text-blue-400"
+                      className="font-semibold uppercase text-blue-600 hover:text-blue-400"
                       target="_blank"
                       rel="noreferrer"
                       href={`https://maps.google.com/maps?q=${order.address}`}

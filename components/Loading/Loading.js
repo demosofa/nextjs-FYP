@@ -43,13 +43,8 @@ Loading.Text = function LoadingText({
 Loading.Dots = function LoadingDots({ className, ...props }) {
   return (
     <div className={className} {...props}>
-      <div className={styles.wrapper}>
-        <span className={styles.dot}></span>
-        <div className={styles.dots}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+      <div className={styles.filter}>
+        <div className={styles.dot_shuttle} />
       </div>
     </div>
   );

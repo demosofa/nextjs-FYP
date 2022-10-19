@@ -1,4 +1,4 @@
-import { Notification, Sidebar } from ".";
+import { NotifyToast, Sidebar } from ".";
 import Link from "next/link";
 import { Animation, Icon } from "../components";
 import { AiOutlineHome, AiOutlineArrowRight } from "react-icons/ai";
@@ -45,7 +45,7 @@ function Dashboard({ children, arrLink }) {
         ))}
       </Sidebar>
       <div className="body">{children}</div>
-      <Notification />
+      <NotifyToast />
     </>
   );
 }

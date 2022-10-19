@@ -70,7 +70,8 @@ export default function MyOrder() {
     <div className="w-full">
       <div className="mb-3 flex justify-between">
         <Search
-          className="max-w-fit"
+          className="!m-0 max-w-fit"
+          style={{ width: "100%" }}
           placeholder="search shipper"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

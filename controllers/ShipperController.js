@@ -56,16 +56,16 @@ class ShipperController {
     const { acceptedOrders } = req.body;
     const { accountId, role } = req.user;
     try {
-      const addOrders = await this.unit.Account.updateOne(
-        { _id: accountId, role },
-        {
-          $push: {
-            shipping: {
-              $each: acceptedOrders,
-            },
-          },
-        }
-      );
+      // await this.unit.Account.updateOne(
+      //   { _id: accountId, role },
+      //   {
+      //     $push: {
+      //       shipping: {
+      //         $each: acceptedOrders,
+      //       },
+      //     },
+      //   }
+      // );
       await this.unit.Order.updateMany(
         {
           _id: { $in: acceptedOrders },
@@ -74,7 +74,6 @@ class ShipperController {
       );
       return res.status(200).end();
     } catch (error) {
-      console.log(error.message);
       return res.status(500).json(error);
     }
   };

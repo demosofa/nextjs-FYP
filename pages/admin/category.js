@@ -50,7 +50,7 @@ export default function CrudCategory({ maxTree = 3 }) {
       if (!name) throw new Error("Please fill category name");
       const response = await axios.post(
         `${LocalApi}/category`,
-        { name, isFirstLevel: "true" },
+        { name, isFirstLevel: true },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

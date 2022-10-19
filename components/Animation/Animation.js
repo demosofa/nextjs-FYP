@@ -1,5 +1,5 @@
 import React from "react";
-import { useSpring, useTransition, animated } from "react-spring";
+import { useSpring, useTransition, animated, config } from "react-spring";
 
 export default function Animation() {
   return;
@@ -111,14 +111,12 @@ Animation.Move = function AnimateMove({
     keys: (item) => item.key,
     from: {
       transform: reverse ? "translateX(-100%)" : "translateX(100%)",
-      opacity: 0,
     },
-    enter: { transform: "translateX(0%)", opacity: 1 },
+    enter: { transform: "translateX(0%)" },
     leave: {
-      transform: reverse ? "translateX(50%)" : "translateX(-50%)",
-      opacity: 0,
+      transform: reverse ? "translateX(-100%)" : "translateX(100%)",
     },
-    config: { duration: 600 },
+    config: { duration: 200 },
   });
   return transition(
     (prop, item) =>
