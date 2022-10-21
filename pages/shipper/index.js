@@ -126,8 +126,10 @@ function Shipper() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center">
-                  Currently, there is any customer ordering
+                <td colSpan="4">
+                  <p className="text-center">
+                    Currently, there is any customer ordering
+                  </p>
                 </td>
               </tr>
             )}

@@ -18,6 +18,8 @@ export { default as Slider } from "./Slider/Slider";
 export { default as Timer } from "./Timer/Timer";
 export { default as Breadcrumb } from "./Breadcrumb/Breadcrumb";
 export { default as QRreader } from "./QRreader/QRreader";
+export { default as GoogleMap } from "./GoogleMap/GoogleMap";
+export { default as StarRating } from "./StarRating/StarRating";
 
 export {
   Animation,

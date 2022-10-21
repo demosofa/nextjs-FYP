@@ -34,7 +34,6 @@ export default function Register() {
       <div className="login-container">
         <Slider
           config={{
-            slides: { preView: 1 },
             drag: false,
             created: (slide) => {
               setInstance(slide);

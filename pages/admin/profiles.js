@@ -33,7 +33,6 @@ export default function ManageProfiles() {
     fetcher,
     {
       onError(err, key, config) {
-        console.log(err);
         if (err.status === 300) router.back();
         else if (err.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
@@ -170,8 +169,10 @@ export default function ManageProfiles() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="text-center">
-                      No guest has resgitered our page
+                    <td colSpan="6">
+                      <p className="text-center">
+                        No guest has resgitered our page
+                      </p>
                     </td>
                   </tr>
                 )}

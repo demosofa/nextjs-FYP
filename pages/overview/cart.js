@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
-import { Animation, Form, Icon, Increment } from "../../components";
+import { Animation, Form, Icon, Increment, GoogleMap } from "../../components";
 import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import Head from "next/head";
@@ -25,6 +25,7 @@ export default function Cart() {
         title: "",
         image: "",
         options: [],
+        extraCostPerItem: 0,
         quantity: 0,
         price: 0,
         total: 0,
@@ -38,6 +39,10 @@ export default function Cart() {
     setCart(cartState);
   }, [cartState]);
 
+  const shippingFee = cart.products.reduce((prev, curr) => {
+    return prev + curr.quantity * curr.extraCostPerItem;
+  }, 0);
+
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -49,7 +54,7 @@ export default function Cart() {
       new Validate(address).isEmpty().isNotSpecial();
       await axios.post(
         `${LocalApi}/order`,
-        { ...cart, address },
+        { ...cart, shippingFee, address },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -57,6 +62,9 @@ export default function Cart() {
         }
       );
       dispatch(clearCart());
+      dispatch(
+        addNotification({ message: "Success order your cart", type: "success" })
+      );
       setDisplay(false);
       router.back();
     } catch (error) {
@@ -138,11 +146,11 @@ export default function Cart() {
             <dt>Sub Total</dt>
             <dd>{currencyFormat(cart.total)}</dd>
             <dt>Shipping fee</dt>
-            <dd>{currencyFormat(cart.quantity * 1000)}</dd>
+            <dd>{currencyFormat(shippingFee)}</dd>
           </dl>
           <dl className="total">
             <dt>Total</dt>
-            <dd>{currencyFormat(cart.total + cart.quantity * 0.5)}</dd>
+            <dd>{currencyFormat(cart.total + shippingFee)}</dd>
           </dl>
           <button onClick={() => setDisplay(true)}>Checkout</button>
         </div>
@@ -161,12 +169,7 @@ export default function Cart() {
               <Form.Title>Your Address</Form.Title>
               <Form.Input onChange={(e) => setAddress(e.target.value)} />
             </Form.Item>
-            <Form.Link
-              target="_blank"
-              href={`https://maps.google.com/maps?q=${address}`}
-            >
-              Check address in google map
-            </Form.Link>
+            <GoogleMap width="100%" height="300px" address={address} />
             <Form.Item>
               <Form.Submit>Submit</Form.Submit>
               <Form.Button

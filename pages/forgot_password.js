@@ -23,6 +23,7 @@ export default function ForgotPassword() {
         switch (entry[0]) {
           case "username":
             new Validate(entry[1]).isEmpty();
+            break;
           case "email":
             new Validate(entry[1]).isEmpty().isEmail();
             break;

@@ -9,7 +9,11 @@ const Variation = new Schema(
       { type: Schema.Types.ObjectId, ref: "VariantOption", required: true },
     ],
     price: { type: Number, required: true },
+    cost: { type: Number, required: true },
     quantity: { type: Number, required: true },
+    length: { type: Number, required: true },
+    width: { type: Number, required: true },
+    height: { type: Number, required: true },
     sold: { type: Number, default: 0 },
   },
   { timestamps: true }

@@ -20,6 +20,7 @@ const Order = new Schema(
       },
     ],
     quantity: { type: Number, required: true },
+    shippingFee: { type: Number, default: 0 },
     total: { type: Number, required: true },
     address: { type: String, required: true },
     status: {

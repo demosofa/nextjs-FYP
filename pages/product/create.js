@@ -1,11 +1,11 @@
 import axios from "axios";
 import Head from "next/head";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
-import { FileUpload, TagsInput, Form, Container } from "../../components";
+import { FileUpload, TagsInput, Form } from "../../components";
 import { Variation, Variant, SelectCategory } from "../../containers";
-import { retryAxios, Validate, uploadApi } from "../../utils";
+import { retryAxios, Validate, uploadApi, expireStorage } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 import { editAllVariations } from "../../redux/reducer/variationSlice";
 import { addNotification } from "../../redux/reducer/notificationSlice";
@@ -13,6 +13,8 @@ import Select from "react-select";
 import dynamic from "next/dynamic";
 import { deleteAllVariant } from "../../redux/reducer/variantSlice";
 import { useMediaContext } from "../../contexts/MediaContext";
+import { currencyFormat, Role } from "../../shared";
+import decoder from "jwt-decode";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -30,19 +32,61 @@ function CreateForm() {
     images: [],
     manufacturer: "",
     price: 0,
+    cost: 0,
+    length: 0,
+    width: 0,
+    height: 0,
     quantity: 0,
   });
+
+  useEffect(() => {
+    const accessToken = expireStorage.getItem("accessToken");
+    let controller;
+    if (!accessToken) router.push("/login");
+    else {
+      controller = new AbortController();
+      try {
+        const { role } = decoder(accessToken);
+        if (role !== Role.admin) router.back();
+      } catch (error) {
+        axios
+          .post(`${LocalApi}/auth/refreshToken`, null, {
+            signal: controller.signal,
+          })
+          .then((res) => expireStorage.setItem("accessToken", res.data))
+          .catch(() => router.back());
+      }
+    }
+    return () => {
+      if (controller) controller.abort();
+    };
+  }, []);
 
   const { device, Devices } = useMediaContext();
 
   const validateInput = () => {
-    const { title, description, status, manufacturer, price, quantity } = input;
+    const {
+      title,
+      description,
+      status,
+      manufacturer,
+      price,
+      cost,
+      length,
+      width,
+      height,
+      quantity,
+    } = input;
     Object.entries({
       title,
       description,
       status,
       manufacturer,
       price,
+      cost,
+      length,
+      width,
+      height,
       quantity,
     }).forEach((entry) => {
       switch (entry[0]) {
@@ -57,8 +101,12 @@ function CreateForm() {
           new Validate(entry[1]).isEmpty();
           break;
         case "price":
+        case "cost":
           new Validate(entry[1]).isEmpty().isVND();
           break;
+        case "length":
+        case "width":
+        case "height":
         case "quantity":
           new Validate(entry[1]).isEmpty().isNumber();
           break;
@@ -68,10 +116,10 @@ function CreateForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let uploaded;
+    let uploaded = [];
     try {
       validateInput();
-      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+      const accessToken = expireStorage.getItem("accessToken");
       retryAxios(axios);
       uploaded = await Promise.all(
         input.images.map((image) => {
@@ -88,11 +136,13 @@ function CreateForm() {
       dispatch(deleteAllVariant());
       router.back();
     } catch (error) {
-      const arrPublic_id = uploaded.map((item) => item.public_id);
-      await axios.post(`${LocalApi}/destroy`, {
-        path: "store",
-        files: arrPublic_id,
-      });
+      if (uploaded.length) {
+        const arrPublic_id = uploaded.map((item) => item.public_id);
+        await axios.post(`${LocalApi}/destroy`, {
+          path: "store",
+          files: arrPublic_id,
+        });
+      }
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
@@ -184,28 +234,27 @@ function CreateForm() {
             <label>{`${input.description.length}/1000`}</label>
           </Form.Item>
 
-          <div className="flex flex-wrap justify-between">
-            <FileUpload
-              prevFiles={input.images}
-              setPrevFiles={(images) =>
-                setInput((prev) => ({ ...prev, images }))
-              }
-              style={{ height: "200px", width: "100%" }}
+          <FileUpload
+            prevFiles={input.images}
+            setPrevFiles={(images) => setInput((prev) => ({ ...prev, images }))}
+            style={{ width: "100%" }}
+          >
+            <FileUpload.Show />
+            <FileUpload.Input
+              id="file_input"
+              multiple
+              style={{
+                display: "none",
+              }}
             >
-              <FileUpload.Show></FileUpload.Show>
-              <FileUpload.Input
-                id="file_input"
-                multiple
-                style={{
-                  display: "none",
-                }}
-              >
-                <label htmlFor="file_input" className="add_file__btn">
-                  <AiOutlinePlus style={{ width: "30px", height: "30px" }} />
-                </label>
-              </FileUpload.Input>
-            </FileUpload>
-            <div className="flex w-fit flex-col">
+              <label htmlFor="file_input" className="add_file__btn">
+                <AiOutlinePlus style={{ width: "30px", height: "30px" }} />
+              </label>
+            </FileUpload.Input>
+          </FileUpload>
+          <div className="flex flex-wrap justify-center gap-12">
+            <div className="flex flex-col">
+              <Form.Title className="mx-auto text-lg">Information</Form.Title>
               <Form.Item>
                 <Form.Title>Manufacturer</Form.Title>
                 <Form.Input
@@ -220,6 +269,52 @@ function CreateForm() {
               </Form.Item>
 
               <Form.Item>
+                <Form.Title>Quantity</Form.Title>
+                <Form.Input
+                  value={input.quantity}
+                  onChange={(e) =>
+                    setInput((prev) => ({
+                      ...prev,
+                      quantity: e.target.value,
+                    }))
+                  }
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Form.Title>Length</Form.Title>
+                <Form.Input
+                  value={input.length}
+                  onChange={(e) =>
+                    setInput((prev) => ({ ...prev, length: e.target.value }))
+                  }
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Form.Title>Width</Form.Title>
+                <Form.Input
+                  value={input.width}
+                  onChange={(e) =>
+                    setInput((prev) => ({ ...prev, width: e.target.value }))
+                  }
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Form.Title>Height</Form.Title>
+                <Form.Input
+                  value={input.height}
+                  onChange={(e) =>
+                    setInput((prev) => ({ ...prev, height: e.target.value }))
+                  }
+                />
+              </Form.Item>
+            </div>
+
+            <div className="flex flex-col">
+              <Form.Title className="mx-auto text-lg">Pricing</Form.Title>
+              <Form.Item>
                 <Form.Title>Price</Form.Title>
                 <Form.Input
                   value={input.price}
@@ -228,16 +323,21 @@ function CreateForm() {
                   }
                 />
               </Form.Item>
-
               <Form.Item>
-                <Form.Title>Quantity</Form.Title>
+                <Form.Title>Cost</Form.Title>
                 <Form.Input
-                  value={input.quantity}
+                  value={input.cost}
                   onChange={(e) =>
-                    setInput((prev) => ({ ...prev, quantity: e.target.value }))
+                    setInput((prev) => ({ ...prev, cost: e.target.value }))
                   }
                 />
               </Form.Item>
+              <dl>
+                <dt>Margin</dt>
+                <dd>{Math.ceil(100 - (input.cost / input.price) * 100)}%</dd>
+                <dt>Profit</dt>
+                <dd>{currencyFormat(input.price - input.cost)}</dd>
+              </dl>
             </div>
           </div>
 
@@ -247,12 +347,16 @@ function CreateForm() {
               dispatch(
                 editAllVariations({
                   price: input.price,
+                  cost: input.cost,
+                  length: input.length,
+                  width: input.width,
+                  height: input.height,
                   quantity: input.quantity,
                 })
               )
             }
           >
-            Apply Price and Quantity to all Variations
+            Apply all Info to all Variations
           </Form.Button>
           <Variation />
         </div>

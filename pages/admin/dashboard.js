@@ -109,8 +109,10 @@ function Dashboard() {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center">
-                  No customer has bought anything
+                <td colSpan="5">
+                  <p className="text-center">
+                    There is any product that has been bought or ordered
+                  </p>
                 </td>
               </tr>
             )}

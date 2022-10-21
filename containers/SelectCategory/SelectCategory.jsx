@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import Select from "react-select";
 import { Loading } from "../../components";
@@ -12,14 +13,18 @@ export default function SelectCategory({
 }) {
   const [selected, setSelected] = useState();
   const [categories, setCategories] = useState();
+  const router = useRouter();
   const { loading } = useAxiosLoad({
     async callback(axiosInstance) {
       const url = parentId
         ? `${LocalApi}/category/${parentId}`
         : `${LocalApi}/category`;
       const response = await axiosInstance({ url });
-      setCategories(response.data);
-      setSelectedCategories(index, null);
+      if (!response.data.length) router.push("/admin/category");
+      else {
+        setCategories(response.data);
+        setSelectedCategories(index, null);
+      }
     },
     deps: [parentId],
   });

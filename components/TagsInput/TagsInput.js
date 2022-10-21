@@ -30,9 +30,9 @@ export default function TagsInput({
 
   const handleInput = (e) => {
     let input = text.trim();
-    if (input.length > 2 && input.slice(-1) === ",") {
+    if (input.length && input.slice(-1) === ",") {
       input = input.replaceAll(",", "");
-      if (!tags.includes(input) && input.length > 2) setTags([...tags, input]);
+      if (!tags.includes(input) && input.length) setTags([...tags, input]);
       handleFilter("");
       e.target.focus();
     }

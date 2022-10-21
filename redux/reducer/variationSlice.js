@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-/** @type {({ sku: string, types: string[], price: number, quantity: number }[])} */
+/** @type {({ sku: string, types: string[], price: number, cost: number, quantity: number, length:number, width:number, height:number }[])} */
 const initialState = [];
 
 const variation = createSlice({
@@ -12,6 +12,10 @@ const variation = createSlice({
         sku: "",
         types: variant,
         price: 0,
+        cost: 0,
+        length: 0,
+        width: 0,
+        height: 0,
         quantity: 0,
       }));
     },
@@ -22,8 +26,7 @@ const variation = createSlice({
       return clone;
     },
     editAllVariations(state, { payload }) {
-      const { price, quantity } = payload;
-      return state.map((item) => ({ ...item, price, quantity }));
+      return state.map((item) => ({ ...item, ...payload }));
     },
     deleteVariation(state, { payload }) {
       return state.filter((_, index) => index !== payload);

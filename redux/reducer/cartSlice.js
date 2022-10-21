@@ -8,6 +8,7 @@ import pushCart from "../async/pushCart";
  *  title: string,
  *  image: string,
  *  options: string[],
+ *  extraCostPerItem: number,
  *  quantity: number,
  *  price: number,
  *  total: number,

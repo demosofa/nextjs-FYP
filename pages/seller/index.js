@@ -141,8 +141,10 @@ function SellerPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center">
-                    Currently, seller has yet validated any shipper order
+                  <td colSpan="5">
+                    <p className="text-center">
+                      Currently, seller has yet validated any shipper order
+                    </p>
                   </td>
                 </tr>
               )}

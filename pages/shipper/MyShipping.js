@@ -157,9 +157,11 @@ function MyShipping() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="8" className="text-center">
-                      Go to this <Link href="/">page</Link> and accept orders
-                      first
+                    <td colSpan="8">
+                      <p className="text-center">
+                        Go to this <Link href="/">page</Link> and accept orders
+                        first
+                      </p>
                     </td>
                   </tr>
                 )}

@@ -25,6 +25,12 @@ export default function General({ children, arrLink }) {
                 className="absolute top-0 right-0 cursor-pointer"
                 onClick={() => setToggle((prev) => !prev)}
               />
+              {typeof window !== "undefined" &&
+                localStorage.getItem("accessToken") && (
+                  <Link href="/profile">
+                    <a onClick={() => setToggle(!toggle)}>My Profile</a>
+                  </Link>
+                )}
               <Link href="/">
                 <a onClick={() => setToggle(!toggle)}>
                   <Icon>

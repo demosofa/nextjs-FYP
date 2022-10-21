@@ -25,6 +25,11 @@ function Dashboard({ children, arrLink }) {
           toggle ? "sm:left-0" : "sm:left-[-10rem]"
         }`}
       >
+        {typeof window !== "undefined" && localStorage.getItem("accessToken") && (
+          <Link href="/profile">
+            <a onClick={() => setToggle(!toggle)}>My Profile</a>
+          </Link>
+        )}
         <Link href="/">
           <a>
             <Icon>

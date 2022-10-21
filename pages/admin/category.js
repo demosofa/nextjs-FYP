@@ -14,7 +14,6 @@ import { useRouter } from "next/router";
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function CrudCategory({ maxTree = 3 }) {
-  const dispatch = useDispatch();
   const [categories, setCategories] = useState([]);
   const { loading, isLoggined, isAuthorized } = useAuthLoad({
     async cb(axiosInstance) {
@@ -25,6 +24,7 @@ export default function CrudCategory({ maxTree = 3 }) {
   });
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!loading && !isLoggined && !isAuthorized) router.push("/login");
@@ -75,10 +75,11 @@ export default function CrudCategory({ maxTree = 3 }) {
       <CategoryInput callback={handleAddCategory}></CategoryInput>
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         {categories.length &&
-          categories.map((category) => {
+          categories.map((category, index) => {
             return (
               <SubCategory
                 key={category.updatedAt}
+                index={index}
                 data={category}
                 maxTree={maxTree}
                 setDelete={() =>
@@ -94,7 +95,7 @@ export default function CrudCategory({ maxTree = 3 }) {
   );
 }
 
-function SubCategory({ data, maxTree, setDelete, ...props }) {
+function SubCategory({ data, index, maxTree, setDelete, ...props }) {
   const accessToken = expireStorage.getItem("accessToken");
   const [toggle, setToggle] = useState({
     edit: false,
@@ -190,7 +191,10 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
           />
         )) || (
           <div className={styles.tab_container}>
-            {currentCategory.name}
+            <label>
+              <span>{index + 1}. </span>
+              {currentCategory.name}
+            </label>
             {!toggle.edit && (
               <Dropdown component={<BiDotsVertical />} hoverable={true}>
                 <Dropdown.Content className="right-0">
@@ -217,7 +221,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
       {maxTree > 0 && (
         <div className="flex items-center gap-6 border-t py-2 px-3 dark:border-gray-600 sm:gap-2">
           <button
-            className={styles.btn}
+            className="rounded bg-blue-600 px-4 py-2 text-blue-100 transition duration-300 hover:bg-blue-500"
             onClick={() =>
               setToggle((prev) => ({ ...prev, add: !prev.add, more: true }))
             }
@@ -226,7 +230,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
           </button>
           {maxTree > 0 && (
             <button
-              className={styles.btn}
+              className="rounded bg-gray-600 px-4 py-2 text-gray-100 transition duration-300 hover:bg-gray-500"
               onClick={() =>
                 setToggle((prev) => ({ ...prev, more: !prev.more }))
               }
@@ -248,6 +252,7 @@ function SubCategory({ data, maxTree, setDelete, ...props }) {
           {categories.map((category) => (
             <SubCategory
               key={category.updatedAt}
+              index={index}
               data={category}
               maxTree={maxTree - 1}
               setDelete={() =>
@@ -273,18 +278,24 @@ function CategoryInput({
   return (
     <div className="relative mb-4 inline-flex w-full flex-wrap justify-between rounded-lg border border-gray-500 bg-white">
       <input
-        className="rounded-lg border-0 bg-white p-2.5 text-sm text-gray-900 focus:outline-none"
+        className="flex-2 rounded-lg border-0 bg-white p-2.5 text-sm text-gray-900 focus:outline-none"
         value={input.name}
         onChange={(e) =>
           setInput((prev) => ({ ...prev, name: e.target.value }))
         }
       />
-      <div className="flex items-center gap-6 border-t py-2 px-3 sm:gap-2">
-        <button className={styles.btn} onClick={() => callback(input)}>
+      <div className="flex items-center gap-3 border-t py-2 px-3 sm:gap-1">
+        <button
+          className="rounded-lg border-b-4 border-indigo-700 bg-indigo-600 py-1 px-3 text-indigo-100 transition duration-300 hover:border-indigo-800 hover:bg-indigo-700"
+          onClick={() => callback(input)}
+        >
           Save
         </button>
         {setToggle && (
-          <button className={styles.btn} onClick={() => setToggle(false)}>
+          <button
+            className="rounded-lg border-b-4 border-orange-700 bg-orange-600 py-1 px-3 text-orange-100 transition duration-300 hover:border-orange-800 hover:bg-orange-700"
+            onClick={() => setToggle(false)}
+          >
             Cancel
           </button>
         )}

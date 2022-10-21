@@ -1,11 +1,9 @@
 import Image from "next/image";
 import { Slider } from "../../components";
-import { useMediaContext } from "../../contexts/MediaContext";
 import { currencyFormat } from "../../shared";
 import styles from "../../styles/Home.module.scss";
 
 export default function ProductSlider({ products }) {
-  const { device, Devices } = useMediaContext();
   return (
     <Slider
       config={{
@@ -34,7 +32,7 @@ export default function ProductSlider({ products }) {
                   <Image alt="product" src={item.thumbnail} layout="fill" />
                 </div>
                 <label className="text-sm line-clamp-1">{item.title}</label>
-                <span className="float-right">Sold: </span>
+                <span className="float-right">Sold: {item.sold}</span>
               </div>
             </a>
           );

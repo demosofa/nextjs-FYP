@@ -31,8 +31,9 @@ export default function Variation() {
             <th>No.</th>
             <th>Sku</th>
             <th>Type</th>
-            <th>Price</th>
+            <th>Pricing</th>
             <th>Quantity</th>
+            <th>Size Package</th>
             <th>Delete</th>
           </tr>
         </thead>
@@ -60,15 +61,31 @@ export default function Variation() {
                     {variation.types.join("/")}
                   </td>
                   <td>
-                    <label>Price</label>
-                    <input
-                      value={variation.price}
-                      onChange={(e) =>
-                        dispatch(
-                          editVariation({ index, price: e.target.value })
-                        )
-                      }
-                    />
+                    <label>Pricing</label>
+                    <dl>
+                      <dt>Price</dt>
+                      <dd>
+                        <input
+                          value={variation.price}
+                          onChange={(e) =>
+                            dispatch(
+                              editVariation({ index, price: e.target.value })
+                            )
+                          }
+                        />
+                      </dd>
+                      <dt>Cost</dt>
+                      <dd>
+                        <input
+                          value={variation.cost}
+                          onChange={(e) =>
+                            dispatch(
+                              editVariation({ index, cost: e.target.value })
+                            )
+                          }
+                        />
+                      </dd>
+                    </dl>
                   </td>
                   <td>
                     <label>Quantity</label>
@@ -81,6 +98,46 @@ export default function Variation() {
                       }
                     />
                   </td>
+                  <td>
+                    <label>Package size</label>
+                    <dl>
+                      <dt>Length</dt>
+                      <dd>
+                        <input
+                          value={variation.length}
+                          onChange={(e) =>
+                            dispatch(
+                              editVariation({ index, length: e.target.value })
+                            )
+                          }
+                        />
+                      </dd>
+
+                      <dt>Width</dt>
+                      <dd>
+                        <input
+                          value={variation.width}
+                          onChange={(e) =>
+                            dispatch(
+                              editVariation({ index, width: e.target.value })
+                            )
+                          }
+                        />
+                      </dd>
+
+                      <dt>Height</dt>
+                      <dd>
+                        <input
+                          value={variation.height}
+                          onChange={(e) =>
+                            dispatch(
+                              editVariation({ index, height: e.target.value })
+                            )
+                          }
+                        />
+                      </dd>
+                    </dl>
+                  </td>
                   <td
                     className="text-center"
                     onClick={() => dispatch(deleteVariation(index))}
@@ -92,7 +149,7 @@ export default function Variation() {
             })
           ) : (
             <tr>
-              <td colSpan="5" className="text-center">
+              <td colSpan="7" className="text-center">
                 Please add variants first so variation can be generated
               </td>
             </tr>

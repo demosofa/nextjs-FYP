@@ -108,7 +108,7 @@ export default function Home({ products, categories, pageCounted, query }) {
                       <label className="text-sm line-clamp-1">
                         {item.title}
                       </label>
-                      <span className="float-right">Sold: </span>
+                      <span className="float-right">Sold: {item.sold}</span>
                     </div>
                   </a>
                 </Link>

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-/**@type {({title: string, thumbnail: string, price: number, rate: number, url: string}[])} */
+/**@type {({title: string, thumbnail: string, price: number, avgRating: number, url: string}[])} */
 const initialState = [];
 
 const recentlyViewed = createSlice({
@@ -15,7 +15,7 @@ const recentlyViewed = createSlice({
         clone.push(payload);
       } else {
         clone.thumbnail = payload.thumbnail;
-        clone.rate = payload.rate;
+        clone.avgRating = payload.avgRating;
         clone.price = payload.price;
       }
       return clone;

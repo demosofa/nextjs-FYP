@@ -11,6 +11,8 @@ import {
   Timer,
   Breadcrumb,
   Form,
+  GoogleMap,
+  StarRating,
 } from "../../components";
 import { Comment, ProductSlider, Rating } from "../../containers";
 import { expireStorage, retryAxios, Validate } from "../../utils";
@@ -69,13 +71,19 @@ export default function Overview({ product }) {
 
   const dispatch = useDispatch();
   const generateCart = () => {
-    let { _id, title, images, price } = product;
+    let { _id, title, images, price, length, width, height } = product;
     let variationId = null;
     let variationImage = null;
+    let extraCostPerItem = (length * width * height) / 6000;
     if (targetVariation) {
       variationId = targetVariation._id;
-      price = targetVariation.price;
       variationImage = targetVariation.image?.url;
+      price = targetVariation.price;
+      extraCostPerItem =
+        (targetVariation.length *
+          targetVariation.width *
+          targetVariation.height) /
+        6000;
     }
     return {
       productId: _id,
@@ -83,6 +91,7 @@ export default function Overview({ product }) {
       title,
       image: variationImage || images[0].url,
       options,
+      extraCostPerItem: Math.ceil(extraCostPerItem) * 5000,
       quantity,
       price,
       total: quantity * price,
@@ -105,10 +114,14 @@ export default function Overview({ product }) {
     try {
       let products = [generateCart()];
       new Validate(address).isEmpty().isNotSpecial();
+      const shippingFee = products.reduce((prev, curr) => {
+        return prev + curr.quantity * curr.extraCostPerItem;
+      }, 0);
       await axios.post(
         `${LocalApi}/order`,
         {
           products,
+          shippingFee,
           total: products[0].total,
           quantity: products[0].quantity,
           address,
@@ -120,6 +133,9 @@ export default function Overview({ product }) {
         }
       );
       setDisplay(false);
+      dispatch(
+        addNotification({ message: "Success order product", type: "success" })
+      );
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
@@ -131,14 +147,15 @@ export default function Overview({ product }) {
   }, [options, product.images, targetVariation]);
 
   useEffect(() => {
-    const { title, images, price, avgRating } = product;
+    const { title, images, price, avgRating, sold } = product;
     const thumbnail = images[0].url;
     dispatch(
       addViewed({
         title,
         thumbnail,
         price,
-        rate: avgRating,
+        avgRating,
+        sold,
         url: window.location.href,
       })
     );
@@ -183,7 +200,8 @@ export default function Overview({ product }) {
 
           <div className="product-info">
             <label className="text-2xl">{product.title}</label>
-            <div>
+            <div className="flex items-center gap-2">
+              <StarRating id="star" value={product.avgRating} />
               <label>{product.rateCount}</label>
             </div>
 
@@ -258,13 +276,13 @@ export default function Overview({ product }) {
                   style={{ flex: 1 }}
                 />
                 <button
-                  className="btn-add-to-cart flex-1"
+                  className="btn-add-to-cart flex-1 shadow-lg"
                   onClick={handleAddToCart}
                 >
                   Add to Cart
                 </button>
                 <button
-                  className="btn-add-to-cart flex-1"
+                  className="btn-add-to-cart flex-1 shadow-lg"
                   onClick={() => setDisplay(true)}
                 >
                   Order
@@ -326,12 +344,7 @@ export default function Overview({ product }) {
                 <Form.Title>Your Address</Form.Title>
                 <Form.Input onChange={(e) => setAddress(e.target.value)} />
               </Form.Item>
-              <Form.Link
-                target="_blank"
-                href={`https://maps.google.com/maps?q=${address}`}
-              >
-                Check address in google map
-              </Form.Link>
+              <GoogleMap width="100%" height="300px" address={address} />
               <Form.Item>
                 <Form.Submit>Submit</Form.Submit>
                 <Form.Button

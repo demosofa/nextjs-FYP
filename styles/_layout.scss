@@ -15,12 +15,11 @@
 }
 .body {
   width: 100%;
-  padding-left:80px;
-  padding-right: 80px;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  @include mq("tablet"){
-    padding-left: 0;
+  padding: 50px 80px;
+  @include mq("tablet-wide"){
     padding-right: 0;
+  }
+  @include mq("phablet"){
+    padding-left: 0;
   }
 }

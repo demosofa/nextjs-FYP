@@ -1,5 +1,6 @@
 import axios from "axios";
 import UnitOfWork from "./services/UnitOfWork";
+import { startSession } from "mongoose";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -60,6 +61,7 @@ class ProductController {
         price: 1,
         sale: 1,
         time: 1,
+        sold: 1,
       })
       .lookup({
         from: "files",
@@ -157,48 +159,68 @@ class ProductController {
       return res
         .status(500)
         .json({ errorMessage: `Product already has ${others.title}` });
-    const arrImage = await Promise.all(
-      images.map((image) => this.unit.File.create(image))
-    );
-    let productOpts = [];
-    let arrVariant;
-    if (variants.length) {
-      arrVariant = await Promise.all(
-        variants.map(async (item) => {
-          const { name, options } = item;
-          const arrOption = await Promise.all(
-            options.map((opt) => this.unit.Option.create({ name: opt }))
-          );
-          productOpts.push(...arrOption);
-          return this.unit.Variant.create({
-            name,
-            options: arrOption.map((opt) => opt._id),
-          });
-        })
+    const session = await startSession();
+    try {
+      session.startTransaction();
+      const arrImage = await Promise.all(
+        images.map((image) => this.unit.File.create(image, { session }))
       );
-    }
-    let arrVariation;
-    if (variations.length) {
-      arrVariation = await Promise.all(
-        variations.map((item) => {
-          const { types, ...others } = item;
-          let arrType = [];
-          productOpts.forEach((opt) => {
-            if (types.includes(opt.name)) arrType.push(opt._id);
-          });
-          return this.unit.Variation.create({ ...others, types: arrType });
-        })
+      let productOpts = [];
+      let arrVariant;
+      if (variants.length) {
+        arrVariant = await Promise.all(
+          variants.map(async (item) => {
+            const { name, options } = item;
+            const arrOption = await Promise.all(
+              options.map((opt) =>
+                this.unit.Option.create({ name: opt }, { session })
+              )
+            );
+            productOpts.push(...arrOption);
+            return this.unit.Variant.create(
+              {
+                name,
+                options: arrOption.map((opt) => opt._id),
+              },
+              { session }
+            );
+          })
+        );
+      }
+      let arrVariation;
+      if (variations.length) {
+        arrVariation = await Promise.all(
+          variations.map((item) => {
+            const { types, ...others } = item;
+            let arrType = [];
+            productOpts.forEach((opt) => {
+              if (types.includes(opt.name)) arrType.push(opt._id);
+            });
+            return this.unit.Variation.create(
+              { ...others, types: arrType },
+              { session }
+            );
+          })
+        );
+      }
+      await this.unit.Product.create(
+        {
+          ...others,
+          images: arrImage.map((file) => file._id),
+          variants: arrVariant?.map((item) => item._id),
+          variations: arrVariation?.map((item) => item._id),
+        },
+        { session }
       );
+      await session.commitTransaction();
+      await session.endSession();
+      return res.status(200).json({ message: "Success Create Product" });
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+      console.log(error);
+      return res.status(500).json(error);
     }
-    const product = await this.unit.Product.create({
-      ...others,
-      images: arrImage.map((file) => file._id),
-      variants: arrVariant?.map((item) => item._id),
-      variations: arrVariation?.map((item) => item._id),
-    });
-    if (!product)
-      return res.status(500).json({ message: `Fail to create collection` });
-    return res.status(200).json({ message: "Success Create Product" });
   };
 
   update = async (req, res) => {

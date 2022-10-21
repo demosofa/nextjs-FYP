@@ -9,6 +9,7 @@ const OrderItem = new Schema(
     image: { type: String, required: true },
     options: [{ type: String }],
     quantity: { type: Number, required: true },
+    shippingFee: { type: Number, default: 0 },
     price: { type: Number, required: true },
     total: { type: Number, required: true },
   },

@@ -68,17 +68,8 @@ function ProductCRUD() {
     else if (!loading && !isAuthorized) router.back();
   }, [loading, isLoggined, isAuthorized]);
 
-  if (loading || !isLoggined || !isAuthorized)
-    return (
-      <Loading
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: `translate(-50%, -50%)`,
-        }}
-      />
-    );
+  const isLoadingInitialData = loading || !isLoggined || !isAuthorized;
+
   return (
     <div className="product-crud__container">
       <Head>
@@ -98,126 +89,144 @@ function ProductCRUD() {
           onClick={() => setQuery((prev) => ({ ...prev, search }))}
         />
         <Select
+          defaultValue={{ value: "", label: "All" }}
           onChange={({ value }) =>
             setQuery((prev) => ({ ...prev, filter: value }))
           }
           options={[
+            { value: "", label: "All" },
             { value: "active", label: "Active" },
             { value: "non-active", label: "Non Active" },
             { value: "out", label: "Out of stock" },
           ]}
         />
       </div>
-      <div className="manage_table">
-        <table>
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Thumbnail</th>
-              <th style={{ width: "20%" }}>Title</th>
-              <th>Status</th>
-              <th>TimeStamp</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.length ? (
-              products.map((product, index) => {
-                return (
-                  <tr key={product._id}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <Image
-                        className="rounded-lg"
-                        alt="product"
-                        src={product.images[0].url}
-                        width="100px"
-                        height="90px"
-                      />
-                    </td>
-                    <td className="group">
-                      <p className="line-clamp-1 group-hover:line-clamp-none">
-                        {product.title}
-                      </p>
-                    </td>
-                    <td>
-                      <select
-                        defaultValue={product.status}
-                        onChange={(e) => handleStatus(e, index)}
-                      >
-                        <option value="active">active</option>
-                        <option value="non-active">non-active</option>
-                        <option value="out">out</option>
-                      </select>
-                    </td>
-                    <td>
-                      <p>
-                        Created at:{" "}
-                        {new Date(product.createdAt).toLocaleString("en-US", {
-                          timeZone: "Asia/Ho_Chi_Minh",
-                        })}
-                      </p>
-                      <p>
-                        Updated at:{" "}
-                        {new Date(product.updatedAt).toLocaleString("en-US", {
-                          timeZone: "Asia/Ho_Chi_Minh",
-                        })}
-                      </p>
-                    </td>
-                    <td>
-                      <button
-                        className="mr-5 whitespace-nowrap uppercase text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-none"
-                        onClick={() => router.push(`/overview/${product._id}`)}
-                      >
-                        Preview
-                      </button>
-                      <button
-                        className="mr-5 whitespace-nowrap uppercase text-yellow-600 hover:text-yellow-900 focus:underline focus:outline-none"
-                        onClick={() =>
-                          router.push(`product/update/${product._id}`)
-                        }
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="whitespace-nowrap uppercase text-red-600 hover:text-red-900 focus:underline focus:outline-none"
-                        onClick={() => setRemove(index)}
-                      >
-                        Remove
-                      </button>
+      {isLoadingInitialData ? (
+        <Loading.Dots />
+      ) : (
+        <>
+          <div className="manage_table">
+            <table>
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Thumbnail</th>
+                  <th style={{ width: "20%" }}>Title</th>
+                  <th>Status</th>
+                  <th>TimeStamp</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.length ? (
+                  products.map((product, index) => {
+                    return (
+                      <tr key={product._id}>
+                        <td>{index + 1}</td>
+                        <td>
+                          <Image
+                            className="rounded-lg"
+                            alt="product"
+                            src={product.images[0].url}
+                            width="100px"
+                            height="90px"
+                          />
+                        </td>
+                        <td className="group">
+                          <p className="line-clamp-1 group-hover:line-clamp-none">
+                            {product.title}
+                          </p>
+                        </td>
+                        <td>
+                          <select
+                            defaultValue={product.status}
+                            onChange={(e) => handleStatus(e, index)}
+                          >
+                            <option value="active">active</option>
+                            <option value="non-active">non-active</option>
+                            <option value="out">out</option>
+                          </select>
+                        </td>
+                        <td>
+                          <p>
+                            Created at:{" "}
+                            {new Date(product.createdAt).toLocaleString(
+                              "en-US",
+                              {
+                                timeZone: "Asia/Ho_Chi_Minh",
+                              }
+                            )}
+                          </p>
+                          <p>
+                            Updated at:{" "}
+                            {new Date(product.updatedAt).toLocaleString(
+                              "en-US",
+                              {
+                                timeZone: "Asia/Ho_Chi_Minh",
+                              }
+                            )}
+                          </p>
+                        </td>
+                        <td>
+                          <div className="flex flex-wrap gap-2">
+                            <button
+                              className="rounded-lg border-2 border-green-700 px-4 py-2 text-green-700 duration-300 hover:bg-green-700 hover:text-green-100"
+                              onClick={() =>
+                                router.push(`/overview/${product._id}`)
+                              }
+                            >
+                              Preview
+                            </button>
+                            <button
+                              className="rounded-lg border-2 border-blue-500 px-4 py-2 text-blue-500 duration-300 hover:bg-blue-600 hover:text-blue-100"
+                              onClick={() =>
+                                router.push(`product/update/${product._id}`)
+                              }
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="rounded-lg border-2 border-red-600 px-4 py-2 text-red-600 duration-300 hover:bg-red-600 hover:text-red-100"
+                              onClick={() => setRemove(index)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan="6">
+                      <p className="text-center">Please add new products</p>
                     </td>
                   </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan="6" className="text-center">
-                  Please add new products
-                </td>
-              </tr>
+                )}
+              </tbody>
+            </table>
+            {remove !== null && (
+              <Remove
+                index={remove}
+                product={products[remove]}
+                setProducts={setProducts}
+                setRemove={setRemove}
+              />
             )}
-          </tbody>
-        </table>
-        {remove !== null && (
-          <Remove
-            index={remove}
-            product={products[remove]}
-            setProducts={setProducts}
-            setRemove={setRemove}
-          />
-        )}
-      </div>
-      {totalPageCount ? (
-        <Pagination
-          totalPageCount={totalPageCount}
-          currentPage={query.page}
-          setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
-        >
-          <Pagination.Arrow>
-            <Pagination.Number />
-          </Pagination.Arrow>
-        </Pagination>
-      ) : null}
+          </div>
+          {totalPageCount ? (
+            <Pagination
+              totalPageCount={totalPageCount}
+              currentPage={query.page}
+              setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
+            >
+              <Pagination.Arrow>
+                <Pagination.Number />
+              </Pagination.Arrow>
+            </Pagination>
+          ) : null}
+        </>
+      )}
     </div>
   );
 }
