@@ -287,7 +287,10 @@ function CategoryInput({
       <div className="flex items-center gap-3 border-t py-2 px-3 sm:gap-1">
         <button
           className="rounded-lg border-b-4 border-indigo-700 bg-indigo-600 py-1 px-3 text-indigo-100 transition duration-300 hover:border-indigo-800 hover:bg-indigo-700"
-          onClick={() => callback(input)}
+          onClick={() => {
+            callback(input);
+            setInput("");
+          }}
         >
           Save
         </button>

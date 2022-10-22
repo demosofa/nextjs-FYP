@@ -64,7 +64,7 @@ export default function ManageOrder() {
 
   const isLoadingInitialData = !data && !error;
   return (
-    <div>
+    <div className="ml-11 sm:ml-2">
       <Head>
         <title>My Shipping</title>
         <meta name="description" content="My Shipping" />

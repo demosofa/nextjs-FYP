@@ -49,7 +49,9 @@ Product.post(
       _id: { $in: doc.variations },
     });
     await mongoose.models.File.deleteMany({ _id: { $in: doc.images } });
-    await mongoose.models.Variant.deleteMany({ _id: { $in: doc.variants } });
+    await Promise.all(
+      doc.variants.map((Id) => mongoose.models.Variant.findByIdAndDelete(Id))
+    );
     await mongoose.models.Rate.deleteMany({ product: doc._id });
   }
 );

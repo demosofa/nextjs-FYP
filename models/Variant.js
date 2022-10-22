@@ -8,8 +8,14 @@ const Variant = new Schema({
   ],
 });
 
-Variant.post("deleteMany", { document: false, query: true }, function (doc) {
-  mongoose.models.VariantOption.deleteMany({ _id: { $in: doc.options } });
-});
+Variant.post(
+  "findOneAndDelete",
+  { document: false, query: true },
+  function (doc) {
+    mongoose.models.VariantOption.findByIdAndDelete({
+      _id: { $in: doc.options },
+    });
+  }
+);
 
 module.exports = mongoose.models.Variant || mongoose.model("Variant", Variant);

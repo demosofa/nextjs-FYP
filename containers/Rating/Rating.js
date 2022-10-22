@@ -44,7 +44,7 @@ export default function Rating({ url }) {
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
       return data;
-    });
+    }, false);
   };
 
   if (!data || error) return <Loading.Text />;

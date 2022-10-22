@@ -84,14 +84,7 @@ function MyShipping() {
         ]}
       />
       {isLoadingInitialData ? (
-        <Loading.Dots
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: `translate(-50%, -50%)`,
-          }}
-        />
+        <Loading.Dots />
       ) : (
         <>
           <div className="manage_table">

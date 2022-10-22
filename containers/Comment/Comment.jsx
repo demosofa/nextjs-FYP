@@ -57,7 +57,7 @@ export default function Comment({ url, maxTree = 3 }) {
   if (loading) return <Loading.Text />;
   return (
     <div className={styles.wrapper}>
-      <CommentInput callback={handleAddComment}></CommentInput>
+      <CommentInput callback={handleAddComment} />
       <div className={styles.section}>
         {comments.map((comment) => (
           <CommentTab
@@ -278,7 +278,10 @@ function CommentInput({ data = "", callback, setToggle = undefined }) {
       <div className="flex items-center justify-between border-t py-2 px-3">
         <button
           className="inline-flex items-center rounded-lg bg-orange-700 py-2.5 px-4 text-center text-xs font-medium text-white hover:bg-orange-800 focus:ring-4 focus:ring-orange-200"
-          onClick={() => callback(input)}
+          onClick={() => {
+            callback(input);
+            setInput("");
+          }}
         >
           Save
         </button>
