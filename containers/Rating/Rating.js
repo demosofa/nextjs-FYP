@@ -1,5 +1,5 @@
 import axios from "axios";
-import useSWR from "swr";
+import useSWRImmutable from "swr/immutable";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { Loading, StarRating } from "../../components";
@@ -24,10 +24,7 @@ export default function Rating({ url }) {
   };
   const dispatch = useDispatch();
   const router = useRouter();
-  const { data, error, mutate } = useSWR({ url }, fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
+  const { data, error, mutate } = useSWRImmutable({ url }, fetcher, {
     onError(err, key, config) {
       if (err.status === 300) router.back();
       else if (err.status === 401) router.push("/login");

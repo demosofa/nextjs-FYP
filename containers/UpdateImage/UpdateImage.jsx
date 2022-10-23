@@ -183,9 +183,9 @@ function StoredImage({
             }}
           />
           <Icon htmlFor={image._id}>
-            <BiUpload></BiUpload>
+            <BiUpload />
           </Icon>
-          <BsTrash onClick={handleDeleteImage}></BsTrash>
+          <BsTrash onClick={handleDeleteImage} />
         </div>
       )}
     </div>

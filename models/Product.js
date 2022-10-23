@@ -15,10 +15,10 @@ const Product = new Schema(
         required: true,
       },
     ],
-    price: { type: Number },
-    cost: { type: Number },
+    price: { type: Number, default: 0 },
+    cost: { type: Number, default: 0 },
     time: { type: Date },
-    sale: { type: Number },
+    sale: { type: Number, default: 0 },
     quantity: { type: Number },
     manufacturer: { type: String, required: true },
     length: { type: Number, required: true },
@@ -28,7 +28,6 @@ const Product = new Schema(
     variations: [{ type: Schema.Types.ObjectId, ref: "Variation" }],
     avgRating: { type: Number, default: 0 },
     rateCount: { type: Number, default: 0 },
-    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     sold: { type: Number, default: 0 },
   },
   { timestamps: true }
@@ -53,6 +52,13 @@ Product.post(
       doc.variants.map((Id) => mongoose.models.Variant.findByIdAndDelete(Id))
     );
     await mongoose.models.Rate.deleteMany({ product: doc._id });
+    await mongoose.models.Comment.findOne({ produtId: doc._id }).then((arr) => {
+      Promise.all(
+        arr.map((comment) =>
+          mongoose.models.Comment.findByIdAndDelete(comment._id)
+        )
+      );
+    });
   }
 );
 

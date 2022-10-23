@@ -150,8 +150,10 @@ export default function MyOrder() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="text-center">
-                    Currently there is any orders that meet this filter
+                  <td colSpan="7">
+                    <p className="text-center">
+                      Currently there is any orders that meet this filter
+                    </p>
                   </td>
                 </tr>
               )}

@@ -14,7 +14,7 @@ import dynamic from "next/dynamic";
 import { deleteAllVariant } from "../../redux/reducer/variantSlice";
 import { useMediaContext } from "../../contexts/MediaContext";
 import { currencyFormat, Role } from "../../shared";
-import decoder from "jwt-decode";
+import { useAuthLoad } from "../../hooks";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -38,29 +38,6 @@ function CreateForm() {
     height: 0,
     quantity: 0,
   });
-
-  useEffect(() => {
-    const accessToken = expireStorage.getItem("accessToken");
-    let controller;
-    if (!accessToken) router.push("/login");
-    else {
-      controller = new AbortController();
-      try {
-        const { role } = decoder(accessToken);
-        if (role !== Role.admin) router.back();
-      } catch (error) {
-        axios
-          .post(`${LocalApi}/auth/refreshToken`, null, {
-            signal: controller.signal,
-          })
-          .then((res) => expireStorage.setItem("accessToken", res.data))
-          .catch(() => router.back());
-      }
-    }
-    return () => {
-      if (controller) controller.abort();
-    };
-  }, []);
 
   const { device, Devices } = useMediaContext();
 
@@ -158,6 +135,16 @@ function CreateForm() {
       return { ...clone, images };
     });
   }, []);
+
+  const { loading, isLoggined, isAuthorized, error } = useAuthLoad({
+    roles: [Role.admin],
+  });
+  useEffect(() => {
+    if (!loading && !isLoggined) router.push("/login");
+    else if (!loading && isLoggined && !isAuthorized) router.back();
+    else if (error) router.push("/register");
+  }, [loading, isLoggined, isAuthorized, error]);
+
   return (
     <>
       <Head>

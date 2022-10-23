@@ -11,3 +11,4 @@ export { default as Rating } from "./Rating/Rating";
 export { default as ProductSlider } from "./ProductSlider/ProductSlider";
 export { default as Notification } from "./Notification/Notification";
 export { default as ItemsFromOrder } from "./ItemsFromOrder/ItemsFromOrder";
+export { default as PriceInfo } from "./PriceInfo/PriceInfo";

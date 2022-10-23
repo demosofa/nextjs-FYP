@@ -74,7 +74,7 @@ export default function Navbar({ arrLink }) {
           </>
         )}
         <RouterAuth />
-        <Link href="/overview/cart">
+        <Link href="/c/cart">
           <a>
             <Badge value={cart.products.length}>
               <AiOutlineShoppingCart />

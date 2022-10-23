@@ -8,20 +8,18 @@ import {
   ReadMoreLess,
   Increment,
   Slider,
-  Timer,
   Breadcrumb,
   Form,
   GoogleMap,
   StarRating,
 } from "../../components";
-import { Comment, ProductSlider, Rating } from "../../containers";
+import { Comment, PriceInfo, ProductSlider, Rating } from "../../containers";
 import { expireStorage, retryAxios, Validate } from "../../utils";
 import { useMediaContext } from "../../contexts/MediaContext";
 import { addCart } from "../../redux/reducer/cartSlice";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { addViewed } from "../../redux/reducer/recentlyViewedSlice";
 import Link from "next/link";
-import { currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -71,7 +69,8 @@ export default function Overview({ product }) {
 
   const dispatch = useDispatch();
   const generateCart = () => {
-    let { _id, title, images, price, length, width, height } = product;
+    let { _id, title, images, price, length, width, height, time, sale } =
+      product;
     let variationId = null;
     let variationImage = null;
     let extraCostPerItem = (length * width * height) / 6000;
@@ -84,6 +83,9 @@ export default function Overview({ product }) {
           targetVariation.width *
           targetVariation.height) /
         6000;
+    }
+    if (time && sale && new Date(time).getTime() > Date.now()) {
+      price = sale;
     }
     return {
       productId: _id,
@@ -147,8 +149,11 @@ export default function Overview({ product }) {
   }, [options, product.images, targetVariation]);
 
   useEffect(() => {
-    const { title, images, price, avgRating, sold } = product;
+    let { title, images, price, avgRating, sold, time, sale } = product;
     const thumbnail = images[0].url;
+    if (time && sale && new Date(time).getTime() > Date.now()) {
+      price = sale;
+    }
     dispatch(
       addViewed({
         title,
@@ -202,25 +207,13 @@ export default function Overview({ product }) {
             <label className="text-2xl">{product.title}</label>
             <div className="flex items-center gap-2">
               <StarRating id="star" value={product.avgRating} />
-              <label>{product.rateCount}</label>
+              <label>{`(${product.rateCount} reviews)`}</label>
             </div>
 
-            {product.time && new Date(product.time).getTime() > Date.now() ? (
-              <Timer value={new Date(product.time).getTime()} />
-            ) : null}
-
-            <div className="flex items-center gap-3">
-              <label className="text-lg font-medium">Price: </label>
-              <span>
-                {currencyFormat(
-                  targetVariation
-                    ? targetVariation.price
-                    : product.time
-                    ? product.sale
-                    : product.price
-                )}
-              </span>
-            </div>
+            <PriceInfo
+              saleEvent={{ time: product.time, sale: product.sale }}
+              price={targetVariation ? targetVariation.price : product.price}
+            />
 
             {product.variants.map((variant, index) => {
               return (
@@ -276,20 +269,22 @@ export default function Overview({ product }) {
                   style={{ flex: 1 }}
                 />
                 <button
-                  className="btn-add-to-cart flex-1 shadow-lg"
+                  className="btn-add-to-cart shadow-lg"
                   onClick={handleAddToCart}
                 >
                   Add to Cart
                 </button>
                 <button
-                  className="btn-add-to-cart flex-1 shadow-lg"
+                  className="btn-add-to-cart shadow-lg"
                   onClick={() => setDisplay(true)}
                 >
                   Order
                 </button>
               </div>
             ) : (
-              <span>Out of Stock right now</span>
+              <span className="text-2xl font-medium text-gray-700">
+                Out of Stock right now
+              </span>
             )}
           </div>
         </div>

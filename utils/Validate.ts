@@ -57,7 +57,7 @@ export default class Validate {
   }
   isVND() {
     const num = parseInt(this.input);
-    if (num % 1000 === 0) return this;
+    if (num && num % 1000 === 0) return this;
     throw new Error("this input is not VND currency");
   }
 }

@@ -26,6 +26,7 @@ class CategoryController {
   };
   create = async (req, res) => {
     const Category = await this.unit.Category.getOne({
+      isFirstLevel: true,
       name: req.body.name,
     }).lean();
     if (Category)
@@ -56,10 +57,13 @@ class CategoryController {
     return res.status(200).json(category);
   };
   update = async (req, res) => {
-    const Category = await this.unit.Category.getById(req.query.id).lean();
-    if (!Category)
+    const Category = await this.unit.Category.getOne({
+      name: req.body.name,
+      isFirstLevel: true,
+    }).lean();
+    if (Category)
       return res.status(300).json({
-        message: "there is any existed category",
+        message: "there is already existed category",
       });
     const updated = await this.unit.Category.updateById(req.query.id, {
       $set: req.body,

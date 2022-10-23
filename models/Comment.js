@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const Comment = new Schema(
   {
+    productId: { type: Schema.Types.ObjectId, ref: "Product" },
     author: { type: Schema.Types.ObjectId, ref: "Account", required: true },
     content: { type: String, required: true, maxLength: 150 },
     replys: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
@@ -17,14 +18,6 @@ Comment.post(
   { document: false, query: true },
   async function (doc) {
     // console.log(doc._id.toHexString());
-    await mongoose.models.Product.updateOne(
-      { comments: doc._id },
-      {
-        $pull: {
-          comments: doc._id,
-        },
-      }
-    );
     await Promise.all(
       doc.replys.map((reply) =>
         mongoose.models.Comment.findByIdAndDelete(reply._id)

@@ -5,21 +5,22 @@ class CommentController {
     this.unit = new unit();
   }
   getCommentFromProduct = async (req, res) => {
-    const { id, page } = req.query;
-    const { comments } = await this.unit.Product.getById(id)
-      .select("comments")
-      .populate({
-        path: "comments",
-        options: {
-          skip: (page - 1) * 10,
-          limit: 10,
-        },
-        populate: { path: "author", select: ["username"] },
-      })
+    let { id, sort, page, limit } = req.query;
+    if (!sort) sort = { updatedAt: 1 };
+    if (!limit) limit = 10;
+    const comments = await this.unit.Comment.getAll({ productId: id })
+      .sort(sort)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate({ path: "author", select: ["username"] })
       .lean();
     if (!comments)
       return res.status(500).json({ message: "Fail to load comment" });
-    return res.status(200).json(comments);
+    const countComments = await this.unit.Comment.countData({
+      productId: id,
+    }).lean();
+    const pageCounted = Math.ceil(countComments / limit);
+    return res.status(200).json({ comments, pageCounted });
   };
   getSubComment = async (req, res) => {
     const id = req.query.id;
@@ -40,6 +41,7 @@ class CommentController {
     const id = req.query.id;
     const { content } = req.body;
     const created = await this.unit.Comment.create({
+      productId: id,
       author: req.user.accountId,
       content,
     }).then((value) =>
@@ -47,11 +49,6 @@ class CommentController {
     );
     if (!created)
       return res.status(500).json("Fail to create Comment for Product");
-    const updated = await this.unit.Product.updateById(id, {
-      $push: { comments: created._id },
-    });
-    if (!updated)
-      return res.status(500).json("Fail to insert comment to Product");
     return res.status(200).json(created);
   };
   addSubComment = async (req, res) => {

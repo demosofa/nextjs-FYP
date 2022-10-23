@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import axios from "axios";
 import { BiDotsVertical } from "react-icons/bi";
-import { Avatar, Dropdown, Loading } from "../../components";
+import { Dropdown, Loading, Pagination } from "../../components";
 import { useAxiosLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
@@ -15,6 +15,7 @@ export default function Comment({ url, maxTree = 3 }) {
   const [params, setParams] = useState({
     page: 1,
   });
+  const [pageCounted, setPageCounted] = useState(1);
   const [comments, setComments] = useState();
   const controller = useRef();
   const dispatch = useDispatch();
@@ -25,8 +26,11 @@ export default function Comment({ url, maxTree = 3 }) {
       params,
     },
     callback: async (axiosInstance) => {
-      setComments((await axiosInstance()).data);
+      const { comments, pageCounted } = (await axiosInstance()).data;
+      setComments(comments);
+      setPageCounted(pageCounted);
     },
+    deps: [params],
   });
 
   const handleAddComment = async (content) => {
@@ -57,7 +61,9 @@ export default function Comment({ url, maxTree = 3 }) {
   if (loading) return <Loading.Text />;
   return (
     <div className={styles.wrapper}>
-      <CommentInput callback={handleAddComment} />
+      {localStorage.getItem("accessToken") ? (
+        <CommentInput callback={handleAddComment} />
+      ) : null}
       <div className={styles.section}>
         {comments.map((comment) => (
           <CommentTab
@@ -73,6 +79,14 @@ export default function Comment({ url, maxTree = 3 }) {
           />
         ))}
       </div>
+      <Pagination
+        className="flex justify-end"
+        totalPageCount={pageCounted}
+        currentPage={params.page}
+        setCurrentPage={(page) => setParams((prev) => ({ ...prev, page }))}
+      >
+        <Pagination.Number />
+      </Pagination>
     </div>
   );
 }
@@ -168,7 +182,7 @@ function CommentTab({
   return (
     <div className={styles.container} {...props}>
       <div className={styles.tab_container}>
-        <Avatar text={currentComment.author.username}></Avatar>
+        <label>{currentComment.author.username}</label>
         {isAuthor && !toggle.edit && (
           <Dropdown component={<BiDotsVertical />} hoverable={true}>
             <Dropdown.Content className="right-0">
@@ -335,7 +349,7 @@ function CommentReply({
 
   return (
     <div className="reply-comment">
-      <Avatar text={data.author.username}></Avatar>
+      <label>{data.author.username}</label>
       <CommentInput callback={handleReply} setToggle={setToggle} />
     </div>
   );

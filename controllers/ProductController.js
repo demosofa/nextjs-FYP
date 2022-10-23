@@ -9,6 +9,23 @@ class ProductController {
     this.unit = new unit();
   }
 
+  trending = async (req, res) => {
+    try {
+      const previous3days = new Date(
+        new Date().setDate(new Date().getDate() - 3)
+      );
+      const product = await this.unit.Product.getAll({
+        updatedAt: { $gte: previous3days },
+      })
+        .limit(10)
+        .sort({ sold: -1 })
+        .lean();
+      return res.status(200).json(product);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  };
+
   read = async (req, res) => {
     const product = await this.unit.Product.getById(req.query.id)
       .populate({

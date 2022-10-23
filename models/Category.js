@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Category = new Schema(
   {
-    name: { type: String, required: true, unique: true, maxlength: 225 },
+    name: { type: String, required: true, maxlength: 225 },
     isFirstLevel: { type: Boolean, default: false },
     subCategories: [{ type: Schema.Types.ObjectId, ref: "Category" }],
   },

@@ -5,7 +5,7 @@ import styles from "./StarRating.module.scss";
 export default function StarRating({
   id = "star-rating_",
   name = id,
-  value,
+  value = 0,
   handleRating,
   ...props
 }) {
@@ -19,7 +19,8 @@ export default function StarRating({
       className={styles.rate}
       checked={[value]}
       setChecked={(data) => {
-        if (typeof handleRating === "function") handleRating(data[0]);
+        if (typeof handleRating === "function" && value !== data[0])
+          handleRating(data[0]);
       }}
       style={{ pointerEvents: handleRating ? "auto" : "none" }}
       {...props}

@@ -9,14 +9,12 @@ const recentlyViewed = createSlice({
   reducers: {
     addViewed(state, { payload }) {
       const clone = JSON.parse(JSON.stringify(state));
-      const result = clone.findIndex((item) => item.title === payload.title);
-      if (result === -1) {
+      const index = clone.findIndex((item) => item.title === payload.title);
+      if (index === -1) {
         if (clone.length >= 10) clone.shift();
         clone.push(payload);
       } else {
-        clone.thumbnail = payload.thumbnail;
-        clone.avgRating = payload.avgRating;
-        clone.price = payload.price;
+        clone[index] = payload;
       }
       return clone;
     },

@@ -9,7 +9,8 @@ import { expireStorage, retryAxios, Validate } from "../../../utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../../redux/reducer/notificationSlice";
-import { Role, dateFormat } from "../../../shared";
+import { Role } from "../../../shared";
+import { format } from "date-fns";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -22,7 +23,14 @@ function UpdateProduct() {
       const res = await axiosInstance({
         url: `${LocalApi}/product/${router.query?.id}`,
       });
-      setProduct(res.data);
+      const { price, cost, quantity, sale, ...other } = res.data;
+      setProduct({
+        ...other,
+        price: price + "",
+        cost: cost + "",
+        sale: sale + "",
+        quantity: quantity + "",
+      });
     },
     roles: [Role.admin],
     deps: [router.isReady],
@@ -30,9 +38,9 @@ function UpdateProduct() {
 
   const dispatch = useDispatch();
   const validateInput = () => {
-    const { description, price, quantity, sale, time } = input;
-    let target = { description, price, quantity };
-    if (sale && time) target = { ...target, sale, time };
+    const { description, price, cost, quantity, sale, time } = product;
+    let target = { description, price, cost, quantity };
+    if ((sale !== "0" && sale) || time) target = { ...target, sale, time };
     Object.entries(target).forEach((entry) => {
       switch (entry[0]) {
         case "description":
@@ -40,9 +48,16 @@ function UpdateProduct() {
           break;
         case "time":
           new Validate(entry[1]).isEmpty();
+          if (new Date(time).getTime() < Date.now())
+            throw new Error("The sale time is left behind");
           break;
         case "sale":
+          new Validate(entry[1]).isEmpty().isVND();
+          if (parseInt(sale) >= parseInt(price))
+            throw new Error("Why is sale value larger than or equal to price?");
+          break;
         case "price":
+        case "cost":
           new Validate(entry[1]).isEmpty().isVND();
           break;
         case "quantity":
@@ -53,14 +68,14 @@ function UpdateProduct() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { _id, description, quantity, sale, time } = product;
+    const { _id, description, price, cost, quantity, sale, time } = product;
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
       validateInput();
       await axios.put(
         `${LocalApi}/product`,
-        { _id, description, quantity, sale, time },
+        { _id, description, price, cost, quantity, sale, time },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -110,6 +125,24 @@ function UpdateProduct() {
         <label>{`${product.description.length}/1000`}</label>
       </Form.Item>
       <Form.Item>
+        <Form.Title>Price</Form.Title>
+        <Form.Input
+          value={product.price}
+          onChange={(e) =>
+            setProduct((prev) => ({ ...prev, price: e.target.value }))
+          }
+        />
+      </Form.Item>
+      <Form.Item>
+        <Form.Title>Cost</Form.Title>
+        <Form.Input
+          value={product.cost}
+          onChange={(e) =>
+            setProduct((prev) => ({ ...prev, cost: e.target.value }))
+          }
+        />
+      </Form.Item>
+      <Form.Item>
         <Form.Title>Quantity</Form.Title>
         <Form.Input
           value={product.quantity}
@@ -121,7 +154,7 @@ function UpdateProduct() {
       <Form.Item>
         <Form.Title>Sale Price</Form.Title>
         <Form.Input
-          value={product.sale || " "}
+          value={product.sale}
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, sale: e.target.value }))
           }
@@ -131,7 +164,9 @@ function UpdateProduct() {
         <Form.Title>TimeStamp</Form.Title>
         <Form.Input
           type="date"
-          value={product.time && dateFormat(product.time)}
+          value={
+            product.time ? format(new Date(product.time), "yyyy-MM-dd") : " "
+          }
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, time: e.target.value }))
           }

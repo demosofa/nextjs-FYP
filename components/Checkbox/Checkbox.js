@@ -29,6 +29,7 @@ Checkbox.Item = function Item({
   children,
   value = children,
   defaultChecked = false,
+  onChange,
   ...props
 }) {
   const { checks, setChecks, type, name } = useContext(Kits);
@@ -53,7 +54,10 @@ Checkbox.Item = function Item({
         type={type}
         name={name}
         value={value}
-        onChange={handleCheck}
+        onChange={(e) => {
+          if (typeof onChange === "function") onChange(e);
+          handleCheck();
+        }}
         checked={checks.includes(value)}
       />
       {children}

@@ -81,7 +81,7 @@ export default function Cart() {
         {cart.products.length ? (
           cart.products.map((item) => (
             <Animation.Zoom key={item.title + item.variationId}>
-              <Link href={`/overview/${item.productId}`}>
+              <Link href={`/c/${item.productId}`}>
                 <a className="cart__product ux-card">
                   <div className="cart__product__info">
                     <img alt="product" src={item.image} />

@@ -4,6 +4,8 @@ import decoder from "jwt-decode";
 import { useAxiosLoad } from ".";
 import { expireStorage, retryAxios } from "../utils";
 
+const LocalApi = process.env.NEXT_PUBLIC_API;
+
 export default function useAuthLoad({
   config,
   cb,
@@ -11,17 +13,18 @@ export default function useAuthLoad({
   deps = [],
 }: {
   config?: AxiosRequestConfig;
-  cb: (AxiosInstance: AxiosInstance) => unknown;
+  cb?: (AxiosInstance: AxiosInstance) => unknown;
   roles: string[];
   deps?: DependencyList;
 }) {
   const [isLoggined, setLoggined] = useState(false);
   const [isAuthorized, setAuthorized] = useState(false);
+  const [error, setError] = useState();
   const { loading, setLoading, axiosInstance } = useAxiosLoad({
     config,
     deps,
     callback: async (axiosInstance) => {
-      const accessToken = expireStorage.getItem("accessToken");
+      let accessToken = expireStorage.getItem("accessToken");
       if (!accessToken) {
         setLoading(false);
         setLoggined(false);
@@ -29,18 +32,31 @@ export default function useAuthLoad({
         return;
       } else setLoggined(true);
 
-      const { role } = decoder(accessToken) as { exp: number; role: string };
-      if (!roles.includes(role)) {
-        setLoading(false);
-        setAuthorized(false);
-        return;
-      } else setAuthorized(true);
+      try {
+        const { role } = decoder(accessToken) as { role: string };
+        if (!roles.includes(role)) {
+          setLoading(false);
+          setAuthorized(false);
+          return;
+        } else setAuthorized(true);
+      } catch (error) {
+        await axiosInstance
+          .post(`${LocalApi}/auth/refreshToken`, null)
+          .then((res) => {
+            accessToken = res.data;
+            expireStorage.setItem("accessToken", accessToken);
+            setAuthorized(true);
+          })
+          .catch((res) => setError(res));
+      }
 
-      axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-      retryAxios(axiosInstance);
-      await cb(axiosInstance);
+      if (cb) {
+        axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        retryAxios(axiosInstance);
+        await cb(axiosInstance);
+      }
       return;
     },
   });
-  return { loading, isLoggined, isAuthorized, axiosInstance };
+  return { loading, isLoggined, isAuthorized, error, axiosInstance };
 }

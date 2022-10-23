@@ -279,7 +279,7 @@ function CategoryInput({
     <div className="relative mb-4 inline-flex w-full flex-wrap justify-between rounded-lg border border-gray-500 bg-white">
       <input
         className="flex-2 rounded-lg border-0 bg-white p-2.5 text-sm text-gray-900 focus:outline-none"
-        value={input.name}
+        value={input.name || " "}
         onChange={(e) =>
           setInput((prev) => ({ ...prev, name: e.target.value }))
         }
@@ -289,7 +289,7 @@ function CategoryInput({
           className="rounded-lg border-b-4 border-indigo-700 bg-indigo-600 py-1 px-3 text-indigo-100 transition duration-300 hover:border-indigo-800 hover:bg-indigo-700"
           onClick={() => {
             callback(input);
-            setInput("");
+            setInput((prev) => ({ ...prev, name: "" }));
           }}
         >
           Save

@@ -171,9 +171,7 @@ function ProductCRUD() {
                           <div className="flex flex-wrap gap-2">
                             <button
                               className="rounded-lg border-2 border-green-700 px-4 py-2 text-green-700 duration-300 hover:bg-green-700 hover:text-green-100"
-                              onClick={() =>
-                                router.push(`/overview/${product._id}`)
-                              }
+                              onClick={() => router.push(`/c/${product._id}`)}
                             >
                               Preview
                             </button>

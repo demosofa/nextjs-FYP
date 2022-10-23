@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
-import { Animation, Loading, Timer } from "../components";
+import { Animation, Loading } from "../components";
 import { useAxiosLoad } from "../hooks";
 import { currencyFormat } from "../shared";
 import styles from "../styles/Home.module.scss";
@@ -85,16 +85,8 @@ export default function Home({ products, categories, pageCounted, query }) {
                       "optional"}
                   </p>
                 </div>
-                <Link href={`/overview/${item._id}`}>
+                <Link href={`/c/${item._id}`}>
                   <a>
-                    {item.time &&
-                      new Date(item.time).getTime() > Date.now() && (
-                        <Timer
-                          className="absolute top-0 left-0"
-                          value={new Date(item.time).getTime()}
-                        />
-                      )}
-
                     <div>
                       <div className="relative h-44 w-full">
                         <Image
@@ -108,7 +100,18 @@ export default function Home({ products, categories, pageCounted, query }) {
                       <label className="text-sm line-clamp-1">
                         {item.title}
                       </label>
-                      <span className="float-right">Sold: {item.sold}</span>
+                      <label className="float-left">
+                        <span className="fa fa-star checked mr-1 text-yellow-300 " />
+                        <span className="font-semibold italic">
+                          {item.avgRating}
+                        </span>
+                      </label>
+                      <label className="float-right">
+                        <span className="font-semibold">Sold: </span>
+                        <span className="text-xs text-gray-400">
+                          {item.sold}
+                        </span>
+                      </label>
                     </div>
                   </a>
                 </Link>
