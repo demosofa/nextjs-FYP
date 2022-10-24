@@ -81,10 +81,18 @@ export default function Home({ products, categories, pageCounted, query }) {
               <Fragment key={item.title}>
                 <div className={styles.price_tag}>
                   <p className={styles.price_tag_price}>
-                    {currencyFormat(item.sale ? item.sale : item.price) ||
-                      "optional"}
+                    {currencyFormat(
+                      new Date(item.time).getTime() > Date.now()
+                        ? item.sale
+                        : item.price
+                    ) || "optional"}
                   </p>
                 </div>
+                {new Date(item.time).getTime() > Date.now() ? (
+                  <span className={styles.sale}>
+                    -{Math.ceil(100 - (item.sale / item.price) * 100)}%
+                  </span>
+                ) : null}
                 <Link href={`/c/${item._id}`}>
                   <a>
                     <div>

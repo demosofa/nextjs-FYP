@@ -29,7 +29,7 @@ export default function Variants() {
             <input
               value={variant.name || " "}
               onChange={(e) =>
-                dispatch(editVariant({ index, name: e.target.value }))
+                dispatch(editVariant({ index, name: e.target.value.trim() }))
               }
               placeholder="input variant name"
             />

@@ -2,7 +2,7 @@
 
 .layout {
   @include flex(20px, column);
-  > .nav-sidebar{
+  > .nav-sidebar {
     width: 100vw;
     height: 60px;
     padding: 15px;
@@ -11,15 +11,14 @@
     justify-content: space-between;
     background-color: orangered;
   }
-  
 }
 .body {
   width: 100%;
   padding: 50px 80px;
-  @include mq("tablet-wide"){
+  @include mq("tablet-wide") {
     padding-right: 0;
   }
-  @include mq("phablet"){
+  @include mq("phablet") {
     padding-left: 0;
   }
 }

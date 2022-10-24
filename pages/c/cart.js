@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
-import { Animation, Form, Icon, Increment, GoogleMap } from "../../components";
+import { Animation, Icon, Increment } from "../../components";
 import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import Head from "next/head";
@@ -10,12 +10,12 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { currencyFormat } from "../../shared";
+import { ReceivingAddress } from "../../containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function Cart() {
   const [display, setDisplay] = useState(false);
-  const [address, setAddress] = useState("");
   const cartState = useSelector((state) => state.cart);
   const [cart, setCart] = useState({
     products: [
@@ -46,12 +46,12 @@ export default function Cart() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, address) => {
     e.preventDefault();
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
-      new Validate(address).isEmpty().isNotSpecial();
+      new Validate(address).isEmpty().isAddress();
       await axios.post(
         `${LocalApi}/order`,
         { ...cart, shippingFee, address },
@@ -156,32 +156,7 @@ export default function Cart() {
         </div>
       </div>
       {display && (
-        <>
-          <div
-            className="backdrop"
-            onClick={() => {
-              setAddress(""), setDisplay(false);
-            }}
-          />
-          <Form onSubmit={handleSubmit} className="form_center">
-            <Form.Title>Please set form for your checkout</Form.Title>
-            <Form.Item>
-              <Form.Title>Your Address</Form.Title>
-              <Form.Input onChange={(e) => setAddress(e.target.value)} />
-            </Form.Item>
-            <GoogleMap width="100%" height="300px" address={address} />
-            <Form.Item>
-              <Form.Submit>Submit</Form.Submit>
-              <Form.Button
-                onClick={() => {
-                  setAddress(""), setDisplay(false);
-                }}
-              >
-                Cancel
-              </Form.Button>
-            </Form.Item>
-          </Form>
-        </>
+        <ReceivingAddress setDisplay={setDisplay} handleOrder={handleSubmit} />
       )}
     </div>
   );

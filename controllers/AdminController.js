@@ -149,7 +149,7 @@ class AdminController {
     );
     try {
       const profit = await this.unit.Order.aggregate()
-        .match({ createdAt: { $gte: previousMonth }, status: "paid" })
+        .match({ updatedAt: { $gte: previousMonth }, status: "paid" })
         .project({
           month: { $month: "$createdAt" },
           profit: "$total",
@@ -168,13 +168,31 @@ class AdminController {
     );
     try {
       const accounts = await this.unit.Account.aggregate()
-        .match({ createdAt: { $gte: previousMonth } })
+        .match({ role: Role.guest, createdAt: { $gte: previousMonth } })
         .project({
           month: { $month: "$createdAt" },
         })
         .group({ _id: "$month", total: { $sum: 1 } })
         .sort({ _id: 1 });
       return res.status(200).json(accounts);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  };
+
+  totalOrder = async (req, res) => {
+    const previousMonth = new Date(
+      new Date().setMonth(new Date().getMonth() - 2)
+    );
+    try {
+      const orders = await this.unit.Order.aggregate()
+        .match({ createdAt: { $gte: previousMonth } })
+        .project({
+          month: { $month: "$createdAt" },
+        })
+        .group({ _id: "$month", total: { $sum: 1 } })
+        .sort({ _id: 1 });
+      return res.status(200).json(orders);
     } catch (error) {
       return res.status(500).json(error);
     }

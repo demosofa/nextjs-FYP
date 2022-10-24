@@ -39,8 +39,8 @@ function MyShipping() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.status === 300) router.back();
-        else if (err.status === 401) router.push("/login");
+        if (err.response.status === 300) router.back();
+        else if (err.response.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
@@ -75,7 +75,6 @@ function MyShipping() {
         }
         options={[
           { value: "", label: "all" },
-          { value: "pending", label: "Pending" },
           { value: "progress", label: "Progress" },
           { value: "shipping", label: "Shipping" },
           { value: "arrived", label: "Arrived" },
@@ -125,26 +124,28 @@ function MyShipping() {
                       </td>
                       <td>{order.customer.user.phoneNumber}</td>
                       <td>{currencyFormat(order.total)}</td>
-                      <td className="flex flex-col items-center">
-                        <button
-                          className="mr-5 whitespace-nowrap uppercase text-green-600 hover:text-green-900 focus:underline focus:outline-none"
-                          onClick={() => setViewOrder(order.orderItems)}
-                        >
-                          View List item
-                        </button>
-                        {order.status === "progress" && (
+                      <td>
+                        <div className="flex flex-col items-center">
                           <button
-                            className="mr-5 whitespace-nowrap uppercase text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-none"
-                            onClick={() => handleShowQR(order._id)}
+                            className="mr-5 whitespace-nowrap uppercase text-green-600 hover:text-green-900 focus:underline focus:outline-none"
+                            onClick={() => setViewOrder(order.orderItems)}
                           >
-                            Show QR to seller
+                            View List item
                           </button>
-                        )}
-                        <Link href={`/shipping/${order._id}`}>
-                          <a className="mr-5 whitespace-nowrap uppercase text-purple-600 hover:text-purple-900 focus:underline focus:outline-none">
-                            Manage Progress
-                          </a>
-                        </Link>
+                          {order.status === "progress" && (
+                            <button
+                              className="mr-5 whitespace-nowrap uppercase text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-none"
+                              onClick={() => handleShowQR(order._id)}
+                            >
+                              Show QR to seller
+                            </button>
+                          )}
+                          <Link href={`/shipping/${order._id}`}>
+                            <a className="mr-5 whitespace-nowrap uppercase text-purple-600 hover:text-purple-900 focus:underline focus:outline-none">
+                              Manage Progress
+                            </a>
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -154,7 +155,9 @@ function MyShipping() {
                       <p className="text-center">
                         Go to this{" "}
                         <Link href="/shipper">
-                          <a className="uppercase">page</a>
+                          <a className="uppercase text-gray-400 hover:text-orange-500">
+                            page
+                          </a>
                         </Link>{" "}
                         and accept orders first
                       </p>

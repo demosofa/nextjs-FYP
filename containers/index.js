@@ -12,3 +12,4 @@ export { default as ProductSlider } from "./ProductSlider/ProductSlider";
 export { default as Notification } from "./Notification/Notification";
 export { default as ItemsFromOrder } from "./ItemsFromOrder/ItemsFromOrder";
 export { default as PriceInfo } from "./PriceInfo/PriceInfo";
+export { default as ReceivingAddress } from "./ReceivingAddress/ReceivingAddress";

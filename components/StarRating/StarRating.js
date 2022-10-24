@@ -7,6 +7,7 @@ export default function StarRating({
   name = id,
   value = 0,
   handleRating,
+  className,
   ...props
 }) {
   const arrStar = useRef(
@@ -16,7 +17,7 @@ export default function StarRating({
     <Checkbox
       type="radio"
       name={name}
-      className={styles.rate}
+      className={`${styles.rate} ${className}`}
       checked={[value]}
       setChecked={(data) => {
         if (typeof handleRating === "function" && value !== data[0])

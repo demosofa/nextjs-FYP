@@ -219,7 +219,7 @@ function SubCategory({ data, index, maxTree, setDelete, ...props }) {
         )}
       </div>
       {maxTree > 0 && (
-        <div className="flex items-center gap-6 border-t py-2 px-3 dark:border-gray-600 sm:gap-2">
+        <div className="flex items-center gap-6 border-t py-2 px-3 sm:gap-2">
           <button
             className="rounded bg-blue-600 px-4 py-2 text-blue-100 transition duration-300 hover:bg-blue-500"
             onClick={() =>

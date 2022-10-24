@@ -1,15 +1,15 @@
 @import "./mixin.scss";
-.cart__container{
+.cart__container {
   margin-top: 20px;
   width: 100%;
   display: flex;
   gap: 20px;
-  @include mq("tablet"){
+  @include mq("tablet") {
     flex-direction: column;
   }
 }
 
-.cart__lst{
+.cart__lst {
   flex: 2;
   display: flex;
   flex-direction: column;
@@ -18,9 +18,9 @@
 }
 
 .ux-card {
-  border: 1px solid #E8E8E8;
-  background: #FCFCFC;
-  padding:20px;
+  border: 1px solid #e8e8e8;
+  background: #fcfcfc;
+  padding: 20px;
   position: relative;
   &:hover {
     border-color: orangered;
@@ -28,7 +28,7 @@
   }
 }
 
-.cart__product{
+.cart__product {
   position: relative;
   flex: 1;
   max-width: 100%;
@@ -37,14 +37,14 @@
   gap: 20px;
   box-shadow: 4px 4px 0 0 rgb(0 0 0 / 10%);
   flex-wrap: wrap;
-  & > .cart__product__info{
+  & > .cart__product__info {
     flex: 1;
     display: flex;
     gap: 20px;
-    & > img{
+    & > img {
       max-width: 100px;
     }
-    & > .product__info{
+    & > .product__info {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
@@ -52,29 +52,29 @@
     }
   }
 
-  & .info{
+  & .info {
     width: 100%;
     font-size: 13px;
 
-    & > span{
+    & > span {
       font-weight: bolder;
       font-size: 16px;
     }
   }
 
-  & > .change__quantity{
+  & > .change__quantity {
     height: inherit;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     margin-right: 12px;
   }
-  
-  & > .remove__product{
+
+  & > .remove__product {
     position: absolute;
     width: 25px;
     height: 25px;
-    top:8px;
+    top: 8px;
     right: 8px;
     border-radius: 50%;
     background-color: orangered;
@@ -87,23 +87,23 @@
   max-width: 400px;
   dl {
     width: 100%;
-    margin:0;
-    padding:20px;
+    margin: 0;
+    padding: 20px;
     display: inline-block;
     dt {
-      float:left;
-      clear:left;
+      float: left;
+      clear: left;
       font-weight: normal;
     }
     dd {
-      float:right;
-      clear:right;
+      float: right;
+      clear: right;
       font-weight: bold;
     }
   }
   .sub-total {
     @include mq("tablet") {
-      border-top: 5px solid #D0D0D0;
+      border-top: 5px solid #d0d0d0;
       dt {
         margin-top: 2px;
       }
@@ -117,11 +117,11 @@
     border-radius: 8px;
     dt {
       text-transform: uppercase;
-      font-weight:bold;
+      font-weight: bold;
       font-size: 2em;
     }
     dd {
-      font-size:1.5em;
+      font-size: 1.5em;
     }
   }
   .support {
@@ -134,7 +134,8 @@
   button {
     margin: 0 20px;
     width: calc(100% - 40px);
-    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(90deg, rgba(255,43,43,1) 0%, rgba(255,218,0,1) 100%);
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
+      linear-gradient(90deg, rgba(255, 43, 43, 1) 0%, rgba(255, 218, 0, 1) 100%);
     color: #fff;
     border: 1px solid #999;
     border-style: none none solid none;

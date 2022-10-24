@@ -1,6 +1,6 @@
 @import "./mixin.scss";
 
-.page-overview{
+.page-overview {
   @include block(100%, 100%, 0, 15px);
   @include flex(10px, column, true);
 
@@ -8,7 +8,7 @@
     width: 100%;
     padding: 15px;
     @include flex(30px, row, true);
-    @include mq("tablet"){
+    @include mq("tablet") {
       flex-direction: column;
     }
 
@@ -16,14 +16,15 @@
       flex: 1;
       width: 100%;
       @include flex(10px, column);
-      .image__magnifier{
-        flex: 4
+      .image__magnifier {
+        flex: 4;
       }
-      .slider{
+      .slider {
         width: 100%;
         height: 100px;
-        @include mq("tablet"){
-          width: 60px; height: 180px;
+        @include mq("tablet") {
+          width: 60px;
+          height: 180px;
         }
       }
     }
@@ -32,13 +33,13 @@
       height: 350px;
       width: 100%;
       flex: 1;
-      border-radius: 12px
+      border-radius: 12px;
     }
     > .product-info {
       @include flex(30px, column);
       flex: 1;
 
-      & .btn-add-to-cart{
+      & .btn-add-to-cart {
         flex: 1;
         height: 65px;
         border-radius: 8px;
@@ -48,11 +49,11 @@
         font-size: larger;
         font-weight: 600;
         border: none;
-        @include mq("tablet-wide"){
-          font-size: medium
+        @include mq("tablet-wide") {
+          font-size: medium;
         }
-        @include mq("tablet"){
-          font-size: small
+        @include mq("tablet") {
+          font-size: small;
         }
       }
     }
@@ -61,7 +62,6 @@
   .rating {
     @include block(100%, 200px, 0, 15px);
     @include flex(10px, row, true);
-    flex: 1
+    flex: 1;
   }
 }
-

@@ -20,7 +20,7 @@ export default function General({ children, arrLink }) {
       {(device === Devices.pc && <Navbar arrLink={arrLink} />) ||
         (toggle ? (
           <Animation.Move className="fixed z-20 h-screen gap-5 overflow-y-auto bg-[#f0f2f5] text-[#445261] shadow-md transition-all sm:w-full md:w-80">
-            <Sidebar className="w-screen">
+            <Sidebar className="w-full">
               <AiOutlineMenuFold
                 className="absolute top-0 right-0 cursor-pointer"
                 onClick={() => setToggle((prev) => !prev)}

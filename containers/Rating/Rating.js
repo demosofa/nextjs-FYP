@@ -26,8 +26,8 @@ export default function Rating({ url }) {
   const router = useRouter();
   const { data, error, mutate } = useSWRImmutable({ url }, fetcher, {
     onError(err, key, config) {
-      if (err.status === 300) router.back();
-      else if (err.status === 401) router.push("/login");
+      if (err.response.status === 300) router.back();
+      else if (err.response.status === 401) router.push("/login");
       else dispatch(addNotification({ message: err.message, type: "error" }));
     },
   });

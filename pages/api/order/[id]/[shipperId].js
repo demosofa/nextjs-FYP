@@ -1,10 +1,10 @@
-import { order } from "../../../../controllers";
+import { user } from "../../../../controllers";
 import { isAuthentication } from "../../../../helpers";
 
 async function shipperId(req, res) {
   switch (req.method.toLowerCase()) {
     case "get":
-      await order.checkQR(req, res);
+      await user.checkQR(req, res);
       break;
   }
 }

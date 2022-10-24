@@ -18,13 +18,9 @@
   --blue-shade-one: #548bcf;
   --blue-shade-two: #e5f1ff;
   --blue-shade-three: #2e8eff;
-	--light-orange: #F98340;
-	--red-orange: #F71442;
-	--linear-orange-red: repeating-linear-gradient(to right, #f57a32, #f71414);
-}
-
-*, *:before, *:after {
-  box-sizing: border-box;
+  --light-orange: #f98340;
+  --red-orange: #f71442;
+  --linear-orange-red: repeating-linear-gradient(to right, #f57a32, #f71414);
 }
 
 html,
@@ -33,59 +29,60 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-	background-color: #f6f7fb
+  background-color: #f6f7fb;
 }
 
 dl {
-	dt, dd{
-		display: inline-flex;
-		float: left
-	}
-	dt{
-		clear: left;
-		width: 150px;
-		white-space: nowrap
-	}
+  dt,
+  dd {
+    display: inline-flex;
+    float: left;
+  }
+  dt {
+    clear: left;
+    width: 150px;
+    white-space: nowrap;
+  }
 }
 
-.main_btn{
-	@apply max-w-fit cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-400 to-red-600 px-3 py-2 text-center font-semibold text-white shadow-md transition-all hover:px-4 hover:py-3 hover:text-sm 
+.main_btn {
+  @apply max-w-fit cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-400 to-red-600 px-3 py-2 text-center font-semibold text-white shadow-md transition-all hover:px-4 hover:py-3 hover:text-sm;
 }
 
-.status{
-	@apply text-xs inline-flex items-center font-bold uppercase px-3 py-1 rounded-full shadow;
-	&.shipping{
-		@apply bg-blue-200 text-blue-700;
-	}
-	&.arrived{
-		@apply bg-green-200 text-green-700;
-	}
-	&.cancel{
-		@apply bg-red-200 text-red-700;
-	}
-	&.pending{
-		@apply bg-orange-200 text-orange-700;
-	}
-	&.other{
-		@apply bg-white text-gray-700;
-	}
+.status {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase shadow;
+  &.shipping {
+    @apply bg-blue-200 text-blue-700;
+  }
+  &.arrived {
+    @apply bg-green-200 text-green-700;
+  }
+  &.cancel {
+    @apply bg-red-200 text-red-700;
+  }
+  &.pending {
+    @apply bg-orange-200 text-orange-700;
+  }
+  &.other {
+    @apply bg-white text-gray-700;
+  }
 }
 
 .card {
   // margin: 1rem;
   // padding: 1.5rem;
   display: flex;
-	flex-direction: column;
-	background-color: #FFF;
+  flex-direction: column;
+  background-color: #fff;
   text-align: left;
   color: inherit;
   text-decoration: none;
   border: 1px solid #eaeaea;
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
-	min-width: 150px;
+  min-width: 150px;
   max-width: 500px;
-  box-shadow: 0 5px 10px 0 rgba(#000, .15);
+  box-shadow: 0 5px 10px 0 rgba(#000, 0.15);
   padding: 12px 8px;
 }
 
@@ -106,11 +103,11 @@ dl {
   line-height: 1.5;
 }
 
-.card img{
+.card img {
   width: 100%;
 }
 
-.add_file__btn{
+.add_file__btn {
   width: 50px;
   height: 50px;
   border-radius: 6px;
@@ -124,82 +121,80 @@ dl {
   cursor: pointer;
 }
 
-.thumbnail_upload{
+.thumbnail_upload {
   width: 90px;
   height: 70px;
 }
 
 .backdrop {
-	width: 100%;
-	height: 100%;
-	background-color: #333;
-	opacity: 0.8;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 10;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+  opacity: 0.8;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
 }
 
-.form_center{
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 13;
-	border-radius: 15px;
-	background-color: white;
-	padding: 15px;
-	gap: 15px;
+.form_center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 13;
+  border-radius: 15px;
+  background-color: white;
+  padding: 15px;
+  gap: 15px;
 }
 
 .table {
-	@apply table-auto w-full leading-normal shadow-md;
-	> thead{
-		@apply uppercase text-white text-xs font-semibold bg-orange-600;
-		> tr {
-			@apply sm:hidden;
-			> th {
-				@apply text-left p-3
-			}
-		}
-	}
-	> tbody{
-		@apply sm:flex-1 text-gray-700 flex-none;
-		> tr{
-			@apply border-t first:border-t-0 sm:flex sm:p-1 p-3 hover:bg-gray-100 flex-col w-full flex-wrap gap-1;
-			> td{
-				@apply p-1 md:p-3 sm:flex flex-col;
-				> label{
-					@apply text-sm text-gray-500 uppercase font-bold hidden sm:inline-block;
-				}
-				img {
-					max-width: 140px;
-					max-height: 100px;
-				};
-			}
-		}
-	}
+  @apply w-full table-auto leading-normal shadow-md;
+  > thead {
+    @apply bg-orange-600 text-xs font-semibold uppercase text-white;
+    > tr {
+      @apply sm:hidden;
+      > th {
+        @apply p-3 text-left;
+      }
+    }
+  }
+  > tbody {
+    @apply flex-none text-gray-700 sm:flex-1;
+    > tr {
+      @apply w-full flex-col flex-wrap gap-1 border-t p-3 first:border-t-0 hover:bg-gray-100 sm:flex sm:p-1;
+      > td {
+        @apply flex-col p-1 sm:flex md:p-3;
+        > label {
+          @apply hidden text-sm font-bold uppercase text-gray-500 sm:inline-block;
+        }
+        img {
+          max-width: 140px;
+          max-height: 100px;
+        }
+      }
+    }
+  }
 }
 .skeleton {
-	background-color: #e2e5e7;
-	// The shine that's going to move across the skeleton:
-	background-image:			
-			linear-gradient(
-				90deg, 
-				rgba(#fff, 0), 
-				rgba(#fff, 0.5),
-				rgba(#fff, 0)
-			);
-	background-size: 40px 100%; // width of the shine
-	background-repeat: no-repeat; // No need to repeat the shine effect
-	background-position: left -40px top 0; // Place shine on the left side, with offset on the left based on the width of the shine - see background-size
-	animation: shine 1s ease infinite; // increase animation time to see effect in 'slow-mo'
+  background-color: #e2e5e7;
+  // The shine that's going to move across the skeleton:
+  background-image: linear-gradient(
+    90deg,
+    rgba(#fff, 0),
+    rgba(#fff, 0.5),
+    rgba(#fff, 0)
+  );
+  background-size: 40px 100%; // width of the shine
+  background-repeat: no-repeat; // No need to repeat the shine effect
+  background-position: left -40px top 0; // Place shine on the left side, with offset on the left based on the width of the shine - see background-size
+  animation: shine 1s ease infinite; // increase animation time to see effect in 'slow-mo'
 }
 
 @keyframes shine {
-	to {
-		// Move shine from left to right, with offset on the right based on the width of the shine - see background-size
-		background-position: right -40px top 0;
-	}
+  to {
+    // Move shine from left to right, with offset on the right based on the width of the shine - see background-size
+    background-position: right -40px top 0;
+  }
 }
-

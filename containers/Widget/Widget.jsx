@@ -40,8 +40,8 @@ export default function Widget({
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     onError(err, key, config) {
-      if (err.status === 300) router.back();
-      else if (err.status === 401) router.push("/login");
+      if (err.response.status === 300) router.back();
+      else if (err.response.status === 401) router.push("/login");
       else dispatch(addNotification({ message: err.message, type: "error" }));
     },
   });

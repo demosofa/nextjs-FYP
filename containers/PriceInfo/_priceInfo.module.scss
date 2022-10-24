@@ -1,0 +1,45 @@
+.discount_label {
+  padding: 5px;
+  position: relative;
+  float: left;
+  width: 60px;
+  margin-left: 20px;
+  border-radius: 0 4px 4px 0;
+  background-color: #e80707;
+
+  &:after {
+    right: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border-color: rgba(136, 183, 213, 0);
+    border-right-color: #e80707;
+    border-width: 20px;
+    top: 50%;
+    margin-top: -20px;
+  }
+
+  &:before {
+    content: "";
+    z-index: 2;
+    position: absolute;
+    top: 42%;
+    right: 100%;
+    width: 7px;
+    height: 7px;
+    opacity: 0.95;
+    background: #ffffff;
+    border-radius: 7px;
+    box-shadow: inset 0.5px 0 rgba(0, 0, 0, 0.6);
+  }
+
+  > span {
+    margin-left: 4px;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    font-family: "Raleway", Helvetica;
+  }
+}

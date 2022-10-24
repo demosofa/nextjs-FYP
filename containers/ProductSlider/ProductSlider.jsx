@@ -20,10 +20,18 @@ export default function ProductSlider({ products }) {
             <a className="card relative mt-2 h-fit min-h-0 !max-w-[140px] cursor-pointer !overflow-visible">
               <div className={styles.price_tag}>
                 <p className={styles.price_tag_price}>
-                  {currencyFormat(item.sale ? item.sale : item.price) ||
-                    "optional"}
+                  {currencyFormat(
+                    new Date(item.time).getTime() > Date.now()
+                      ? item.sale
+                      : item.price
+                  ) || "optional"}
                 </p>
               </div>
+              {new Date(item.time).getTime() > Date.now() ? (
+                <span className={styles.sale}>
+                  -{Math.ceil(100 - (item.sale / item.price) * 100)}%
+                </span>
+              ) : null}
               <div>
                 <div className="relative h-36 w-full rounded-xl">
                   <Image alt="product" src={item.thumbnail} layout="fill" />

@@ -9,17 +9,22 @@ import {
   Increment,
   Slider,
   Breadcrumb,
-  Form,
-  GoogleMap,
   StarRating,
 } from "../../components";
-import { Comment, PriceInfo, ProductSlider, Rating } from "../../containers";
+import {
+  Comment,
+  PriceInfo,
+  ProductSlider,
+  Rating,
+  ReceivingAddress,
+} from "../../containers";
 import { expireStorage, retryAxios, Validate } from "../../utils";
 import { useMediaContext } from "../../contexts/MediaContext";
 import { addCart } from "../../redux/reducer/cartSlice";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { addViewed } from "../../redux/reducer/recentlyViewedSlice";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -36,20 +41,22 @@ export async function getServerSideProps({ params }) {
 export default function Overview({ product }) {
   const [targetImage, setTargetImage] = useState(product.images[0].url);
   const [quantity, setQuantity] = useState(1);
-  const [address, setAddress] = useState("");
   const [display, setDisplay] = useState(false);
   const [loading, setLoading] = useState(false);
   const [similiarProducts, setSimiliarProducts] = useState([]);
   const [options, setOptions] = useState([]);
-  const targetVariation = useMemo(() => {
-    const index = product.variations.findIndex((item) =>
+
+  const targetVariationIdx = useMemo(() => {
+    return product.variations.findIndex((item) =>
       item.types.every((value) =>
-        options.some((opt) => opt.includes(value.name))
+        options.some((opt) => opt.split(":")[1]?.trim() === value.name)
       )
     );
-    return product.variations[index];
   }, [options, product.variations]);
+  const targetVariation = product.variations[targetVariationIdx];
 
+  const dispatch = useDispatch();
+  const router = useRouter();
   const { device, Devices } = useMediaContext();
 
   useEffect(() => {
@@ -67,7 +74,6 @@ export default function Overview({ product }) {
       });
   }, []);
 
-  const dispatch = useDispatch();
   const generateCart = () => {
     let { _id, title, images, price, length, width, height, time, sale } =
       product;
@@ -109,13 +115,13 @@ export default function Overview({ product }) {
     );
   };
 
-  const handleOrder = async (e) => {
+  const handleOrder = async (e, address) => {
     e.preventDefault();
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
       let products = [generateCart()];
-      new Validate(address).isEmpty().isNotSpecial();
+      new Validate(address).isEmpty().isAddress();
       const shippingFee = products.reduce((prev, curr) => {
         return prev + curr.quantity * curr.extraCostPerItem;
       }, 0);
@@ -138,6 +144,7 @@ export default function Overview({ product }) {
       dispatch(
         addNotification({ message: "Success order product", type: "success" })
       );
+      router.reload();
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
@@ -151,14 +158,13 @@ export default function Overview({ product }) {
   useEffect(() => {
     let { title, images, price, avgRating, sold, time, sale } = product;
     const thumbnail = images[0].url;
-    if (time && sale && new Date(time).getTime() > Date.now()) {
-      price = sale;
-    }
     dispatch(
       addViewed({
         title,
         thumbnail,
         price,
+        time,
+        sale,
         avgRating,
         sold,
         url: window.location.href,
@@ -189,7 +195,7 @@ export default function Overview({ product }) {
                 },
               }}
             >
-              <Slider.Content className="h-20 sm:h-60">
+              <Slider.Content className="h-20 sm:h-80">
                 {product.images.map((image, index) => (
                   <img
                     className="rounded-lg"
@@ -205,7 +211,7 @@ export default function Overview({ product }) {
 
           <div className="product-info">
             <label className="text-2xl">{product.title}</label>
-            <div className="flex items-center gap-2">
+            <div className="flex w-full items-center gap-2">
               <StarRating id="star" value={product.avgRating} />
               <label>{`(${product.rateCount} reviews)`}</label>
             </div>
@@ -326,32 +332,7 @@ export default function Overview({ product }) {
         ) : null}
 
         {display && (
-          <>
-            <div
-              className="backdrop"
-              onClick={() => {
-                setAddress(""), setDisplay(false);
-              }}
-            />
-            <Form onSubmit={handleOrder} className="form_center">
-              <Form.Title>Please set form for your checkout</Form.Title>
-              <Form.Item>
-                <Form.Title>Your Address</Form.Title>
-                <Form.Input onChange={(e) => setAddress(e.target.value)} />
-              </Form.Item>
-              <GoogleMap width="100%" height="300px" address={address} />
-              <Form.Item>
-                <Form.Submit>Submit</Form.Submit>
-                <Form.Button
-                  onClick={() => {
-                    setAddress(""), setDisplay(false);
-                  }}
-                >
-                  Cancel
-                </Form.Button>
-              </Form.Item>
-            </Form>
-          </>
+          <ReceivingAddress setDisplay={setDisplay} handleOrder={handleOrder} />
         )}
       </div>
     </>

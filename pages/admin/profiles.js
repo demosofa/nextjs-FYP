@@ -33,12 +33,14 @@ export default function ManageProfiles() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.status === 300) router.back();
-        else if (err.status === 401) router.push("/login");
+        if (err.response.status === 300) router.back();
+        else if (err.response.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
   );
+
+  console.log(error);
 
   const handleChangeRole = (e, index) => {
     mutate(async (data) => {
@@ -146,7 +148,7 @@ export default function ManageProfiles() {
                           defaultValue={profile.role}
                           onChange={(e) => handleChangeRole(e, index)}
                         >
-                          {["guest", "shipper"].map((role) => (
+                          {["guest", "shipper", "seller"].map((role) => (
                             <option key={role} value={role}>
                               {role}
                             </option>
@@ -158,12 +160,20 @@ export default function ManageProfiles() {
                         <div>Phone Number: {profile.user.phoneNumber}</div>
                       </td>
                       <td>
-                        <button onClick={() => handleBlockUser(index)}>
-                          {profile.blocked ? "Unblock" : "Block"}
-                        </button>
-                        <button onClick={() => handleDeleteUser(index)}>
-                          Delete
-                        </button>
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            className={`rounded-lg bg-yellow-500 px-4 py-2 duration-300 hover:bg-yellow-600`}
+                            onClick={() => handleBlockUser(index)}
+                          >
+                            {profile.blocked ? "Unblock" : "Block"}
+                          </button>
+                          <button
+                            className="rounded-lg bg-red-600 px-4 py-2 text-red-100 duration-300 hover:bg-red-700"
+                            onClick={() => handleDeleteUser(index)}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))

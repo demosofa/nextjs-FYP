@@ -60,4 +60,9 @@ export default class Validate {
     if (num && num % 1000 === 0) return this;
     throw new Error("this input is not VND currency");
   }
+  isAddress() {
+    if (!/[!@$%^&*(),?":{}|<>]/g.test(this.input))
+      throw new Error("this input is not like address");
+    return this;
+  }
 }

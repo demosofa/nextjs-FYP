@@ -5,7 +5,7 @@ import decoder from "jwt-decode";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { expireStorage, retryAxios } from "../../utils";
-import { convertTime } from "../../shared";
+import { convertTime, currencyFormat } from "../../shared";
 import { Loading, QRreader } from "../../components";
 import { ProgressBar } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
@@ -14,7 +14,6 @@ import { Role } from "../../shared";
 import Head from "next/head";
 import VnPay from "../../containers/VnPay/VnPay";
 import { useAblyContext } from "../../contexts/AblyContext";
-import { data } from "autoprefixer";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
@@ -24,6 +23,7 @@ function ShippingProgress() {
   const channel = useRef();
   const [showQR, setShowQR] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
+  const [showVnPay, setShowVnPay] = useState(false);
   const auth = useState(() => {
     const accessToken = expireStorage.getItem("accessToken");
     if (accessToken) {
@@ -59,17 +59,21 @@ function ShippingProgress() {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.status === 300) router.back();
-        else if (err.status === 401) router.push("/login");
+        if (err.response.status === 300) router.back();
+        else if (err.response.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
   );
 
   useEffect(() => {
-    if (!channel.current && order)
-      channel.current = ably.channels.get(order.customer);
-  }, [order]);
+    if (!channel.current && order) {
+      if ([Role.shipper, Role.admin].includes(auth.role))
+        channel.current = ably.channels.get(order.customer);
+      else if ([Role.guest].includes(auth.role))
+        channel.current = ably.channels.get(order.shipper);
+    }
+  }, [order, auth]);
 
   const handleShowQr = async () => {
     if (showQR !== null) setShowQR(null);
@@ -92,8 +96,22 @@ function ShippingProgress() {
         const result = await fetcher({
           url: `${LocalApi}/order/${scanData}`,
         });
-        setShowScanner(false);
+        if (result._id === router.query.id) {
+          setShowScanner(false);
+          setShowVnPay(true);
+          content = `Customer has scanned QR successfully`;
+          channel.current.publish({
+            name: "shipping",
+            data: {
+              message: content,
+              type: "success",
+            },
+          });
+        } else {
+          throw new Error("This is not your order");
+        }
       } catch (error) {
+        setShowScanner(false);
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
     }
@@ -139,6 +157,11 @@ function ShippingProgress() {
     }
   };
 
+  const styles = {
+    dt: "mb-1 text-xl font-medium text-gray-900",
+    dd: "mb-3 font-normal text-gray-700",
+  };
+
   const steps = [
     { title: "pending", allowed: false },
     { title: "progress", allowed: false },
@@ -169,12 +192,28 @@ function ShippingProgress() {
         <meta name="description" content="Shipping Progress" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <dl className="block max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:bg-gray-100">
+        <dt className={styles.dt}>Order Id</dt>
+        <dd className={styles.dd}>{order._id}</dd>
+        <dt className={styles.dt}>Address</dt>
+        <dd className={styles.dd}>{order.address}</dd>
+        <dt className={styles.dt}>Quantity</dt>
+        <dd className={styles.dd}>{order.quantity}</dd>
+        <dt className={styles.dt}>Shipping Fee</dt>
+        <dd className={styles.dd}>{currencyFormat(order.shippingFee)}</dd>
+        <dt className={styles.dt}>Total</dt>
+        <dd className={styles.dd}>
+          {currencyFormat(order.total + order.shippingFee)}
+        </dd>
+      </dl>
       <ProgressBar
         steps={steps}
         pass={order.status}
         onResult={handleCheckStep}
       />
-      {auth.accountId === order.customer && data.status === "arrived" ? (
+      {auth.accountId === order.customer &&
+      order.status === "arrived" &&
+      showVnPay ? (
         <VnPay order={order} />
       ) : null}
       {showQR !== null && (

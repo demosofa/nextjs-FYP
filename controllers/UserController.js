@@ -56,7 +56,8 @@ class UserController {
   };
   checkQR = async (req, res) => {
     const { shipperId, id } = req.query;
-    const orders = await this.unit.Order.getAll({
+    const order = await this.unit.Order.getOne({
+      _id: id,
       customer: req.user.accountId,
       shipper: shipperId,
       status: "arrived",
@@ -64,10 +65,8 @@ class UserController {
       .populate({ path: "shipper", select: ["username"] })
       .populate("products")
       .lean();
-    if (!orders.length) return res.status(500).json("This is not your order");
-    const check = orders.findIndex((order) => order._id === id);
-    if (check === -1) return res.status(500).json("This is not your order");
-    return res.status(200).json(orders[check]);
+    if (!order) return res.status(500).json("This is not your order");
+    return res.status(200).json(order);
   };
 }
 

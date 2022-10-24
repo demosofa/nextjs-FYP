@@ -102,6 +102,7 @@ function EditProfile() {
         <Form.Item>
           <Form.Title>Gender</Form.Title>
           <Checkbox
+            className="flex gap-4"
             type="radio"
             name="gender"
             checked={[data.gender]}
@@ -109,12 +110,14 @@ function EditProfile() {
               setData((prev) => ({ ...prev, gender: value[0] }))
             }
           >
-            <Checkbox.Item id="male" value="Male">
+            <div className="flex items-center gap-1">
+              <Checkbox.Item id="male" value="Male" />
               <label htmlFor="male">Male</label>
-            </Checkbox.Item>
-            <Checkbox.Item id="female" value="Female">
+            </div>
+            <div className="flex items-center gap-1">
+              <Checkbox.Item id="female" value="Female" />
               <label htmlFor="female">Female</label>
-            </Checkbox.Item>
+            </div>
           </Checkbox>
         </Form.Item>
         <Form.Item>

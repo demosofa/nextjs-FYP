@@ -1,28 +1,28 @@
 @import "./mixin.scss";
 
-.homepage{
+.homepage {
   @include block(100%, 100%);
   @include flex(10px, column, center);
   > .trending {
     @include block(100%, 100%, 0, 15px);
-    @include flex(10px, row)
+    @include flex(10px, row);
   }
-    .category__lst{
-      width: 80%;
-      height: 150px;
+  .category__lst {
+    width: 80%;
+    height: 150px;
   }
-  > .grid_list__product{
+  > .grid_list__product {
     width: 100%;
     @include grid(15px);
 
-    & > .product{
+    & > .product {
       transition: all 0.3s cubic-bezier(0.47, 0, 0.745, 0.715);
-      & > img{
+      & > img {
         width: 100%;
         height: 100%;
         border-radius: 6px;
       }
-      &:hover{
+      &:hover {
         transform: scale(1.1);
       }
     }

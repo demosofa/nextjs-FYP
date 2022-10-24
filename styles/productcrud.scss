@@ -1,5 +1,5 @@
 @import "./mixin.scss";
-.product-crud__container{
+.product-crud__container {
   margin-left: 30px;
   margin-right: 30px;
   margin-top: 20px;
@@ -7,41 +7,42 @@
   flex-direction: column;
   gap: 20px;
 
-  .create-edit{
-    @include mq("phone-wide"){
+  .create-edit {
+    @include mq("phone-wide") {
       gap: 10px;
-      .form__title{
+      .form__title {
         font-size: 12px;
       }
-      .form__input{
+      .form__input {
         font-size: 12px;
         padding: 6px 10px;
       }
     }
   }
 }
-.manage_table{
+.manage_table {
   overflow-x: auto;
 }
 .manage_table > table {
   @apply min-w-full leading-normal;
   text-align: left;
   border-collapse: collapse;
-  
-  .ellipse{
+
+  .ellipse {
     max-width: 150px;
-    @include ellipse()
+    @include ellipse();
   }
 
-  th,td {
-    @apply px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 tracking-wider;
-    @include mq("phone-wide"){
+  th,
+  td {
+    @apply border-b-2 border-gray-200 bg-gray-100 px-5 py-3 text-left text-xs font-semibold tracking-wider text-gray-700;
+    @include mq("phone-wide") {
       font-size: 12px;
     }
   }
 
   td {
-    @apply px-5 py-5 border-b border-gray-200 bg-white text-sm;
-    box-shadow: 0 2px 2px -2px #0E1119;
+    @apply border-b border-gray-200 bg-white px-5 py-5 text-sm;
+    box-shadow: 0 2px 2px -2px #0e1119;
   }
 }

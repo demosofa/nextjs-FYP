@@ -6,7 +6,16 @@ class OrderController {
     this.unit = new unit();
   }
   getOrder = async (req, res) => {
-    const order = await this.unit.Order.getById(req.query.id).lean();
+    const order = await this.unit.Order.getById(req.query.id)
+      .populate({
+        path: "customer",
+        select: ["username"],
+      })
+      .populate({
+        path: "shipper",
+        select: ["username"],
+      })
+      .lean();
     if (!order) return res.status(500).json("Fail to get order");
     return res.status(200).json(order);
   };
@@ -41,21 +50,6 @@ class OrderController {
     } catch (error) {
       return res.status(500).json("Fail to get QR");
     }
-  };
-  checkQR = async (req, res) => {
-    const { shipperId, id } = req.query;
-    const orders = await this.unit.Order.getAll({
-      customer: req.user.accountId,
-      shipper: shipperId,
-      status: "arrived",
-    })
-      .populate({ path: "shipper", select: ["username"] })
-      .populate("products")
-      .lean();
-    if (!orders.length) return res.status(500).json("This is not your order");
-    const check = orders.findIndex((order) => order._id === id);
-    if (check === -1) return res.status(500).json("This is not your order");
-    return res.status(200).json(orders[check]);
   };
   addOrder = async (req, res) => {
     const { products, ...others } = req.body;

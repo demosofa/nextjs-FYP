@@ -34,8 +34,8 @@ function Dashboard() {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       onError(err, key, config) {
-        if (err.status === 300) router.back();
-        else if (err.status === 401) router.push("/login");
+        if (err.response.status === 300) router.back();
+        else if (err.response.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
@@ -53,13 +53,13 @@ function Dashboard() {
       />
     );
   return (
-    <div className="flex flex-col gap-10">
+    <div className="m-10 flex flex-col gap-10 sm:m-2">
       <Head>
         <title>Dashboard</title>
         <meta name="description" content="Dashboard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex justify-around">
+      <div className="flex flex-wrap gap-3">
         <Widget
           url={`${LocalApi}/admin/income`}
           description="Compare to last month"
@@ -72,8 +72,21 @@ function Dashboard() {
         >
           Profit
         </Widget>
+        <Widget
+          url={`${LocalApi}/admin/newUsers`}
+          description="Compare to last month"
+        >
+          New Users
+        </Widget>
+        <Widget
+          url={`${LocalApi}/admin/totalOrder`}
+          description="Compare to last month"
+        >
+          Orders
+        </Widget>
       </div>
       <div className="manage_table">
+        <label>Top 10 product sold</label>
         <table>
           <thead>
             <tr>
