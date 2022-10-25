@@ -3,7 +3,7 @@ import { isAuthentication } from "../../../../helpers";
 
 async function shipperId(req, res) {
   switch (req.method.toLowerCase()) {
-    case "get":
+    case "patch":
       await user.checkQR(req, res);
       break;
   }

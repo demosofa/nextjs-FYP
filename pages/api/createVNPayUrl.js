@@ -1,9 +1,9 @@
 import { isAuthentication } from "../../helpers";
-import dateFormat from "dateformat";
+import { format } from "date-fns";
 import { sortObject } from "../../shared";
 import NextCors from "nextjs-cors";
 
-const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 async function createVNPayUrl(req, res) {
   switch (req.method.toLowerCase()) {
@@ -17,11 +17,11 @@ async function createVNPayUrl(req, res) {
       var tmnCode = process.env.vnp_TmnCode;
       var secretKey = process.env.vnp_HashSecret;
       var vnpUrl = process.env.vnp_Url;
-      var returnUrl = LocalUrl + "success";
+      var returnUrl = LocalApi + "/createVNPayReturn";
 
       var date = new Date();
 
-      var createDate = dateFormat(date, "yyyymmddHHmmss");
+      var createDate = format(date, "yyyyMMddHHmmss");
       var orderId = req.body.orderId;
       var amount = req.body.amount;
       var bankCode = req.body.bankCode;
@@ -40,7 +40,7 @@ async function createVNPayUrl(req, res) {
       // vnp_Params['vnp_Merchant'] = ''
       vnp_Params["vnp_Locale"] = locale;
       vnp_Params["vnp_CurrCode"] = currCode;
-      vnp_Params["vnp_TxnRef"] = orderId + "+" + Date.now();
+      vnp_Params["vnp_TxnRef"] = orderId;
       vnp_Params["vnp_OrderInfo"] = orderInfo;
       vnp_Params["vnp_OrderType"] = orderType;
       vnp_Params["vnp_Amount"] = amount * 100;

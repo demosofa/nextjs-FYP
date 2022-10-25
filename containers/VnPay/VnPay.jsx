@@ -33,7 +33,7 @@ export default function VnPay({ order, ...props }) {
     }
   };
   return (
-    <Form {...props} onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} {...props}>
       <Form.Item>
         <Form.Title htmlFor="bank_code">Ngân hàng</Form.Title>
         <select

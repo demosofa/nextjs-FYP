@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { currencyFormat } from "../shared";
 
 export function getServerSideProps({ query }) {
   return {
@@ -17,7 +18,7 @@ export default function Success({ query }) {
         <dt>Order Id</dt>
         <dd>{query.vnp_TxnRef}</dd>
         <dt>Order price</dt>
-        <dd>{query.vnp_Amount}</dd>
+        <dd>{currencyFormat(query.vnp_Amount / 100)}</dd>
         <dt>Order Info</dt>
         <dd>{query.vnp_OrderInfo}</dd>
         <dt>Payment time</dt>

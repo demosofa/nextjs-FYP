@@ -22,8 +22,8 @@ export default function VNPayReturn(req, res) {
   if (secureHash === signed) {
     //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
 
-    res.render("success", { code: vnp_Params["vnp_ResponseCode"] });
+    res.redirect(307, "/success" + vnp_Params);
   } else {
-    res.render("success", { code: "97" });
+    res.redirect(307, "/success" + vnp_Params);
   }
 }
