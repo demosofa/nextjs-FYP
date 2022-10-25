@@ -3,14 +3,12 @@ import useSWRImmutable from "swr/immutable";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { Checkbox, Loading, Pagination, QRreader } from "../../components";
-import { Widget } from "../../containers";
 import { expireStorage, retryAxios } from "../../utils";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
 import { currencyFormat } from "../../shared";
-import { useMediaContext } from "../../contexts/MediaContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -21,7 +19,6 @@ function SellerPage() {
   const [viewOrder, setViewOrder] = useState();
   const [checkOrder, setCheckOrder] = useState([]);
   const [scannedUrl, setScannedUrl] = useState();
-  const { device, Devices } = useMediaContext();
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -40,8 +37,8 @@ function SellerPage() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.response.status === 300) router.back();
-        else if (err.response.status === 401) router.push("/login");
+        if (err?.response?.status === 403) router.back();
+        else if (err?.response?.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
@@ -152,13 +149,6 @@ function SellerPage() {
             </tbody>
           </table>
         </div>
-        {/* <Widget
-          className="max-w-[200px]"
-          url={`${LocalApi}/seller/income`}
-          description="Compare to yester"
-        >
-          Sale Status
-        </Widget> */}
       </div>
 
       <Pagination

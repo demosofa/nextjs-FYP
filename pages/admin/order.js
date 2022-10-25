@@ -39,8 +39,8 @@ export default function ManageOrder() {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.response.status === 300) router.back();
-        else if (err.response.status === 401) router.push("/login");
+        if (err?.response?.status === 403) router.back();
+        else if (err?.response?.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
@@ -62,7 +62,7 @@ export default function ManageOrder() {
     }, false);
   };
 
-  const isLoadingInitialData = !data && !error;
+  const isLoadingInitialData = (!data && !error) || error;
   return (
     <div className="ml-11 sm:ml-2">
       <Head>

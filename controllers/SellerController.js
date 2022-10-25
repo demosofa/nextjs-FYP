@@ -4,7 +4,7 @@ class SellerController {
   constructor(unit = UnitOfWork) {
     this.unit = new unit();
   }
-  compareYesterday = async (req, res) => {
+  income = async (req, res) => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     try {
@@ -22,6 +22,55 @@ class SellerController {
       res.status(200).json(income);
     } catch (error) {
       res.status(500).json(error);
+    }
+  };
+  totalOrder = async (req, res) => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    try {
+      const orders = await this.unit.Order.aggregate()
+        .match({ createdAt: { $gte: yesterday } })
+        .project({
+          day: { $dayOfMonth: "$createddAt" },
+        })
+        .group({ _id: "$day", total: { $sum: 1 } })
+        .sort({ _id: 1 });
+      return res.status(200).json(orders);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  };
+  topSold = async (req, res) => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    try {
+      const total = await this.unit.OrderItem.aggregate([
+        { $match: { createdAt: { $gte: yesterday } } },
+        {
+          $project: {
+            productId: 1,
+            title: 1,
+            image: 1,
+            sales: "$quantity",
+          },
+        },
+        {
+          $group: {
+            _id: "$productId",
+            image: { $last: "$image" },
+            title: { $last: "$title" },
+            total: { $sum: "$sales" },
+          },
+        },
+        {
+          $sort: {
+            total: -1,
+          },
+        },
+      ]).limit(10);
+      return res.status(200).json(total);
+    } catch (error) {
+      return res.status(500).json(error);
     }
   };
   todayValidated = async (req, res) => {

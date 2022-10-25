@@ -18,7 +18,7 @@ export default function useAuthLoad({
   deps?: DependencyList;
 }) {
   const [isLoggined, setLoggined] = useState(false);
-  const [isAuthorized, setAuthorized] = useState(false);
+  const [isAuthorized, setAuthorized] = useState(null);
   const [error, setError] = useState();
   const { loading, setLoading, axiosInstance } = useAxiosLoad({
     config,
@@ -28,7 +28,7 @@ export default function useAuthLoad({
       if (!accessToken) {
         setLoading(false);
         setLoggined(false);
-        setAuthorized(false);
+        setAuthorized(null);
         return;
       } else setLoggined(true);
 
@@ -36,16 +36,17 @@ export default function useAuthLoad({
         const { role } = decoder(accessToken) as { role: string };
         if (!roles.includes(role)) {
           setLoading(false);
-          setAuthorized(false);
+          setAuthorized(null);
           return;
-        } else setAuthorized(true);
+        } else setAuthorized(role);
       } catch (error) {
         await axiosInstance
           .post(`${LocalApi}/auth/refreshToken`, null)
           .then((res) => {
             accessToken = res.data;
             expireStorage.setItem("accessToken", accessToken);
-            setAuthorized(true);
+            const { role } = decoder(accessToken) as { role: string };
+            setAuthorized(role);
           })
           .catch((res) => setError(res));
       }

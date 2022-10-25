@@ -34,8 +34,8 @@ export default function Notification({ className, ...props }) {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.response.status === 300) router.back();
-        else if (err.response.status === 401) router.push("/login");
+        if (err?.response?.status === 403) router.back();
+        else if (err?.response?.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
@@ -72,7 +72,7 @@ export default function Notification({ className, ...props }) {
     }, false);
   };
 
-  const isLoadingInitialData = !data && !error;
+  const isLoadingInitialData = (!data && !error) || error;
   const isLoadingMore =
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === "undefined");

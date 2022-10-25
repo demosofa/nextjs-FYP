@@ -165,7 +165,7 @@ function UpdateProduct() {
         <Form.Input
           type="date"
           value={
-            product.time ? format(new Date(product.time), "yyyy-MM-dd") : " "
+            product.time ? format(new Date(product.time), "yyyy-MM-dd") : ""
           }
           onChange={(e) =>
             setProduct((prev) => ({ ...prev, time: e.target.value }))

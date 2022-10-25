@@ -3,16 +3,64 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
-import { Loading } from "../../components";
-import { Widget } from "../../containers";
-import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
+import { Loading } from "../components";
+import { Widget } from "../containers";
+import { addNotification } from "../redux/reducer/notificationSlice";
+import { expireStorage, retryAxios } from "../utils";
 import Head from "next/head";
 import Image from "next/image";
+import { useState } from "react";
+import decoder from "jwt-decode";
+import { Role } from "../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function Dashboard() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const auth = useState(() => {
+    const accessToken = expireStorage.getItem("accessToken");
+    if (accessToken) {
+      const { role, accountId } = decoder(accessToken);
+      return { role, accountId };
+    } else router.push("/login");
+  })[0];
+  const widgetRoutes =
+    (auth &&
+      auth.role === Role.admin && [
+        {
+          path: "/admin/income",
+          title: "Revenue",
+          desc: "Compare to last month",
+        },
+        {
+          path: "/admin/profitMonthly",
+          title: "Profit",
+          desc: "Compare to last month",
+        },
+        {
+          path: "/admin/newUsers",
+          title: "New Users",
+          desc: "Compare to last month",
+        },
+        {
+          path: "/admin/totalOrder",
+          title: "Orders",
+          desc: "Compare to last month",
+        },
+      ]) ||
+    (auth.role === Role.seller && [
+      {
+        path: "/seller/income",
+        title: "Revenue",
+        desc: "Compare to yesterday",
+      },
+      {
+        path: "/seller/totalOrder",
+        title: "Orders",
+        desc: "Compare to yesterday",
+      },
+    ]);
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -24,18 +72,23 @@ function Dashboard() {
     });
     return response.data;
   };
-  const dispatch = useDispatch();
-  const router = useRouter();
+
   const { data, error } = useSWR(
-    { url: `${LocalApi}/admin/topSellingProduct` },
+    {
+      url: `${LocalApi}/${
+        auth.role === Role.admin || auth.role === Role.seller
+          ? auth.role
+          : Role.seller
+      }/topSellingProduct`,
+    },
     fetcher,
     {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       onError(err, key, config) {
-        if (err.response.status === 300) router.back();
-        else if (err.response.status === 401) router.push("/login");
+        if (err?.response?.status === 403) router.back();
+        else if (err?.response?.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
@@ -60,30 +113,15 @@ function Dashboard() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-wrap gap-3">
-        <Widget
-          url={`${LocalApi}/admin/income`}
-          description="Compare to last month"
-        >
-          Revenue
-        </Widget>
-        <Widget
-          url={`${LocalApi}/admin/profitMonthly`}
-          description="Compare to last month"
-        >
-          Profit
-        </Widget>
-        <Widget
-          url={`${LocalApi}/admin/newUsers`}
-          description="Compare to last month"
-        >
-          New Users
-        </Widget>
-        <Widget
-          url={`${LocalApi}/admin/totalOrder`}
-          description="Compare to last month"
-        >
-          Orders
-        </Widget>
+        {widgetRoutes.map((info) => (
+          <Widget
+            key={info.title}
+            url={LocalApi + info.path}
+            description={info.desc}
+          >
+            {info.title}
+          </Widget>
+        ))}
       </div>
       <div className="manage_table">
         <label>Top 10 product sold</label>

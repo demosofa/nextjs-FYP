@@ -20,7 +20,16 @@ export default function Layout({ children, routerPath }) {
   }, [routerPath]);
 
   const TargetLayout = useMemo(() => {
-    if (isStringStartWith(routerPath, ["/admin", "/product"])) return Dashboard;
+    if (
+      isStringStartWith(routerPath, [
+        "/admin",
+        "/seller",
+        "/shipper",
+        "/product",
+        "/dashboard",
+      ])
+    )
+      return Dashboard;
     else if (!isStringStartWith(routerPath, ["/login", "/register"]))
       return General;
   }, [routerPath]);

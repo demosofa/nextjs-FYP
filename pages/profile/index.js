@@ -8,7 +8,6 @@ import { Role, dateFormat } from "../../shared";
 import Head from "next/head";
 import { MyOrder, ProductSlider } from "../../containers";
 import { useSelector } from "react-redux";
-import { useMediaContext } from "../../contexts/MediaContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -29,7 +28,6 @@ function MyProfile() {
     // return after;
     return state.recentlyViewed;
   });
-  const { device, Devices } = useMediaContext();
   const { loading, isLoggined, isAuthorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({
@@ -37,7 +35,7 @@ function MyProfile() {
       });
       setData(res.data);
     },
-    roles: [Role.guest, Role.admin, Role.shipper],
+    roles: [Role.guest, Role.admin, Role.shipper, Role.seller],
   });
 
   useEffect(() => {
@@ -96,7 +94,7 @@ function MyProfile() {
           <label>You haven&apos; t visited any products</label>
         )}
       </div>
-      <MyOrder />
+      {isAuthorized === Role.seller ? null : <MyOrder />}
     </div>
   );
 }

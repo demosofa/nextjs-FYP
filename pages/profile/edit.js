@@ -6,8 +6,9 @@ import { Checkbox, Form, Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { retryAxios, Validate } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Role, dateFormat } from "../../shared";
+import { Role } from "../../shared";
 import Head from "next/head";
+import { format } from "date-fns";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -27,7 +28,7 @@ function EditProfile() {
       });
       setData(res.data);
     },
-    roles: [Role.admin, Role.guest, Role.shipper],
+    roles: [Role.admin, Role.guest, Role.shipper, Role.seller],
   });
 
   const validateInput = () => {
@@ -92,7 +93,11 @@ function EditProfile() {
         <Form.Item>
           <Form.Title>Date of Birth</Form.Title>
           <Form.Input
-            value={dateFormat(data.dateOfBirth)}
+            value={
+              data.dateOfBirth
+                ? format(new Date(data.dateOfBirth), "yyyy-MM-dd")
+                : ""
+            }
             type="date"
             onChange={(e) =>
               setData((prev) => ({ ...prev, dateOfBirth: e.target.value }))

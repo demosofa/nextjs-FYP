@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const qrcodeRegionId = "html5qr-code-full-region";
 /**@param {({config: Html5QrcodeCameraScanConfig, onScanSuccess: (decodedText: string, result: Html5QrcodeResult, html5Qrcode: Html5Qrcode) => void, onScanFailure?: (errorMessage: string, error: Html5QrcodeError, html5Qrcode: Html5Qrcode) => void})} */
 export default function QRreader({
-  config = { fps: 10, qrbox: { width: 200, height: 200 } },
+  config = { fps: 10, qrbox: { width: 250, height: 250 } },
   onScanSuccess,
   onScanFailure,
   ...props

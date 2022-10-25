@@ -9,7 +9,7 @@ import { expireStorage, retryAxios } from "../../utils";
 import { useAuthLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Role } from "../../shared";
+import { Role, currencyFormat } from "../../shared";
 import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -38,7 +38,7 @@ function ProductCRUD() {
       setTotalPageCount(res.data.pageCounted);
       return;
     },
-    roles: [Role.admin],
+    roles: [Role.admin, Role.seller],
     deps: [query],
   });
 
@@ -76,12 +76,14 @@ function ProductCRUD() {
         <title>Manage Product</title>
       </Head>
       <div className="flex flex-wrap gap-4">
-        <button
-          className="main_btn"
-          onClick={() => router.push(`product/create`)}
-        >
-          Create
-        </button>
+        {isAuthorized === Role.admin ? (
+          <button
+            className="main_btn"
+            onClick={() => router.push(`product/create`)}
+          >
+            Create
+          </button>
+        ) : null}
         <Search
           className="!ml-0"
           value={search}
@@ -113,6 +115,7 @@ function ProductCRUD() {
                   <th>Thumbnail</th>
                   <th style={{ width: "20%" }}>Title</th>
                   <th>Status</th>
+                  <th>Info</th>
                   <th>TimeStamp</th>
                   <th>Actions</th>
                 </tr>
@@ -148,6 +151,14 @@ function ProductCRUD() {
                           </select>
                         </td>
                         <td>
+                          <dl>
+                            <dt>Price</dt>
+                            <dd>{currencyFormat(product.price)}</dd>
+                            <dt>Quantity</dt>
+                            <dd>{product.quantity}</dd>
+                          </dl>
+                        </td>
+                        <td>
                           <p>
                             Created at:{" "}
                             {new Date(product.createdAt).toLocaleString(
@@ -175,20 +186,24 @@ function ProductCRUD() {
                             >
                               Preview
                             </button>
-                            <button
-                              className="rounded-lg border-2 border-blue-500 px-4 py-2 text-blue-500 duration-300 hover:bg-blue-600 hover:text-blue-100"
-                              onClick={() =>
-                                router.push(`product/update/${product._id}`)
-                              }
-                            >
-                              Edit
-                            </button>
-                            <button
-                              className="rounded-lg border-2 border-red-600 px-4 py-2 text-red-600 duration-300 hover:bg-red-600 hover:text-red-100"
-                              onClick={() => setRemove(index)}
-                            >
-                              Remove
-                            </button>
+                            {isAuthorized === Role.admin ? (
+                              <>
+                                <button
+                                  className="rounded-lg border-2 border-blue-500 px-4 py-2 text-blue-500 duration-300 hover:bg-blue-600 hover:text-blue-100"
+                                  onClick={() =>
+                                    router.push(`product/update/${product._id}`)
+                                  }
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  className="rounded-lg border-2 border-red-600 px-4 py-2 text-red-600 duration-300 hover:bg-red-600 hover:text-red-100"
+                                  onClick={() => setRemove(index)}
+                                >
+                                  Remove
+                                </button>
+                              </>
+                            ) : null}
                           </div>
                         </td>
                       </tr>
@@ -196,7 +211,7 @@ function ProductCRUD() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="6">
+                    <td colSpan="7">
                       <p className="text-center">Please add new products</p>
                     </td>
                   </tr>

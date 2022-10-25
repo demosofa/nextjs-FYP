@@ -33,14 +33,12 @@ export default function ManageProfiles() {
     fetcher,
     {
       onError(err, key, config) {
-        if (err.response.status === 300) router.back();
-        else if (err.response.status === 401) router.push("/login");
+        if (err?.response?.status === 403) router.back();
+        else if (err?.response?.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
   );
-
-  console.log(error);
 
   const handleChangeRole = (e, index) => {
     mutate(async (data) => {
@@ -100,7 +98,7 @@ export default function ManageProfiles() {
     });
   };
 
-  const isLoadingInitialData = !data && !error;
+  const isLoadingInitialData = (!data && !error) || error;
 
   return (
     <div className="px-24 sm:p-4 md:px-10">

@@ -18,13 +18,9 @@ const ShipperRole = [
 ];
 
 const SellerRole = [
-  { title: "Seller", path: "/seller", icon: <MdOutlineSell /> },
-];
-
-const AdminRole = [
   {
     title: "Dashboard",
-    path: "/admin/dashboard",
+    path: "/dashboard",
     icon: <MdOutlineDashboard />,
   },
   {
@@ -32,6 +28,10 @@ const AdminRole = [
     path: "/product",
     icon: <BsBoxSeam />,
   },
+  { title: "Seller", path: "/seller", icon: <MdOutlineSell /> },
+];
+
+const AdminRole = [
   {
     title: "Category Management",
     path: "/admin/category",
@@ -47,8 +47,8 @@ const AdminRole = [
     path: "/admin/profiles",
     icon: <AiOutlineProfile />,
   },
-  ...ShipperRole,
   ...SellerRole,
+  ...ShipperRole,
 ];
 
 export { AdminRole, ShipperRole, SellerRole };

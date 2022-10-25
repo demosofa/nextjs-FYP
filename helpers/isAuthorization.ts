@@ -6,7 +6,7 @@ export default function isAuthorization(
   roles: string[]
 ): NextApiHandler {
   return (req: Request, res: NextApiResponse): unknown => {
-    if (!roles.includes(req.user.role)) return res.status(300).end();
+    if (!roles.includes(req.user.role)) return res.status(403).end();
     return handler(req, res);
   };
 }

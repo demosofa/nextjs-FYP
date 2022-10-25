@@ -63,7 +63,7 @@ class UserController {
       status: "arrived",
     })
       .populate({ path: "shipper", select: ["username"] })
-      .populate("products")
+      .populate("orderItems")
       .lean();
     if (!order) return res.status(500).json("This is not your order");
     return res.status(200).json(order);

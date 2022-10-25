@@ -59,8 +59,8 @@ function ShippingProgress() {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
-        if (err.response.status === 300) router.back();
-        else if (err.response.status === 401) router.push("/login");
+        if (err?.response?.status === 403) router.back();
+        else if (err?.response?.status === 401) router.push("/login");
         else dispatch(addNotification({ message: err.message, type: "error" }));
       },
     }
@@ -69,9 +69,9 @@ function ShippingProgress() {
   useEffect(() => {
     if (!channel.current && order) {
       if ([Role.shipper, Role.admin].includes(auth.role))
-        channel.current = ably.channels.get(order.customer);
+        channel.current = ably.channels.get(order.customer._id);
       else if ([Role.guest].includes(auth.role))
-        channel.current = ably.channels.get(order.shipper);
+        channel.current = ably.channels.get(order.shipper._id);
     }
   }, [order, auth]);
 
@@ -99,7 +99,7 @@ function ShippingProgress() {
         if (result._id === router.query.id) {
           setShowScanner(false);
           setShowVnPay(true);
-          content = `Customer has scanned QR successfully`;
+          let content = `Customer has scanned QR successfully`;
           channel.current.publish({
             name: "shipping",
             data: {
@@ -111,6 +111,7 @@ function ShippingProgress() {
           throw new Error("This is not your order");
         }
       } catch (error) {
+        console.log(error);
         setShowScanner(false);
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
@@ -119,9 +120,15 @@ function ShippingProgress() {
 
   const handleCheckStep = (value) => {
     if (value === "arrived") {
-      if (auth.role === Role.guest) {
+      if (
+        (auth.role === Role.guest || auth.role === Role.admin) &&
+        auth.accountId === order.customer._id
+      ) {
         setShowScanner(true);
-      } else if (auth.role === Role.shipper || auth.role === Role.admin) {
+      } else if (
+        (auth.role === Role.shipper || auth.role === Role.admin) &&
+        auth.accountId === order.shipper._id
+      ) {
         if (order.status !== "arrived") {
           const content = `Your order ${
             order._id
@@ -227,15 +234,10 @@ function ShippingProgress() {
       {showScanner && (
         <>
           <div className="backdrop" onClick={() => setShowScanner(false)} />
-          <div className="form_center">
-            <button onClick={() => setShowScanner((prev) => !prev)}>
-              Show Scanner
-            </button>
-            <QRreader
-              onScanSuccess={handleScan}
-              className="w-full max-w-lg !p-0 sm:max-w-none"
-            />
-          </div>
+          <QRreader
+            onScanSuccess={handleScan}
+            className="form_center !fixed w-full max-w-lg !p-0 sm:max-w-none"
+          />
         </>
       )}
     </div>
