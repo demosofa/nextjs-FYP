@@ -7,9 +7,7 @@ import styles from "./breadcrumb.module.scss";
 export default function Breadcrumb({ categories, className, ...props }) {
   return (
     <div className={`${styles.container} ${className}`} {...props}>
-      <Link href="/">
-        <a>Home</a>
-      </Link>
+      <Link href="/">Home</Link>
       {categories.map((category) => (
         <Fragment key={category._id}>
           <Icon>
@@ -23,7 +21,7 @@ export default function Breadcrumb({ categories, className, ...props }) {
               },
             }}
           >
-            <a>{category.name}</a>
+            {category.name}
           </Link>
         </Fragment>
       ))}

@@ -10,6 +10,8 @@ const Variation = new Schema(
     ],
     price: { type: Number, required: true },
     cost: { type: Number, required: true },
+    time: { type: Date },
+    sale: { type: Number, default: 0 },
     quantity: { type: Number, required: true },
     length: { type: Number, required: true },
     width: { type: Number, required: true },

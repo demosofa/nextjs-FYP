@@ -52,7 +52,7 @@ Product.post(
       doc.variants.map((Id) => mongoose.models.Variant.findByIdAndDelete(Id))
     );
     await mongoose.models.Rate.deleteMany({ product: doc._id });
-    await mongoose.models.Comment.findOne({ produtId: doc._id }).then((arr) => {
+    await mongoose.models.Comment.find({ produtId: doc._id }).then((arr) => {
       Promise.all(
         arr.map((comment) =>
           mongoose.models.Comment.findByIdAndDelete(comment._id)

@@ -83,14 +83,18 @@ export default function Overview({ product }) {
     if (targetVariation) {
       variationId = targetVariation._id;
       variationImage = targetVariation.image?.url;
-      price = targetVariation.price;
+      price =
+        targetVariation.time &&
+        new Date(targetVariation.time).getTime() > Date.now()
+          ? targetVariation.sale
+          : targetVariation.price;
       extraCostPerItem =
         (targetVariation.length *
           targetVariation.width *
           targetVariation.height) /
         6000;
     }
-    if (time && sale && new Date(time).getTime() > Date.now()) {
+    if (time && new Date(time).getTime() > Date.now()) {
       price = sale;
     }
     return {
@@ -217,7 +221,10 @@ export default function Overview({ product }) {
             </div>
 
             <PriceInfo
-              saleEvent={{ time: product.time, sale: product.sale }}
+              saleEvent={{
+                time: targetVariation ? targetVariation.time : product.time,
+                sale: targetVariation ? targetVariation.sale : product.sale,
+              }}
               price={targetVariation ? targetVariation.price : product.price}
             />
 
