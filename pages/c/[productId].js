@@ -160,10 +160,12 @@ export default function Overview({ product }) {
   }, [options, product.images, targetVariation]);
 
   useEffect(() => {
-    let { title, images, price, avgRating, sold, time, sale } = product;
+    let { _id, title, images, price, avgRating, sold, time, sale, variations } =
+      product;
     const thumbnail = images[0].url;
     dispatch(
       addViewed({
+        _id,
         title,
         thumbnail,
         price,
@@ -171,7 +173,7 @@ export default function Overview({ product }) {
         sale,
         avgRating,
         sold,
-        url: window.location.href,
+        variations,
       })
     );
   }, [product]);

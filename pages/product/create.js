@@ -5,7 +5,13 @@ import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FileUpload, TagsInput, Form } from "../../components";
 import { Variation, Variant, SelectCategory } from "../../containers";
-import { retryAxios, Validate, uploadApi, expireStorage } from "../../utils";
+import {
+  retryAxios,
+  Validate,
+  uploadApi,
+  expireStorage,
+  validateVariations,
+} from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 import { editAllVariations } from "../../redux/reducer/variationSlice";
 import { addNotification } from "../../redux/reducer/notificationSlice";
@@ -41,6 +47,16 @@ function CreateForm() {
 
   const { device, Devices } = useMediaContext();
 
+  const validateVariant = () => {
+    if (variants.length) {
+      variants.forEach(({ name, options }) => {
+        if (!name) throw new Error("Please add value name for Variant");
+        if (!options.length)
+          throw new Error("Please add value options for Variant " + name);
+      });
+    }
+  };
+
   const validateInput = () => {
     const {
       title,
@@ -54,18 +70,10 @@ function CreateForm() {
       height,
       quantity,
     } = input;
-    Object.entries({
-      title,
-      description,
-      status,
-      manufacturer,
-      price,
-      cost,
-      length,
-      width,
-      height,
-      quantity,
-    }).forEach((entry) => {
+    let validate = { title, description, status, manufacturer };
+    if (!variations.length)
+      validate = { ...validate, price, cost, length, width, height, quantity };
+    Object.entries(validate).forEach((entry) => {
       switch (entry[0]) {
         case "title":
           new Validate(entry[1]).isEmpty().isEnoughLength({ max: 255 });
@@ -95,6 +103,9 @@ function CreateForm() {
     e.preventDefault();
     let uploaded = [];
     try {
+      if (!input.categories.length) throw new Error("Please select categories");
+      validateVariant();
+      validateVariations(variations);
       validateInput();
       const accessToken = expireStorage.getItem("accessToken");
       retryAxios(axios);

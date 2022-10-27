@@ -153,7 +153,23 @@ function ProductCRUD() {
                         <td>
                           <dl>
                             <dt>Price</dt>
-                            <dd>{currencyFormat(product.price)}</dd>
+                            <dd>
+                              {product.variations.length
+                                ? `${currencyFormat(
+                                    Math.min(
+                                      ...product.variations.map(
+                                        (item) => item.price
+                                      )
+                                    )
+                                  )} - ${currencyFormat(
+                                    Math.max(
+                                      ...product.variations.map(
+                                        (item) => item.price
+                                      )
+                                    )
+                                  )}`
+                                : currencyFormat(product.price)}
+                            </dd>
                             <dt>Quantity</dt>
                             <dd>{product.quantity}</dd>
                           </dl>

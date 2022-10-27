@@ -23,14 +23,7 @@ function UpdateProduct() {
       const res = await axiosInstance({
         url: `${LocalApi}/product/${router.query?.id}`,
       });
-      const { price, cost, quantity, sale, ...other } = res.data;
-      setProduct({
-        ...other,
-        price: price + "",
-        cost: cost + "",
-        sale: sale + "",
-        quantity: quantity + "",
-      });
+      setProduct(res.data);
     },
     roles: [Role.admin],
     deps: [router.isReady],

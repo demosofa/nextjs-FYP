@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const Variation = new Schema(
   {
-    sku: { type: String, required: true, max: 200 },
+    sku: { type: String, unique: true, required: true, max: 200 },
     image: { type: Schema.Types.ObjectId, ref: "File" },
     types: [
       { type: Schema.Types.ObjectId, ref: "VariantOption", required: true },

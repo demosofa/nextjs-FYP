@@ -33,7 +33,7 @@ export default function SelectCategory({
     setSelectedCategories(index, value._id);
   };
 
-  if (loading) return <Loading.Text />;
+  if (loading || categories === undefined) return <Loading.Text />;
   return (
     <>
       <Select

@@ -2,10 +2,10 @@ import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Animation, Loading } from "../components";
+import { ProductCard } from "../containers";
 import { useAxiosLoad } from "../hooks";
-import { currencyFormat } from "../shared";
 import styles from "../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -76,56 +76,13 @@ export default function Home({ products, categories, pageCounted, query }) {
           </Animation.Fade>
         </div>
         <div className="grid grid-cols-fit-2 gap-6 sm:gap-4">
-          <Animation.Zoom className="card relative mt-2 cursor-pointer">
-            {lstProduct?.map((item) => (
-              <Fragment key={item.title}>
-                <div className={styles.price_tag}>
-                  <p className={styles.price_tag_price}>
-                    {currencyFormat(
-                      new Date(item.time).getTime() > Date.now()
-                        ? item.sale
-                        : item.price
-                    ) || "optional"}
-                  </p>
-                </div>
-                {new Date(item.time).getTime() > Date.now() ? (
-                  <span className={styles.sale}>
-                    -{Math.ceil(100 - (item.sale / item.price) * 100)}%
-                  </span>
-                ) : null}
-                <Link href={`/c/${item._id}`}>
-                  <a>
-                    <div>
-                      <div className="relative h-44 w-full">
-                        <Image
-                          className="rounded-xl"
-                          alt="product"
-                          src={item.thumbnail}
-                          layout="fill"
-                          objectFit="contain"
-                        />
-                      </div>
-                      <label className="text-sm line-clamp-1">
-                        {item.title}
-                      </label>
-                      <label className="float-left">
-                        <span className="fa fa-star checked mr-1 text-yellow-300 " />
-                        <span className="font-semibold italic">
-                          {item.avgRating}
-                        </span>
-                      </label>
-                      <label className="float-right">
-                        <span className="font-semibold">Sold: </span>
-                        <span className="text-xs text-gray-400">
-                          {item.sold}
-                        </span>
-                      </label>
-                    </div>
-                  </a>
-                </Link>
-              </Fragment>
-            ))}
-          </Animation.Zoom>
+          {lstProduct?.map((item) => (
+            <ProductCard
+              key={item._id}
+              href={`/c/${item._id}`}
+              product={item}
+            />
+          ))}
         </div>
         {loading && <Loading.Text />}
         {pageLeft > 1 && (

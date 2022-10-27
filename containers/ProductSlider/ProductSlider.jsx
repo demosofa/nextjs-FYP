@@ -1,8 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
 import { Slider } from "../../components";
-import { currencyFormat } from "../../shared";
-import styles from "../../styles/Home.module.scss";
+import ProductCard from "../ProductCard/ProductCard";
+
+const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
 
 export default function ProductSlider({ products }) {
   return (
@@ -16,38 +15,11 @@ export default function ProductSlider({ products }) {
     >
       <Slider.Content className="p-2">
         {products.map((item) => (
-          <Link href={item.url} key={item.title}>
-            <a className="card relative mt-2 h-fit min-h-0 !max-w-[140px] cursor-pointer !overflow-visible">
-              <div className={styles.price_tag}>
-                <p className={styles.price_tag_price}>
-                  {currencyFormat(
-                    new Date(item.time).getTime() > Date.now()
-                      ? item.sale
-                      : item.price
-                  ) || "optional"}
-                </p>
-              </div>
-              {new Date(item.time).getTime() > Date.now() ? (
-                <span className={styles.sale}>
-                  -{Math.ceil(100 - (item.sale / item.price) * 100)}%
-                </span>
-              ) : null}
-              <div>
-                <div className="relative h-36 w-full rounded-xl">
-                  <Image alt="product" src={item.thumbnail} layout="fill" />
-                </div>
-                <label className="text-sm line-clamp-1">{item.title}</label>
-                <label className="float-left">
-                  <span className="fa fa-star checked mr-1 text-yellow-300 " />
-                  <span className="font-semibold italic">{item.avgRating}</span>
-                </label>
-                <label className="float-right">
-                  <span className="font-semibold">Sold: </span>
-                  <span className="text-xs text-gray-400">{item.sold}</span>
-                </label>
-              </div>
-            </a>
-          </Link>
+          <ProductCard
+            key={item._id}
+            href={`${LocalUrl}/c/${item._id}`}
+            product={item}
+          />
         ))}
       </Slider.Content>
     </Slider>

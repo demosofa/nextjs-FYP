@@ -1,6 +1,7 @@
 export default class Validate {
-  constructor(public input: string) {
-    this.input = input;
+  public input: string;
+  constructor(input: string | number) {
+    this.input = typeof input === "string" ? input : input.toString();
   }
 
   isEmail() {

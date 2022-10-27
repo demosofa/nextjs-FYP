@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-/**@type {({title: string, thumbnail: string, price: number, avgRating: number, url: string}[])} */
+/**@type {({_id: string, title: string, thumbnail: string, price: number, avgRating: number}[])} */
 const initialState = [];
 
 const recentlyViewed = createSlice({
@@ -9,7 +9,7 @@ const recentlyViewed = createSlice({
   reducers: {
     addViewed(state, { payload }) {
       const clone = JSON.parse(JSON.stringify(state));
-      const index = clone.findIndex((item) => item.title === payload.title);
+      const index = clone.findIndex((item) => item._id === payload._id);
       if (index === -1) {
         if (clone.length >= 10) clone.shift();
         clone.push(payload);

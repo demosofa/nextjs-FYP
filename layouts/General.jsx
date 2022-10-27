@@ -77,7 +77,7 @@ export default function General({ children, arrLink }) {
             <AiOutlineMenuFold />
           </Icon>
         ))}
-      <div className="body">{children}</div>
+      <main className="body">{children}</main>
       <Footer />
       <NotifyToast />
     </>

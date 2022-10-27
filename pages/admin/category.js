@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuthLoad, useAxiosLoad } from "../../hooks";
 import { Dropdown, Loading } from "../../components";
-import { expireStorage, retryAxios } from "../../utils";
+import { expireStorage, retryAxios, Validate } from "../../utils";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { BiDotsVertical } from "react-icons/bi";
@@ -47,7 +47,7 @@ export default function CrudCategory({ maxTree = 3 }) {
     const accessToken = expireStorage.getItem("accessToken");
     retryAxios(axios);
     try {
-      if (!name) throw new Error("Please fill category name");
+      new Validate(name).isEmpty().isNotSpecial();
       const response = await axios.post(
         `${LocalApi}/category`,
         { name, isFirstLevel: true },
@@ -72,14 +72,14 @@ export default function CrudCategory({ maxTree = 3 }) {
         <meta name="description" content="Manage Category" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <CategoryInput callback={handleAddCategory}></CategoryInput>
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-        {categories.length &&
-          categories.map((category, index) => {
-            return (
+      <CategoryInput callback={handleAddCategory} />
+      <div className="flex flex-col gap-5">
+        {categories.length
+          ? categories.map((category, index) => (
               <SubCategory
                 key={category.updatedAt}
                 index={index}
+                unique={category.name + "-"}
                 data={category}
                 maxTree={maxTree}
                 setDelete={() =>
@@ -88,14 +88,21 @@ export default function CrudCategory({ maxTree = 3 }) {
                   )
                 }
               />
-            );
-          })}
+            ))
+          : null}
       </div>
     </div>
   );
 }
 
-function SubCategory({ data, index, maxTree, setDelete, ...props }) {
+function SubCategory({
+  data,
+  index,
+  unique = "",
+  maxTree,
+  setDelete,
+  ...props
+}) {
   const accessToken = expireStorage.getItem("accessToken");
   const [toggle, setToggle] = useState({
     edit: false,
@@ -124,17 +131,17 @@ function SubCategory({ data, index, maxTree, setDelete, ...props }) {
   const handleEditSave = async ({ name }) => {
     retryAxios(axios);
     try {
-      if (!name) throw new Error("Please fill category name");
+      new Validate(name).isEmpty().isNotSpecial();
       await axios.patch(
         `${LocalApi}/category/${currentCategory._id}`,
-        { name },
+        { name: unique + name },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      setCurrentCategory((prev) => ({ ...prev, name }));
+      setCurrentCategory((prev) => ({ ...prev, name: unique + name }));
       setToggle((prev) => ({ ...prev, edit: false }));
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
@@ -158,10 +165,10 @@ function SubCategory({ data, index, maxTree, setDelete, ...props }) {
   const handleAddSubCategory = async ({ name }) => {
     retryAxios(axios);
     try {
-      if (!name) throw new Error("Please fill category name");
+      new Validate(name).isEmpty().isNotSpecial();
       const response = await axios.put(
         `${LocalApi}/category/${currentCategory._id}`,
-        { name },
+        { name: unique + name },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -183,7 +190,7 @@ function SubCategory({ data, index, maxTree, setDelete, ...props }) {
       <div className={styles.container}>
         {(toggle.edit && (
           <CategoryInput
-            data={currentCategory}
+            data={{ ...currentCategory, unique }}
             callback={handleEditSave}
             setToggle={(boolean) =>
               setToggle((prev) => ({ ...prev, edit: boolean }))
@@ -193,7 +200,7 @@ function SubCategory({ data, index, maxTree, setDelete, ...props }) {
           <div className={styles.tab_container}>
             <label>
               <span>{index + 1}. </span>
-              {currentCategory.name}
+              {currentCategory.name.replace(unique, "")}
             </label>
             {!toggle.edit && (
               <Dropdown component={<BiDotsVertical />} hoverable={true}>
@@ -228,16 +235,13 @@ function SubCategory({ data, index, maxTree, setDelete, ...props }) {
           >
             Add
           </button>
-          {maxTree > 0 && (
-            <button
-              className="rounded bg-gray-600 px-4 py-2 text-gray-100 transition duration-300 hover:bg-gray-500"
-              onClick={() =>
-                setToggle((prev) => ({ ...prev, more: !prev.more }))
-              }
-            >
-              More
-            </button>
-          )}
+
+          <button
+            className="rounded bg-gray-600 px-4 py-2 text-gray-100 transition duration-300 hover:bg-gray-500"
+            onClick={() => setToggle((prev) => ({ ...prev, more: !prev.more }))}
+          >
+            More
+          </button>
         </div>
       )}
       {toggle.add && (
@@ -253,6 +257,7 @@ function SubCategory({ data, index, maxTree, setDelete, ...props }) {
             <SubCategory
               key={category.updatedAt}
               index={index}
+              unique={unique}
               data={category}
               maxTree={maxTree - 1}
               setDelete={() =>
@@ -269,7 +274,7 @@ function SubCategory({ data, index, maxTree, setDelete, ...props }) {
 }
 
 function CategoryInput({
-  data = { name: "" },
+  data = { name: "", unique: "" },
   callback,
   setToggle = undefined,
 }) {
@@ -279,9 +284,9 @@ function CategoryInput({
     <div className="relative mb-4 inline-flex w-full flex-wrap justify-between rounded-lg border border-gray-500 bg-white">
       <input
         className="flex-2 rounded-lg border-0 bg-white p-2.5 text-sm text-gray-900 focus:outline-none"
-        value={input.name || " "}
+        value={input.name.replace(input.unique, "") || " "}
         onChange={(e) =>
-          setInput((prev) => ({ ...prev, name: e.target.value }))
+          setInput((prev) => ({ ...prev, name: e.target.value.trim() }))
         }
       />
       <div className="flex items-center gap-3 border-t py-2 px-3 sm:gap-1">

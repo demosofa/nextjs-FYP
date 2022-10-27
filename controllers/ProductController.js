@@ -40,6 +40,7 @@ class ProductController {
       .populate({
         path: "variations",
         populate: ["types", "image"],
+        select: ["-cost"],
       })
       .lean();
     if (!product) return res.status(404).json({ errorMessage: "Not Found" });
@@ -78,6 +79,7 @@ class ProductController {
         price: 1,
         sale: 1,
         time: 1,
+        variations: 1,
         sold: 1,
       })
       .lookup({
@@ -88,7 +90,18 @@ class ProductController {
       })
       .unwind("image")
       .addFields({ thumbnail: "$image.url" })
-      .project({ image: 0 });
+      .project({ image: 0 })
+      .lookup({
+        from: "variations",
+        localField: "variations",
+        foreignField: "_id",
+        pipeline: [
+          {
+            $project: { price: 1, cost: 1, sale: 1, time: 1, quantity: 1 },
+          },
+        ],
+        as: "variations",
+      });
     const productCounted = await this.unit.Product.countData({
       status: "active",
       ...filterOptions,

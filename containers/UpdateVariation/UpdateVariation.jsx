@@ -4,11 +4,12 @@ import { useDispatch } from "react-redux";
 import { Loading, Checkbox, Animation } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { retryAxios } from "../../utils";
+import { retryAxios, validateVariations } from "../../utils";
 import { AiOutlineCheck } from "react-icons/ai";
 import { Role } from "../../shared";
 import styles from "./updatevariation.module.scss";
 import Image from "next/image";
+import { format } from "date-fns";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -58,12 +59,14 @@ export default function UpdateVariation({ productId, setToggle }) {
 
   const handleSaveVariation = async () => {
     try {
+      validateVariations(storedVariations);
       retryAxios(axios);
       await axios.patch(`${LocalApi}/product/${productId}/variation`, {
         variations: storedVariations,
       });
       setToggle(null);
     } catch (error) {
+      console.log(error);
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
@@ -79,8 +82,9 @@ export default function UpdateVariation({ productId, setToggle }) {
               <th>Image</th>
               <th>Sku</th>
               <th>Type</th>
-              <th>Price</th>
+              <th>Price Info</th>
               <th>Quantity</th>
+              <th>Sale Event</th>
             </tr>
           </thead>
           <tbody>
@@ -117,13 +121,32 @@ export default function UpdateVariation({ productId, setToggle }) {
                       {variation.types.map((type) => type.name).join("/")}
                     </td>
                     <td>
-                      <label>Price: </label>
-                      <input
-                        value={variation.price}
-                        onChange={(e) =>
-                          handleEditVariation({ price: e.target.value }, index)
-                        }
-                      />
+                      <dl>
+                        <dt>Price: </dt>
+                        <dd>
+                          <input
+                            value={variation.price}
+                            onChange={(e) =>
+                              handleEditVariation(
+                                { price: e.target.value },
+                                index
+                              )
+                            }
+                          />
+                        </dd>
+                        <dt>Cost: </dt>
+                        <dd>
+                          <input
+                            value={variation.cost}
+                            onChange={(e) =>
+                              handleEditVariation(
+                                { cost: e.target.value },
+                                index
+                              )
+                            }
+                          />
+                        </dd>
+                      </dl>
                     </td>
                     <td>
                       <label>Quantity: </label>
@@ -136,6 +159,39 @@ export default function UpdateVariation({ productId, setToggle }) {
                           )
                         }
                       />
+                    </td>
+                    <td>
+                      <dl>
+                        <dt>Sale</dt>
+                        <dd>
+                          <input
+                            value={variation.sale}
+                            onChange={(e) =>
+                              handleEditVariation(
+                                { sale: e.target.value },
+                                index
+                              )
+                            }
+                          />
+                        </dd>
+                        <dt>Time</dt>
+                        <dd>
+                          <input
+                            type="date"
+                            value={
+                              variation.time
+                                ? format(new Date(variation.time), "yyyy-MM-dd")
+                                : ""
+                            }
+                            onChange={(e) =>
+                              handleEditVariation(
+                                { time: e.target.value },
+                                index
+                              )
+                            }
+                          />
+                        </dd>
+                      </dl>
                     </td>
                   </tr>
                 );

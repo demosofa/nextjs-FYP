@@ -49,7 +49,7 @@ function Dashboard({ children, arrLink }) {
           </Link>
         ))}
       </Sidebar>
-      <div className="body">{children}</div>
+      <main className="body">{children}</main>
       <NotifyToast />
     </>
   );
