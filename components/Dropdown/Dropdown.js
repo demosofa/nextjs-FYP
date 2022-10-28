@@ -1,5 +1,4 @@
 import { useState } from "react";
-import styles from "./dropdown.module.scss";
 
 export default function Dropdown({
   component,
@@ -16,7 +15,7 @@ export default function Dropdown({
   const [toggle, setToggle] = useState(isShow);
   return (
     <div
-      className={`${styles.dropdown} ${className}`}
+      className={`relative inline-flex justify-center text-sm font-medium text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100 ${className}`}
       {...props}
       onClick={(e) => {
         if (typeof onClick === "function") onClick(e);
@@ -39,7 +38,10 @@ export default function Dropdown({
 
 Dropdown.Content = function DropdownContent({ children, className, ...props }) {
   return (
-    <div className={`${styles.dropdown_content} ${className}`} {...props}>
+    <div
+      className={`absolute z-10 mt-2 flex flex-col rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none [&>*]:px-4 [&>*]:py-2 ${className}`}
+      {...props}
+    >
       {children}
     </div>
   );

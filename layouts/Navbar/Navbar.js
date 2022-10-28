@@ -39,16 +39,13 @@ export default function Navbar({ arrLink }) {
           ) : null
         )}
         {linkDrop.length ? (
-          <Dropdown
-            className="pl-3"
-            component={<div className="text-white">Other</div>}
-          >
-            <Dropdown.Content className="right-0">
+          <Dropdown component={<button className="text-white">Other</button>}>
+            <Dropdown.Content className="right-0 origin-top-right">
               {linkDrop?.map(
                 (link, index) =>
                   link.title && (
                     <Link key={index} href={link.path}>
-                      <a className="whitespace-nowrap text-center text-black hover:bg-orange-400 hover:text-white">
+                      <a className="whitespace-nowrap text-black hover:bg-orange-400 hover:text-white">
                         {link.title}
                       </a>
                     </Link>
@@ -67,7 +64,7 @@ export default function Navbar({ arrLink }) {
               hoverable={true}
               clickable={false}
             >
-              <Dropdown.Content className="right-0 max-h-[85vh] w-64 overflow-y-auto !p-3">
+              <Dropdown.Content className="right-0 max-h-[85vh] w-64 overflow-y-auto">
                 <Notification />
               </Dropdown.Content>
             </Dropdown>

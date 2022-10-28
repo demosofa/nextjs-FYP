@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { convertTime } = require("../shared");
+const { convertTime, OrderStatus } = require("../shared");
 const Schema = mongoose.Schema;
 
 const Order = new Schema(
@@ -26,15 +26,15 @@ const Order = new Schema(
     status: {
       type: String,
       enum: [
-        "cancel",
-        "pending",
-        "progress",
-        "shipping",
-        "arrived",
-        "validated",
-        "paid",
+        OrderStatus.cancel,
+        OrderStatus.pending,
+        OrderStatus.progress,
+        OrderStatus.shipping,
+        OrderStatus.arrived,
+        OrderStatus.validated,
+        OrderStatus.paid,
       ],
-      default: "pending",
+      default: OrderStatus.pending,
     },
     validatedAt: {
       type: Date,

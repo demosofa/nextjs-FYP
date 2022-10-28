@@ -1,6 +1,6 @@
 import axios from "axios";
 import Head from "next/head";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   ImageMagnifier,
@@ -315,17 +315,12 @@ export default function Overview({ product }) {
           </dd>
 
           <dt className="w-fit text-lg font-medium">Tags: </dt>
-          <dd className="ml-2">
-            {product.tags.map((tag, index) => {
-              return (
-                <Fragment key={tag}>
-                  <Link href={{ pathname: "/", query: { search: tag } }}>
-                    <a>#{tag}</a>
-                  </Link>
-                  {index < product.tags - 1 ? ", " : null}
-                </Fragment>
-              );
-            })}
+          <dd className="ml-2 mt-1">
+            {product.tags.map((tag) => (
+              <Link key={tag} href={{ pathname: "/", query: { search: tag } }}>
+                <a className="ml-2">#{tag}</a>
+              </Link>
+            ))}
           </dd>
         </dl>
 

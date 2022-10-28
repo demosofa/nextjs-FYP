@@ -1,5 +1,6 @@
 import UnitOfWork from "./services/UnitOfWork";
 import { toDataURL } from "qrcode";
+import { OrderStatus } from "../shared";
 
 class OrderController {
   constructor(unit = UnitOfWork) {
@@ -23,7 +24,7 @@ class OrderController {
     let { page, sort, limit } = req.query;
     if (!limit) limit = 10;
     const lstOrder = await this.unit.Order.getAll({
-      status: "pending",
+      status: OrderStatus.pending,
       customer: { $ne: req.user.accountId },
     })
       .skip((page - 1) * limit)
@@ -37,7 +38,7 @@ class OrderController {
       })
       .lean();
     const orderCounted = await this.unit.Order.countData({
-      status: "pending",
+      status: OrderStatus.pending,
     }).lean();
     const pageCounted = Math.ceil(orderCounted / limit);
     return res.status(200).json({ lstOrder, pageCounted });

@@ -1,3 +1,4 @@
+import { OrderStatus } from "../shared";
 import UnitOfWork from "./services/UnitOfWork";
 
 class UserController {
@@ -62,9 +63,9 @@ class UserController {
           _id: id,
           customer: req.user.accountId,
           shipper: shipperId,
-          status: "arrived",
+          status: OrderStatus.arrived,
         },
-        { status: "validated" }
+        { status: OrderStatus.validated }
       );
       if (!order) return res.status(500).json("This is not your order");
       return res.status(200).json(order);

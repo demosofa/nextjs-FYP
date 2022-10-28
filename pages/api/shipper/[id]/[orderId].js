@@ -11,5 +11,5 @@ async function withOrderId(req, res) {
 }
 
 export default isAuthentication(
-  isAuthorization(withOrderId, [Role.admin, Role.guest, Role.seller])
+  isAuthorization(withOrderId, [Role.admin, Role.customer, Role.seller])
 );

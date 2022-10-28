@@ -10,7 +10,7 @@ import { Loading, QRreader } from "../../components";
 import { ProgressBar } from "../../containers";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useEffect, useRef, useState } from "react";
-import { Role } from "../../shared";
+import { Role, OrderStatus } from "../../shared";
 import Head from "next/head";
 import VnPay from "../../containers/VnPay/VnPay";
 import { useAblyContext } from "../../contexts/AblyContext";
@@ -70,7 +70,7 @@ function ShippingProgress() {
     if (!channel.current && order) {
       if ([Role.shipper, Role.admin].includes(auth.role))
         channel.current = ably.channels.get(order.customer._id);
-      else if ([Role.guest].includes(auth.role))
+      else if ([Role.customer].includes(auth.role))
         channel.current = ably.channels.get(order.shipper._id);
     }
   }, [order, auth]);
@@ -109,7 +109,7 @@ function ShippingProgress() {
               type: "success",
             },
           });
-          data.status = "validated";
+          data.status = OrderStatus.validated;
         } catch (error) {
           setShowScanner(false);
           dispatch(addNotification({ message: error.message, type: "error" }));
@@ -121,7 +121,7 @@ function ShippingProgress() {
 
   const arrivedState = () => {
     if (
-      (auth.role === Role.guest || auth.role === Role.admin) &&
+      (auth.role === Role.customer || auth.role === Role.admin) &&
       auth.accountId === order.customer._id
     ) {
       setShowScanner(true);
@@ -129,16 +129,16 @@ function ShippingProgress() {
       (auth.role === Role.shipper || auth.role === Role.admin) &&
       auth.accountId === order.shipper._id
     ) {
-      if (order.status !== "arrived") {
+      if (order.status !== OrderStatus.arrived) {
         const content = `Your order ${
           order._id
-        } has moved to ${"arrived".toUpperCase()} state `;
+        } has moved to ${OrderStatus.arrived.toUpperCase()} state `;
         mutate(async (data) => {
           try {
             await fetcher({
               url: `${LocalApi}/order/${order._id}`,
               method: "patch",
-              data: { status: "arrived" },
+              data: { status: OrderStatus.arrived },
             });
             await fetcher({
               url: `${LocalApi}/notify`,
@@ -148,7 +148,7 @@ function ShippingProgress() {
                 content,
               },
             });
-            data.status = "arrived";
+            data.status = OrderStatus.arrived;
           } catch (error) {
             dispatch(
               addNotification({ message: error.message, type: "error" })
@@ -171,7 +171,7 @@ function ShippingProgress() {
 
   const validatedState = () => {
     if (
-      (auth.role === Role.guest || auth.role === Role.admin) &&
+      (auth.role === Role.customer || auth.role === Role.admin) &&
       auth.accountId === order.customer._id
     ) {
       setShowVnPay(true);
@@ -180,9 +180,9 @@ function ShippingProgress() {
 
   const handleCheckStep = (value) => {
     switch (value) {
-      case "arrived":
+      case OrderStatus.arrived:
         return arrivedState();
-      case "validated":
+      case OrderStatus.validated:
         return validatedState();
     }
   };
@@ -196,26 +196,26 @@ function ShippingProgress() {
     !order || error
       ? []
       : [
-          { title: "pending", allowed: false },
-          { title: "progress", allowed: false },
-          { title: "shipping", allowed: false },
+          { title: OrderStatus.pending, allowed: false },
+          { title: OrderStatus.progress, allowed: false },
+          { title: OrderStatus.shipping, allowed: false },
           {
-            title: "arrived",
+            title: OrderStatus.arrived,
             allowed:
-              order.status === "arrived" &&
+              order.status === OrderStatus.arrived &&
               (auth.role === Role.shipper || auth.role === Role.admin)
                 ? true
                 : false,
           },
           {
-            title: "validated",
+            title: OrderStatus.validated,
             allowed:
-              order.status === "validated" &&
-              (auth.role === Role.guest || auth.role === Role.admin)
+              order.status === OrderStatus.validated &&
+              (auth.role === Role.customer || auth.role === Role.admin)
                 ? true
                 : false,
           },
-          { title: "paid", allowed: false },
+          { title: OrderStatus.paid, allowed: false },
         ];
 
   if (!order || error)
@@ -257,7 +257,7 @@ function ShippingProgress() {
         onResult={handleCheckStep}
       />
       {auth.accountId === order.customer._id &&
-      order.status === "validated" &&
+      order.status === OrderStatus.validated &&
       showVnPay ? (
         <>
           <div className="backdrop" onClick={() => setShowVnPay(false)} />

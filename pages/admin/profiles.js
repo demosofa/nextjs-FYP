@@ -8,6 +8,7 @@ import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
 import { useState } from "react";
 import Select from "react-select";
+import { Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -146,11 +147,13 @@ export default function ManageProfiles() {
                           defaultValue={profile.role}
                           onChange={(e) => handleChangeRole(e, index)}
                         >
-                          {["guest", "shipper", "seller"].map((role) => (
-                            <option key={role} value={role}>
-                              {role}
-                            </option>
-                          ))}
+                          {[Role.customer, Role.shipper, Role.seller].map(
+                            (role) => (
+                              <option key={role} value={role}>
+                                {role}
+                              </option>
+                            )
+                          )}
                         </select>
                       </td>
                       <td>
@@ -179,7 +182,7 @@ export default function ManageProfiles() {
                   <tr>
                     <td colSpan="6">
                       <p className="text-center">
-                        No guest has resgitered our page
+                        No customer has resgitered our page
                       </p>
                     </td>
                   </tr>

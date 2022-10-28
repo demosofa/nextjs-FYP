@@ -5,7 +5,12 @@ import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { Dropdown, Loading, Pagination, Form } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { convertTime, currencyFormat, dateFormat } from "../../shared";
+import {
+  convertTime,
+  currencyFormat,
+  dateFormat,
+  OrderStatus,
+} from "../../shared";
 import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
 import { BiDownArrow } from "react-icons/bi";
 import { IoMdTrash } from "react-icons/io";
@@ -77,12 +82,12 @@ export default function ManageOrder() {
         }
         options={[
           { value: "", label: "all" },
-          { value: "pending", label: "Pending" },
-          { value: "progress", label: "Progress" },
-          { value: "shipping", label: "Shipping" },
-          { value: "arrived", label: "Arrived" },
-          { value: "validated", label: "Validated" },
-          { value: "cancel", label: "Cancel" },
+          { value: OrderStatus.pending, label: "Pending" },
+          { value: OrderStatus.progress, label: "Progress" },
+          { value: OrderStatus.shipping, label: "Shipping" },
+          { value: OrderStatus.arrived, label: "Arrived" },
+          { value: OrderStatus.validated, label: "Validated" },
+          { value: OrderStatus.cancel, label: "Cancel" },
         ]}
       />
       {isLoadingInitialData ? (

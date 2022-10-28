@@ -11,6 +11,8 @@ module.exports = {
       flex: {
         1.8: "1.8 1.8 0%",
         2: "2 2 0%",
+        3: "3 3 0%",
+        4: "4 4 0%",
       },
     },
     gridTemplateColumns: {

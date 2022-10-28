@@ -1,6 +1,7 @@
 import Role from "../shared/Role";
 import UnitOfWork from "./services/UnitOfWork";
 import { blacklist } from "../helpers";
+import { OrderStatus } from "../shared";
 
 class AdminController {
   constructor(unit = UnitOfWork) {
@@ -45,7 +46,9 @@ class AdminController {
     try {
       const deleted = await this.unit.Order.deleteOne({
         _id: req.body.Id,
-        status: { $in: ["progress", "pending", "cancel"] },
+        status: {
+          $in: [OrderStatus.progress, OrderStatus.pending, OrderStatus.cancel],
+        },
       });
       if (!deleted) throw new Error("Fail to delete Order");
       return res.status(200).end();
@@ -149,7 +152,7 @@ class AdminController {
     );
     try {
       const profit = await this.unit.Order.aggregate()
-        .match({ updatedAt: { $gte: previousMonth }, status: "paid" })
+        .match({ updatedAt: { $gte: previousMonth }, status: OrderStatus.paid })
         .project({
           month: { $month: "$createdAt" },
           profit: "$total",
@@ -168,7 +171,7 @@ class AdminController {
     );
     try {
       const accounts = await this.unit.Account.aggregate()
-        .match({ role: Role.guest, createdAt: { $gte: previousMonth } })
+        .match({ role: Role.customer, createdAt: { $gte: previousMonth } })
         .project({
           month: { $month: "$createdAt" },
         })

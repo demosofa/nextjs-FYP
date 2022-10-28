@@ -1,8 +1,9 @@
 import { shipper } from "../../../controllers";
-import { isAuthentication, isAuthorization } from "../../../helpers";
+import { db, isAuthentication, isAuthorization } from "../../../helpers";
 import { Role } from "../../../shared";
 
 async function Shipper(req, res) {
+  await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":
       await shipper.MyShipping(req, res);
@@ -14,5 +15,5 @@ async function Shipper(req, res) {
 }
 
 export default isAuthentication(
-  isAuthorization(Shipper, [Role.shipper, Role.admin, Role.guest])
+  isAuthorization(Shipper, [Role.shipper, Role.admin, Role.customer])
 );

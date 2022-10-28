@@ -42,7 +42,7 @@ export default function Layout({ children, routerPath }) {
           ? (role === Role.admin && AdminRole) ||
             (role === Role.seller && SellerRole) ||
             (role === Role.shipper && ShipperRole) ||
-            (role === Role.guest && [])
+            (role === Role.customer && [])
           : []
       }
     >

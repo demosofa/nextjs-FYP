@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Select from "react-select";
 import { Form, Loading, Search } from "../../components";
-import { currencyFormat } from "../../shared";
+import { currencyFormat, OrderStatus } from "../../shared";
 import { ItemsFromOrder } from "../";
 import Link from "next/link";
 
@@ -85,12 +85,13 @@ export default function MyOrder() {
           }
           options={[
             { value: "", label: "all" },
-            { value: "pending", label: "Pending" },
-            { value: "progress", label: "Progress" },
-            { value: "shipping", label: "Shipping" },
-            { value: "arrived", label: "Arrived" },
-            { value: "validated", label: "Validated" },
-            { value: "cancel", label: "Cancel" },
+            { value: OrderStatus.pending, label: "Pending" },
+            { value: OrderStatus.progress, label: "Progress" },
+            { value: OrderStatus.shipping, label: "Shipping" },
+            { value: OrderStatus.arrived, label: "Arrived" },
+            { value: OrderStatus.validated, label: "Validated" },
+            { value: OrderStatus.paid, label: "Paid" },
+            { value: OrderStatus.cancel, label: "Cancel" },
           ]}
         />
       </div>
@@ -137,7 +138,7 @@ export default function MyOrder() {
                       >
                         View order items
                       </button>
-                      {order.status === "pending" && (
+                      {order.status === OrderStatus.pending && (
                         <button
                           className="whitespace-nowrap uppercase text-red-600 hover:text-red-900 focus:underline focus:outline-none"
                           onClick={() => setDisplayCancel(order._id)}

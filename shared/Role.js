@@ -1,7 +1,7 @@
 const Role = {
   admin: "admin",
   seller: "seller",
-  guest: "guest",
+  customer: "customer",
   manager: "manager",
   shipper: "shipper",
 };

@@ -48,9 +48,45 @@ class ProductController {
   };
 
   getAll = async (req, res) => {
-    let { page, search, sort, category, limit, filter } = req.query;
+    let {
+      page,
+      search,
+      sort,
+      category,
+      limit,
+      filter,
+      keywork,
+      rating,
+      pricing,
+    } = req.query;
     let filterOptions = {};
     if (!page) page = 1;
+    if (keywork) {
+      switch (keywork) {
+        case "latest":
+          filterOptions = { ...filterOptions, createdAt: -1 };
+          break;
+        case "popular":
+          filterOptions = { ...filterOptions, sold: -1 };
+          break;
+        default:
+          break;
+      }
+    }
+    if (rating) {
+      const [from, to] = rating.split(",");
+      filterOptions = {
+        ...filterOptions,
+        avgRating: { $gte: parseFloat(from), $lte: parseFloat(to) },
+      };
+    }
+    if (pricing) {
+      const [from, to] = pricing.split(",");
+      filterOptions = {
+        ...filterOptions,
+        price: { $gte: parseFloat(from), $lte: parseFloat(to) },
+      };
+    }
     if (search)
       filterOptions = {
         ...filterOptions,

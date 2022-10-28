@@ -68,7 +68,10 @@ export default function Home({ products, categories, pageCounted, query }) {
             {categories?.map((category) => (
               <Link
                 key={category._id}
-                href={{ pathname: "/", query: { category: category.name } }}
+                href={{
+                  pathname: "/search",
+                  query: { category: category.name },
+                }}
               >
                 <a className="text-center">{category.name}</a>
               </Link>

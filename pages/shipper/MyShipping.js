@@ -9,7 +9,7 @@ import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
 import { Loading, Pagination } from "../../components";
 import { useState } from "react";
 import Head from "next/head";
-import { currencyFormat } from "../../shared";
+import { currencyFormat, OrderStatus } from "../../shared";
 import { ItemsFromOrder } from "../../containers";
 import Select from "react-select";
 
@@ -75,11 +75,11 @@ function MyShipping() {
         }
         options={[
           { value: "", label: "all" },
-          { value: "progress", label: "Progress" },
-          { value: "shipping", label: "Shipping" },
-          { value: "arrived", label: "Arrived" },
-          { value: "validated", label: "Validated" },
-          { value: "cancel", label: "Cancel" },
+          { value: OrderStatus.progress, label: "Progress" },
+          { value: OrderStatus.shipping, label: "Shipping" },
+          { value: OrderStatus.arrived, label: "Arrived" },
+          { value: OrderStatus.validated, label: "Validated" },
+          { value: OrderStatus.cancel, label: "Cancel" },
         ]}
       />
       {isLoadingInitialData ? (
@@ -132,7 +132,7 @@ function MyShipping() {
                           >
                             View List item
                           </button>
-                          {order.status === "progress" && (
+                          {order.status === OrderStatus.progress && (
                             <button
                               className="mr-5 whitespace-nowrap uppercase text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-none"
                               onClick={() => handleShowQR(order._id)}

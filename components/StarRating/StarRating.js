@@ -7,6 +7,7 @@ export default function StarRating({
   name = id,
   value = 0,
   handleRating,
+  size = "1.3rem",
   className,
   ...props
 }) {
@@ -34,14 +35,18 @@ export default function StarRating({
               value={star}
               id={id + star}
             />
-            <label htmlFor={id + star} />
+            <label htmlFor={id + star} style={{ "--size": size }} />
 
             <Checkbox.Item
               className={styles.star}
               value={star - 0.5}
               id={id + star + "-and-half"}
             />
-            <label className={styles.half} htmlFor={id + star + "-and-half"} />
+            <label
+              className={styles.half}
+              htmlFor={id + star + "-and-half"}
+              style={{ "--size": size }}
+            />
           </Fragment>
         );
       })}

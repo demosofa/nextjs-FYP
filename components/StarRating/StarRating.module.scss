@@ -14,8 +14,8 @@
     /* The star of the show */
     &:before {
       display: inline-block;
-      font-size: 2rem;
-      padding: 0.3rem 0.2rem;
+      font-size: var(--size);
+      padding: 0.25rem 0.15rem;
       margin: 0;
       cursor: pointer;
       font-family: FontAwesome;

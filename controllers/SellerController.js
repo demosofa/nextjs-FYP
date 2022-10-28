@@ -1,3 +1,4 @@
+import { OrderStatus } from "../shared";
 import UnitOfWork from "./services/UnitOfWork";
 
 class SellerController {
@@ -89,7 +90,7 @@ class SellerController {
         .populate({ path: "shipper", select: "username" })
         .lean();
       const orderCounted = await this.unit.Order.countData({
-        status: "shipping",
+        status: OrderStatus.shipping,
         ...filterOptions,
       }).lean();
       const pageCounted = Math.ceil(orderCounted / limit);
@@ -117,7 +118,7 @@ class SellerController {
   validateShipperOrder = async (req, res) => {
     try {
       await this.unit.Order.updateById(req.query.orderId, {
-        $set: { validatedAt: Date.now(), status: "shipping" },
+        $set: { validatedAt: Date.now(), status: OrderStatus.shipping },
       });
       return res.status(200).end();
     } catch (error) {

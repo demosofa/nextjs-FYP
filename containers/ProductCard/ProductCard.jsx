@@ -41,7 +41,7 @@ export default function ProductCard({ product, ...props }) {
             {currencyFormat(sale ? sale : price)}
           </p>
         </div>
-        {sale > 0 ? (
+        {sale ? (
           <span className={styles.sale}>
             -{Math.ceil(100 - (sale / price) * 100)}%
           </span>

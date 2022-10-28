@@ -1,28 +1,30 @@
 import { useRouter } from "next/router";
-import { currencyFormat } from "../shared";
+import { Loading } from "../components";
+import { useAuthLoad } from "../hooks";
+import { currencyFormat, Role } from "../shared";
 
-export function getServerSideProps({ query }) {
-  return {
-    props: {
-      query,
-    },
-  };
-}
-
-export default function Success({ query }) {
+export default function Success() {
   const router = useRouter();
+  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+    roles: [Role.customer],
+  });
+  useEffect(() => {
+    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
+    else if (!loading && !isAuthorized) router.back();
+  }, [loading, isLoggined, isAuthorized]);
+  if (loading || !isLoggined || !isAuthorized) return <Loading />;
   return (
     <div className="form_center">
       <span>Success checkout Order</span>
       <dl>
         <dt>Order Id</dt>
-        <dd>{query.vnp_TxnRef}</dd>
+        <dd>{router.query.vnp_TxnRef}</dd>
         <dt>Order price</dt>
-        <dd>{currencyFormat(query.vnp_Amount / 100)}</dd>
+        <dd>{currencyFormat(router.query.vnp_Amount / 100)}</dd>
         <dt>Order Info</dt>
-        <dd>{query.vnp_OrderInfo}</dd>
+        <dd>{router.query.vnp_OrderInfo}</dd>
         <dt>Payment time</dt>
-        <dd>{query.vnp_PayDate}</dd>
+        <dd>{router.query.vnp_PayDate}</dd>
       </dl>
     </div>
   );

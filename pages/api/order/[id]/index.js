@@ -1,7 +1,8 @@
 import { order } from "../../../../controllers";
-import { isAuthentication } from "../../../../helpers";
+import { db, isAuthentication } from "../../../../helpers";
 
 async function orderId(req, res) {
+  await db.connect();
   switch (req.method.toLowerCase()) {
     case "get":
       await order.getOrder(req, res);

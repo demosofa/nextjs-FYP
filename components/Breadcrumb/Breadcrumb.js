@@ -1,18 +1,16 @@
 import Link from "next/link";
 import { Fragment } from "react";
-import Icon from "../Icon/Icon";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import styles from "./breadcrumb.module.scss";
 
 export default function Breadcrumb({ categories, className, ...props }) {
   return (
-    <div className={`${styles.container} ${className}`} {...props}>
-      <Link href="/">Home</Link>
+    <div className={`flex items-center gap-2 ${className}`} {...props}>
+      <Link href="/">
+        <a className="sm:text-xs">Home</a>
+      </Link>
       {categories.map((category) => (
         <Fragment key={category._id}>
-          <Icon>
-            <MdOutlineKeyboardArrowRight />
-          </Icon>
+          <MdOutlineKeyboardArrowRight />
           <Link
             href={{
               pathname: "/",
@@ -21,7 +19,7 @@ export default function Breadcrumb({ categories, className, ...props }) {
               },
             }}
           >
-            {category.name}
+            <a className="sm:text-xs">{category.name}</a>
           </Link>
         </Fragment>
       ))}

@@ -28,7 +28,7 @@ function EditProfile() {
       });
       setData(res.data);
     },
-    roles: [Role.admin, Role.guest, Role.shipper, Role.seller],
+    roles: [Role.admin, Role.customer, Role.shipper, Role.seller],
   });
 
   const validateInput = () => {

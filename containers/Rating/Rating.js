@@ -45,5 +45,7 @@ export default function Rating({ url }) {
   };
 
   if (!data || error) return <Loading.Text />;
-  return <StarRating value={data.rating} handleRating={handleRating} />;
+  return (
+    <StarRating value={data.rating} handleRating={handleRating} size="2rem" />
+  );
 }

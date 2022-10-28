@@ -33,7 +33,7 @@ function CreateForm() {
     title: "",
     description: "",
     categories: [],
-    status: "",
+    status: "active",
     tags: [],
     images: [],
     manufacturer: "",

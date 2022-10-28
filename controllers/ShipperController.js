@@ -1,3 +1,4 @@
+import { OrderStatus } from "../shared";
 import UnitOfWork from "./services/UnitOfWork";
 
 class ShipperController {
@@ -70,7 +71,7 @@ class ShipperController {
         {
           _id: { $in: acceptedOrders },
         },
-        { $set: { shipper: accountId, status: "progress" } }
+        { $set: { shipper: accountId, status: OrderStatus.progress } }
       );
       return res.status(200).end();
     } catch (error) {

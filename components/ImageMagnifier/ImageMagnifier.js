@@ -1,5 +1,4 @@
-import { useState, useRef, useCallback } from "react";
-import { useResize } from "../../hooks";
+import { useState, useRef } from "react";
 import { compareToRange } from "../../utils";
 
 export default function ImageMagnifier({
@@ -11,19 +10,6 @@ export default function ImageMagnifier({
 }) {
   const maginfier = useRef();
   const [offset, setOffset] = useState();
-  const [track, setTrack] = useState(false);
-  const [resize, setResize] = useState(false);
-
-  useResize(() => setResize((prev) => !prev), []);
-
-  const target = useCallback(
-    (node) => {
-      if (node) {
-        setOffset(node.getBoundingClientRect());
-      }
-    },
-    [resize]
-  );
 
   const handleMaginfier = ({ pageX, pageY }) => {
     const mag = maginfier.current;
@@ -48,18 +34,14 @@ export default function ImageMagnifier({
   return (
     <div
       className="relative"
-      onMouseEnter={() => setTrack(true)}
-      onMouseMove={(e) => track && handleMaginfier(e)}
-      onMouseLeave={() => setTrack(false)}
+      onMouseEnter={(e) => {
+        setOffset(e.currentTarget.getBoundingClientRect());
+      }}
+      onMouseMove={(e) => offset && handleMaginfier(e)}
+      onMouseLeave={() => setOffset(null)}
     >
-      <img
-        className={` ${className}`}
-        alt="magnifier"
-        ref={target}
-        src={src}
-        {...props}
-      />
-      {track && (
+      <img className={` ${className}`} alt="magnifier" src={src} {...props} />
+      {offset && (
         <div
           ref={maginfier}
           className="absolute top-0 h-20 w-20 cursor-none"

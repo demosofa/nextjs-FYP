@@ -1,6 +1,7 @@
-import { sortObject } from "../../shared";
+import { OrderStatus, sortObject } from "../../shared";
+const Order = require("../../models/Order");
 
-export default function VNPayReturn(req, res) {
+export default async function VNPayReturn(req, res) {
   var vnp_Params = req.query;
 
   var secureHash = vnp_Params["vnp_SecureHash"];
@@ -21,9 +22,14 @@ export default function VNPayReturn(req, res) {
 
   if (secureHash === signed) {
     //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-
+    await Order.findByIdAndUpdate(req.query.vnp_TxnRef, {
+      status: OrderStatus.paid,
+    });
     res.redirect(307, "/success" + vnp_Params);
   } else {
+    await Order.findByIdAndUpdate(req.query.vnp_TxnRef, {
+      status: OrderStatus.cancel,
+    });
     res.redirect(307, "/success" + vnp_Params);
   }
 }

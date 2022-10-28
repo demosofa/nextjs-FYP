@@ -35,7 +35,7 @@ function MyProfile() {
       });
       setData(res.data);
     },
-    roles: [Role.guest, Role.admin, Role.shipper, Role.seller],
+    roles: [Role.customer, Role.admin, Role.shipper, Role.seller],
   });
 
   useEffect(() => {
