@@ -202,8 +202,9 @@ function ShippingProgress() {
           {
             title: OrderStatus.arrived,
             allowed:
-              order.status === OrderStatus.arrived &&
-              (auth.role === Role.shipper || auth.role === Role.admin)
+              order.status === OrderStatus.arrived ||
+              (order.status === OrderStatus.shipping &&
+                (auth.role === Role.shipper || auth.role === Role.admin))
                 ? true
                 : false,
           },

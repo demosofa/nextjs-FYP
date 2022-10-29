@@ -1,15 +1,12 @@
 import { OrderStatus } from "../shared";
-import UnitOfWork from "./services/UnitOfWork";
+import models from "../models";
 
 class SellerController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
   income = async (req, res) => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     try {
-      const income = await this.unit.Order.aggregate()
+      const income = await models.Order.aggregate()
         .match({ createdAt: { $gte: yesterday } })
         .project({
           day: { $dayOfMonth: "$validatedAt" },
@@ -29,7 +26,7 @@ class SellerController {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     try {
-      const orders = await this.unit.Order.aggregate()
+      const orders = await models.Order.aggregate()
         .match({ createdAt: { $gte: yesterday } })
         .project({
           day: { $dayOfMonth: "$createddAt" },
@@ -45,7 +42,7 @@ class SellerController {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     try {
-      const total = await this.unit.OrderItem.aggregate([
+      const total = await models.OrderItem.aggregate([
         { $match: { createdAt: { $gte: yesterday } } },
         {
           $project: {
@@ -80,7 +77,7 @@ class SellerController {
     try {
       let filterOptions = { validatedAt: { $gte: currentDate } };
       if (!limit) limit = 10;
-      const lstValidated = await this.unit.Order.getAll(filterOptions)
+      const lstValidated = await models.Order.find(filterOptions)
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({
@@ -89,7 +86,7 @@ class SellerController {
         .populate("orderItems")
         .populate({ path: "shipper", select: "username" })
         .lean();
-      const orderCounted = await this.unit.Order.countData({
+      const orderCounted = await models.Order.countDocuments({
         status: OrderStatus.shipping,
         ...filterOptions,
       }).lean();
@@ -102,7 +99,7 @@ class SellerController {
   getShipperOrder = async (req, res) => {
     try {
       const { shipperId, orderId } = req.query;
-      const data = await this.unit.Order.getOne({
+      const data = await models.Order.findOne({
         _id: orderId,
         shipper: shipperId,
       })
@@ -117,7 +114,7 @@ class SellerController {
   };
   validateShipperOrder = async (req, res) => {
     try {
-      await this.unit.Order.updateById(req.query.orderId, {
+      await models.Order.findByIdAndUpdate(req.query.orderId, {
         $set: { validatedAt: Date.now(), status: OrderStatus.shipping },
       });
       return res.status(200).end();

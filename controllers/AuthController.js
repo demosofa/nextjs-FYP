@@ -1,4 +1,3 @@
-import UnitOfWork from "./services/UnitOfWork";
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
 import { setCookieToken, Token } from "../helpers";
@@ -8,17 +7,14 @@ import {
   createTransport,
   getTestMessageUrl,
 } from "nodemailer";
+import models from "../models";
 
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
 
 class AuthController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
-
   login = async (req, res) => {
     const { username, password } = req.body;
-    const check = await this.unit.Account.getOne({ username }).lean();
+    const check = await models.Account.findOne({ username }).lean();
     if (!check)
       return res
         .status(300)
@@ -45,17 +41,17 @@ class AuthController {
 
   register = async (req, res) => {
     const { account, userInfo } = req.body;
-    const isExisted = await this.unit.Account.getOne({
+    const isExisted = await models.Account.findOne({
       username: account.username,
     }).lean();
     if (isExisted)
       return res.status(300).json({
         message: "There is already existed account with this username",
       });
-    const user = await this.unit.User.create({ ...userInfo });
+    const user = await models.User.create({ ...userInfo });
     if (!user) return res.status(500).json({ message: "Fail to Register" });
     let hashPassword = await bcrypt.hash(account.password, 10);
-    const created = await this.unit.Account.create({
+    const created = await models.Account.create({
       username: account.username,
       hashPassword,
       user: user._id,
@@ -85,7 +81,7 @@ class AuthController {
   forgot = async (req, res) => {
     try {
       const { username, email } = req.body;
-      await this.unit.Account.getOne({ username })
+      await models.Account.findOne({ username })
         .populate("user")
         .lean()
         .then(async ({ _id, hashPassword, user }) => {
@@ -125,7 +121,7 @@ class AuthController {
   resetLink = async (req, res) => {
     try {
       const { id, token } = req.query;
-      await this.unit.Account.getById(id)
+      await models.Account.findById(id)
         .select("hashPassword")
         .lean()
         .then(({ hashPassword }) => {
@@ -143,7 +139,7 @@ class AuthController {
     try {
       const { id, token } = req.query;
       const { pwd } = req.body;
-      await this.unit.Account.getById(id)
+      await models.Account.findById(id)
         .select("hashPassword")
         .lean()
         .then(async ({ hashPassword }) => {
@@ -153,7 +149,7 @@ class AuthController {
             const validPass = await bcrypt.compare(pwd, hashPassword);
             if (!validPass) {
               let newHashPassword = await bcrypt.hash(pwd, 10);
-              await this.unit.Account.updateById(id, {
+              await models.Account.findByIdAndUpdate(id, {
                 $set: { hashPassword: newHashPassword },
               });
               return res.redirect("/login");

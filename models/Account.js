@@ -1,5 +1,5 @@
 import Role from "../shared/Role";
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const Account = new Schema(
@@ -41,4 +41,4 @@ Account.post(
     );
   }
 );
-module.exports = mongoose.models.Account || mongoose.model("Account", Account);
+export default mongoose.models.Account || mongoose.model("Account", Account);

@@ -1,12 +1,9 @@
-import UnitOfWork from "./services/UnitOfWork";
+import models from "../models";
 
 class RateController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
   getRating = async (req, res) => {
     try {
-      const { ratings } = await this.unit.Account.getById(req.user.accountId)
+      const { ratings } = await models.Account.findById(req.user.accountId)
         .populate({
           path: "ratings",
           match: {
@@ -26,12 +23,12 @@ class RateController {
     let increment = 0,
       count = 0;
     try {
-      const prevRate = await this.unit.Rate.getOne({
+      const prevRate = await models.Rate.findOne({
         product: productId,
         account: accountId,
       }).lean();
 
-      const update = await this.unit.Rate.updateOne(
+      const update = await models.Rate.findOneAndUpdate(
         { product: productId, account: accountId },
         { ...req.body, product: productId, account: accountId },
         {
@@ -41,16 +38,16 @@ class RateController {
       );
       if (prevRate) increment = update.rating - prevRate.rating;
       else {
-        await this.unit.Account.updateById(accountId, {
+        await models.Account.findByIdAndUpdate(accountId, {
           $push: { ratings: update._id },
         });
         increment = update.rating;
         count = 1;
       }
-      this.unit.Product.getById(productId)
+      models.Product.findById(productId)
         .select(["avgRating", "rateCount"])
         .exec(async (err, doc) => {
-          await this.unit.Product.updateById(productId, {
+          await models.Product.findByIdAndUpdate(productId, {
             $inc: {
               rateCount: count,
             },

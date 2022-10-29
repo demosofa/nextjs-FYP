@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const Notification = new Schema(
   {
@@ -10,5 +10,5 @@ const Notification = new Schema(
   { timestamps: true }
 );
 
-module.exports =
-  mongoose.models.Notification || mongoose.model("Notification", Notification);
+export default mongoose.models.Notification ||
+  mongoose.model("Notification", Notification);

@@ -1,12 +1,9 @@
 import { OrderStatus } from "../shared";
-import UnitOfWork from "./services/UnitOfWork";
+import models from "../models";
 
 class UserController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
   getProfile = async (req, res) => {
-    const profile = await this.unit.User.getById(req.user.id).lean();
+    const profile = await models.User.findById(req.user.id).lean();
     if (!profile) return res.status(404).end();
     return res.status(200).json(profile);
   };
@@ -14,7 +11,7 @@ class UserController {
     let { page, search, status, sort } = req.query;
     if (!sort) sort = "status";
     if (!status) status = { $exists: true };
-    let { orders } = await this.unit.Account.getById(req.user.accountId)
+    let { orders } = await models.Account.findById(req.user.accountId)
       .select("orders")
       .populate({
         path: "orders",
@@ -47,9 +44,9 @@ class UserController {
     return res.status(200).json(orders);
   };
   updateProfile = async (req, res) => {
-    const profile = await this.unit.User.getById(req.body._id).lean();
+    const profile = await models.User.findById(req.body._id).lean();
     if (!profile) return res.status(404).end();
-    const isUpdated = await this.unit.User.updateById(req.body._id, {
+    const isUpdated = await models.User.findByIdAndUpdate(req.body._id, {
       $set: req.body,
     });
     if (!isUpdated) return res.status(404).end();
@@ -58,14 +55,14 @@ class UserController {
   checkQR = async (req, res) => {
     const { shipperId, id } = req.query;
     if (id === req.body.orderId) {
-      const order = await this.unit.Order.updateOne(
+      const order = await models.Order.findOneAndUpdate(
         {
           _id: id,
           customer: req.user.accountId,
           shipper: shipperId,
           status: OrderStatus.arrived,
         },
-        { status: OrderStatus.validated }
+        { $set: { status: OrderStatus.validated } }
       );
       if (!order) return res.status(500).json("This is not your order");
       return res.status(200).json(order);

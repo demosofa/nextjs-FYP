@@ -1,13 +1,10 @@
-import UnitOfWork from "./services/UnitOfWork";
+import models from "../models";
 import { toDataURL } from "qrcode";
 import { OrderStatus } from "../shared";
 
 class OrderController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
   getOrder = async (req, res) => {
-    const order = await this.unit.Order.getById(req.query.id)
+    const order = await models.Order.findById(req.query.id)
       .populate({
         path: "customer",
         select: ["username"],
@@ -23,7 +20,7 @@ class OrderController {
   lstOrder = async (req, res) => {
     let { page, sort, limit } = req.query;
     if (!limit) limit = 10;
-    const lstOrder = await this.unit.Order.getAll({
+    const lstOrder = await models.Order.find({
       status: OrderStatus.pending,
       customer: { $ne: req.user.accountId },
     })
@@ -37,7 +34,7 @@ class OrderController {
         select: ["username"],
       })
       .lean();
-    const orderCounted = await this.unit.Order.countData({
+    const orderCounted = await models.Order.countDocuments({
       status: OrderStatus.pending,
     }).lean();
     const pageCounted = Math.ceil(orderCounted / limit);
@@ -58,23 +55,23 @@ class OrderController {
       products.map(async (product) => {
         const reduce = parseInt(`-${product.quantity}`);
         if (product.variationId)
-          await this.unit.Variation.updateById(product.variationId, {
+          await models.Variation.findByIdAndUpdate(product.variationId, {
             $inc: { quantity: reduce },
           });
         else
-          await this.unit.Product.updateById(product.productId, {
+          await models.Product.findByIdAndUpdate(product.productId, {
             $inc: { quantity: reduce },
           });
-        return this.unit.OrderItem.create(product);
+        return models.OrderItem.create(product);
       })
     );
-    const created = await this.unit.Order.create({
+    const created = await models.Order.create({
       ...others,
       customer: req.user.accountId,
       orderItems: orderItems.map((item) => item._id),
     });
     if (!created) return res.status(500).json("Fail to create Order");
-    const addOrderToCustomer = await this.unit.Account.updateById(
+    const addOrderToCustomer = await models.Account.findByIdAndUpdate(
       req.user.accountId,
       {
         $push: { orders: created._id },
@@ -84,13 +81,13 @@ class OrderController {
     return res.status(200).end();
   };
   patchOrder = async (req, res) => {
-    await this.unit.Order.updateById(req.query.id, {
+    await models.Order.findByIdAndUpdate(req.query.id, {
       $set: req.body,
     });
     return res.status(200).end();
   };
   cancelOrder = async (req, res) => {
-    await this.unit.Order.updateById(req.query.id, {
+    await models.Order.findByIdAndUpdate(req.query.id, {
       $set: { status: "cancel" },
     })
       .select("orderItems")
@@ -99,11 +96,11 @@ class OrderController {
         Promise.all(
           orderItems.map(async ({ productId, variationId, quantity }) => {
             if (variationId)
-              return this.unit.Variation.updateById(variationId, {
+              return models.Variation.findByIdAndUpdate(variationId, {
                 $inc: { quantity },
               });
             else
-              return this.unit.Product.updateById(productId, {
+              return models.Product.findByIdAndUpdate(productId, {
                 $inc: { quantity },
               });
           })

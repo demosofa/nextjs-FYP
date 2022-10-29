@@ -1,10 +1,7 @@
 import { OrderStatus } from "../shared";
-import UnitOfWork from "./services/UnitOfWork";
+import models from "../models";
 
 class ShipperController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
   MyShipping = async (req, res) => {
     let { page, sort, status, limit } = req.query;
     let filterOptions = { shipper: req.user.accountId };
@@ -19,7 +16,7 @@ class ShipperController {
         status,
       };
     if (!limit) limit = 10;
-    const lstShipping = await this.unit.Order.getAll(filterOptions)
+    const lstShipping = await models.Order.find(filterOptions)
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({
@@ -36,7 +33,7 @@ class ShipperController {
       .populate("orderItems")
       .lean();
     if (!lstShipping) return res.status(404).json({ message: "Not Found" });
-    const countMyShipping = await this.unit.Order.countData(
+    const countMyShipping = await models.Order.countDocuments(
       filterOptions
     ).lean();
     const pageCounted = Math.ceil(countMyShipping / limit);
@@ -44,7 +41,7 @@ class ShipperController {
   };
   checkQR = async (req, res) => {
     const { id, orderId } = req.query;
-    const order = await this.unit.Order.getOne({
+    const order = await models.Order.findOne({
       shipper: id,
       _id: orderId,
     })
@@ -57,7 +54,7 @@ class ShipperController {
     const { acceptedOrders } = req.body;
     const { accountId, role } = req.user;
     try {
-      // await this.unit.Account.updateOne(
+      // await models.Account.findOneAndUpdate(
       //   { _id: accountId, role },
       //   {
       //     $push: {
@@ -67,7 +64,7 @@ class ShipperController {
       //     },
       //   }
       // );
-      await this.unit.Order.updateMany(
+      await models.Order.updateMany(
         {
           _id: { $in: acceptedOrders },
         },

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const File = new Schema(
@@ -36,4 +36,4 @@ File.post(
   }
 );
 
-module.exports = mongoose.models.File || mongoose.model("File", File);
+export default mongoose.models.File || mongoose.model("File", File);

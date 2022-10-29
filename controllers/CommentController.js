@@ -1,14 +1,11 @@
-import UnitOfWork from "./services/UnitOfWork";
+import models from "../models";
 
 class CommentController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
   getCommentFromProduct = async (req, res) => {
     let { id, sort, page, limit } = req.query;
     if (!sort) sort = { updatedAt: 1 };
     if (!limit) limit = 10;
-    const comments = await this.unit.Comment.getAll({ productId: id })
+    const comments = await models.Comment.find({ productId: id })
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit)
@@ -16,7 +13,7 @@ class CommentController {
       .lean();
     if (!comments)
       return res.status(500).json({ message: "Fail to load comment" });
-    const countComments = await this.unit.Comment.countData({
+    const countComments = await models.Comment.countDocuments({
       productId: id,
     }).lean();
     const pageCounted = Math.ceil(countComments / limit);
@@ -24,7 +21,7 @@ class CommentController {
   };
   getSubComment = async (req, res) => {
     const id = req.query.id;
-    const { replys } = await this.unit.Comment.getById(id)
+    const { replys } = await models.Comment.findById(id)
       .select("replys")
       .populate({
         path: "replys",
@@ -40,7 +37,7 @@ class CommentController {
   addCommentToProduct = async (req, res) => {
     const id = req.query.id;
     const { content } = req.body;
-    const created = await this.unit.Comment.create({
+    const created = await models.Comment.create({
       productId: id,
       author: req.user.accountId,
       content,
@@ -54,7 +51,7 @@ class CommentController {
   addSubComment = async (req, res) => {
     const id = req.query.id;
     const { content } = req.body;
-    const comment = await this.unit.Comment.create({
+    const comment = await models.Comment.create({
       author: req.user.accountId,
       content,
     }).then((value) =>
@@ -62,7 +59,7 @@ class CommentController {
     );
     if (!comment)
       return res.status(500).json({ message: "Fail to create comment" });
-    const updated = await this.unit.Comment.updateById(id, {
+    const updated = await models.Comment.findByIdAndUpdate(id, {
       $push: { replys: comment._id },
     });
     if (!updated)
@@ -73,14 +70,16 @@ class CommentController {
   };
   patch = async (req, res) => {
     const id = req.query.id;
-    const updated = await this.unit.Comment.updateById(id, { $set: req.body });
+    const updated = await models.Comment.findByIdAndUpdate(id, {
+      $set: req.body,
+    });
     if (!updated)
       return res.status(500).json({ message: "Fail to update comment" });
     return res.status(200).end();
   };
   delete = async (req, res) => {
     const id = req.query.id;
-    const deleted = await this.unit.Comment.deleteById(id);
+    const deleted = await models.Comment.findByIdAndDelete(id);
     if (!deleted)
       return res.status(500).json({ message: "Cannot delete comment" });
     return res.status(200).end();

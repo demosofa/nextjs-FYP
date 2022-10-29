@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const Account = require("./Account");
 
@@ -16,4 +16,4 @@ function checkDiscriminator() {
   return Account.discriminator("Shipper", Shipper);
 }
 
-module.exports = checkDiscriminator();
+export default checkDiscriminator();

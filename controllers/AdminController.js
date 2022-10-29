@@ -1,13 +1,9 @@
 import Role from "../shared/Role";
-import UnitOfWork from "./services/UnitOfWork";
 import { blacklist } from "../helpers";
 import { OrderStatus } from "../shared";
+import models from "../models";
 
 class AdminController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
-
   getAllOrder = async (req, res) => {
     try {
       let { page, sort, status, limit } = req.query;
@@ -19,7 +15,7 @@ class AdminController {
         };
       if (!limit) limit = 10;
 
-      const lstOrder = await this.unit.Order.getAll(filterOptions)
+      const lstOrder = await models.Order.find(filterOptions)
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({
@@ -28,7 +24,9 @@ class AdminController {
         .populate("orderItems")
         .lean();
       if (!lstOrder) throw new Error("Fail to load profiles");
-      const countOrder = await this.unit.Order.countData(filterOptions).lean();
+      const countOrder = await models.Order.countDocuments(
+        filterOptions
+      ).lean();
       const pageCounted = Math.ceil(countOrder / limit);
       return res.status(200).json({ lstOrder, pageCounted });
     } catch (error) {
@@ -38,13 +36,13 @@ class AdminController {
 
   changeOrderStatus = async (req, res) => {
     const { status } = req.body;
-    await this.unit.Order.updateById(req.query.id, { $set: { status } });
+    await models.Order.findByIdAndUpdate(req.query.id, { $set: { status } });
     return res.status(200).end();
   };
 
   deleteOrder = async (req, res) => {
     try {
-      const deleted = await this.unit.Order.deleteOne({
+      const deleted = await models.Order.deleteOne({
         _id: req.body.Id,
         status: {
           $in: [OrderStatus.progress, OrderStatus.pending, OrderStatus.cancel],
@@ -72,7 +70,7 @@ class AdminController {
           role,
         };
       if (!limit) limit = 10;
-      const lstProfile = await this.unit.Account.getAll(filterOptions)
+      const lstProfile = await models.Account.find(filterOptions)
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({
@@ -81,7 +79,7 @@ class AdminController {
         .populate({ path: "user", select: ["email", "phoneNumber"] })
         .lean();
       if (!lstProfile) throw new Error("Fail to load profiles");
-      const countProfiles = await this.unit.Account.countData(
+      const countProfiles = await models.Account.countDocuments(
         filterOptions
       ).lean();
       const pageCounted = Math.ceil(countProfiles / limit);
@@ -93,7 +91,7 @@ class AdminController {
 
   changeRole = async (req, res) => {
     try {
-      await this.unit.Account.updateById(req.query.id, {
+      await models.Account.findByIdAndUpdate(req.query.id, {
         $set: { role: req.body.role },
       });
       return res.status(200).end();
@@ -104,7 +102,7 @@ class AdminController {
 
   blockOrUnblockAccount = async (req, res) => {
     try {
-      await this.unit.Account.updateById(req.query.id, {
+      await models.Account.findByIdAndUpdate(req.query.id, {
         $set: { blocked: req.body.blocked },
       });
       if (req.body.blocked) blacklist.addToBlackList(req.query.id);
@@ -117,7 +115,7 @@ class AdminController {
 
   deleteAccount = async (req, res) => {
     try {
-      await this.unit.Account.deleteById(req.query.id);
+      await models.Account.findByIdAndDelete(req.query.id);
       return res.status(200).end();
     } catch (error) {
       return res.status(500).json({ message: error });
@@ -129,7 +127,7 @@ class AdminController {
       new Date().setMonth(new Date().getMonth() - 2)
     );
     try {
-      const income = await this.unit.Order.aggregate()
+      const income = await models.Order.aggregate()
         .match({ createdAt: { $gte: previousMonth } })
         .project({
           month: { $month: "$createdAt" },
@@ -151,7 +149,7 @@ class AdminController {
       new Date().setMonth(new Date().getMonth() - 2)
     );
     try {
-      const profit = await this.unit.Order.aggregate()
+      const profit = await models.Order.aggregate()
         .match({ updatedAt: { $gte: previousMonth }, status: OrderStatus.paid })
         .project({
           month: { $month: "$createdAt" },
@@ -170,7 +168,7 @@ class AdminController {
       new Date().setMonth(new Date().getMonth() - 2)
     );
     try {
-      const accounts = await this.unit.Account.aggregate()
+      const accounts = await models.Account.aggregate()
         .match({ role: Role.customer, createdAt: { $gte: previousMonth } })
         .project({
           month: { $month: "$createdAt" },
@@ -188,7 +186,7 @@ class AdminController {
       new Date().setMonth(new Date().getMonth() - 2)
     );
     try {
-      const orders = await this.unit.Order.aggregate()
+      const orders = await models.Order.aggregate()
         .match({ createdAt: { $gte: previousMonth } })
         .project({
           month: { $month: "$createdAt" },
@@ -206,7 +204,7 @@ class AdminController {
       new Date().setMonth(new Date().getMonth() - 2)
     );
     try {
-      const total = await this.unit.OrderItem.aggregate([
+      const total = await models.OrderItem.aggregate([
         { $match: { createdAt: { $gte: previousMonth } } },
         {
           $project: {

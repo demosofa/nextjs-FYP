@@ -1,23 +1,19 @@
-import UnitOfWork from "./services/UnitOfWork";
+import models from "../models";
 
 class NotificationController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
-
   getAllForUser = async (req, res) => {
     try {
       let { page, filter, limit } = req.query;
       let filterOptions = { to: req.user.accountId };
       if (filter) filterOptions = { ...filterOptions, isRead: filter };
       if (!limit) limit = 10;
-      const notifications = await this.unit.Notification.getAll(filterOptions)
+      const notifications = await models.Notification.find(filterOptions)
         .sort({ updatedAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
         .populate({ path: "from", select: "username" })
         .lean();
-      // const notfifyCounted = await this.unit.Notification.countData(
+      // const notfifyCounted = await models.Notification.countData(
       //   filterOptions
       // ).lean();
       // const pageCounted = Math.ceil(notfifyCounted / limit);
@@ -28,7 +24,7 @@ class NotificationController {
   };
   addNotification = async (req, res) => {
     try {
-      await this.unit.Notification.create({
+      await models.Notification.create({
         ...req.body,
         from: req.user.accountId,
       });
@@ -39,7 +35,9 @@ class NotificationController {
   };
   readNotification = async (req, res) => {
     try {
-      await this.unit.Notification.updateById(req.query.id, { isRead: true });
+      await models.Notification.findByIdAndUpdate(req.query.id, {
+        isRead: true,
+      });
       return res.status(200).end();
     } catch (error) {
       return res.status(500).json(error);
@@ -47,7 +45,7 @@ class NotificationController {
   };
   deleteNotification = async (req, res) => {
     try {
-      await this.unit.Notification.deleteById(req.query.id);
+      await models.Notification.findByIdAndDelete(req.query.id);
       return res.status(200).end();
     } catch (error) {
       return res.status(500).json(error);

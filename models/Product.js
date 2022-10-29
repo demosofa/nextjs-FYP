@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const Product = new Schema(
@@ -15,15 +15,7 @@ const Product = new Schema(
         required: true,
       },
     ],
-    price: { type: Number, default: 0 },
-    cost: { type: Number, default: 0 },
-    time: { type: Date },
-    sale: { type: Number, default: 0 },
-    quantity: { type: Number },
     manufacturer: { type: String, required: true },
-    length: { type: Number, required: true },
-    width: { type: Number, required: true },
-    height: { type: Number, required: true },
     variants: [{ type: Schema.Types.ObjectId, ref: "Variant" }],
     variations: [{ type: Schema.Types.ObjectId, ref: "Variation" }],
     avgRating: { type: Number, default: 0 },
@@ -62,4 +54,4 @@ Product.post(
   }
 );
 
-module.exports = mongoose.models.Product || mongoose.model("Product", Product);
+export default mongoose.models.Product || mongoose.model("Product", Product);

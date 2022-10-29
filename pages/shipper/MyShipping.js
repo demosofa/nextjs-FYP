@@ -79,6 +79,7 @@ function MyShipping() {
           { value: OrderStatus.shipping, label: "Shipping" },
           { value: OrderStatus.arrived, label: "Arrived" },
           { value: OrderStatus.validated, label: "Validated" },
+          { value: OrderStatus.paid, label: "Paid" },
           { value: OrderStatus.cancel, label: "Cancel" },
         ]}
       />

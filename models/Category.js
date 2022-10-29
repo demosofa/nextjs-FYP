@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const Category = new Schema(
@@ -23,5 +23,4 @@ Category.post("findOneAndDelete", async function (doc) {
   );
 });
 
-module.exports =
-  mongoose.models.Category || mongoose.model("Category", Category);
+export default mongoose.models.Category || mongoose.model("Category", Category);

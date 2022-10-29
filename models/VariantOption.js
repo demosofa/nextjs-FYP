@@ -1,10 +1,9 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const VariantOption = new Schema({
   name: { type: String, required: true },
 });
 
-module.exports =
-  mongoose.models.VariantOption ||
+export default mongoose.models.VariantOption ||
   mongoose.model("VariantOption", VariantOption);

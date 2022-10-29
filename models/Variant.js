@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const Variant = new Schema({
@@ -18,4 +18,4 @@ Variant.post(
   }
 );
 
-module.exports = mongoose.models.Variant || mongoose.model("Variant", Variant);
+export default mongoose.models.Variant || mongoose.model("Variant", Variant);

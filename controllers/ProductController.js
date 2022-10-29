@@ -1,20 +1,16 @@
 import axios from "axios";
-import UnitOfWork from "./services/UnitOfWork";
+import models from "../models";
 import { startSession } from "mongoose";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 class ProductController {
-  constructor(unit = UnitOfWork) {
-    this.unit = new unit();
-  }
-
   trending = async (req, res) => {
     try {
       const previous3days = new Date(
         new Date().setDate(new Date().getDate() - 3)
       );
-      const product = await this.unit.Product.getAll({
+      const product = await models.Product.find({
         updatedAt: { $gte: previous3days },
       })
         .limit(10)
@@ -27,7 +23,7 @@ class ProductController {
   };
 
   read = async (req, res) => {
-    const product = await this.unit.Product.getById(req.query.id)
+    const product = await models.Product.findById(req.query.id)
       .populate({
         path: "variants",
         populate: {
@@ -94,11 +90,11 @@ class ProductController {
       };
     if (filter) filterOptions = { ...filterOptions, title: { $ne: filter } };
     if (category) {
-      const result = await this.unit.Category.getOne({ name: category }).lean();
+      const result = await models.Category.findOne({ name: category }).lean();
       filterOptions = { ...filterOptions, categories: result._id };
     }
     if (!limit) limit = 10;
-    const products = await this.unit.Product.aggregate()
+    const products = await models.Product.aggregate()
       .match({
         status: "active",
         ...filterOptions,
@@ -138,7 +134,7 @@ class ProductController {
         ],
         as: "variations",
       });
-    const productCounted = await this.unit.Product.countData({
+    const productCounted = await models.Product.countDocuments({
       status: "active",
       ...filterOptions,
     }).lean();
@@ -147,7 +143,7 @@ class ProductController {
   };
 
   getImage = async (req, res) => {
-    const { images } = await this.unit.Product.getById(req.query.id)
+    const { images } = await models.Product.findById(req.query.id)
       .select("images")
       .populate("images")
       .lean();
@@ -157,7 +153,7 @@ class ProductController {
   };
 
   getVariation = async (req, res) => {
-    const { variations } = await this.unit.Product.getById(req.query.id)
+    const { variations } = await models.Product.findById(req.query.id)
       .select("variations")
       .populate({
         path: "variations",
@@ -178,7 +174,7 @@ class ProductController {
         $text: { $search: search },
       };
     if (category) {
-      const result = await this.unit.Category.getOne({ name: category });
+      const result = await models.Category.findOne({ name: category });
       filterOptions = { ...filterOptions, categories: result._id };
     }
     if (filter)
@@ -187,7 +183,7 @@ class ProductController {
         status: filter,
       };
     if (!limit) limit = 10;
-    const products = await this.unit.Product.getAll(filterOptions)
+    const products = await models.Product.find(filterOptions)
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({
@@ -209,7 +205,7 @@ class ProductController {
       })
       .lean();
     if (!products) return res.status(404).json({ message: "Not Found" });
-    const productCounted = await this.unit.Product.countData(
+    const productCounted = await models.Product.countDocuments(
       filterOptions
     ).lean();
     const pageCounted = Math.ceil(productCounted / limit);
@@ -218,7 +214,7 @@ class ProductController {
 
   create = async (req, res) => {
     const { variants, variations, images, ...others } = req.body;
-    const check = await this.unit.Product.getOne({
+    const check = await models.Product.findOne({
       title: others.title,
     });
     if (check)
@@ -229,7 +225,9 @@ class ProductController {
     try {
       session.startTransaction();
       const arrImage = await Promise.all(
-        images.map((image) => this.unit.File.create(image, { session }))
+        images.map(
+          async (image) => (await models.File.create([image], { session }))[0]
+        )
       );
       let productOpts = [];
       let arrVariant;
@@ -238,44 +236,54 @@ class ProductController {
           variants.map(async (item) => {
             const { name, options } = item;
             const arrOption = await Promise.all(
-              options.map((opt) =>
-                this.unit.Option.create({ name: opt }, { session })
+              options.map(
+                async (opt) =>
+                  (
+                    await models.Option.create([{ name: opt }], { session })
+                  )[0]
               )
             );
             productOpts.push(...arrOption);
-            return this.unit.Variant.create(
-              {
-                name,
-                options: arrOption.map((opt) => opt._id),
-              },
-              { session }
-            );
+            return (
+              await models.Variant.create(
+                [
+                  {
+                    name,
+                    options: arrOption.map((opt) => opt._id),
+                  },
+                ],
+                { session }
+              )
+            )[0];
           })
         );
       }
       let arrVariation;
       if (variations.length) {
         arrVariation = await Promise.all(
-          variations.map((item) => {
+          variations.map(async (item) => {
             const { types, ...others } = item;
             let arrType = [];
             productOpts.forEach((opt) => {
               if (types.includes(opt.name)) arrType.push(opt._id);
             });
-            return this.unit.Variation.create(
-              { ...others, types: arrType },
-              { session }
-            );
+            return (
+              await models.Variation.create([{ ...others, types: arrType }], {
+                session,
+              })
+            )[0];
           })
         );
       }
-      await this.unit.Product.create(
-        {
-          ...others,
-          images: arrImage.map((file) => file._id),
-          variants: arrVariant?.map((item) => item._id),
-          variations: arrVariation?.map((item) => item._id),
-        },
+      await models.Product.create(
+        [
+          {
+            ...others,
+            images: arrImage.map((file) => file._id),
+            variants: arrVariant?.map((item) => item._id),
+            variations: arrVariation?.map((item) => item._id),
+          },
+        ],
         { session }
       );
       await session.commitTransaction();
@@ -284,14 +292,15 @@ class ProductController {
     } catch (error) {
       await session.abortTransaction();
       await session.endSession();
-      console.log(error);
       return res.status(500).json(error);
     }
   };
 
   update = async (req, res) => {
     const { _id, ...others } = req.body;
-    const updated = await this.unit.Product.updateById(_id, { $set: others });
+    const updated = await models.Product.findByIdAndUpdate(_id, {
+      $set: others,
+    });
     if (!updated)
       return res.status(500).json({ message: "Fail to update product" });
     return res.status(200).json({ message: "Success update Product" });
@@ -302,7 +311,7 @@ class ProductController {
     const { newImages, filterImages } = req.body;
     if (filterImages.length) {
       const filterId = filterImages.map((image) => image._id);
-      const deleted = await this.unit.File.deleteMany({
+      const deleted = await models.File.deleteMany({
         _id: { $in: filterId },
       });
       if (!deleted)
@@ -310,10 +319,10 @@ class ProductController {
     }
     if (newImages.length) {
       const createdImages = await Promise.all(
-        newImages.map((image) => this.unit.File.create(image))
+        newImages.map((image) => models.File.create(image))
       );
       const createdIds = createdImages.map((image) => image._id);
-      const updated = await this.unit.Product.updateById(_id, {
+      const updated = await models.Product.findByIdAndUpdate(_id, {
         $push: { images: { $each: createdIds } },
       });
       if (!updated)
@@ -330,11 +339,11 @@ class ProductController {
       variations.map((variation) => {
         const { _id, image, ...other } = variation;
         if (!image)
-          return this.unit.Variation.updateById(_id, {
+          return models.Variation.findByIdAndUpdate(_id, {
             $set: other,
             $unset: { image: 1 },
           });
-        return this.unit.Variation.updateById(_id, {
+        return models.Variation.findByIdAndUpdate(_id, {
           $set: { image: image._id, ...other },
         });
       })
@@ -350,17 +359,19 @@ class ProductController {
 
   patch = async (req, res) => {
     const _id = req.query.id;
-    const patched = await this.unit.Product.updateById(_id, { $set: req.body });
+    const patched = await models.Product.findByIdAndUpdate(_id, {
+      $set: req.body,
+    });
     if (!patched) return res.status(500).end();
     return res.status(200).end();
   };
 
   delete = async (req, res) => {
-    const { images } = await this.unit.Product.getById(req.query.id)
+    const { images } = await models.Product.findById(req.query.id)
       .select("images")
       .populate("images");
     const selectedPublic_id = images.map((image) => image.public_id);
-    const deleted = await this.unit.Product.deleteById(req.query.id);
+    const deleted = await models.Product.findByIdAndDelete(req.query.id);
     if (!deleted) return res.status(500).end();
     await axios.delete(`${LocalApi}/destroy`, {
       data: { files: selectedPublic_id },

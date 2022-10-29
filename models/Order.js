@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { convertTime, OrderStatus } = require("../shared");
 const Schema = mongoose.Schema;
 
@@ -67,4 +67,4 @@ Order.post(
   }
 );
 
-module.exports = mongoose.models.Order || mongoose.model("Order", Order);
+export default mongoose.models.Order || mongoose.model("Order", Order);

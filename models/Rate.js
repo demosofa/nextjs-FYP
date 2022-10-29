@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const Rate = new Schema({
@@ -7,4 +7,4 @@ const Rate = new Schema({
   rating: { type: Number },
 });
 
-module.exports = mongoose.models.Rate || mongoose.model("Rate", Rate);
+export default mongoose.models.Rate || mongoose.model("Rate", Rate);

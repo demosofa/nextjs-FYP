@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const Variation = new Schema(
@@ -21,5 +21,5 @@ const Variation = new Schema(
   { timestamps: true }
 );
 
-module.exports =
-  mongoose.models.Variation || mongoose.model("Variation", Variation);
+export default mongoose.models.Variation ||
+  mongoose.model("Variation", Variation);

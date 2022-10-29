@@ -3,8 +3,8 @@ const OrderStatus = {
   pending: "pending",
   progress: "progress",
   shipping: "shipping",
-  arrived: "arrive",
-  validated: "validate",
+  arrived: "arrived",
+  validated: "validated",
   paid: "paid",
 };
 
