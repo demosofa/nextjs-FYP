@@ -6,26 +6,24 @@ import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/reducer/notificationSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
-const AblyFe = createContext();
+const ably = new Realtime.Promise({
+  authUrl: `${LocalApi}/createAblyToken`,
+});
+const AblyFe = createContext(ably);
 
 export default function AblyContext({ children }) {
-  const ably = useRef();
   const { role, accountId } = useMemo(() => {
     if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
       let decoded = parser(expireStorage.getItem("accessToken"));
-      if (!ably.current && decoded)
-        ably.current = new Realtime.Promise({
-          authUrl: `${LocalApi}/createAblyToken`,
-        });
-      return decoded;
+      if (decoded) return decoded;
     }
     return { accountId: "", role: "" };
   }, []);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (ably.current && accountId) {
-      ably.current.channels.get(accountId).subscribe(({ name, data }) => {
+    if (accountId) {
+      ably.channels.get(accountId).subscribe(({ name, data }) => {
         switch (name) {
           case "shipping":
             dispatch(addNotification({ ...data }));
@@ -36,10 +34,8 @@ export default function AblyContext({ children }) {
         }
       });
     }
-  }, [ably.current, accountId]);
-  return (
-    <AblyFe.Provider value={{ ably: ably.current }}>{children}</AblyFe.Provider>
-  );
+  }, [ably, accountId]);
+  return <AblyFe.Provider value={{ ably }}>{children}</AblyFe.Provider>;
 }
 
 export function useAblyContext() {
