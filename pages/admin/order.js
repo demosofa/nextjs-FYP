@@ -60,6 +60,7 @@ export default function ManageOrder() {
           data: { Id },
         });
         data.lstOrder = data.lstOrder.filter((order) => order._id !== Id);
+        setDisplayDelete(null);
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
@@ -98,12 +99,16 @@ export default function ManageOrder() {
             {data.lstOrder.length ? (
               data.lstOrder.map((order) => (
                 <div key={order._id} className="card relative mt-2 h-fit">
-                  {order.status === "cancel" ? (
+                  {/* {order.status === "cancel" ? (
                     <IoMdTrash
                       className="absolute right-4"
                       onClick={() => setDisplayDelete(order._id)}
                     />
-                  ) : null}
+                  ) : null} */}
+                  <IoMdTrash
+                    className="absolute right-4"
+                    onClick={() => setDisplayDelete(order._id)}
+                  />
                   <dl>
                     <dt className="font-bold">Id:</dt>
                     <dd className="whitespace-pre-line line-clamp-1">
@@ -158,7 +163,7 @@ export default function ManageOrder() {
       )}
       {displayDelete && (
         <>
-          <div className="backdrop" onClick={() => setDisplayCancel(null)} />
+          <div className="backdrop" onClick={() => setDisplayDelete(null)} />
           <Form className="form_center">
             <Form.Title>
               Are you sure to delete order {displayDelete}

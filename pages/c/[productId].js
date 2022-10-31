@@ -46,6 +46,20 @@ export default function Overview({ product }) {
   const [similiarProducts, setSimiliarProducts] = useState([]);
   const [options, setOptions] = useState([]);
 
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { device, Devices } = useMediaContext();
+
+  const defaultChecked = useMemo(() => {
+    const current = product.variations.find(
+      (item) => item._id === router.query.vid
+    );
+    return current.types.reduce((prev, curr) => {
+      prev.push(curr.name);
+      return prev;
+    }, []);
+  }, []);
+
   const targetVariationIdx = useMemo(() => {
     return product.variations.findIndex((item) =>
       item.types.every((value) =>
@@ -54,10 +68,6 @@ export default function Overview({ product }) {
     );
   }, [options, product.variations]);
   const targetVariation = product.variations[targetVariationIdx];
-
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const { device, Devices } = useMediaContext();
 
   useEffect(() => {
     setLoading(true);
@@ -75,14 +85,14 @@ export default function Overview({ product }) {
   }, []);
 
   const generateCart = () => {
-    let { _id, title, images, price, length, width, height, time, sale } =
-      product;
+    let { _id, title, images } = product;
     let variationId = null;
     let variationImage = null;
-    let extraCostPerItem = (length * width * height) / 6000;
+    let price = 0;
+    let extraCostPerItem = 0;
     if (targetVariation) {
       variationId = targetVariation._id;
-      variationImage = targetVariation.image?.url;
+      variationImage = targetVariation.thumbnail?.url;
       price =
         targetVariation.time &&
         new Date(targetVariation.time).getTime() > Date.now()
@@ -93,9 +103,6 @@ export default function Overview({ product }) {
           targetVariation.width *
           targetVariation.height) /
         6000;
-    }
-    if (time && new Date(time).getTime() > Date.now()) {
-      price = sale;
     }
     return {
       productId: _id,
@@ -155,28 +162,39 @@ export default function Overview({ product }) {
   };
 
   useEffect(() => {
-    if (targetVariation && targetVariation.image)
-      setTargetImage(targetVariation.image.url);
-  }, [options, product.images, targetVariation]);
+    if (targetVariation && targetVariation.thumbnail) {
+      router.replace(
+        router.asPath,
+        {
+          pathname: `/c/${targetVariation.productId}`,
+          query: { vid: targetVariation._id },
+        },
+        { shallow: true }
+      );
+      setTargetImage(targetVariation.thumbnail.url);
+    }
+  }, [targetVariation]);
 
   useEffect(() => {
-    let { _id, title, images, price, avgRating, sold, time, sale, variations } =
-      product;
-    const thumbnail = images[0].url;
-    dispatch(
-      addViewed({
-        _id,
-        title,
-        thumbnail,
-        price,
-        time,
-        sale,
-        avgRating,
-        sold,
-        variations,
-      })
-    );
-  }, [product]);
+    const { title, avgRating } = product;
+    if (targetVariation) {
+      const { _id, productId, thumbnail, price, time, sale, sold } =
+        targetVariation;
+      dispatch(
+        addViewed({
+          _id,
+          productId,
+          title,
+          thumbnail: thumbnail.url,
+          price,
+          time,
+          sale,
+          avgRating,
+          sold,
+        })
+      );
+    }
+  }, [product, options]);
 
   return (
     <>
@@ -224,10 +242,10 @@ export default function Overview({ product }) {
 
             <PriceInfo
               saleEvent={{
-                time: targetVariation ? targetVariation.time : product.time,
-                sale: targetVariation ? targetVariation.sale : product.sale,
+                time: targetVariation?.time,
+                sale: targetVariation?.sale,
               }}
-              price={targetVariation ? targetVariation.price : product.price}
+              price={targetVariation?.price}
             />
 
             {product.variants.map((variant, index) => {
@@ -255,7 +273,10 @@ export default function Overview({ product }) {
                           className="peer hidden"
                           id={item.name}
                           value={`${variant.name}: ${item.name}`}
-                          defaultChecked={index === 0}
+                          defaultChecked={
+                            defaultChecked.length &&
+                            defaultChecked.includes(item.name)
+                          }
                         />
                         <label
                           className="inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-gray-200 bg-white font-bold text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:bg-orange-600 peer-checked:text-white"
@@ -270,17 +291,12 @@ export default function Overview({ product }) {
               );
             })}
 
-            {(!targetVariation && product.quantity > 0) ||
-            targetVariation?.quantity > 0 ? (
+            {targetVariation?.quantity > 0 ? (
               <div className="flex items-center justify-center gap-3">
                 <Increment
                   value={quantity}
                   setValue={setQuantity}
-                  max={
-                    targetVariation
-                      ? targetVariation.quantity
-                      : product.quantity
-                  }
+                  max={targetVariation.quantity}
                   style={{ flex: 1 }}
                 />
                 <button

@@ -3,8 +3,10 @@ const Schema = mongoose.Schema;
 
 const Variation = new Schema(
   {
-    sku: { type: String, unique: true, required: true, max: 200 },
-    image: { type: Schema.Types.ObjectId, ref: "File" },
+    productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+    title: { type: String, required: true, max: 200 },
+    tags: { type: String },
+    thumbnail: { type: Schema.Types.ObjectId, ref: "File" },
     types: [
       { type: Schema.Types.ObjectId, ref: "VariantOption", required: true },
     ],
@@ -20,6 +22,11 @@ const Variation = new Schema(
   },
   { timestamps: true }
 );
+
+Variation.index({
+  title: "text",
+  tags: "text",
+});
 
 export default mongoose.models.Variation ||
   mongoose.model("Variation", Variation);

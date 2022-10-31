@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-/**@type {({_id: string, title: string, thumbnail: string, price: number, avgRating: number}[])} */
+/**@type {({_id: string, productId: string, title: string, thumbnail: string, price: number, sale:number, time:Date, avgRating: number}[])} */
 const initialState = [];
 
 const recentlyViewed = createSlice({

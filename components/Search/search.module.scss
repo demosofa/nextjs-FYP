@@ -1,6 +1,6 @@
 @import "../../styles/mixin.scss";
 
-.search_wrapper{
+.search_wrapper {
   border: 1px solid lightgray;
   display: flex;
   align-items: center;
@@ -13,5 +13,6 @@
     border: none;
     background-color: transparent;
     outline: none;
+    color: black;
   }
 }

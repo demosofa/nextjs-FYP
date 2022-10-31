@@ -6,9 +6,6 @@ export default function validateVariations(variations) {
       if (sale && time) others = { ...others, sale };
       Object.entries(others).forEach((entry) => {
         switch (entry[0]) {
-          case "sku":
-            new Validate(entry[1]).isEmpty();
-            break;
           case "price":
           case "cost":
           case "sale":

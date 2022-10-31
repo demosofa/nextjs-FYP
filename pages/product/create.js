@@ -37,6 +37,9 @@ function CreateForm() {
     tags: [],
     images: [],
     manufacturer: "",
+  });
+
+  const [info, setInfo] = useState({
     price: 0,
     cost: 0,
     length: 0,
@@ -58,51 +61,30 @@ function CreateForm() {
   };
 
   const validateInput = () => {
-    const {
-      title,
-      description,
-      status,
-      manufacturer,
-      price,
-      cost,
-      length,
-      width,
-      height,
-      quantity,
-    } = input;
+    const { title, description, status, manufacturer } = input;
     let validate = { title, description, status, manufacturer };
     if (!variations.length)
-      validate = { ...validate, price, cost, length, width, height, quantity };
-    Object.entries(validate).forEach((entry) => {
-      switch (entry[0]) {
-        case "title":
-          new Validate(entry[1]).isEmpty().isEnoughLength({ max: 255 });
-          break;
-        case "description":
-          new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
-          break;
-        case "status":
-        case "manufacturer":
-          new Validate(entry[1]).isEmpty();
-          break;
-        case "price":
-        case "cost":
-          new Validate(entry[1]).isEmpty().isVND();
-          break;
-        case "length":
-        case "width":
-        case "height":
-        case "quantity":
-          new Validate(entry[1]).isEmpty().isNumber();
-          break;
-      }
-    });
+      Object.entries(validate).forEach((entry) => {
+        switch (entry[0]) {
+          case "title":
+            new Validate(entry[1]).isEmpty().isEnoughLength({ max: 255 });
+            break;
+          case "description":
+            new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
+            break;
+          case "status":
+          case "manufacturer":
+            new Validate(entry[1]).isEmpty();
+            break;
+        }
+      });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let uploaded = [];
     try {
+      if (!variants.length) throw new Error("Please add new variant");
       if (!input.categories.length) throw new Error("Please select categories");
       validateVariant();
       validateVariations(variations);
@@ -269,9 +251,9 @@ function CreateForm() {
               <Form.Item>
                 <Form.Title>Quantity</Form.Title>
                 <Form.Input
-                  value={input.quantity}
+                  value={info.quantity}
                   onChange={(e) =>
-                    setInput((prev) => ({
+                    setInfo((prev) => ({
                       ...prev,
                       quantity: e.target.value,
                     }))
@@ -282,9 +264,9 @@ function CreateForm() {
               <Form.Item>
                 <Form.Title>Length</Form.Title>
                 <Form.Input
-                  value={input.length}
+                  value={info.length}
                   onChange={(e) =>
-                    setInput((prev) => ({ ...prev, length: e.target.value }))
+                    setInfo((prev) => ({ ...prev, length: e.target.value }))
                   }
                 />
               </Form.Item>
@@ -292,9 +274,9 @@ function CreateForm() {
               <Form.Item>
                 <Form.Title>Width</Form.Title>
                 <Form.Input
-                  value={input.width}
+                  value={info.width}
                   onChange={(e) =>
-                    setInput((prev) => ({ ...prev, width: e.target.value }))
+                    setInfo((prev) => ({ ...prev, width: e.target.value }))
                   }
                 />
               </Form.Item>
@@ -302,9 +284,9 @@ function CreateForm() {
               <Form.Item>
                 <Form.Title>Height</Form.Title>
                 <Form.Input
-                  value={input.height}
+                  value={info.height}
                   onChange={(e) =>
-                    setInput((prev) => ({ ...prev, height: e.target.value }))
+                    setInfo((prev) => ({ ...prev, height: e.target.value }))
                   }
                 />
               </Form.Item>
@@ -315,47 +297,49 @@ function CreateForm() {
               <Form.Item>
                 <Form.Title>Price</Form.Title>
                 <Form.Input
-                  value={input.price}
+                  value={info.price}
                   onChange={(e) =>
-                    setInput((prev) => ({ ...prev, price: e.target.value }))
+                    setInfo((prev) => ({ ...prev, price: e.target.value }))
                   }
                 />
               </Form.Item>
               <Form.Item>
                 <Form.Title>Cost</Form.Title>
                 <Form.Input
-                  value={input.cost}
+                  value={info.cost}
                   onChange={(e) =>
-                    setInput((prev) => ({ ...prev, cost: e.target.value }))
+                    setInfo((prev) => ({ ...prev, cost: e.target.value }))
                   }
                 />
               </Form.Item>
               <dl>
                 <dt>Margin</dt>
-                <dd>{Math.ceil(100 - (input.cost / input.price) * 100)}%</dd>
+                <dd>{Math.ceil(100 - (info.cost / info.price) * 100)}%</dd>
                 <dt>Profit</dt>
-                <dd>{currencyFormat(input.price - input.cost)}</dd>
+                <dd>{currencyFormat(info.price - info.cost)}</dd>
               </dl>
             </div>
           </div>
 
           <Variant />
+
           <Form.Button
             onClick={() =>
               dispatch(
                 editAllVariations({
-                  price: input.price,
-                  cost: input.cost,
-                  length: input.length,
-                  width: input.width,
-                  height: input.height,
-                  quantity: input.quantity,
+                  price: info.price,
+                  cost: info.cost,
+                  length: info.length,
+                  width: info.width,
+                  height: info.height,
+                  quantity: info.quantity,
                 })
               )
             }
           >
             Apply all Info to all Variations
           </Form.Button>
+
           <Variation />
         </div>
 

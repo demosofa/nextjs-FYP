@@ -29,7 +29,6 @@ export default function Variation() {
         <thead>
           <tr>
             <th>No.</th>
-            <th>Sku</th>
             <th>Type</th>
             <th>Pricing</th>
             <th>Quantity</th>
@@ -46,15 +45,6 @@ export default function Variation() {
                   <td>
                     <label>No.</label>
                     {index + 1}
-                  </td>
-                  <td>
-                    <label>Sku</label>
-                    <input
-                      value={variation.sku}
-                      onChange={(e) =>
-                        dispatch(editVariation({ index, sku: e.target.value }))
-                      }
-                    />
                   </td>
                   <td>
                     <label>Type</label>
@@ -149,7 +139,7 @@ export default function Variation() {
             })
           ) : (
             <tr>
-              <td colSpan="7" className="text-center">
+              <td colSpan="6" className="text-center">
                 Please add variants first so variation can be generated
               </td>
             </tr>

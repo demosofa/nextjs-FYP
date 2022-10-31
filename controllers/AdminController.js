@@ -45,10 +45,15 @@ class AdminController {
       const deleted = await models.Order.deleteOne({
         _id: req.body.Id,
         status: {
-          $in: [OrderStatus.progress, OrderStatus.pending, OrderStatus.cancel],
+          $in: [
+            OrderStatus.progress,
+            OrderStatus.pending,
+            OrderStatus.cancel,
+            OrderStatus.validated,
+          ],
         },
       });
-      if (!deleted) throw new Error("Fail to delete Order");
+      if (!deleted.deletedCount) throw new Error("Fail to delete Order");
       return res.status(200).end();
     } catch (error) {
       return res.status(500).json(error.message);

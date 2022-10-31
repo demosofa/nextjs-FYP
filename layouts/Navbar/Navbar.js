@@ -27,7 +27,9 @@ export default function Navbar({ arrLink }) {
         <Search
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          onClick={() => router.push({ pathname: "/", query: { search } })}
+          onClick={() =>
+            router.push({ pathname: "/", query: { ...router.query, search } })
+          }
         />
       </div>
       <div className={styles.bar}>

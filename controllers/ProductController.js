@@ -35,7 +35,7 @@ class ProductController {
       .populate("categories")
       .populate({
         path: "variations",
-        populate: ["types", "image"],
+        populate: ["types", "thumbnail"],
         select: ["-cost"],
       })
       .lean();
@@ -54,8 +54,10 @@ class ProductController {
       keywork,
       rating,
       pricing,
+      orderby,
     } = req.query;
     let filterOptions = {};
+    if (!sort) sort = "title";
     if (!page) page = 1;
     if (keywork) {
       switch (keywork) {
@@ -76,16 +78,16 @@ class ProductController {
         avgRating: { $gte: parseFloat(from), $lte: parseFloat(to) },
       };
     }
+    let filterVariation = {};
     if (pricing) {
       const [from, to] = pricing.split(",");
-      filterOptions = {
-        ...filterOptions,
+      filterVariation = {
         price: { $gte: parseFloat(from), $lte: parseFloat(to) },
       };
     }
     if (search)
-      filterOptions = {
-        ...filterOptions,
+      filterVariation = {
+        ...filterVariation,
         $text: { $search: search },
       };
     if (filter) filterOptions = { ...filterOptions, title: { $ne: filter } };
@@ -94,52 +96,74 @@ class ProductController {
       filterOptions = { ...filterOptions, categories: result._id };
     }
     if (!limit) limit = 10;
-    const products = await models.Product.aggregate()
-      .match({
-        status: "active",
-        ...filterOptions,
-      })
-      .sort({
-        [sort]: "asc",
-      })
-      .skip((page - 1) * limit)
-      .limit(limit)
+    const products = await models.Variation.aggregate()
+      .match(filterVariation)
       .project({
-        image: { $first: "$images" },
         title: 1,
-        avgRating: 1,
         price: 1,
         sale: 1,
         time: 1,
-        variations: 1,
-        sold: 1,
+        quanitty: 1,
+        thumbnail: 1,
+        productId: 1,
       })
       .lookup({
-        from: "files",
-        localField: "image",
-        foreignField: "_id",
-        as: "image",
-      })
-      .unwind("image")
-      .addFields({ thumbnail: "$image.url" })
-      .project({ image: 0 })
-      .lookup({
-        from: "variations",
-        localField: "variations",
+        from: "products",
+        localField: "productId",
         foreignField: "_id",
         pipeline: [
           {
-            $project: { price: 1, cost: 1, sale: 1, time: 1, quantity: 1 },
+            $project: {
+              status: 1,
+              categories: 1,
+              tags: 1,
+              manufacturer: 1,
+              sold: 1,
+              avgRating: 1,
+            },
           },
         ],
-        as: "variations",
+        as: "product",
+      })
+      .unwind("product")
+      .addFields({
+        productId: "$product._id",
+        status: "$product.status",
+        tags: "$product.tag",
+        categories: "$product.categories",
+        manufacturer: "$product.manufacturer",
+        avgRating: "$product.avgRating",
+        sold: "$product.sold",
+      })
+      .project({ product: 0 })
+      .match({ status: "active", ...filterOptions })
+      .sort({ [sort]: orderby })
+      .lookup({
+        from: "files",
+        localField: "thumbnail",
+        foreignField: "_id",
+        as: "thumbnail",
+      })
+      .unwind("thumbnail")
+      .addFields({ thumbnail: "$thumbnail.url" })
+      .facet({
+        products: [{ $skip: (page - 1) * limit }, { $limit: limit }],
+        pageCounted: [
+          {
+            $count: "count",
+          },
+          {
+            $project: {
+              count: {
+                $ceil: {
+                  $divide: ["$count", limit],
+                },
+              },
+            },
+          },
+        ],
       });
-    const productCounted = await models.Product.countDocuments({
-      status: "active",
-      ...filterOptions,
-    }).lean();
-    const pageCounted = Math.ceil(productCounted / limit);
-    return res.status(200).json({ products, pageCounted });
+    return res.status(200).json(...products);
   };
 
   getImage = async (req, res) => {
@@ -157,7 +181,7 @@ class ProductController {
       .select("variations")
       .populate({
         path: "variations",
-        populate: ["types", "image"],
+        populate: ["types", "thumbnail"],
       })
       .lean();
     if (!variations)
@@ -229,6 +253,17 @@ class ProductController {
           async (image) => (await models.File.create([image], { session }))[0]
         )
       );
+      const newProduct = (
+        await models.Product.create(
+          [
+            {
+              ...others,
+              images: arrImage.map((file) => file._id),
+            },
+          ],
+          { session }
+        )
+      )[0];
       let productOpts = [];
       let arrVariant;
       if (variants.length) {
@@ -268,26 +303,31 @@ class ProductController {
               if (types.includes(opt.name)) arrType.push(opt._id);
             });
             return (
-              await models.Variation.create([{ ...others, types: arrType }], {
-                session,
-              })
+              await models.Variation.create(
+                [
+                  {
+                    ...others,
+                    types: arrType,
+                    title: newProduct.title,
+                    tags: newProduct.tags?.join(","),
+                    productId: newProduct._id,
+                    thumbnail: arrImage[0]._id,
+                  },
+                ],
+                {
+                  session,
+                }
+              )
             )[0];
           })
         );
       }
-      await models.Product.create(
-        [
-          {
-            ...others,
-            images: arrImage.map((file) => file._id),
-            variants: arrVariant?.map((item) => item._id),
-            variations: arrVariation?.map((item) => item._id),
-          },
-        ],
-        { session }
-      );
       await session.commitTransaction();
       await session.endSession();
+      await models.Product.findByIdAndUpdate(newProduct._id, {
+        variants: arrVariant.map((item) => item._id),
+        variations: arrVariation.map((item) => item._id),
+      });
       return res.status(200).json({ message: "Success Create Product" });
     } catch (error) {
       await session.abortTransaction();
@@ -301,6 +341,12 @@ class ProductController {
     const updated = await models.Product.findByIdAndUpdate(_id, {
       $set: others,
     });
+    await models.Variation.updateMany(
+      { productId: _id },
+      {
+        tags: others.tags?.join(","),
+      }
+    );
     if (!updated)
       return res.status(500).json({ message: "Fail to update product" });
     return res.status(200).json({ message: "Success update Product" });
@@ -337,14 +383,14 @@ class ProductController {
     const { variations } = req.body;
     const updated = await Promise.all(
       variations.map((variation) => {
-        const { _id, image, ...other } = variation;
-        if (!image)
+        const { _id, thumbnail, ...other } = variation;
+        if (!thumbnail)
           return models.Variation.findByIdAndUpdate(_id, {
             $set: other,
-            $unset: { image: 1 },
+            $unset: { thumbnail: 1 },
           });
         return models.Variation.findByIdAndUpdate(_id, {
-          $set: { image: image._id, ...other },
+          $set: { thumbnail: thumbnail._id, ...other },
         });
       })
     );

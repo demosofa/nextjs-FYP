@@ -43,7 +43,7 @@ export default function UpdateVariation({ productId, setToggle }) {
   const handleChangeImage = () => {
     setStoredVariations((prev) => {
       const clone = JSON.parse(JSON.stringify(prev));
-      clone[variationImage].image = selectedImage;
+      clone[variationImage].thumbnail = selectedImage;
       return clone;
     });
     setVariationImage(null);
@@ -66,7 +66,6 @@ export default function UpdateVariation({ productId, setToggle }) {
       });
       setToggle(null);
     } catch (error) {
-      console.log(error);
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
   };
@@ -80,10 +79,9 @@ export default function UpdateVariation({ productId, setToggle }) {
             <tr>
               <th>No.</th>
               <th>Image</th>
-              <th>Sku</th>
               <th>Type</th>
-              <th>Price Info</th>
               <th>Quantity</th>
+              <th>Price Info</th>
               <th>Sale Event</th>
             </tr>
           </thead>
@@ -98,27 +96,30 @@ export default function UpdateVariation({ productId, setToggle }) {
                     </td>
                     <td onClick={(e) => setVariationImage(index)}>
                       <label>Image: </label>
-                      {variation.image && (
+                      {variation.thumbnail && (
                         <Image
                           alt="product"
-                          src={variation.image.url}
+                          src={variation.thumbnail.url}
                           width="100px"
                           height="90px"
                         />
                       )}
                     </td>
                     <td>
-                      <label>Sku: </label>
-                      <input
-                        value={variation.sku}
-                        onChange={(e) =>
-                          handleEditVariation({ sku: e.target.value }, index)
-                        }
-                      />
-                    </td>
-                    <td>
                       <label>Type: </label>
                       {variation.types.map((type) => type.name).join("/")}
+                    </td>
+                    <td>
+                      <label>Quantity: </label>
+                      <input
+                        value={variation.quantity}
+                        onChange={(e) =>
+                          handleEditVariation(
+                            { quantity: e.target.value },
+                            index
+                          )
+                        }
+                      />
                     </td>
                     <td>
                       <dl>
@@ -147,18 +148,6 @@ export default function UpdateVariation({ productId, setToggle }) {
                           />
                         </dd>
                       </dl>
-                    </td>
-                    <td>
-                      <label>Quantity: </label>
-                      <input
-                        value={variation.quantity}
-                        onChange={(e) =>
-                          handleEditVariation(
-                            { quantity: e.target.value },
-                            index
-                          )
-                        }
-                      />
                     </td>
                     <td>
                       <dl>
@@ -198,7 +187,7 @@ export default function UpdateVariation({ productId, setToggle }) {
               })
             ) : (
               <tr>
-                <td colSpan="6" className="text-center">
+                <td colSpan="5" className="text-center">
                   There is any variations for this product
                 </td>
               </tr>

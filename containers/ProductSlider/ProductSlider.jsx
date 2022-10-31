@@ -1,8 +1,6 @@
 import { Slider } from "../../components";
 import ProductCard from "../ProductCard/ProductCard";
 
-const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
-
 export default function ProductSlider({ products }) {
   return (
     <Slider
@@ -17,7 +15,7 @@ export default function ProductSlider({ products }) {
         {products.map((item) => (
           <ProductCard
             key={item._id}
-            href={`${LocalUrl}/c/${item._id}`}
+            href={`/c/${item.productId}?vid=${item._id}`}
             product={item}
           />
         ))}

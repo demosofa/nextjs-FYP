@@ -19,7 +19,7 @@ Comment.post(
   async function (doc) {
     // console.log(doc._id.toHexString());
     await Promise.all(
-      doc.replys.map((reply) =>
+      doc?.replys.map((reply) =>
         mongoose.models.Comment.findByIdAndDelete(reply._id)
       )
     );

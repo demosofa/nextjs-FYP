@@ -12,7 +12,7 @@ Variant.post(
   "findOneAndDelete",
   { document: false, query: true },
   function (doc) {
-    mongoose.models.VariantOption.findByIdAndDelete({
+    mongoose.models.VariantOption.deleteMany({
       _id: { $in: doc.options },
     });
   }

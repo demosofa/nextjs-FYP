@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useState, useEffect } from "react";
-import { Form, Loading } from "../../../components";
+import { Form, Loading, TagsInput } from "../../../components";
 import { UpdateImage, UpdateVariation } from "../../../containers";
 import dynamic from "next/dynamic";
 import { useAuthLoad } from "../../../hooks";
@@ -31,44 +31,28 @@ function UpdateProduct() {
 
   const dispatch = useDispatch();
   const validateInput = () => {
-    const { description, price, cost, quantity, sale, time } = product;
-    let target = { description, price, cost, quantity };
-    if ((sale !== "0" && sale) || time) target = { ...target, sale, time };
-    Object.entries(target).forEach((entry) => {
+    const { description, manufacturer } = product;
+    Object.entries({ description, manufacturer }).forEach((entry) => {
       switch (entry[0]) {
         case "description":
           new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
           break;
-        case "time":
-          new Validate(entry[1]).isEmpty();
-          if (new Date(time).getTime() < Date.now())
-            throw new Error("The sale time is left behind");
-          break;
-        case "sale":
-          new Validate(entry[1]).isEmpty().isVND();
-          if (parseInt(sale) >= parseInt(price))
-            throw new Error("Why is sale value larger than or equal to price?");
-          break;
-        case "price":
-        case "cost":
-          new Validate(entry[1]).isEmpty().isVND();
-          break;
-        case "quantity":
-          new Validate(entry[1]).isEmpty().isNumber();
+        case "manufacturer":
+          new Validate(entry[1]).isEmpty().isNotSpecial();
           break;
       }
     });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { _id, description, price, cost, quantity, sale, time } = product;
+    const { _id, description, tags } = product;
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
       validateInput();
       await axios.put(
         `${LocalApi}/product`,
-        { _id, description, price, cost, quantity, sale, time },
+        { _id, description, tags },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -118,50 +102,20 @@ function UpdateProduct() {
         <label>{`${product.description.length}/1000`}</label>
       </Form.Item>
       <Form.Item>
-        <Form.Title>Price</Form.Title>
-        <Form.Input
-          value={product.price}
-          onChange={(e) =>
-            setProduct((prev) => ({ ...prev, price: e.target.value }))
+        <Form.Title>Tags</Form.Title>
+        <TagsInput
+          prevTags={product.tags}
+          setPrevTags={(tags) =>
+            setProduct((prev) => ({ ...prev, tags: tags }))
           }
         />
       </Form.Item>
       <Form.Item>
-        <Form.Title>Cost</Form.Title>
+        <Form.Title>Manufacturer</Form.Title>
         <Form.Input
-          value={product.cost}
+          value={product.manufacturer}
           onChange={(e) =>
-            setProduct((prev) => ({ ...prev, cost: e.target.value }))
-          }
-        />
-      </Form.Item>
-      <Form.Item>
-        <Form.Title>Quantity</Form.Title>
-        <Form.Input
-          value={product.quantity}
-          onChange={(e) =>
-            setProduct((prev) => ({ ...prev, quantity: e.target.value }))
-          }
-        />
-      </Form.Item>
-      <Form.Item>
-        <Form.Title>Sale Price</Form.Title>
-        <Form.Input
-          value={product.sale}
-          onChange={(e) =>
-            setProduct((prev) => ({ ...prev, sale: e.target.value }))
-          }
-        />
-      </Form.Item>
-      <Form.Item>
-        <Form.Title>TimeStamp</Form.Title>
-        <Form.Input
-          type="date"
-          value={
-            product.time ? format(new Date(product.time), "yyyy-MM-dd") : ""
-          }
-          onChange={(e) =>
-            setProduct((prev) => ({ ...prev, time: e.target.value }))
+            setProduct((prev) => ({ ...prev, manufacturer: e.target.value }))
           }
         />
       </Form.Item>

@@ -20,7 +20,7 @@ export async function getServerSideProps({ query }) {
     });
     const result = resProducts.data;
     products = result.products;
-    pageCounted = result.pageCounted;
+    pageCounted = result.pageCounted.length ? result.pageCounted[0].count : 0;
     const resCategories = await axios.get(`${LocalApi}/category/all`);
     categories = resCategories.data;
   } catch (error) {}
@@ -82,7 +82,7 @@ export default function Home({ products, categories, pageCounted, query }) {
           {lstProduct?.map((item) => (
             <ProductCard
               key={item._id}
-              href={`/c/${item._id}`}
+              href={`/c/${item.productId}?vid=${item._id}`}
               product={item}
             />
           ))}

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-/** @type {({ sku: string, types: string[], price: number, cost: number, quantity: number, length:number, width:number, height:number }[])} */
+/** @type {({ types: string[], price: number, cost: number, quantity: number, length:number, width:number, height:number }[])} */
 const initialState = [];
 
 const variation = createSlice({
@@ -9,7 +9,6 @@ const variation = createSlice({
   reducers: {
     addVariation(state, { payload }) {
       return payload.map((variant) => ({
-        sku: "",
         types: variant,
         price: 0,
         cost: 0,

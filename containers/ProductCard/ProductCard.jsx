@@ -6,32 +6,9 @@ import styles from "../../styles/Home.module.scss";
 
 export default function ProductCard({ product, ...props }) {
   const { price, sale } = useMemo(() => {
-    if (product.variations.length) {
-      const arrVariationSale = product.variations.filter(
-        ({ price, time, sale }) => {
-          if (time && new Date(time).getTime() > Date.now())
-            return { price, sale };
-        }
-      );
-      if (arrVariationSale.length) {
-        let index = 0;
-        for (let i = 1; i < arrVariationSale.length; i++) {
-          if (arrVariationSale[index].sale > arrVariationSale[i].sale)
-            index = i;
-        }
-        return arrVariationSale[index];
-      } else {
-        const variationsPrice = product.variations.map(
-          (variation) => variation.price
-        );
-        return { price: Math.min(...variationsPrice), sale: 0 };
-      }
-    } else {
-      let init = { price: product.price, sale: 0 };
-      if (product.time && new Date(product.time).getTime() > Date.now())
-        init = { ...init, sale: product.sale };
-      return init;
-    }
+    if (product.time && new Date(product.time).getTime() > Date.now())
+      return { price: product.price, sale: product.sale };
+    else return { price: product.price, sale: 0 };
   }, [product]);
   return (
     <Link {...props}>

@@ -18,7 +18,7 @@ export async function getServerSideProps({ query }) {
     props: {
       query,
       products,
-      pageCounted,
+      pageCounted: pageCounted.length ? pageCounted[0]?.count : 0,
     },
   };
 }
@@ -49,8 +49,9 @@ export default function SearchProduct({ query, products, pageCounted }) {
   };
   return (
     <div className="flex gap-5">
-      <aside className="flex flex-1 flex-col">
-        <div className="flex flex-col">
+      <aside className="flex flex-1 flex-col gap-5">
+        <div className="flex flex-col items-center gap-3">
+          <label>Rating range</label>
           <div className="flex">
             <input
               className="min-w-fit flex-1"
@@ -81,7 +82,8 @@ export default function SearchProduct({ query, products, pageCounted }) {
             Apply
           </button>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center gap-3">
+          <label>Price range</label>
           <div className="flex">
             <input
               className="min-w-fit flex-1"
@@ -125,7 +127,7 @@ export default function SearchProduct({ query, products, pageCounted }) {
           {products.map((product) => (
             <ProductCard
               key={product._id}
-              href={`${LocalApi}/c/${product._id}`}
+              href={`/c/${product.productId}?vid=${product._id}`}
               product={product}
             />
           ))}
