@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Animation, Loading } from "../components";
+import { Loading, Slider } from "../components";
 import { ProductCard } from "../containers";
 import { useAxiosLoad } from "../hooks";
 import styles from "../styles/Home.module.scss";
@@ -63,21 +63,28 @@ export default function Home({ products, categories, pageCounted, query }) {
 
       <main className={styles.main}>
         <div className="trending"></div>
-        <div className="grid grid-cols-fit gap-3">
-          <Animation.Fade className="card">
+        <Slider
+          config={{
+            slides: {
+              perView: "auto",
+            },
+          }}
+        >
+          <Slider.Content className="gap-2 p-4">
             {categories?.map((category) => (
-              <Link
-                key={category._id}
-                href={{
-                  pathname: "/search",
-                  query: { category: category.name },
-                }}
-              >
-                <a className="text-center">{category.name}</a>
-              </Link>
+              <div key={category._id} className="card">
+                <Link
+                  href={{
+                    pathname: "/search",
+                    query: { category: category.name },
+                  }}
+                >
+                  <a className="text-center">{category.name}</a>
+                </Link>
+              </div>
             ))}
-          </Animation.Fade>
-        </div>
+          </Slider.Content>
+        </Slider>
         <div className="grid grid-cols-fit-2 gap-6 sm:gap-4">
           {lstProduct?.map((item) => (
             <ProductCard

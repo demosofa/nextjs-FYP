@@ -48,22 +48,22 @@ export default function SearchProduct({ query, products, pageCounted }) {
       );
   };
   return (
-    <div className="flex gap-5">
-      <aside className="flex flex-1 flex-col gap-5">
+    <div className="flex gap-3">
+      <aside className="flex h-full min-h-0 w-52 flex-col gap-5 bg-white px-3 py-2 [&>div]:border-t-2">
         <div className="flex flex-col items-center gap-3">
-          <label>Rating range</label>
+          <label className="text-sm font-medium">Rating range</label>
           <div className="flex">
             <input
-              className="min-w-fit flex-1"
+              className="h-8 w-20 rounded-md border border-gray-400 pl-1 pr-1 text-xs"
               value={rating.from}
               onChange={(e) => {
                 if (e.target.value >= 0)
                   setRating((prev) => ({ ...prev, from: e.target.value }));
               }}
             />
-            <span>-</span>
+            <span className="mx-1 text-gray-500">-</span>
             <input
-              className="min-w-fit flex-1"
+              className="h-8 w-20 rounded-md border border-gray-400 pl-1 pr-1 text-xs"
               value={rating.to}
               onChange={(e) => {
                 if (e.target.value <= 5)
@@ -72,6 +72,7 @@ export default function SearchProduct({ query, products, pageCounted }) {
             />
           </div>
           <button
+            className="w-full rounded-lg border-2 border-orange-500 py-1 text-orange-500 duration-300 hover:bg-orange-600 hover:text-orange-100"
             onClick={() =>
               router.push({
                 pathname: "/search",
@@ -83,28 +84,33 @@ export default function SearchProduct({ query, products, pageCounted }) {
           </button>
         </div>
         <div className="flex flex-col items-center gap-3">
-          <label>Price range</label>
+          <label className="text-sm font-medium">Price range</label>
           <div className="flex">
             <input
-              className="min-w-fit flex-1"
+              className="h-8 w-20 rounded-md border border-gray-400 pl-1 pr-1 text-xs"
               value={pricing.from}
               onChange={(e) => {
                 setPricing((prev) => ({ ...prev, from: e.target.value }));
               }}
             />
-            <span>-</span>
+            <span className="mx-1 text-gray-500">-</span>
             <input
-              className="min-w-fit flex-1"
+              className="h-8 w-20 rounded-md border border-gray-400 pl-1 pr-1 text-xs"
               value={pricing.to}
               onChange={(e) => {
                 setPricing((prev) => ({ ...prev, to: e.target.value }));
               }}
             />
           </div>
-          <button onClick={applyPricing}>Apply</button>
+          <button
+            className="w-full rounded-lg border-2 border-orange-500 py-1 text-orange-500 duration-300 hover:bg-orange-600 hover:text-orange-100"
+            onClick={applyPricing}
+          >
+            Apply
+          </button>
         </div>
       </aside>
-      <div className="flex flex-4 flex-col gap-6">
+      <div className="flex flex-4 flex-col gap-6 bg-white py-2 px-3">
         <div className="flex gap-5">
           <Link
             href={{
@@ -123,7 +129,7 @@ export default function SearchProduct({ query, products, pageCounted }) {
             <a>Latest</a>
           </Link>
         </div>
-        <div>
+        <div className="grid grid-cols-fit gap-3">
           {products.map((product) => (
             <ProductCard
               key={product._id}

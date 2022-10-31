@@ -67,11 +67,15 @@ function ShippingProgress() {
   );
 
   useEffect(() => {
-    if (!channel.current && order) {
-      if ([Role.shipper, Role.admin].includes(auth.role))
-        channel.current = ably.channels.get(order.customer._id);
-      else if ([Role.customer].includes(auth.role))
-        channel.current = ably.channels.get(order.shipper._id);
+    try {
+      if (!channel.current && order) {
+        if ([Role.shipper, Role.admin].includes(auth.role))
+          channel.current = ably.channels.get(order.customer._id);
+        else if ([Role.customer].includes(auth.role))
+          channel.current = ably.channels.get(order.shipper._id);
+      }
+    } catch (error) {
+      dispatch(addNotification({ message: error.message, type: "error" }));
     }
   }, [order, auth]);
 
