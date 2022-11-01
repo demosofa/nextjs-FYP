@@ -116,7 +116,21 @@ class SellerController {
     try {
       await models.Order.findByIdAndUpdate(req.query.orderId, {
         $set: { validatedAt: Date.now(), status: OrderStatus.shipping },
-      });
+      })
+        .select("orderItems")
+        .populate("orderItems")
+        .then(({ orderItems }) =>
+          Promise.all(
+            orderItems.map(async ({ productId, variationId, quantity }) => {
+              await models.Variation.findByIdAndUpdate(variationId, {
+                $inc: { sold: quantity },
+              });
+              return models.Product.findByIdAndUpdate(productId, {
+                $inc: { sold: quantity },
+              });
+            })
+          )
+        );
       return res.status(200).end();
     } catch (error) {
       return res.status(500).json("Fail to validate this shipper order");

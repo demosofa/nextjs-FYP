@@ -99,16 +99,12 @@ export default function ManageOrder() {
             {data.lstOrder.length ? (
               data.lstOrder.map((order) => (
                 <div key={order._id} className="card relative mt-2 h-fit">
-                  {/* {order.status === "cancel" ? (
+                  {order.status === OrderStatus.cancel ? (
                     <IoMdTrash
                       className="absolute right-4"
                       onClick={() => setDisplayDelete(order._id)}
                     />
-                  ) : null} */}
-                  <IoMdTrash
-                    className="absolute right-4"
-                    onClick={() => setDisplayDelete(order._id)}
-                  />
+                  ) : null}
                   <dl>
                     <dt className="font-bold">Id:</dt>
                     <dd className="whitespace-pre-line line-clamp-1">

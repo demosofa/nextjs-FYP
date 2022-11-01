@@ -118,11 +118,17 @@ export default function MyOrder() {
                     <td>{index + 1}</td>
                     <td>{order._id}</td>
                     <td>
-                      <Link href={`/shipping/${order._id}`}>
-                        <a className={tailwindStatus(order.status)}>
+                      {order.status === OrderStatus.cancel ? (
+                        <label className={tailwindStatus(order.status)}>
                           {order.status}
-                        </a>
-                      </Link>
+                        </label>
+                      ) : (
+                        <Link href={`/shipping/${order._id}`}>
+                          <a className={tailwindStatus(order.status)}>
+                            {order.status}
+                          </a>
+                        </Link>
+                      )}
                     </td>
                     <td>
                       {new Date(order.createdAt).toLocaleString("en-US", {

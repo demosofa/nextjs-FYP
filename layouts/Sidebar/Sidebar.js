@@ -9,7 +9,7 @@ export default function Sidebar({ children, className, ...props }) {
       {...props}
     >
       <nav
-        className={`relative flex flex-col items-center justify-start gap-[0.75em] overflow-y-auto rounded-lg p-[0.75em]`}
+        className={`relative flex w-full flex-col items-center justify-start gap-[0.75em] overflow-y-auto rounded-lg p-[0.75em]`}
       >
         {children}
         <RouterAuth />

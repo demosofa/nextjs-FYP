@@ -51,13 +51,16 @@ export default function Overview({ product }) {
   const { device, Devices } = useMediaContext();
 
   const defaultChecked = useMemo(() => {
-    const current = product.variations.find(
-      (item) => item._id === router.query.vid
-    );
-    return current.types.reduce((prev, curr) => {
-      prev.push(curr.name);
-      return prev;
-    }, []);
+    if (router.query.vid) {
+      const current = product.variations.find(
+        (item) => item._id === router.query.vid
+      );
+      return current.types.reduce((prev, curr) => {
+        prev.push(curr.name);
+        return prev;
+      }, []);
+    }
+    return [];
   }, []);
 
   const targetVariationIdx = useMemo(() => {
@@ -274,8 +277,9 @@ export default function Overview({ product }) {
                           id={item.name}
                           value={`${variant.name}: ${item.name}`}
                           defaultChecked={
-                            defaultChecked.length &&
-                            defaultChecked.includes(item.name)
+                            defaultChecked.length
+                              ? defaultChecked.includes(item.name)
+                              : index === 0
                           }
                         />
                         <label

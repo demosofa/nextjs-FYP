@@ -15,5 +15,5 @@ async function Shipper(req, res) {
 }
 
 export default isAuthentication(
-  isAuthorization(Shipper, [Role.shipper, Role.admin, Role.customer])
+  isAuthorization(Shipper, [Role.shipper, Role.admin])
 );

@@ -25,11 +25,11 @@ export default async function VNPayReturn(req, res) {
     await models.Order.findByIdAndUpdate(req.query.vnp_TxnRef, {
       status: OrderStatus.paid,
     });
-    res.redirect(307, "/success" + vnp_Params);
+    res.redirect(307, "/success?" + signData);
   } else {
     await models.Order.findByIdAndUpdate(req.query.vnp_TxnRef, {
       status: OrderStatus.cancel,
     });
-    res.redirect(307, "/success" + vnp_Params);
+    res.redirect(307, "/success?" + signData);
   }
 }

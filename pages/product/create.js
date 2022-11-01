@@ -39,6 +39,7 @@ function CreateForm() {
     manufacturer: "",
   });
 
+  const [displayApplyAllForm, setDisplayApplyAllForm] = useState(false);
   const [info, setInfo] = useState({
     price: 0,
     cost: 0,
@@ -232,22 +233,66 @@ function CreateForm() {
               </label>
             </FileUpload.Input>
           </FileUpload>
-          <div className="flex flex-wrap justify-center gap-12">
+          <Form.Item>
+            <Form.Title>Manufacturer</Form.Title>
+            <Form.Input
+              value={input.manufacturer}
+              onChange={(e) =>
+                setInput((prev) => ({
+                  ...prev,
+                  manufacturer: e.target.value,
+                }))
+              }
+            />
+          </Form.Item>
+
+          <Variant />
+
+          <Form.Button onClick={() => setDisplayApplyAllForm(true)}>
+            Apply all Info to all Variations
+          </Form.Button>
+
+          <Variation />
+        </div>
+
+        <Form.Item style={{ justifyContent: "flex-start" }}>
+          <Form.Submit>Submit</Form.Submit>
+          <Form.Button
+            onClick={() => {
+              dispatch(deleteAllVariant());
+              router.back();
+            }}
+          >
+            Cancel
+          </Form.Button>
+        </Form.Item>
+      </Form>
+
+      {displayApplyAllForm ? (
+        <>
+          <div
+            className="backdrop"
+            onClick={() => setDisplayApplyAllForm(false)}
+          />
+          <Form
+            className="form_center"
+            onSubmit={(e) => {
+              e.preventDefault();
+              dispatch(
+                editAllVariations({
+                  price: info.price,
+                  cost: info.cost,
+                  length: info.length,
+                  width: info.width,
+                  height: info.height,
+                  quantity: info.quantity,
+                })
+              );
+              setDisplayApplyAllForm(false);
+            }}
+          >
             <div className="flex flex-col">
               <Form.Title className="mx-auto text-lg">Information</Form.Title>
-              <Form.Item>
-                <Form.Title>Manufacturer</Form.Title>
-                <Form.Input
-                  value={input.manufacturer}
-                  onChange={(e) =>
-                    setInput((prev) => ({
-                      ...prev,
-                      manufacturer: e.target.value,
-                    }))
-                  }
-                />
-              </Form.Item>
-
               <Form.Item>
                 <Form.Title>Quantity</Form.Title>
                 <Form.Input
@@ -319,42 +364,15 @@ function CreateForm() {
                 <dd>{currencyFormat(info.price - info.cost)}</dd>
               </dl>
             </div>
-          </div>
-
-          <Variant />
-
-          <Form.Button
-            onClick={() =>
-              dispatch(
-                editAllVariations({
-                  price: info.price,
-                  cost: info.cost,
-                  length: info.length,
-                  width: info.width,
-                  height: info.height,
-                  quantity: info.quantity,
-                })
-              )
-            }
-          >
-            Apply all Info to all Variations
-          </Form.Button>
-
-          <Variation />
-        </div>
-
-        <Form.Item style={{ justifyContent: "flex-start" }}>
-          <Form.Submit>Submit</Form.Submit>
-          <Form.Button
-            onClick={() => {
-              dispatch(deleteAllVariant());
-              router.back();
-            }}
-          >
-            Cancel
-          </Form.Button>
-        </Form.Item>
-      </Form>
+            <Form.Submit>
+              Accept applying all Info to all Variations
+            </Form.Submit>
+            <Form.Button onClick={() => setDisplayApplyAllForm(false)}>
+              Cancel
+            </Form.Button>
+          </Form>
+        </>
+      ) : null}
     </>
   );
 }

@@ -54,14 +54,9 @@ class OrderController {
     const orderItems = await Promise.all(
       products.map(async (product) => {
         const reduce = parseInt(`-${product.quantity}`);
-        if (product.variationId)
-          await models.Variation.findByIdAndUpdate(product.variationId, {
-            $inc: { quantity: reduce },
-          });
-        else
-          await models.Product.findByIdAndUpdate(product.productId, {
-            $inc: { quantity: reduce },
-          });
+        await models.Variation.findByIdAndUpdate(product.variationId, {
+          $inc: { quantity: reduce },
+        });
         return models.OrderItem.create(product);
       })
     );
@@ -94,15 +89,10 @@ class OrderController {
       .populate("orderItems")
       .then(({ orderItems }) =>
         Promise.all(
-          orderItems.map(async ({ productId, variationId, quantity }) => {
-            if (variationId)
-              return models.Variation.findByIdAndUpdate(variationId, {
-                $inc: { quantity },
-              });
-            else
-              return models.Product.findByIdAndUpdate(productId, {
-                $inc: { quantity },
-              });
+          orderItems.map(async ({ variationId, quantity }) => {
+            return models.Variation.findByIdAndUpdate(variationId, {
+              $inc: { quantity },
+            });
           })
         )
       );
