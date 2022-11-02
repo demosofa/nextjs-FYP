@@ -32,7 +32,7 @@ function SellerPage() {
   };
   const router = useRouter();
   const dispatch = useDispatch();
-  const { data, error } = useSWRImmutable(
+  const { data, error, mutate } = useSWRImmutable(
     { url: `${LocalApi}/seller?page=${page}` },
     fetcher,
     {
@@ -60,18 +60,21 @@ function SellerPage() {
     }
   };
 
-  const handleSubmit = async () => {
-    try {
-      if (checkOrder.length === viewOrder.orderItems.length) {
-        await fetcher({
-          url: `${LocalApi}/seller/${scannedUrl}`,
-          method: "patch",
-        });
-        setViewOrder(null);
-      } else throw new Error("You are missing checked items");
-    } catch (error) {
-      dispatch(addNotification({ message: error.message, type: "error" }));
-    }
+  const handleSubmit = () => {
+    mutate(async (data) => {
+      try {
+        if (checkOrder.length === viewOrder.orderItems.length) {
+          await fetcher({
+            url: `${LocalApi}/seller/${scannedUrl}`,
+            method: "patch",
+          });
+          setViewOrder(null);
+        } else throw new Error("You are missing checked items");
+      } catch (error) {
+        dispatch(addNotification({ message: error.message, type: "error" }));
+      }
+      return data;
+    });
   };
 
   if (!data || error)

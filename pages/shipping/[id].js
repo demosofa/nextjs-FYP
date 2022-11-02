@@ -119,7 +119,7 @@ function ShippingProgress() {
           dispatch(addNotification({ message: error.message, type: "error" }));
         }
         return data;
-      }, false);
+      });
     }
   };
 
@@ -159,7 +159,7 @@ function ShippingProgress() {
             );
           }
           return data;
-        }, false);
+        });
         channel.current.publish({
           name: "shipping",
           data: {

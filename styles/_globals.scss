@@ -148,6 +148,8 @@ dl {
   background-color: white;
   padding: 15px;
   gap: 15px;
+  overflow-y: auto;
+  min-height: 500px;
 }
 
 .table {

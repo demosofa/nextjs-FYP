@@ -9,7 +9,7 @@ import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
 import { Loading, Pagination } from "../../components";
 import { useState } from "react";
 import Head from "next/head";
-import { currencyFormat, OrderStatus } from "../../shared";
+import { convertTime, currencyFormat, OrderStatus } from "../../shared";
 import { ItemsFromOrder } from "../../containers";
 import Select from "react-select";
 
@@ -38,6 +38,8 @@ function MyShipping() {
     },
     fetcher,
     {
+      refreshInterval: convertTime("5s").milisecond,
+      dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
         if (err?.response?.status === 403) router.back();
         else if (err?.response?.status === 401) router.push("/login");

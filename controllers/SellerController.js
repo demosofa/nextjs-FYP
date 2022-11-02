@@ -73,9 +73,12 @@ class SellerController {
   };
   todayValidated = async (req, res) => {
     let { page, sort, limit } = req.query;
-    const currentDate = new Date();
+    let start = new Date();
+    start.setHours(0, 0, 0, 0);
+    let end = new Date();
+    end.setHours(23, 59, 59, 999);
     try {
-      let filterOptions = { validatedAt: { $gte: currentDate } };
+      let filterOptions = { validatedAt: { $gte: start, $lt: end } };
       if (!limit) limit = 10;
       const lstValidated = await models.Order.find(filterOptions)
         .skip((page - 1) * limit)
