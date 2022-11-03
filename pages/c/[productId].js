@@ -89,24 +89,18 @@ export default function Overview({ product }) {
 
   const generateCart = () => {
     let { _id, title, images } = product;
-    let variationId = null;
-    let variationImage = null;
-    let price = 0;
-    let extraCostPerItem = 0;
-    if (targetVariation) {
-      variationId = targetVariation._id;
-      variationImage = targetVariation.thumbnail?.url;
-      price =
-        targetVariation.time &&
-        new Date(targetVariation.time).getTime() > Date.now()
-          ? targetVariation.sale
-          : targetVariation.price;
-      extraCostPerItem =
-        (targetVariation.length *
-          targetVariation.width *
-          targetVariation.height) /
-        6000;
-    }
+    let variationId = targetVariation._id;
+    let variationImage = targetVariation.thumbnail?.url;
+    let price =
+      targetVariation.time &&
+      new Date(targetVariation.time).getTime() > Date.now()
+        ? targetVariation.sale
+        : targetVariation.price;
+    let extraCostPerItem =
+      (targetVariation.length *
+        targetVariation.width *
+        targetVariation.height) /
+      6000;
     return {
       productId: _id,
       variationId,

@@ -1,32 +1,37 @@
 .toast_message {
   transition: opacity 0.5s ease-in;
   opacity: 0;
-  @apply p-4 w-full max-w-xs text-gray-500 bg-white rounded-lg shadow whitespace-pre-line
+  @apply flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow;
 }
 
 .success {
-  @apply bg-green-500
+  @apply bg-green-500;
 }
 
 .link {
-  @apply bg-blue-600
+  @apply bg-blue-600;
 }
 
 .warning {
-  @apply bg-yellow-500
+  @apply bg-yellow-500;
 }
 
-.error{
-  @apply bg-red-600
+.error {
+  @apply bg-red-600;
 }
 
-.toast_message > span {
+.toast_message > div {
+  display: flex;
+  gap: 20px;
+}
+
+.toast_message span {
   flex: 2;
   font-size: 12px;
   font-weight: 500;
   font-style: italic;
   margin: 2px auto;
-  color: white
+  color: white;
 }
 
 .toast_message > .loader {

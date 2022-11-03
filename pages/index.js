@@ -85,7 +85,7 @@ export default function Home({ products, categories, pageCounted, query }) {
             ))}
           </Slider.Content>
         </Slider>
-        <div className="grid grid-cols-fit-2 gap-6 sm:gap-4">
+        <div className="grid grid-cols-fit-2 gap-6 sm:gap-1">
           {lstProduct?.map((item) => (
             <ProductCard
               key={item._id}

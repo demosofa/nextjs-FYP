@@ -1,28 +1,35 @@
 import { useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { removeNotification } from "../../redux/reducer/notificationSlice";
+import Icon from "../Icon/Icon";
+import {
+  BsCheckCircleFill,
+  BsFillExclamationTriangleFill,
+  BsExclamationOctagonFill,
+} from "react-icons/bs";
+import { FaExternalLinkSquareAlt } from "react-icons/fa";
+import { RiCloseFill } from "react-icons/ri";
 import styles from "./ToastMessage.module.css";
+import { convertTime } from "../../shared";
 
 export default function ToastMessage({
   id,
   type = "success",
   message,
-  timeout = 10000,
+  timeout = "5s",
   ...props
 }) {
   const ToastRef = useRef();
   const dispatch = useDispatch();
   useEffect(() => {
     ToastRef.current.style.opacity = 1;
-    const Progress = ToastRef.current.lastElementChild;
-    Progress.value = Progress.max;
-    const timeInterVal = setInterval(() => {
-      if (Progress.value <= 0) {
-        clearInterval(timeInterVal);
-        dispatch(removeNotification(id));
-      }
-      Progress.value -= 0.25;
-    }, (0.2 * timeout) / 100);
+    const timeOut = setTimeout(() => {
+      clearTimeout(timeOut);
+      dispatch(removeNotification(id));
+    }, convertTime(timeout).milisecond);
+    return () => {
+      clearTimeout(timeOut);
+    };
   }, [timeout, id]);
   return (
     <a
@@ -30,8 +37,20 @@ export default function ToastMessage({
       className={`${styles.toast_message} ${styles[type]}`}
       {...props}
     >
-      <span>{message}</span>
-      <progress className={styles.progress} max="100"></progress>
+      <div>
+        <Icon>
+          {(type === "success" && <BsCheckCircleFill color="green" />) ||
+            (type === "warning" && (
+              <BsFillExclamationTriangleFill color="yellow" />
+            )) ||
+            (type === "error" && <BsExclamationOctagonFill color="red" />) ||
+            (type === "link" && <FaExternalLinkSquareAlt color="blue" />)}
+        </Icon>
+        <span>{message}</span>
+      </div>
+      <Icon onClick={() => dispatch(removeNotification(id))}>
+        <RiCloseFill />
+      </Icon>
     </a>
   );
 }
