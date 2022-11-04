@@ -58,7 +58,6 @@ export default function Home({ products, categories, pageCounted, query }) {
       <Head>
         <title>HomePage</title>
         <meta name="description" content="Homepage" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>

@@ -110,7 +110,6 @@ function Dashboard() {
       <Head>
         <title>Dashboard</title>
         <meta name="description" content="Dashboard" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-wrap gap-3">
         {widgetRoutes.map((info) => (

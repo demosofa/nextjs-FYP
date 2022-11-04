@@ -106,10 +106,9 @@ export default function ManageProfiles() {
       <Head>
         <title>Manage Profiles</title>
         <meta name="description" content="Manage Profiles" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Select
-        className="w-32 sm:pl-3"
+        className="mb-3 w-32 sm:pl-3"
         defaultValue={{ value: "", label: "all" }}
         onChange={({ value }) => setQuery((prev) => ({ ...prev, role: value }))}
         options={[

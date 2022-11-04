@@ -91,11 +91,7 @@ export default function Overview({ product }) {
     let { _id, title, images } = product;
     let variationId = targetVariation._id;
     let variationImage = targetVariation.thumbnail?.url;
-    let price =
-      targetVariation.time &&
-      new Date(targetVariation.time).getTime() > Date.now()
-        ? targetVariation.sale
-        : targetVariation.price;
+    let price = targetVariation.price;
     let extraCostPerItem =
       (targetVariation.length *
         targetVariation.width *
@@ -175,7 +171,7 @@ export default function Overview({ product }) {
   useEffect(() => {
     const { title, avgRating } = product;
     if (targetVariation) {
-      const { _id, productId, thumbnail, price, time, sale, sold } =
+      const { _id, productId, thumbnail, price, compare, sold } =
         targetVariation;
       dispatch(
         addViewed({
@@ -184,8 +180,7 @@ export default function Overview({ product }) {
           title,
           thumbnail: thumbnail.url,
           price,
-          time,
-          sale,
+          compare,
           avgRating,
           sold,
         })
@@ -200,7 +195,6 @@ export default function Overview({ product }) {
         <Head>
           <title>{product.title}</title>
           <meta name="description" content={product.description} />
-          <link rel="icon" href="/favicon.ico" />
         </Head>
         <div className="container-info">
           <div className="preview-product">
@@ -238,10 +232,7 @@ export default function Overview({ product }) {
             </div>
 
             <PriceInfo
-              saleEvent={{
-                time: targetVariation?.time,
-                sale: targetVariation?.sale,
-              }}
+              discount={targetVariation?.compare}
               price={targetVariation?.price}
             />
 

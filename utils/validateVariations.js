@@ -2,13 +2,13 @@ import Validate from "./Validate";
 
 export default function validateVariations(variations) {
   if (variations.length) {
-    variations.forEach(({ sale, time, ...others }) => {
-      if (sale && time) others = { ...others, sale };
+    variations.forEach(({ compare, ...others }) => {
+      if (compare && compare != 0) others = { ...others, compare };
       Object.entries(others).forEach((entry) => {
         switch (entry[0]) {
           case "price":
           case "cost":
-          case "sale":
+          case "compare":
             new Validate(entry[1]).isEmpty().isVND();
             break;
           case "quantity":
@@ -19,7 +19,8 @@ export default function validateVariations(variations) {
             break;
         }
       });
-      if (sale > others.price) throw new Error("Why sale is larger than price");
+      if (others.compare <= others.price)
+        throw new Error("Why is the compare less than or equal to price?");
     });
   }
 }

@@ -93,7 +93,6 @@ function SellerPage() {
       <Head>
         <title>Seller page</title>
         <meta name="description" content="Seller page" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <button
         className="main_btn"

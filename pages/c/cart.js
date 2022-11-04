@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { IoIosClose } from "react-icons/io";
+import { RiCloseFill } from "react-icons/ri";
 import { Animation, Icon, Increment } from "../../components";
 import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
@@ -130,7 +130,7 @@ export default function Cart() {
                     }}
                     style={{ padding: 0 }}
                   >
-                    <IoIosClose />
+                    <RiCloseFill />
                   </Icon>
                 </a>
               </Link>

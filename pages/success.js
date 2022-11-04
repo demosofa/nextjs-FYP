@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { Loading } from "../components";
@@ -16,6 +17,9 @@ export default function Success() {
   if (loading || !isLoggined || !isAuthorized) return <Loading />;
   return (
     <div className="form_center">
+      <Head>
+        <title>Checkout Order</title>
+      </Head>
       <span>Success checkout Order</span>
       <dl>
         <dt>Order Id</dt>

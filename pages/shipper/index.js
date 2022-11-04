@@ -84,7 +84,6 @@ function Shipper() {
       <Head>
         <title>List pending order</title>
         <meta name="description" content="List pending order" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Checkbox setChecked={(value) => setCheckOrder(value)}>
         <table className="table">

@@ -9,7 +9,6 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { Role } from "../../shared";
 import styles from "./updatevariation.module.scss";
 import Image from "next/image";
-import { format } from "date-fns";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -82,7 +81,7 @@ export default function UpdateVariation({ productId, setToggle }) {
               <th>Type</th>
               <th>Quantity</th>
               <th>Price Info</th>
-              <th>Sale Event</th>
+              <th>Discount</th>
             </tr>
           </thead>
           <tbody>
@@ -100,8 +99,8 @@ export default function UpdateVariation({ productId, setToggle }) {
                         <Image
                           alt="product"
                           src={variation.thumbnail.url}
-                          width="100px"
-                          height="90px"
+                          width="160px"
+                          height="140px"
                         />
                       )}
                     </td>
@@ -150,37 +149,15 @@ export default function UpdateVariation({ productId, setToggle }) {
                       </dl>
                     </td>
                     <td>
-                      <dl>
-                        <dt>Sale</dt>
-                        <dd>
-                          <input
-                            value={variation.sale}
-                            onChange={(e) =>
-                              handleEditVariation(
-                                { sale: e.target.value },
-                                index
-                              )
-                            }
-                          />
-                        </dd>
-                        <dt>Time</dt>
-                        <dd>
-                          <input
-                            type="date"
-                            value={
-                              variation.time
-                                ? format(new Date(variation.time), "yyyy-MM-dd")
-                                : ""
-                            }
-                            onChange={(e) =>
-                              handleEditVariation(
-                                { time: e.target.value },
-                                index
-                              )
-                            }
-                          />
-                        </dd>
-                      </dl>
+                      <input
+                        value={variation.compare}
+                        onChange={(e) =>
+                          handleEditVariation(
+                            { compare: e.target.value },
+                            index
+                          )
+                        }
+                      />
                     </td>
                   </tr>
                 );

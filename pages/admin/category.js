@@ -70,7 +70,6 @@ export default function CrudCategory({ maxTree = 3 }) {
       <Head>
         <title>Manage Category</title>
         <meta name="description" content="Manage Category" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <CategoryInput callback={handleAddCategory} />
       <div className="flex flex-col gap-5">

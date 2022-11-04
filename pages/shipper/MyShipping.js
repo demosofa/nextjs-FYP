@@ -67,7 +67,6 @@ function MyShipping() {
       <Head>
         <title>My Shipping</title>
         <meta name="description" content="My Shipping" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Select
         className="w-32"

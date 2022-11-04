@@ -239,13 +239,21 @@ function ShippingProgress() {
       <Head>
         <title>Shipping Progress</title>
         <meta name="description" content="Shipping Progress" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <dl className="block max-w-2xl rounded-lg border border-gray-200 bg-white p-6 shadow-md hover:bg-gray-100">
         <dt className={styles.dt}>Order Id</dt>
         <dd className={styles.dd}>{order._id}</dd>
         <dt className={styles.dt}>Address</dt>
-        <dd className={styles.dd}>{order.address}</dd>
+        <dd className={styles.dd}>
+          <a
+            className="font-semibold uppercase text-blue-600 hover:text-blue-400"
+            target="_blank"
+            rel="noreferrer"
+            href={`https://maps.google.com/maps?q=${order.address}`}
+          >
+            {order.address}
+          </a>
+        </dd>
         <dt className={styles.dt}>Quantity</dt>
         <dd className={styles.dd}>{order.quantity}</dd>
         <dt className={styles.dt}>Shipping Fee</dt>

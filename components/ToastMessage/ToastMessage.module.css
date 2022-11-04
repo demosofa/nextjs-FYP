@@ -1,7 +1,7 @@
 .toast_message {
   transition: opacity 0.5s ease-in;
   opacity: 0;
-  @apply flex w-full max-w-xs items-center rounded-lg bg-white p-4 text-gray-500 shadow;
+  @apply flex w-full max-w-xs items-center justify-between rounded-lg bg-white p-4 text-gray-500 shadow-md;
 }
 
 .success {
@@ -31,7 +31,6 @@
   font-weight: 500;
   font-style: italic;
   margin: 2px auto;
-  color: white;
 }
 
 .toast_message > .loader {

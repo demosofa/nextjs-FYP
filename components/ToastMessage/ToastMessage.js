@@ -32,11 +32,7 @@ export default function ToastMessage({
     };
   }, [timeout, id]);
   return (
-    <a
-      ref={ToastRef}
-      className={`${styles.toast_message} ${styles[type]}`}
-      {...props}
-    >
+    <a ref={ToastRef} className={`${styles.toast_message}`} {...props}>
       <div>
         <Icon>
           {(type === "success" && <BsCheckCircleFill color="green" />) ||
@@ -48,8 +44,11 @@ export default function ToastMessage({
         </Icon>
         <span>{message}</span>
       </div>
-      <Icon onClick={() => dispatch(removeNotification(id))}>
-        <RiCloseFill />
+      <Icon
+        className="rounded-full hover:bg-gray-300"
+        onClick={() => dispatch(removeNotification(id))}
+      >
+        <RiCloseFill scale={20} />
       </Icon>
     </a>
   );

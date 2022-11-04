@@ -1,6 +1,7 @@
 import axios from "axios";
 import models from "../models";
 import { startSession } from "mongoose";
+import { OrderStatus } from "../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -101,8 +102,7 @@ class ProductController {
       .project({
         title: 1,
         price: 1,
-        sale: 1,
-        time: 1,
+        compare: 1,
         quanitty: 1,
         thumbnail: 1,
         productId: 1,
@@ -413,6 +413,9 @@ class ProductController {
   };
 
   delete = async (req, res) => {
+    const getOrderItem = await models.OrderItem.findOne({productId: req.query.id}).lean();
+    const check = await models.Order.countDocuments({orderItems: getOrderItem._id, status: {$ne: OrderStatus.paid}})
+    if(!check) return res.status(500).json("There is an order that have this product")
     const { images } = await models.Product.findById(req.query.id)
       .select("images")
       .populate("images");
