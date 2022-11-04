@@ -8,8 +8,9 @@ class UserController {
     return res.status(200).json(profile);
   };
   getMyOrder = async (req, res) => {
-    let { page, search, status, sort } = req.query;
+    let { page, search, status, sort, orderby } = req.query;
     if (!sort) sort = "status";
+    if (!orderby) orderby = -1;
     if (!status) status = { $exists: true };
     let { orders } = await models.Account.findById(req.user.accountId)
       .select("orders")
@@ -26,7 +27,7 @@ class UserController {
           skip: (page - 1) * 10,
           limit: 10,
           sort: {
-            [sort]: -1,
+            [sort]: orderby,
           },
         },
         match: {

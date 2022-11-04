@@ -14,3 +14,4 @@ export { default as ItemsFromOrder } from "./ItemsFromOrder/ItemsFromOrder";
 export { default as PriceInfo } from "./PriceInfo/PriceInfo";
 export { default as ReceivingAddress } from "./ReceivingAddress/ReceivingAddress";
 export { default as ProductCard } from "./ProductCard/ProductCard";
+export { default as ThSortOrderBy } from "./ThSortOrderBy/ThSortOrderBy";

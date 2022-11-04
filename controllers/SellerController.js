@@ -4,7 +4,7 @@ import models from "../models";
 class SellerController {
   income = async (req, res) => {
     const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setDate(yesterday.getDate() - 2);
     try {
       const income = await models.Order.aggregate()
         .match({ createdAt: { $gte: yesterday } })
@@ -24,7 +24,7 @@ class SellerController {
   };
   totalOrder = async (req, res) => {
     const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setDate(yesterday.getDate() - 2);
     try {
       const orders = await models.Order.aggregate()
         .match({ createdAt: { $gte: yesterday } })
@@ -40,7 +40,7 @@ class SellerController {
   };
   topSold = async (req, res) => {
     const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setDate(yesterday.getDate() - 2);
     try {
       const total = await models.OrderItem.aggregate([
         { $match: { createdAt: { $gte: yesterday } } },
@@ -72,19 +72,21 @@ class SellerController {
     }
   };
   todayValidated = async (req, res) => {
-    let { page, sort, limit } = req.query;
+    let { page, sort, limit, orderby } = req.query;
     let start = new Date();
     start.setHours(0, 0, 0, 0);
     let end = new Date();
     end.setHours(23, 59, 59, 999);
     try {
       let filterOptions = { validatedAt: { $gte: start, $lt: end } };
+      if (!sort) sort = "total";
+      if (!orderby) orderby = -1;
       if (!limit) limit = 10;
       const lstValidated = await models.Order.find(filterOptions)
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({
-          [sort]: "asc",
+          [sort]: orderby,
         })
         .populate("orderItems")
         .populate({ path: "shipper", select: "username" })

@@ -3,8 +3,9 @@ import models from "../models";
 
 class ShipperController {
   MyShipping = async (req, res) => {
-    let { page, sort, status, limit } = req.query;
+    let { page, sort, status, limit, orderby } = req.query;
     let filterOptions = { shipper: req.user.accountId };
+    if (!orderby) orderby = -1;
     if (!status)
       filterOptions = {
         ...filterOptions,
@@ -20,7 +21,7 @@ class ShipperController {
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({
-        [sort]: "asc",
+        [sort]: orderby,
       })
       .populate({
         path: "customer",

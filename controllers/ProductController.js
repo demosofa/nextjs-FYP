@@ -59,6 +59,7 @@ class ProductController {
     } = req.query;
     let filterOptions = {};
     if (!sort) sort = "title";
+    if (!orderby) orderby = -1;
     if (!page) page = 1;
     if (keywork) {
       switch (keywork) {
@@ -190,8 +191,10 @@ class ProductController {
   };
 
   listManagedProduct = async (req, res) => {
-    let { page, search, sort, filter, category, limit } = req.query;
+    let { page, search, sort, filter, category, limit, orderby } = req.query;
     let filterOptions = {};
+    if (!sort) sort = "title";
+    if (!orderby) orderby = -1;
     if (search)
       filterOptions = {
         ...filterOptions,
@@ -211,7 +214,7 @@ class ProductController {
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({
-        [sort]: "asc",
+        [sort]: orderby,
       })
       .select(["-comments"])
       .populate("categories", "name")
@@ -413,9 +416,15 @@ class ProductController {
   };
 
   delete = async (req, res) => {
-    const getOrderItem = await models.OrderItem.findOne({productId: req.query.id}).lean();
-    const check = await models.Order.countDocuments({orderItems: getOrderItem._id, status: {$ne: OrderStatus.paid}})
-    if(!check) return res.status(500).json("There is an order that have this product")
+    const getOrderItem = await models.OrderItem.findOne({
+      productId: req.query.id,
+    }).lean();
+    const check = await models.Order.countDocuments({
+      orderItems: getOrderItem._id,
+      status: { $ne: OrderStatus.paid },
+    });
+    if (!check)
+      return res.status(500).json("There is an order that have this product");
     const { images } = await models.Product.findById(req.query.id)
       .select("images")
       .populate("images");

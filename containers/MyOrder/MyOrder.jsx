@@ -8,7 +8,7 @@ import useSWR from "swr";
 import Select from "react-select";
 import { Form, Loading, Search } from "../../components";
 import { currencyFormat, OrderStatus } from "../../shared";
-import { ItemsFromOrder } from "../";
+import { ItemsFromOrder, ThSortOrderBy } from "../";
 import Link from "next/link";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -18,6 +18,8 @@ export default function MyOrder() {
   const [params, setParams] = useState({
     status: "",
     search: "",
+    sort: "total",
+    orderby: -1,
   });
   const [displayCancel, setDisplayCancel] = useState(null);
   const [viewOrder, setViewOrder] = useState(null);
@@ -48,6 +50,14 @@ export default function MyOrder() {
       },
     }
   );
+
+  const sortOrderBy = (sort) => {
+    setParams((prev) => ({
+      ...prev,
+      sort,
+      orderby: prev.orderby * -1,
+    }));
+  };
 
   const handleCancelOrder = async (orderId) => {
     mutate(async (data) => {
@@ -104,9 +114,27 @@ export default function MyOrder() {
               <tr>
                 <th>No.</th>
                 <th>Id</th>
-                <th>Status</th>
-                <th>Order Time</th>
-                <th>Cost</th>
+                <ThSortOrderBy
+                  query={params}
+                  setQuery={setParams}
+                  target="status"
+                >
+                  Status
+                </ThSortOrderBy>
+                <ThSortOrderBy
+                  query={params}
+                  setQuery={setParams}
+                  target="createdAt"
+                >
+                  Order Time
+                </ThSortOrderBy>
+                <ThSortOrderBy
+                  query={params}
+                  setQuery={setParams}
+                  target="total"
+                >
+                  Total Price
+                </ThSortOrderBy>
                 <th>Shipper</th>
                 <th>Action</th>
               </tr>

@@ -10,12 +10,13 @@ import { Checkbox, Loading, Pagination } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";
 import { convertTime, currencyFormat } from "../../shared";
+import { ThSortOrderBy } from "../../containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function Shipper() {
   const [checkOrder, setCheckOrder] = useState([]);
-  const [query, setQuery] = useState({ page: 1, sort: "status" });
+  const [query, setQuery] = useState({ page: 1, sort: "status", orderby: -1 });
 
   const fetcher = async (config) => {
     retryAxios(axios);
@@ -32,7 +33,8 @@ function Shipper() {
   const router = useRouter();
   const { data, error } = useSWR(
     {
-      url: `${LocalApi}/order?page=${query.page}&sort=${query.sort}`,
+      url: `${LocalApi}/order`,
+      params: query,
     },
     fetcher,
     {
@@ -91,8 +93,12 @@ function Shipper() {
             <tr>
               <th>Check</th>
               <th>Order Id</th>
-              <th>Price</th>
-              <th>Address</th>
+              <ThSortOrderBy query={query} setQuery={setQuery} target="total">
+                Price
+              </ThSortOrderBy>
+              <ThSortOrderBy query={query} setQuery={setQuery} target="address">
+                Address
+              </ThSortOrderBy>
             </tr>
           </thead>
           <tbody>

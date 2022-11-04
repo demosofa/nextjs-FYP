@@ -14,20 +14,7 @@ const LocalApi = process.env.NEXT_PUBLIC_API;
 function MyProfile() {
   const router = useRouter();
   const [data, setData] = useState();
-  const recentlyViewed = useSelector((state) => {
-    // let size = 5;
-    // const before = state.recentlyViewed;
-    // let after = [];
-    // for (let i = 0; i < before.length; i += size) {
-    //   let chunk;
-    //   let predict = i + size - (before.length - 1);
-    //   if (predict > 0) chunk = before.slice(i, i + size);
-    //   else chunk = before.slice(i, before.length - 1);
-    //   after.push(chunk);
-    // }
-    // return after;
-    return state.recentlyViewed;
-  });
+  const recentlyViewed = useSelector((state) => state.recentlyViewed);
   const { loading, isLoggined, isAuthorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({

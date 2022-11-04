@@ -18,7 +18,9 @@ class OrderController {
     return res.status(200).json(order);
   };
   lstOrder = async (req, res) => {
-    let { page, sort, limit } = req.query;
+    let { page, sort, limit, orderby } = req.query;
+    if (!sort) sort = "customer.username";
+    if (!orderby) orderby = -1;
     if (!limit) limit = 10;
     const lstOrder = await models.Order.find({
       status: OrderStatus.pending,
@@ -26,12 +28,12 @@ class OrderController {
     })
       .skip((page - 1) * limit)
       .limit(limit)
-      .sort({
-        [sort]: "asc",
-      })
       .populate({
         path: "customer",
         select: ["username"],
+      })
+      .sort({
+        [sort]: orderby,
       })
       .lean();
     const orderCounted = await models.Order.countDocuments({

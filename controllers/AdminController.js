@@ -6,8 +6,10 @@ import models from "../models";
 class AdminController {
   getAllOrder = async (req, res) => {
     try {
-      let { page, sort, status, limit } = req.query;
+      let { page, sort, status, limit, orderby } = req.query;
       let filterOptions = {};
+      if (!sort) sort = "_id";
+      if (!orderby) orderby = -1;
       if (status)
         filterOptions = {
           ...filterOptions,
@@ -19,7 +21,7 @@ class AdminController {
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({
-          [sort]: "asc",
+          [sort]: orderby,
         })
         .populate("orderItems")
         .lean();
@@ -62,8 +64,9 @@ class AdminController {
 
   getAllProfile = async (req, res) => {
     try {
-      let { search, page, sort, role, limit } = req.query;
+      let { search, page, sort, role, limit, orderby } = req.query;
       let filterOptions = { role: { $ne: Role.admin } };
+      if (!orderby) orderby = -1;
       if (search)
         filterOptions = {
           ...filterOptions,
@@ -79,7 +82,7 @@ class AdminController {
         .skip((page - 1) * limit)
         .limit(limit)
         .sort({
-          [sort]: "asc",
+          [sort]: orderby,
         })
         .populate({ path: "user", select: ["email", "phoneNumber"] })
         .lean();

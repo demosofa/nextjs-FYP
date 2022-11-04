@@ -2,11 +2,7 @@ import bcrypt from "bcrypt";
 import Cookies from "cookies";
 import { setCookieToken, Token } from "../helpers";
 import { convertTime } from "../shared";
-import {
-  createTestAccount,
-  createTransport,
-  getTestMessageUrl,
-} from "nodemailer";
+import { createTransport } from "nodemailer";
 import models from "../models";
 
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
@@ -91,29 +87,26 @@ class AuthController {
               expiresIn: "15m",
             });
             const resetLink = `${process.env.NEXT_PUBLIC_DOMAIN}/reset_password/${_id}/${token}`;
-            let testAccount = await createTestAccount();
             let transporter = createTransport({
-              host: "smtp.ethereal.email",
-              port: 587,
-              secure: false, // true for 465, false for other ports
+              host: "smtp.gmail.com",
+              port: 465,
+              secure: true,
               auth: {
-                user: testAccount.user, // generated ethereal user
-                pass: testAccount.pass, // generated ethereal password
+                user: process.env.user, // generated ethereal user
+                pass: process.env.pass, // generated ethereal password
               },
             });
-            let info = await transporter.sendMail({
-              from: `"Fred Foo 👻" <${testAccount.user}>`, // sender address
+            await transporter.sendMail({
+              from: `"Hello 👻" <${process.env.name}>`, // sender address
               to: user.email, // list of receivers
-              subject: "Hello ✔", // Subject line
+              subject: "Verify ✔", // Subject line
               text: "Hello world?", // plain text body
               html: `<b>Please click this link for starting reset password process <a href=${resetLink}>This is the link for starting reset password</a></b>`, // html body
             });
-            console.log("Preview URL: %s", getTestMessageUrl(info));
           }
         });
       return res.status(200).json("Success send reset link to ur email");
     } catch (error) {
-      console.log(error);
       return res.status(500).json("Fail to check account existent");
     }
   };

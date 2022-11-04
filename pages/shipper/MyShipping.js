@@ -10,14 +10,19 @@ import { Loading, Pagination } from "../../components";
 import { useState } from "react";
 import Head from "next/head";
 import { convertTime, currencyFormat, OrderStatus } from "../../shared";
-import { ItemsFromOrder } from "../../containers";
+import { ItemsFromOrder, ThSortOrderBy } from "../../containers";
 import Select from "react-select";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function MyShipping() {
   const [viewOrder, setViewOrder] = useState(null);
-  const [query, setQuery] = useState({ page: 1, sort: "status", status: "" });
+  const [query, setQuery] = useState({
+    page: 1,
+    status: "",
+    sort: "status",
+    orderby: -1,
+  });
   const [showQR, setShowQR] = useState(null);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -34,7 +39,8 @@ function MyShipping() {
   };
   const { data, error } = useSWR(
     {
-      url: `${LocalApi}/shipper?page=${query.page}&sort=${query.sort}&status=${query.status}`,
+      url: `${LocalApi}/shipper`,
+      params: query,
     },
     fetcher,
     {
@@ -94,11 +100,29 @@ function MyShipping() {
                 <tr>
                   <th>No.</th>
                   <th>Order Id</th>
-                  <th>Status</th>
+                  <ThSortOrderBy
+                    query={query}
+                    setQuery={setQuery}
+                    target="status"
+                  >
+                    Status
+                  </ThSortOrderBy>
                   <th>Customer</th>
-                  <th>Address</th>
+                  <ThSortOrderBy
+                    query={query}
+                    setQuery={setQuery}
+                    target="address"
+                  >
+                    Address
+                  </ThSortOrderBy>
                   <th>Phone Number</th>
-                  <th>Total Value</th>
+                  <ThSortOrderBy
+                    query={query}
+                    setQuery={setQuery}
+                    target="total"
+                  >
+                    Total Price
+                  </ThSortOrderBy>
                   <th>Action</th>
                 </tr>
               </thead>
