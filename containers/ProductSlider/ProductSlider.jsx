@@ -7,7 +7,7 @@ export default function ProductSlider({ products }) {
       config={{
         slides: {
           perView: "auto",
-          spacing: 20,
+          spacing: 10,
         },
       }}
     >

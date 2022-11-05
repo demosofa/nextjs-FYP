@@ -42,7 +42,7 @@ function MyProfile() {
       />
     );
   return (
-    <div className="flex flex-col gap-10 px-24 sm:p-4 md:px-10">
+    <div className="flex flex-col gap-10 px-24 sm:p-3 md:px-10">
       <Head>
         <title>My Profile</title>
         <meta name="description" content="My Profile" />

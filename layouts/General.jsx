@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import { useMediaContext } from "../contexts/MediaContext";
 import { useRouter } from "next/router";
+import { FaBell } from "react-icons/fa";
 
 export default function General({ children, arrLink }) {
   const { device, Devices } = useMediaContext();
@@ -20,16 +21,23 @@ export default function General({ children, arrLink }) {
       {(device === Devices.pc && <Navbar arrLink={arrLink} />) ||
         (toggle ? (
           <Animation.Move className="fixed z-20 h-screen gap-5 overflow-y-auto bg-[#f0f2f5] text-[#445261] shadow-md transition-all sm:w-screen md:w-80">
-            <Sidebar className="w-full">
+            <Sidebar className="!relative">
               <AiOutlineMenuFold
                 className="absolute top-0 right-0 cursor-pointer"
                 onClick={() => setToggle((prev) => !prev)}
               />
               {typeof window !== "undefined" &&
                 localStorage.getItem("accessToken") && (
-                  <Link href="/profile">
-                    <a onClick={() => setToggle(!toggle)}>My Profile</a>
-                  </Link>
+                  <>
+                    <Link href="/profile">
+                      <a onClick={() => setToggle(!toggle)}>My Profile</a>
+                    </Link>
+                    <Link href="/notification">
+                      <a onClick={() => setToggle(!toggle)}>
+                        <FaBell />
+                      </a>
+                    </Link>
+                  </>
                 )}
               <Link href="/">
                 <a onClick={() => setToggle(!toggle)}>

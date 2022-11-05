@@ -1,6 +1,5 @@
 import axios from "axios";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Loading, Slider } from "../components";
@@ -54,24 +53,24 @@ export default function Home({ products, categories, pageCounted, query }) {
   }, [products, pageCounted]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.main}>
       <Head>
         <title>HomePage</title>
         <meta name="description" content="Homepage" />
       </Head>
-
-      <main className={styles.main}>
-        <div className="trending"></div>
+      <div className="trending"></div>
+      <div className="px-2">
         <Slider
           config={{
             slides: {
               perView: "auto",
+              spacing: 8,
             },
           }}
         >
-          <Slider.Content className="gap-2 p-4">
+          <Slider.Content className="py-4">
             {categories?.map((category) => (
-              <div key={category._id} className="card">
+              <div key={category._id} className="card justify-center">
                 <Link
                   href={{
                     pathname: "/search",
@@ -84,38 +83,25 @@ export default function Home({ products, categories, pageCounted, query }) {
             ))}
           </Slider.Content>
         </Slider>
-        <div className="grid grid-cols-fit-2 gap-6 sm:gap-1">
-          {lstProduct?.map((item) => (
-            <ProductCard
-              key={item._id}
-              href={`/c/${item.productId}?vid=${item._id}`}
-              product={item}
-            />
-          ))}
-        </div>
-        {loading && <Loading.Text />}
-        {pageLeft > 1 && (
-          <button
-            className="main_btn mx-auto"
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-          >
-            More Products
-          </button>
-        )}
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+      <div className="grid grid-cols-fit gap-6 sm:gap-1">
+        {lstProduct?.map((item) => (
+          <ProductCard
+            key={item._id}
+            href={`/c/${item.productId}?vid=${item._id}`}
+            product={item}
+          />
+        ))}
+      </div>
+      {loading && <Loading.Text />}
+      {pageLeft > 1 && (
+        <button
+          className="main_btn mx-auto"
+          onClick={() => setCurrentPage((prev) => prev + 1)}
         >
-          Powered by{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+          More Products
+        </button>
+      )}
     </div>
   );
 }

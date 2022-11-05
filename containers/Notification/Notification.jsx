@@ -81,7 +81,7 @@ export default function Notification({ className, ...props }) {
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
 
   return (
-    <div>
+    <div className={className}>
       {!isLoadingInitialData ? (
         notifications.map((item, index) => (
           <div

@@ -2,9 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 import { currencyFormat } from "../../shared";
-import styles from "../../styles/Home.module.scss";
+import styles from "./_productcard.module.scss";
 
-export default function ProductCard({ product, ...props }) {
+export default function ProductCard({ product, className, ...props }) {
   const { price, compare } = useMemo(() => {
     if (product.compare)
       return { price: product.price, compare: product.compare };
@@ -12,33 +12,37 @@ export default function ProductCard({ product, ...props }) {
   }, [product]);
   return (
     <Link {...props}>
-      <a className="card relative mt-2 cursor-pointer">
-        <div className={styles.price_tag}>
-          <p className={styles.price_tag_price}>{currencyFormat(price)}</p>
-        </div>
+      <a className={`card relative cursor-pointer !p-0 ${className}`}>
         {compare ? (
           <span className={styles.discount}>
             -{Math.ceil(100 - (price / compare) * 100)}%
           </span>
         ) : null}
-        <div>
-          <div className="relative h-44 w-full">
-            <Image
-              className="rounded-xl"
-              alt="product"
-              src={product.thumbnail}
-              layout="fill"
-              objectFit="contain"
-            />
-          </div>
+        <div className="relative h-44 w-full">
+          <Image
+            className="rounded-sm"
+            alt="product"
+            src={product.thumbnail}
+            layout="fill"
+            objectFit="fill"
+          />
+        </div>
+        <div className="mx-2 mt-2 flex flex-col">
           <label className="text-sm line-clamp-1">{product.title}</label>
-          <label className="float-left">
-            <span className="fa fa-star checked mr-1 text-yellow-300 " />
-            <span className="font-semibold italic">{product.avgRating}</span>
-          </label>
-          <label className="float-right">
-            <span className="font-semibold">Sold: </span>
-            <span className="text-xs text-gray-400">{product.sold}</span>
+          <div className="flex w-full items-center justify-around">
+            <label>
+              <span className="mr-1 font-semibold text-gray-500">
+                {product.avgRating}
+              </span>
+              <span className="fa fa-star checked text-yellow-300" />
+            </label>
+            <label>
+              <span className="font-semibold text-gray-500">Sold: </span>
+              <span className="text-xs text-gray-500">{product.sold}</span>
+            </label>
+          </div>
+          <label className="text-lg font-semibold text-red-600">
+            {currencyFormat(price)}
           </label>
         </div>
       </a>

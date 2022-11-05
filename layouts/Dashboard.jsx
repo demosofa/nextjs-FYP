@@ -4,6 +4,7 @@ import { Animation, Icon } from "../components";
 import { AiOutlineHome, AiOutlineArrowRight } from "react-icons/ai";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import { FaBell } from "react-icons/fa";
 
 function Dashboard({ children, arrLink }) {
   const [toggle, setToggle] = useState(false);
@@ -26,9 +27,16 @@ function Dashboard({ children, arrLink }) {
         }`}
       >
         {typeof window !== "undefined" && localStorage.getItem("accessToken") && (
-          <Link href="/profile">
-            <a onClick={() => setToggle(!toggle)}>My Profile</a>
-          </Link>
+          <>
+            <Link href="/profile">
+              <a onClick={() => setToggle(!toggle)}>My Profile</a>
+            </Link>
+            <Link href="/notification">
+              <a onClick={() => setToggle(!toggle)}>
+                <FaBell />
+              </a>
+            </Link>
+          </>
         )}
         <Link href="/">
           <a>

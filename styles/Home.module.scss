@@ -1,8 +1,5 @@
 @import "./mixin.scss";
 
-$price-tag__height: 30px;
-$price-tag__width-after: 10px;
-
 .container {
   padding: 0 0.5rem;
 }
@@ -13,75 +10,7 @@ $price-tag__width-after: 10px;
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
-
-.price_tag {
-  max-width: fit-content;
-  min-width: 100px;
-  display: flex;
-  align-items: center;
-  height: $price-tag__height;
-  border-radius: 8px 8px 8px 0;
-  background: #ed6663;
-  z-index: 8;
-  position: absolute;
-  top: -15px;
-  left: -$price-tag__width-after;
-
-  &::after {
-    content: "";
-    position: absolute;
-    border-left: $price-tag__width-after solid transparent;
-    border-top: 10px solid #a72c29;
-    left: 0px;
-    top: 30px;
-  }
-
-  &_price {
-    margin-left: $price-tag__width-after;
-    color: #fff;
-  }
-}
-
-.discount {
-  position: absolute;
-  display: inline-block;
-  background: orangered;
-  color: white;
-  height: 2.25rem;
-  width: 2.25rem;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 2.25rem;
-  transform: rotate(-20deg);
-  z-index: 10;
-  top: 10px;
-  right: 10px;
-  animation: beat 1s ease infinite alternate;
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    background: inherit;
-    height: inherit;
-    width: inherit;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    transform: rotate(30deg);
-  }
-  &:after {
-    transform: rotate(60deg);
-  }
-}
-
-@keyframes beat {
-  from {
-    transform: rotate(-20deg) scale(1);
-  }
-  to {
-    transform: rotate(-20deg) scale(1.1);
-  }
+  padding: 0 6px;
 }
 
 .footer {
