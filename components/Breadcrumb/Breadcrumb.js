@@ -13,7 +13,7 @@ export default function Breadcrumb({ categories, className, ...props }) {
           <MdOutlineKeyboardArrowRight />
           <Link
             href={{
-              pathname: "/",
+              pathname: "/search",
               query: {
                 category: category.name,
               },

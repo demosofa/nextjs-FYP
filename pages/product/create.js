@@ -64,21 +64,20 @@ function CreateForm() {
   const validateInput = () => {
     const { title, description, status, manufacturer } = input;
     let validate = { title, description, status, manufacturer };
-    if (!variations.length)
-      Object.entries(validate).forEach((entry) => {
-        switch (entry[0]) {
-          case "title":
-            new Validate(entry[1]).isEmpty().isEnoughLength({ max: 255 });
-            break;
-          case "description":
-            new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
-            break;
-          case "status":
-          case "manufacturer":
-            new Validate(entry[1]).isEmpty();
-            break;
-        }
-      });
+    Object.entries(validate).forEach((entry) => {
+      switch (entry[0]) {
+        case "title":
+          new Validate(entry[1]).isEmpty().isEnoughLength({ max: 255 });
+          break;
+        case "description":
+          new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
+          break;
+        case "status":
+        case "manufacturer":
+          new Validate(entry[1]).isEmpty();
+          break;
+      }
+    });
   };
 
   const handleSubmit = async (e) => {
