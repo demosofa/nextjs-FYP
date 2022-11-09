@@ -32,7 +32,7 @@ export default function retryAxios(
       }
     } else if (error.response.status === 401 && !error.response.data.message) {
       localStorage.clear();
-      window.location = error.response.headers.location;
+      window.location.href = error.response.headers.location;
     } else return Promise.reject(error);
   });
 }

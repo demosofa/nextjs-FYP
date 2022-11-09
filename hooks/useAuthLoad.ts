@@ -32,6 +32,7 @@ export default function useAuthLoad({
         return;
       } else setLoggined(true);
 
+      retryAxios(axiosInstance);
       try {
         const { role } = decoder(accessToken) as { role: string };
         if (!roles.includes(role)) {
@@ -53,7 +54,6 @@ export default function useAuthLoad({
 
       if (cb) {
         axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-        retryAxios(axiosInstance);
         await cb(axiosInstance);
       }
       return;
