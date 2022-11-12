@@ -9,11 +9,12 @@ import dynamic from "next/dynamic";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
 import { currencyFormat } from "../../shared";
+import { ThSortOrderBy } from "../../containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function SellerPage() {
-  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState({ page: 1, sort: "total", orderby: -1 });
   const [viewOrderItem, setViewOrderItem] = useState();
   const [showScanner, setShowScanner] = useState(false);
   const [viewOrder, setViewOrder] = useState();
@@ -33,7 +34,7 @@ function SellerPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { data, error, mutate } = useSWRImmutable(
-    { url: `${LocalApi}/seller?page=${page}` },
+    { url: `${LocalApi}/seller`, params: query },
     fetcher,
     {
       onError(err, key, config) {
@@ -110,8 +111,16 @@ function SellerPage() {
               <tr>
                 <th>No.</th>
                 <th>Id</th>
-                <th>total</th>
-                <th>Validated At</th>
+                <ThSortOrderBy query={query} setQuery={setQuery} target="total">
+                  total
+                </ThSortOrderBy>
+                <ThSortOrderBy
+                  query={query}
+                  setQuery={setQuery}
+                  target="validatedAt"
+                >
+                  Validated At
+                </ThSortOrderBy>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -155,8 +164,8 @@ function SellerPage() {
 
       <Pagination
         totalPageCount={data.pageCounted}
-        currentPage={page}
-        setCurrentPage={setPage}
+        currentPage={query.page}
+        setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
       >
         <Pagination.Arrow>
           <Pagination.Number />

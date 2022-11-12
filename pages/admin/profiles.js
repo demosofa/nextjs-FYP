@@ -2,18 +2,26 @@ import axios from "axios";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { Loading, Pagination } from "../../components";
+import { Loading, Pagination, Search } from "../../components";
 import { expireStorage, retryAxios } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import Head from "next/head";
 import { useState } from "react";
 import Select from "react-select";
 import { Role } from "../../shared";
+import { ThSortOrderBy } from "../../containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function ManageProfiles() {
-  const [query, setQuery] = useState({ page: 1, sort: "role", role: "" });
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState({
+    search: "",
+    page: 1,
+    sort: "role",
+    role: "",
+    orderby: -1,
+  });
   const dispatch = useDispatch();
   const router = useRouter();
   const fetcher = async (config) => {
@@ -29,7 +37,8 @@ export default function ManageProfiles() {
   };
   const { data, error, mutate } = useSWR(
     {
-      url: `${LocalApi}/admin/profiles?page=${query.page}&sort=${query.sort}&role=${query.role}`,
+      url: `${LocalApi}/admin/profiles`,
+      params: query,
     },
     fetcher,
     {
@@ -107,17 +116,27 @@ export default function ManageProfiles() {
         <title>Manage Profiles</title>
         <meta name="description" content="Manage Profiles" />
       </Head>
-      <Select
-        className="mb-3 w-32 sm:pl-3"
-        defaultValue={{ value: "", label: "all" }}
-        onChange={({ value }) => setQuery((prev) => ({ ...prev, role: value }))}
-        options={[
-          { value: "", label: "all" },
-          { value: "user", label: "User" },
-          { value: "shipper", label: "Shipper" },
-          { value: "seller", label: "Seller" },
-        ]}
-      />
+      <div className="flex flex-wrap gap-4">
+        <Search
+          className="!ml-0"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClick={() => setQuery((prev) => ({ ...prev, search }))}
+        />
+        <Select
+          className="mb-3 w-32 sm:pl-3"
+          defaultValue={{ value: "", label: "all" }}
+          onChange={({ value }) =>
+            setQuery((prev) => ({ ...prev, role: value }))
+          }
+          options={[
+            { value: "", label: "all" },
+            { value: "user", label: "User" },
+            { value: "shipper", label: "Shipper" },
+            { value: "seller", label: "Seller" },
+          ]}
+        />
+      </div>
       {isLoadingInitialData ? (
         <Loading.Dots />
       ) : (
@@ -128,8 +147,20 @@ export default function ManageProfiles() {
                 <tr>
                   <th>No.</th>
                   <th>Id</th>
-                  <th>User Name</th>
-                  <th>Role</th>
+                  <ThSortOrderBy
+                    query={query}
+                    setQuery={setQuery}
+                    target="username"
+                  >
+                    User Name
+                  </ThSortOrderBy>
+                  <ThSortOrderBy
+                    query={query}
+                    setQuery={setQuery}
+                    target="role"
+                  >
+                    Role
+                  </ThSortOrderBy>
                   <th>Contact</th>
                   <th>Action</th>
                 </tr>
