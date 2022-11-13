@@ -198,14 +198,14 @@ export default function Overview({ product }) {
         </Head>
         <div className="container-info">
           <div className="preview-product">
-            {device === Devices.phone ? null : (
+            {device === Devices.sm ? null : (
               <ImageMagnifier src={targetImage} className="product-img" />
             )}
             <Slider
               className="slider"
               config={{
                 slides: {
-                  perView: device === Devices.phone ? 1 : 4,
+                  perView: device === Devices.sm ? 1 : 4,
                   spacing: 12,
                 },
               }}

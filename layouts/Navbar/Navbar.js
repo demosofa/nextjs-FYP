@@ -58,7 +58,7 @@ export default function Navbar({ arrLink }) {
         ) : null}
       </div>
       <div className={styles.bar}>
-        {localStorage.getItem("accessToken") && (
+        {typeof window !== "undefined" && localStorage.getItem("accessToken") && (
           <>
             <Link href="/profile">My Profile</Link>
             <Dropdown

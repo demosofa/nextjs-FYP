@@ -151,8 +151,9 @@ function CreateForm() {
           maxWidth: "none",
           width: "auto",
           margin:
-            (device === Devices.pc && "0 9%") ||
-            (device === Devices.tablet && "0 7%") ||
+            ([Devices.xl, Devices.lg, Devices["2xl"]].includes(device) &&
+              "0 9%") ||
+            (device === Devices.md && "0 7%") ||
             "0",
         }}
       >

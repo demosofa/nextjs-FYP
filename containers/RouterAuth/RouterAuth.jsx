@@ -28,19 +28,18 @@ export default function RouterAuth() {
 
   return (
     <>
-      {typeof window !== "undefined" &&
-        ((localStorage.getItem("accessToken") && (
-          <>
-            <a onClick={handleLogout} style={{ cursor: "pointer" }}>
-              Logout
-            </a>
-          </>
-        )) || (
-          <>
-            <Link href="/login">Login</Link>
-            <Link href="/register">Register</Link>
-          </>
-        ))}
+      {typeof window !== "undefined" && localStorage.getItem("accessToken") ? (
+        <>
+          <a onClick={handleLogout} style={{ cursor: "pointer" }}>
+            Logout
+          </a>
+        </>
+      ) : (
+        <>
+          <Link href="/login">Login</Link>
+          <Link href="/register">Register</Link>
+        </>
+      )}
     </>
   );
 }
