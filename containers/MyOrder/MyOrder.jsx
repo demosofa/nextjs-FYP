@@ -51,14 +51,6 @@ export default function MyOrder() {
     }
   );
 
-  const sortOrderBy = (sort) => {
-    setParams((prev) => ({
-      ...prev,
-      sort,
-      orderby: prev.orderby * -1,
-    }));
-  };
-
   const handleCancelOrder = async (orderId) => {
     mutate(async (data) => {
       try {
