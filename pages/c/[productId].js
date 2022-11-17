@@ -28,17 +28,20 @@ import { useRouter } from "next/router";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, query }) {
   const data = await fetch(`${LocalApi}/product/${params.productId}`);
   const product = await data.json();
+  let vid = null;
+  if (query.vid) vid = query.vid;
   return {
     props: {
       product,
+      vid,
     },
   };
 }
 
-export default function Overview({ product }) {
+export default function Overview({ product, vid }) {
   const [targetImage, setTargetImage] = useState(product.images[0].url);
   const [quantity, setQuantity] = useState(1);
   const [display, setDisplay] = useState(false);
@@ -51,17 +54,15 @@ export default function Overview({ product }) {
   const { device, Devices } = useMediaContext();
 
   const defaultChecked = useMemo(() => {
-    if (router.query.vid) {
-      const current = product.variations.find(
-        (item) => item._id === router.query.vid
-      );
+    if (vid) {
+      const current = product.variations.find((item) => item._id === vid);
       return current.types.reduce((prev, curr) => {
         prev.push(curr.name);
         return prev;
       }, []);
     }
     return [];
-  }, []);
+  }, [vid]);
 
   const targetVariationIdx = useMemo(() => {
     return product.variations.findIndex((item) =>
@@ -85,7 +86,7 @@ export default function Overview({ product }) {
         setSimiliarProducts(res.data.products);
         setLoading(false);
       });
-  }, []);
+  }, [product.title]);
 
   const generateCart = () => {
     let { _id, title, images } = product;
