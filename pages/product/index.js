@@ -273,22 +273,27 @@ function ProductCRUD() {
 }
 
 function Remove({ index, product, setProducts, setRemove }) {
+  const dispatch = useDispatch();
   const handleRemove = async () => {
     const accessToken = expireStorage.getItem("accessToken");
     retryAxios(axios);
-    await axios.delete(`${LocalApi}/product/${product._id}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    setProducts((prev) => prev.filter((_, i) => i !== index));
-    setRemove(null);
+    try {
+      await axios.delete(`${LocalApi}/product/${product._id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setProducts((prev) => prev.filter((_, i) => i !== index));
+      setRemove(null);
+    } catch (error) {
+      dispatch(addNotification({ message: error.message, type: "error" }));
+    }
   };
   return (
     <>
       <div className="backdrop" onClick={(e) => setRemove(null)} />
       <div className="form_center">
-        <label>{`Are you sure to Remove ${product.title}?`}</label>
+        <label>{`Are you sure to remove ${product.title}?`}</label>
         <div className="flex gap-3">
           <button onClick={handleRemove}>Yes</button>
           <button onClick={() => setRemove(null)}>No</button>

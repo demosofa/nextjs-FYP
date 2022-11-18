@@ -35,7 +35,7 @@ export default function SelectCategory({
 
   if (loading || categories === undefined) return <Loading.Text />;
   return (
-    <>
+    <div className="flex flex-wrap gap-2">
       <Select
         defaultValue={{
           value: {
@@ -50,13 +50,13 @@ export default function SelectCategory({
           label: category.name,
         }))}
       />
-      {selected && selected.subCategories.length && (
+      {selected && selected.subCategories.length ? (
         <SelectCategory
           index={index + 1}
           parentId={selected._id}
           setSelectedCategories={setSelectedCategories}
         />
-      )}
-    </>
+      ) : null}
+    </div>
   );
 }

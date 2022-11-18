@@ -291,8 +291,10 @@ function CreateForm() {
               setDisplayApplyAllForm(false);
             }}
           >
-            <div className="flex flex-col">
-              <Form.Title className="mx-auto text-lg">Information</Form.Title>
+            <Form.Title className="mx-auto mb-1 text-lg">
+              Information
+            </Form.Title>
+            <div className="flex max-h-72 flex-col overflow-x-auto">
               <Form.Item>
                 <Form.Title>Quantity</Form.Title>
                 <Form.Input
@@ -337,8 +339,8 @@ function CreateForm() {
               </Form.Item>
             </div>
 
+            <Form.Title className="mx-auto mb-1 text-lg">Pricing</Form.Title>
             <div className="flex flex-col">
-              <Form.Title className="mx-auto text-lg">Pricing</Form.Title>
               <Form.Item>
                 <Form.Title>Price</Form.Title>
                 <Form.Input

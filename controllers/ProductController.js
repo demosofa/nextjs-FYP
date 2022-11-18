@@ -419,12 +419,14 @@ class ProductController {
     const getOrderItem = await models.OrderItem.findOne({
       productId: req.query.id,
     }).lean();
-    const check = await models.Order.countDocuments({
-      orderItems: getOrderItem._id,
-      status: { $ne: OrderStatus.paid },
-    });
-    if (!check)
-      return res.status(500).json("There is an order that have this product");
+    if (getOrderItem) {
+      const check = await models.Order.countDocuments({
+        orderItems: getOrderItem._id,
+        status: { $ne: OrderStatus.paid },
+      });
+      if (!check)
+        return res.status(500).json("There is an order that have this product");
+    }
     const { images } = await models.Product.findById(req.query.id)
       .select("images")
       .populate("images");

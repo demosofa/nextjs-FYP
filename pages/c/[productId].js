@@ -203,6 +203,7 @@ export default function Overview({ product, vid }) {
               <ImageMagnifier src={targetImage} className="product-img" />
             )}
             <Slider
+              key={product._id}
               className="slider"
               config={{
                 slides: {
