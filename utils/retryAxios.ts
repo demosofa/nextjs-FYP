@@ -28,11 +28,11 @@ export default function retryAxios(
         counter += 1;
         return axiosInstance(config);
       } catch (err) {
-        return Promise.reject(err);
+        if (err.response.status === 401 && !err.response.data.message) {
+          localStorage.clear();
+          window.location.href = err.response.data;
+        } else return Promise.reject(err);
       }
-    } else if (error.response.status === 401 && !error.response.data.message) {
-      localStorage.clear();
-      window.location.href = error.response.headers.location;
     } else return Promise.reject(error);
   });
 }

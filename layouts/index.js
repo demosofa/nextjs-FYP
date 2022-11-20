@@ -30,7 +30,13 @@ export default function Layout({ children, routerPath }) {
       ])
     )
       return Dashboard;
-    else if (!isStringStartWith(routerPath, ["/login", "/register"]))
+    else if (
+      !isStringStartWith(routerPath, [
+        "/login",
+        "/register",
+        "/forgot_password",
+      ])
+    )
       return General;
   }, [routerPath]);
 

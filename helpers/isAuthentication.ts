@@ -9,8 +9,8 @@ export default function isAuthentication(
   return async (req: Request, res: NextApiResponse) => {
     const authProp = req.headers.authorization;
     if (!authProp) return res.status(401).end();
-    const currentAccessToken = authProp.split(" ")[1];
     try {
+      const currentAccessToken = authProp.split(" ")[1];
       const value = Token.verifyAccessToken(currentAccessToken) as {
         [userId: string]: string;
         accountId: string;
