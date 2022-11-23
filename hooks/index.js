@@ -6,9 +6,7 @@ import useToc from "./useToc";
 export { default as useResize } from "./useResize";
 export { default as useInterval } from "./useInterval";
 export { default as useUpload } from "./useUpload";
-export { default as useMountCount } from "./useMountCount";
 export { default as useVariantPermutation } from "./useVariantPermutation";
 export { default as useAuthLoad } from "./useAuthLoad";
-export { default as useAbortController } from "./useAbortController";
 
 export { useAxiosLoad, useMedia, useObserver, usePagination, useToc };
