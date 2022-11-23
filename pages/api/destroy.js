@@ -1,4 +1,4 @@
-import { Cloudinary } from "../../helpers";
+import { Cloudinary } from "../../backend/helpers";
 
 async function destroy(req, res) {
   try {

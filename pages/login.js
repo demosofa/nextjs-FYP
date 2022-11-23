@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Form } from "../components";
-import { NotifyToast } from "../layouts";
-import { expireStorage, Validate } from "../utils";
+import { Form } from "../frontend/components";
+import { NotifyToast } from "../frontend/layouts";
+import { expireStorage, Validate } from "../frontend/utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { addNotification } from "../redux/reducer/notificationSlice";
+import { addNotification } from "../frontend/redux/reducer/notificationSlice";
 import Head from "next/head";
 import Link from "next/link";
 

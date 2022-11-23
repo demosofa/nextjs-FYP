@@ -1,0 +1,18 @@
+@import "../../../styles/mixin.scss";
+
+.search_wrapper {
+  border: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+  padding: 5px;
+  background-color: white;
+
+  > input {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    color: black;
+  }
+}

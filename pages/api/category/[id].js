@@ -1,5 +1,5 @@
-import { db } from "../../../helpers";
-import { category } from "../../../controllers";
+import { db } from "../../../backend/helpers";
+import { category } from "../../../backend/controllers";
 
 export default async function categoryId(req, res) {
   await db.connect();

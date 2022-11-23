@@ -6,11 +6,11 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { Checkbox, Loading, Pagination } from "../../components";
-import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
+import { Checkbox, Loading, Pagination } from "../../frontend/components";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { expireStorage, retryAxios } from "../../frontend/utils";
 import { convertTime, currencyFormat } from "../../shared";
-import { ThSortOrderBy } from "../../containers";
+import { ThSortOrderBy } from "../../frontend/containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

@@ -1,11 +1,11 @@
 import Head from "next/head";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useAuthLoad, useAxiosLoad } from "../../hooks";
-import { Dropdown, Loading } from "../../components";
-import { expireStorage, retryAxios, Validate } from "../../utils";
+import { useAuthLoad, useAxiosLoad } from "../../frontend/hooks";
+import { Dropdown, Loading } from "../../frontend/components";
+import { expireStorage, retryAxios, Validate } from "../../frontend/utils";
 import { useDispatch } from "react-redux";
-import { addNotification } from "../../redux/reducer/notificationSlice";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { BiDotsVertical } from "react-icons/bi";
 import { Role } from "../../shared";
 import styles from "../../styles/crudcategory.module.scss";

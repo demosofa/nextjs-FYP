@@ -1,5 +1,5 @@
-import { order } from "../../../controllers";
-import { db, isAuthentication } from "../../../helpers";
+import { order } from "../../../backend/controllers";
+import { db, isAuthentication } from "../../../backend/helpers";
 
 async function orderIndex(req, res) {
   await db.connect();

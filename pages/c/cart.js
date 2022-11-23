@@ -1,16 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RiCloseFill } from "react-icons/ri";
-import { Animation, Icon, Increment } from "../../components";
-import { addCart, clearCart, removeCart } from "../../redux/reducer/cartSlice";
+import { Animation, Icon, Increment } from "../../frontend/components";
+import {
+  addCart,
+  clearCart,
+  removeCart,
+} from "../../frontend/redux/reducer/cartSlice";
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import { expireStorage, retryAxios, Validate } from "../../utils";
+import { expireStorage, retryAxios, Validate } from "../../frontend/utils";
 import axios from "axios";
-import { addNotification } from "../../redux/reducer/notificationSlice";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { currencyFormat } from "../../shared";
-import { ReceivingAddress } from "../../containers";
+import { ReceivingAddress } from "../../frontend/containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

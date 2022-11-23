@@ -1,0 +1,16 @@
+@import "../../../styles/mixin.scss";
+.set_quantity {
+  @include flex(0, row, center);
+  & > .quantity {
+    width: 60px;
+    padding: 10px 0;
+    @include flex(0, row, center);
+    background-color: white;
+    text-align: center;
+    border-radius: 8px;
+  }
+  & > .btn {
+    margin: 0;
+    transform: scale(2.5);
+  }
+}

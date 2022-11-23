@@ -1,5 +1,9 @@
-import { admin } from "../../../../controllers";
-import { db, isAuthentication, isAuthorization } from "../../../../helpers";
+import { admin } from "../../../../backend/controllers";
+import {
+  db,
+  isAuthentication,
+  isAuthorization,
+} from "../../../../backend/helpers";
 import { Role } from "../../../../shared";
 
 async function profilesIndex(req, res) {

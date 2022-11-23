@@ -2,14 +2,14 @@ import axios from "axios";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { Loading, Pagination, Search } from "../../components";
-import { expireStorage, retryAxios } from "../../utils";
-import { addNotification } from "../../redux/reducer/notificationSlice";
+import { Loading, Pagination, Search } from "../../frontend/components";
+import { expireStorage, retryAxios } from "../../frontend/utils";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import Head from "next/head";
 import { useState } from "react";
 import Select from "react-select";
 import { Role } from "../../shared";
-import { ThSortOrderBy } from "../../containers";
+import { ThSortOrderBy } from "../../frontend/containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

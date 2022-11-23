@@ -4,11 +4,11 @@ import Head from "next/head";
 import Select from "react-select";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Pagination, Search, Loading } from "../../components";
-import { expireStorage, retryAxios } from "../../utils";
-import { useAuthLoad } from "../../hooks";
+import { Pagination, Search, Loading } from "../../frontend/components";
+import { expireStorage, retryAxios } from "../../frontend/utils";
+import { useAuthLoad } from "../../frontend/hooks";
 import { useDispatch } from "react-redux";
-import { addNotification } from "../../redux/reducer/notificationSlice";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { Role, currencyFormat } from "../../shared";
 import Image from "next/image";
 

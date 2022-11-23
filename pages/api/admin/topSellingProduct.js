@@ -1,5 +1,5 @@
-import { admin } from "../../../controllers";
-import { isAuthentication, isAuthorization } from "../../../helpers";
+import { admin } from "../../../backend/controllers";
+import { isAuthentication, isAuthorization } from "../../../backend/helpers";
 import { Role } from "../../../shared";
 
 async function topSellingProduct(req, res) {

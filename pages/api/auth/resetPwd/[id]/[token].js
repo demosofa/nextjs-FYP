@@ -1,4 +1,4 @@
-import { auth } from "../../../../../controllers";
+import { auth } from "../../../../../backend/controllers";
 
 export default async function resetPwd(req, res) {
   switch (req.method.toLowerCase()) {

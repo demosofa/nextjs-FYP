@@ -1,5 +1,5 @@
-import { isAuthentication } from "../../../helpers";
-import { notification } from "../../../controllers";
+import { isAuthentication } from "../../../backend/helpers";
+import { notification } from "../../../backend/controllers";
 
 async function notifyId(req, res) {
   switch (req.method.toLowerCase()) {

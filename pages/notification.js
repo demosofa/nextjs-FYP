@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Notification } from "../containers";
+import { Notification } from "../frontend/containers";
 
 export default function notification() {
   return (

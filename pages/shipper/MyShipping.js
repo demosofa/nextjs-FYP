@@ -4,13 +4,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
-import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
-import { Loading, Pagination } from "../../components";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import {
+  expireStorage,
+  retryAxios,
+  tailwindStatus,
+} from "../../frontend/utils";
+import { Loading, Pagination } from "../../frontend/components";
 import { useState } from "react";
 import Head from "next/head";
 import { convertTime, currencyFormat, OrderStatus } from "../../shared";
-import { ItemsFromOrder, ThSortOrderBy } from "../../containers";
+import { ItemsFromOrder, ThSortOrderBy } from "../../frontend/containers";
 import Select from "react-select";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

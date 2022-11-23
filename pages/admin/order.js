@@ -3,15 +3,19 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
-import { Dropdown, Loading, Pagination, Form } from "../../components";
-import { addNotification } from "../../redux/reducer/notificationSlice";
+import { Dropdown, Loading, Pagination, Form } from "../../frontend/components";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import {
   convertTime,
   currencyFormat,
   dateFormat,
   OrderStatus,
 } from "../../shared";
-import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
+import {
+  expireStorage,
+  retryAxios,
+  tailwindStatus,
+} from "../../frontend/utils";
 import { BiDownArrow } from "react-icons/bi";
 import { IoMdTrash } from "react-icons/io";
 import Head from "next/head";

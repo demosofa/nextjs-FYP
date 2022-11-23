@@ -1,5 +1,5 @@
-import { db, isAuthentication } from "../../../helpers";
-import { user } from "../../../controllers";
+import { db, isAuthentication } from "../../../backend/helpers";
+import { user } from "../../../backend/controllers";
 
 async function profileId(req, res) {
   await db.connect();

@@ -3,24 +3,24 @@ import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
-import { FileUpload, TagsInput, Form } from "../../components";
-import { Variation, Variant, SelectCategory } from "../../containers";
+import { FileUpload, TagsInput, Form } from "../../frontend/components";
+import { Variation, Variant, SelectCategory } from "../../frontend/containers";
 import {
   retryAxios,
   Validate,
   uploadApi,
   expireStorage,
   validateVariations,
-} from "../../utils";
+} from "../../frontend/utils";
 import { useSelector, useDispatch } from "react-redux";
-import { editAllVariations } from "../../redux/reducer/variationSlice";
-import { addNotification } from "../../redux/reducer/notificationSlice";
+import { editAllVariations } from "../../frontend/redux/reducer/variationSlice";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import Select from "react-select";
 import dynamic from "next/dynamic";
-import { deleteAllVariant } from "../../redux/reducer/variantSlice";
-import { useMediaContext } from "../../contexts/MediaContext";
+import { deleteAllVariant } from "../../frontend/redux/reducer/variantSlice";
+import { useMediaContext } from "../../frontend/contexts/MediaContext";
 import { currencyFormat, Role } from "../../shared";
-import { useAuthLoad } from "../../hooks";
+import { useAuthLoad } from "../../frontend/hooks";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

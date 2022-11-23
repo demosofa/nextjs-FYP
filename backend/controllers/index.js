@@ -1,0 +1,11 @@
+export { default as auth } from "./AuthController";
+export { default as product } from "./ProductController";
+export { default as category } from "./CategoryController";
+export { default as user } from "./UserController";
+export { default as comment } from "./CommentController";
+export { default as order } from "./OrderController";
+export { default as admin } from "./AdminController";
+export { default as rate } from "./RateController";
+export { default as seller } from "./SellerController";
+export { default as shipper } from "./ShipperController";
+export { default as notification } from "./NotificationController";

@@ -1,4 +1,4 @@
-import { isAuthentication } from "../../helpers";
+import { isAuthentication } from "../../backend/helpers";
 import { format } from "date-fns";
 import { sortObject } from "../../shared";
 import NextCors from "nextjs-cors";

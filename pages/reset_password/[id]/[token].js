@@ -2,9 +2,9 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form } from "../../../components";
-import { addNotification } from "../../../redux/reducer/notificationSlice";
-import { Validate } from "../../../utils";
+import { Form } from "../../../frontend/components";
+import { addNotification } from "../../../frontend/redux/reducer/notificationSlice";
+import { Validate } from "../../../frontend/utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

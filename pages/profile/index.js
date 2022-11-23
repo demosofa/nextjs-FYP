@@ -2,11 +2,11 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Loading } from "../../components";
-import { useAuthLoad } from "../../hooks";
+import { Loading } from "../../frontend/components";
+import { useAuthLoad } from "../../frontend/hooks";
 import { Role, dateFormat } from "../../shared";
 import Head from "next/head";
-import { MyOrder, ProductSlider } from "../../containers";
+import { MyOrder, ProductSlider } from "../../frontend/containers";
 import { useSelector } from "react-redux";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

@@ -1,4 +1,4 @@
-import { Cloudinary } from "../../helpers";
+import { Cloudinary } from "../../backend/helpers";
 
 function download(req, res) {
   try {

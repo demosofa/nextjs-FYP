@@ -1,4 +1,4 @@
-import { Cloudinary, parseForm } from "../../helpers";
+import { Cloudinary, parseForm } from "../../backend/helpers";
 import { UploadApiOptions } from "cloudinary";
 import { NextApiRequest, NextApiResponse } from "next";
 

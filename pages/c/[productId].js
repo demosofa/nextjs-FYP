@@ -10,19 +10,19 @@ import {
   Slider,
   Breadcrumb,
   StarRating,
-} from "../../components";
+} from "../../frontend/components";
 import {
   Comment,
   PriceInfo,
   ProductSlider,
   Rating,
   ReceivingAddress,
-} from "../../containers";
-import { expireStorage, retryAxios, Validate } from "../../utils";
-import { useMediaContext } from "../../contexts/MediaContext";
-import { addCart } from "../../redux/reducer/cartSlice";
-import { addNotification } from "../../redux/reducer/notificationSlice";
-import { addViewed } from "../../redux/reducer/recentlyViewedSlice";
+} from "../../frontend/containers";
+import { expireStorage, retryAxios, Validate } from "../../frontend/utils";
+import { useMediaContext } from "../../frontend/contexts/MediaContext";
+import { addCart } from "../../frontend/redux/reducer/cartSlice";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { addViewed } from "../../frontend/redux/reducer/recentlyViewedSlice";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -156,7 +156,7 @@ export default function Overview({ product, vid }) {
   };
 
   useEffect(() => {
-    if (targetVariation && targetVariation.thumbnail) {
+    if (targetVariation && targetVariation.thumbnail?.url) {
       router.replace(
         router.asPath,
         {
@@ -170,7 +170,7 @@ export default function Overview({ product, vid }) {
   }, [targetVariation]);
 
   useEffect(() => {
-    const { title, avgRating } = product;
+    const { title, avgRating, images } = product;
     if (targetVariation) {
       const { _id, productId, thumbnail, price, compare, sold } =
         targetVariation;
@@ -179,7 +179,7 @@ export default function Overview({ product, vid }) {
           _id,
           productId,
           title,
-          thumbnail: thumbnail.url,
+          thumbnail: thumbnail ? thumbnail.url : images[0].url,
           price,
           compare,
           avgRating,

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Checkbox, Form, Slider } from "../components";
-import { expireStorage, Validate } from "../utils";
+import { Checkbox, Form, Slider } from "../frontend/components";
+import { expireStorage, Validate } from "../frontend/utils";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { addNotification } from "../redux/reducer/notificationSlice";
-import { NotifyToast } from "../layouts";
+import { addNotification } from "../frontend/redux/reducer/notificationSlice";
+import { NotifyToast } from "../frontend/layouts";
 import Head from "next/head";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

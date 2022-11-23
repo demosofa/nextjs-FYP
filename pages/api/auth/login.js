@@ -1,5 +1,5 @@
-import { db } from "../../../helpers";
-import { auth } from "../../../controllers";
+import { db } from "../../../backend/helpers";
+import { auth } from "../../../backend/controllers";
 
 export default async function login(req, res) {
   await db.connect();

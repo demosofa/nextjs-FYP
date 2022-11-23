@@ -1,5 +1,5 @@
-import { rate } from "../../../controllers";
-import { isAuthentication } from "../../../helpers";
+import { rate } from "../../../backend/controllers";
+import { isAuthentication } from "../../../backend/helpers";
 
 async function rating(req, res) {
   switch (req.method.toLowerCase()) {

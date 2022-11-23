@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form } from "../components";
-import { NotifyToast } from "../layouts";
-import { addNotification } from "../redux/reducer/notificationSlice";
-import { Validate } from "../utils";
+import { Form } from "../frontend/components";
+import { NotifyToast } from "../frontend/layouts";
+import { addNotification } from "../frontend/redux/reducer/notificationSlice";
+import { Validate } from "../frontend/utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

@@ -2,9 +2,9 @@ import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Loading, Slider } from "../components";
-import { ProductCard } from "../containers";
-import { useAxiosLoad } from "../hooks";
+import { Loading, Slider } from "../frontend/components";
+import { ProductCard } from "../frontend/containers";
+import { useAxiosLoad } from "../frontend/hooks";
 import styles from "../styles/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

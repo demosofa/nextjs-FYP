@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useState, useEffect } from "react";
-import { Form, Loading, TagsInput } from "../../../components";
-import { UpdateImage, UpdateVariation } from "../../../containers";
+import { Form, Loading, TagsInput } from "../../../frontend/components";
+import { UpdateImage, UpdateVariation } from "../../../frontend/containers";
 import dynamic from "next/dynamic";
-import { useAuthLoad } from "../../../hooks";
-import { expireStorage, retryAxios, Validate } from "../../../utils";
+import { useAuthLoad } from "../../../frontend/hooks";
+import { expireStorage, retryAxios, Validate } from "../../../frontend/utils";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { addNotification } from "../../../redux/reducer/notificationSlice";
+import { addNotification } from "../../../frontend/redux/reducer/notificationSlice";
 import { Role } from "../../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

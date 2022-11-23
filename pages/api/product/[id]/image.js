@@ -1,5 +1,5 @@
-import { product } from "../../../../controllers";
-import { db } from "../../../../helpers";
+import { product } from "../../../../backend/controllers";
+import { db } from "../../../../backend/helpers";
 
 async function productImage(req, res) {
   await db.connect();

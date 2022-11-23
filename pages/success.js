@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Loading } from "../components";
-import { useAuthLoad } from "../hooks";
+import { Loading } from "../frontend/components";
+import { useAuthLoad } from "../frontend/hooks";
 import { currencyFormat, Role } from "../shared";
 
 export default function Success() {

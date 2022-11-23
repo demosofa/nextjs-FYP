@@ -3,9 +3,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Pagination } from "../components";
-import { ProductCard } from "../containers";
-import { addNotification } from "../redux/reducer/notificationSlice";
+import { Pagination } from "../frontend/components";
+import { ProductCard } from "../frontend/containers";
+import { addNotification } from "../frontend/redux/reducer/notificationSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

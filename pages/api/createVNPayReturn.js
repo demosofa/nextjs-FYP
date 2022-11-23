@@ -1,5 +1,5 @@
 import { OrderStatus, sortObject } from "../../shared";
-import models from "../../models";
+import models from "../../backend/models";
 
 export default async function VNPayReturn(req, res) {
   var vnp_Params = req.query;

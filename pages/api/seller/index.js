@@ -1,5 +1,9 @@
-import { seller } from "../../../controllers";
-import { db, isAuthentication, isAuthorization } from "../../../helpers";
+import { seller } from "../../../backend/controllers";
+import {
+  db,
+  isAuthentication,
+  isAuthorization,
+} from "../../../backend/helpers";
 import { Role } from "../../../shared";
 
 async function sellerIndex(req, res) {
