@@ -1,4 +1,4 @@
-import { isAuthentication } from "../../../backend/helpers";
+import { authenticate } from "../../../backend/helpers";
 import { notification } from "../../../backend/controllers";
 
 async function notifyId(req, res) {
@@ -12,4 +12,4 @@ async function notifyId(req, res) {
   }
 }
 
-export default isAuthentication(notifyId);
+export default authenticate(notifyId);

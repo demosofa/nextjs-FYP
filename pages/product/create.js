@@ -3,7 +3,12 @@ import Head from "next/head";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlinePlus } from "react-icons/ai";
-import { FileUpload, TagsInput, Form } from "../../frontend/components";
+import {
+  FileUpload,
+  TagsInput,
+  Form,
+  Loading,
+} from "../../frontend/components";
 import { Variation, Variant, SelectCategory } from "../../frontend/containers";
 import {
   retryAxios,
@@ -25,6 +30,7 @@ import { useAuthLoad } from "../../frontend/hooks";
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function CreateForm() {
+  const [waitForCreate, setWaitForCreate] = useState(false);
   const variants = useSelector((state) => state.variant);
   const variations = useSelector((state) => state.variation);
   const router = useRouter();
@@ -82,6 +88,7 @@ function CreateForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setWaitForCreate(true);
     let uploaded = [];
     try {
       if (!variants.length) throw new Error("Please add new variant");
@@ -115,6 +122,7 @@ function CreateForm() {
       }
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
+    setWaitForCreate(false);
   };
 
   const handleSelectedCategories = useCallback((index, categoryId) => {
@@ -129,20 +137,34 @@ function CreateForm() {
     });
   }, []);
 
-  const { loading, isLoggined, isAuthorized, error } = useAuthLoad({
+  const { loading, isLoggined, authorized, error } = useAuthLoad({
     roles: [Role.admin],
   });
   useEffect(() => {
     if (!loading && !isLoggined) router.push("/login");
-    else if (!loading && isLoggined && !isAuthorized) router.back();
+    else if (!loading && isLoggined && !authorized) router.back();
     else if (error) router.push("/register");
-  }, [loading, isLoggined, isAuthorized, error]);
+  }, [loading, isLoggined, authorized, error]);
 
   return (
     <>
       <Head>
         <title>Create Product</title>
       </Head>
+      {waitForCreate ? (
+        <>
+          <div className="backdrop" />
+          <Loading.Spinner
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: `translate(-50%, -50%)`,
+              zIndex: 15,
+            }}
+          />
+        </>
+      ) : null}
       <Form
         className="create_edit"
         onSubmit={handleSubmit}
@@ -179,7 +201,6 @@ function CreateForm() {
                 options={[
                   { value: "active", label: "active" },
                   { value: "non-active", label: "non-active" },
-                  { value: "out", label: "out" },
                 ]}
               />
             </Form.Item>

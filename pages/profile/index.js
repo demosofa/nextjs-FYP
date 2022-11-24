@@ -15,7 +15,7 @@ function MyProfile() {
   const router = useRouter();
   const [data, setData] = useState();
   const recentlyViewed = useSelector((state) => state.recentlyViewed);
-  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+  const { loading, isLoggined, authorized, error } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({
         url: `${LocalApi}/profile`,
@@ -26,11 +26,11 @@ function MyProfile() {
   });
 
   useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
+    if (!loading && !isLoggined && !authorized) router.push("/login");
+    else if ((!loading && !authorized) || (!loading && error)) router.back();
+  }, [loading, isLoggined, authorized]);
 
-  if (loading || !isLoggined || !isAuthorized)
+  if (loading || !isLoggined || !authorized)
     return (
       <Loading
         style={{
@@ -80,7 +80,7 @@ function MyProfile() {
           <label>You haven&apos; t visited any products</label>
         )}
       </div>
-      {isAuthorized === Role.seller ? null : <MyOrder />}
+      {authorized === Role.seller ? null : <MyOrder />}
     </div>
   );
 }

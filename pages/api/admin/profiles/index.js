@@ -1,9 +1,5 @@
 import { admin } from "../../../../backend/controllers";
-import {
-  db,
-  isAuthentication,
-  isAuthorization,
-} from "../../../../backend/helpers";
+import { db, authenticate, authorize } from "../../../../backend/helpers";
 import { Role } from "../../../../shared";
 
 async function profilesIndex(req, res) {
@@ -15,4 +11,4 @@ async function profilesIndex(req, res) {
   }
 }
 
-export default isAuthentication(isAuthorization(profilesIndex, [Role.admin]));
+export default authenticate(authorize(profilesIndex, [Role.admin]));

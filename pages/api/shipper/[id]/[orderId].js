@@ -1,5 +1,5 @@
 import { shipper } from "../../../../backend/controllers";
-import { isAuthentication, isAuthorization } from "../../../../backend/helpers";
+import { authenticate, authorize } from "../../../../backend/helpers";
 import { Role } from "../../../../shared";
 
 async function withOrderId(req, res) {
@@ -10,6 +10,6 @@ async function withOrderId(req, res) {
   }
 }
 
-export default isAuthentication(
-  isAuthorization(withOrderId, [Role.admin, Role.customer, Role.seller])
+export default authenticate(
+  authorize(withOrderId, [Role.customer, Role.seller])
 );

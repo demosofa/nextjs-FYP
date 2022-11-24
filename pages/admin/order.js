@@ -109,7 +109,7 @@ export default function ManageOrder() {
                       onClick={() => setDisplayDelete(order._id)}
                     />
                   ) : null}
-                  <dl>
+                  <dl className="mt-4">
                     <dt className="font-bold">Id:</dt>
                     <dd className="whitespace-pre-line line-clamp-1">
                       {order._id}

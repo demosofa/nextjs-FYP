@@ -1,5 +1,5 @@
 import { admin } from "../../../backend/controllers";
-import { isAuthentication, isAuthorization } from "../../../backend/helpers";
+import { authenticate, authorize } from "../../../backend/helpers";
 import { Role } from "../../../shared";
 
 async function NewUsers(req, res) {
@@ -10,4 +10,4 @@ async function NewUsers(req, res) {
   }
 }
 
-export default isAuthentication(isAuthorization(NewUsers, [Role.admin]));
+export default authenticate(authorize(NewUsers, [Role.admin]));

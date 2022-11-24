@@ -1,5 +1,5 @@
 import { admin } from "../../../../backend/controllers";
-import { isAuthentication, isAuthorization } from "../../../../backend/helpers";
+import { authenticate, authorize } from "../../../../backend/helpers";
 import { Role } from "../../../../shared";
 
 async function profilesId(req, res) {
@@ -16,4 +16,4 @@ async function profilesId(req, res) {
   }
 }
 
-export default isAuthentication(isAuthorization(profilesId, [Role.admin]));
+export default authenticate(authorize(profilesId, [Role.admin]));

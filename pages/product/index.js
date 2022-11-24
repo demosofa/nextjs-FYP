@@ -28,7 +28,7 @@ function ProductCRUD() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+  const { loading, isLoggined, authorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({
         url: `${LocalApi}/product`,
@@ -64,11 +64,11 @@ function ProductCRUD() {
   };
 
   useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
+    if (!loading && !isLoggined && !authorized) router.push("/login");
+    else if (!loading && !authorized) router.back();
+  }, [loading, isLoggined, authorized]);
 
-  const isLoadingInitialData = loading || !isLoggined || !isAuthorized;
+  const isLoadingInitialData = loading || !isLoggined || !authorized;
 
   return (
     <div className="product-crud__container">
@@ -76,7 +76,7 @@ function ProductCRUD() {
         <title>Manage Product</title>
       </Head>
       <div className="flex flex-wrap gap-4">
-        {isAuthorized === Role.admin ? (
+        {authorized === Role.admin ? (
           <button
             className="main_btn"
             onClick={() => router.push(`product/create`)}
@@ -147,7 +147,6 @@ function ProductCRUD() {
                           >
                             <option value="active">active</option>
                             <option value="non-active">non-active</option>
-                            <option value="out">out</option>
                           </select>
                         </td>
                         <td>
@@ -214,7 +213,7 @@ function ProductCRUD() {
                             >
                               Preview
                             </button>
-                            {isAuthorized === Role.admin ? (
+                            {authorized === Role.admin ? (
                               <>
                                 <button
                                   className="rounded-lg border-2 border-blue-500 px-4 py-2 text-blue-500 duration-300 hover:bg-blue-600 hover:text-blue-100"

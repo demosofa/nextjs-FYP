@@ -1,5 +1,5 @@
 import { seller } from "../../../backend/controllers";
-import { isAuthentication, isAuthorization } from "../../../backend/helpers";
+import { authenticate, authorize } from "../../../backend/helpers";
 import { Role } from "../../../shared";
 
 async function totalOrder(req, res) {
@@ -10,6 +10,4 @@ async function totalOrder(req, res) {
   }
 }
 
-export default isAuthentication(
-  isAuthorization(totalOrder, [Role.admin, Role.seller])
-);
+export default authenticate(authorize(totalOrder, [Role.seller]));

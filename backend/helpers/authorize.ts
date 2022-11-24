@@ -1,7 +1,7 @@
 import type { NextApiResponse, NextApiHandler } from "next";
 import Request from "./type";
 
-export default function isAuthorization(
+export default function authorize(
   handler: NextApiHandler,
   roles: string[]
 ): NextApiHandler {

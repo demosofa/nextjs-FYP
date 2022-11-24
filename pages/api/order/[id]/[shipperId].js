@@ -1,5 +1,5 @@
 import { user } from "../../../../backend/controllers";
-import { isAuthentication } from "../../../../backend/helpers";
+import { authenticate } from "../../../../backend/helpers";
 
 async function shipperId(req, res) {
   switch (req.method.toLowerCase()) {
@@ -9,4 +9,4 @@ async function shipperId(req, res) {
   }
 }
 
-export default isAuthentication(shipperId);
+export default authenticate(shipperId);

@@ -15,7 +15,7 @@ const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function CrudCategory({ maxTree = 3 }) {
   const [categories, setCategories] = useState([]);
-  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+  const { loading, isLoggined, authorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({ url: `${LocalApi}/category` });
       setCategories(res.data);
@@ -27,11 +27,11 @@ export default function CrudCategory({ maxTree = 3 }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
+    if (!loading && !isLoggined && !authorized) router.push("/login");
+    else if (!loading && !authorized) router.back();
+  }, [loading, isLoggined, authorized]);
 
-  if (loading || !isLoggined || !isAuthorized)
+  if (loading || !isLoggined || !authorized)
     return (
       <Loading
         style={{

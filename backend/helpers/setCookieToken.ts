@@ -5,10 +5,11 @@ import { convertTime } from "../../shared";
 
 const setCookieToken: NextApiHandler = (req, res) => {
   try {
-    const { accountId, userId, role } = Token.verifyRefreshToken(
+    const { username, accountId, userId, role } = Token.verifyRefreshToken(
       req.cookies.refreshToken
-    ) as { accountId: string; userId: string; role: string };
+    ) as { username: string; accountId: string; userId: string; role: string };
     const { accessToken, refreshToken } = new Token({
+      username,
       accountId,
       userId,
       role,

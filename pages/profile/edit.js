@@ -19,7 +19,7 @@ function EditProfile() {
   const {
     loading,
     isLoggined,
-    isAuthorized,
+    authorized,
     axiosInstance: axios,
   } = useAuthLoad({
     async cb(axiosInstance) {
@@ -65,11 +65,11 @@ function EditProfile() {
   };
 
   useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
+    if (!loading && !isLoggined && !authorized) router.push("/login");
+    else if (!loading && !authorized) router.back();
+  }, [loading, isLoggined, authorized]);
 
-  if (loading || !isLoggined || !isAuthorized)
+  if (loading || !isLoggined || !authorized)
     return (
       <Loading
         style={{

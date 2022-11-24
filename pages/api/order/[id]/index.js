@@ -1,5 +1,5 @@
 import { order } from "../../../../backend/controllers";
-import { db, isAuthentication } from "../../../../backend/helpers";
+import { db, authenticate } from "../../../../backend/helpers";
 
 async function orderId(req, res) {
   await db.connect();
@@ -19,4 +19,4 @@ async function orderId(req, res) {
   }
 }
 
-export default isAuthentication(orderId);
+export default authenticate(orderId);

@@ -1,4 +1,3 @@
-import { blacklist } from "../helpers";
 import { OrderStatus, Role } from "../../shared";
 import models from "../models";
 
@@ -112,8 +111,6 @@ class AdminController {
       await models.Account.findByIdAndUpdate(req.query.id, {
         $set: { blocked: req.body.blocked },
       });
-      if (req.body.blocked) blacklist.addToBlackList(req.query.id);
-      else blacklist.removeFromBlackList(req.query.id);
       return res.status(200).end();
     } catch (error) {
       return res.status(500).json({ message: error });

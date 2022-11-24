@@ -1,5 +1,5 @@
 import { product } from "../../../backend/controllers";
-import { db, isAuthentication } from "../../../backend/helpers";
+import { db, authenticate } from "../../../backend/helpers";
 
 async function index(req, res) {
   await db.connect();
@@ -16,4 +16,4 @@ async function index(req, res) {
   }
 }
 
-export default isAuthentication(index);
+export default authenticate(index);

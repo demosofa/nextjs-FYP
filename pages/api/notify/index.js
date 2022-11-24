@@ -1,5 +1,5 @@
 import { notification } from "../../../backend/controllers";
-import { isAuthentication } from "../../../backend/helpers";
+import { authenticate } from "../../../backend/helpers";
 
 async function notify(req, res) {
   switch (req.method.toLowerCase()) {
@@ -12,4 +12,4 @@ async function notify(req, res) {
   }
 }
 
-export default isAuthentication(notify);
+export default authenticate(notify);

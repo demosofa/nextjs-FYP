@@ -19,6 +19,7 @@ class AuthController {
     if (!validPass)
       return res.status(300).json({ message: "Invalid password" });
     const { accessToken, refreshToken } = new Token({
+      username,
       accountId: check._id,
       userId: check.user,
       role: check.role,
@@ -55,6 +56,7 @@ class AuthController {
     if (!created)
       return res.status(500).json({ message: "Fail to Create Account" });
     const { accessToken, refreshToken } = new Token({
+      username: account.username,
       accountId: created._id,
       userId: user._id,
       role: created.role,
@@ -152,6 +154,11 @@ class AuthController {
     } catch (error) {
       return res.status(500).json(error.message);
     }
+  };
+  checkAllowed = async (id) => {
+    const check = await models.Account.findById(id).lean();
+    if (!check) return 401;
+    if (check.blocked) return 403;
   };
 }
 

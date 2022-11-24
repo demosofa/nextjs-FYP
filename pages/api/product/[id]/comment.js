@@ -1,5 +1,5 @@
 import { comment } from "../../../../backend/controllers";
-import { db, isAuthentication } from "../../../../backend/helpers";
+import { db, authenticate } from "../../../../backend/helpers";
 
 export default async function productComment(req, res) {
   await db.connect();
@@ -8,7 +8,7 @@ export default async function productComment(req, res) {
       await comment.getCommentFromProduct(req, res);
       break;
     case "post":
-      await isAuthentication(comment.addCommentToProduct)(req, res);
+      await authenticate(comment.addCommentToProduct)(req, res);
       break;
   }
 }

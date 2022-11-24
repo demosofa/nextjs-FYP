@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useMediaContext } from "../contexts/MediaContext";
 import { useRouter } from "next/router";
 import { FaBell } from "react-icons/fa";
+import decoder from "jwt-decode";
 
 export default function General({ children, arrLink }) {
   const { device, Devices } = useMediaContext();
@@ -31,7 +32,9 @@ export default function General({ children, arrLink }) {
               localStorage.getItem("accessToken") && (
                 <>
                   <Link href="/profile">
-                    <a onClick={() => setToggle(!toggle)}>My Profile</a>
+                    <a onClick={() => setToggle(!toggle)}>
+                      {decoder(localStorage.getItem("accessToken")).username}
+                    </a>
                   </Link>
                   <Link href="/notification">
                     <a onClick={() => setToggle(!toggle)}>

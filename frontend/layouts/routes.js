@@ -32,23 +32,23 @@ const SellerRole = [
 ];
 
 const AdminRole = [
+  SellerRole[0],
+  SellerRole[1],
   {
     title: "Category Management",
     path: "/admin/category",
     icon: <MdOutlineCategory />,
   },
   {
-    title: "Manage Order",
-    path: "/admin/order",
-    icon: <TbShoppingCartDiscount />,
-  },
-  {
     title: "Manage Account",
     path: "/admin/profiles",
     icon: <AiOutlineProfile />,
   },
-  ...SellerRole,
-  ...ShipperRole,
+  {
+    title: "Manage Order",
+    path: "/admin/order",
+    icon: <TbShoppingCartDiscount />,
+  },
 ];
 
 export { AdminRole, ShipperRole, SellerRole };

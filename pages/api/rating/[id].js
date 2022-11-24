@@ -1,5 +1,5 @@
 import { rate } from "../../../backend/controllers";
-import { isAuthentication } from "../../../backend/helpers";
+import { authenticate } from "../../../backend/helpers";
 
 async function rating(req, res) {
   switch (req.method.toLowerCase()) {
@@ -12,4 +12,4 @@ async function rating(req, res) {
   }
 }
 
-export default isAuthentication(rating);
+export default authenticate(rating);

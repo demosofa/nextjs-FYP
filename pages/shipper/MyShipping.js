@@ -152,7 +152,20 @@ function MyShipping() {
                           {order.address}
                         </a>
                       </td>
-                      <td>{order.customer.user.phoneNumber}</td>
+                      <td>
+                        {(order.status === OrderStatus.progress && (
+                          <p className="text-[#9F6000]">
+                            Only show if this order was validated by seller
+                          </p>
+                        )) ||
+                          (order.status === OrderStatus.paid ? (
+                            <p className="text-[#9F6000]">
+                              This information is now hindden
+                            </p>
+                          ) : (
+                            order.customer.user.phoneNumber
+                          ))}
+                      </td>
                       <td>{currencyFormat(order.total)}</td>
                       <td>
                         <div className="flex flex-col items-center">
@@ -162,14 +175,14 @@ function MyShipping() {
                           >
                             View List item
                           </button>
-                          {order.status === OrderStatus.progress && (
+                          {order.status === OrderStatus.progress ? (
                             <button
                               className="mr-5 whitespace-nowrap uppercase text-indigo-600 hover:text-indigo-900 focus:underline focus:outline-none"
                               onClick={() => handleShowQR(order._id)}
                             >
-                              Show QR to seller
+                              Show QR for seller to validate this order
                             </button>
-                          )}
+                          ) : null}
                           <Link href={`/shipping/${order._id}`}>
                             <a className="mr-5 whitespace-nowrap uppercase text-purple-600 hover:text-purple-900 focus:underline focus:outline-none">
                               Manage Progress

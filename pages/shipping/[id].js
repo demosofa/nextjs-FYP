@@ -68,7 +68,7 @@ function ShippingProgress() {
   useEffect(() => {
     try {
       if (!channel.current && order) {
-        if ([Role.shipper, Role.admin].includes(auth.role))
+        if ([Role.shipper].includes(auth.role))
           channel.current = ably.channels.get(order.customer._id);
         else if ([Role.customer].includes(auth.role))
           channel.current = ably.channels.get(order.shipper._id);
@@ -123,13 +123,10 @@ function ShippingProgress() {
   };
 
   const arrivedState = () => {
-    if (
-      (auth.role === Role.customer || auth.role === Role.admin) &&
-      auth.accountId === order.customer._id
-    ) {
+    if (auth.role === Role.customer && auth.accountId === order.customer._id) {
       setShowScanner(true);
     } else if (
-      (auth.role === Role.shipper || auth.role === Role.admin) &&
+      auth.role === Role.shipper &&
       auth.accountId === order.shipper._id
     ) {
       if (order.status !== OrderStatus.arrived) {
@@ -148,6 +145,7 @@ function ShippingProgress() {
               method: "post",
               data: {
                 to: order.customer._id,
+                link: window.location.href,
                 content,
               },
             });
@@ -173,10 +171,7 @@ function ShippingProgress() {
   };
 
   const validatedState = () => {
-    if (
-      (auth.role === Role.customer || auth.role === Role.admin) &&
-      auth.accountId === order.customer._id
-    ) {
+    if (auth.role === Role.customer && auth.accountId === order.customer._id) {
       setShowVnPay(true);
     }
   };
@@ -207,7 +202,7 @@ function ShippingProgress() {
             allowed:
               order.status === OrderStatus.arrived ||
               (order.status === OrderStatus.shipping &&
-                (auth.role === Role.shipper || auth.role === Role.admin))
+                auth.role === Role.shipper)
                 ? true
                 : false,
           },
@@ -215,7 +210,7 @@ function ShippingProgress() {
             title: OrderStatus.validated,
             allowed:
               order.status === OrderStatus.validated &&
-              (auth.role === Role.customer || auth.role === Role.admin)
+              auth.role === Role.customer
                 ? true
                 : false,
           },
@@ -264,6 +259,7 @@ function ShippingProgress() {
         </dd>
       </dl>
       <ProgressBar
+        key={order._id + order.status}
         steps={steps}
         pass={order.status}
         onResult={handleCheckStep}

@@ -17,7 +17,7 @@ function UpdateProduct() {
   const [product, setProduct] = useState();
   const [toggle, setToggle] = useState(null);
   const router = useRouter();
-  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+  const { loading, isLoggined, authorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({
         url: `${LocalApi}/product/${router.query?.id}`,
@@ -65,11 +65,11 @@ function UpdateProduct() {
   };
 
   useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
+    if (!loading && !isLoggined && !authorized) router.push("/login");
+    else if (!loading && !authorized) router.back();
+  }, [loading, isLoggined, authorized]);
 
-  if (loading || !isLoggined || !isAuthorized)
+  if (loading || !isLoggined || !authorized)
     return (
       <Loading
         style={{

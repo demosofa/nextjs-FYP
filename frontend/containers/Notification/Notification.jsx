@@ -81,31 +81,34 @@ export default function Notification({ className, ...props }) {
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
 
   return (
-    <div className={className}>
+    <div className={`flex flex-col items-center gap-2 ${className}`}>
       {!isLoadingInitialData ? (
         notifications.map((item, index) => (
-          <div
-            className="w-full text-gray-700 hover:shadow-md"
+          <a
+            href={item.link}
+            className="w-full rounded-md p-2 text-gray-700 hover:shadow"
             key={index}
-            onClick={() => handleRead(item._id)}
+            onClick={(e) => {
+              if (!item.link) e.preventDefault();
+              handleRead(item._id);
+            }}
             {...props}
           >
             <label>
-              from{" "}
-              <span className="text-base font-medium">
-                {item.from.username}
-              </span>
+              From <span className="text-base">{item.from.username}</span>
             </label>
-            <label>
+            <label className="text-gray-400">
               {" "}
-              at{" "}
-              <span className="text-base font-medium">
-                {timeAgo(item.createdAt)}
-              </span>
+              at {timeAgo(item.createdAt)}
             </label>
             <p>{item.content}</p>
-            <button onClick={() => handleDelete(index)}>Delete</button>
-          </div>
+            <button
+              className="mt-1 inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+              onClick={() => handleDelete(index)}
+            >
+              Delete
+            </button>
+          </a>
         ))
       ) : (
         <Loading.Spinner />

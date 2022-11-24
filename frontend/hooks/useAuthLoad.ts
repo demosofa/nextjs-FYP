@@ -18,7 +18,7 @@ export default function useAuthLoad({
   deps?: DependencyList;
 }) {
   const [isLoggined, setLoggined] = useState(false);
-  const [isAuthorized, setAuthorized] = useState(null);
+  const [authorized, setAuthorized] = useState(null);
   const [error, setError] = useState();
   const { loading, setLoading, axiosInstance } = useAxiosLoad({
     config,
@@ -68,5 +68,5 @@ export default function useAuthLoad({
       }
     },
   });
-  return { loading, isLoggined, isAuthorized, error, axiosInstance };
+  return { loading, isLoggined, authorized, error, axiosInstance };
 }

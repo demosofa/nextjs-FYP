@@ -7,14 +7,14 @@ import { currencyFormat, Role } from "../shared";
 
 export default function Success() {
   const router = useRouter();
-  const { loading, isLoggined, isAuthorized } = useAuthLoad({
+  const { loading, isLoggined, authorized } = useAuthLoad({
     roles: [Role.customer],
   });
   useEffect(() => {
-    if (!loading && !isLoggined && !isAuthorized) router.push("/login");
-    else if (!loading && !isAuthorized) router.back();
-  }, [loading, isLoggined, isAuthorized]);
-  if (loading || !isLoggined || !isAuthorized) return <Loading />;
+    if (!loading && !isLoggined && !authorized) router.push("/login");
+    else if (!loading && !authorized) router.back();
+  }, [loading, isLoggined, authorized]);
+  if (loading || !isLoggined || !authorized) return <Loading />;
   return (
     <div className="form_center">
       <Head>

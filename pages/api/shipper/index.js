@@ -1,9 +1,5 @@
 import { shipper } from "../../../backend/controllers";
-import {
-  db,
-  isAuthentication,
-  isAuthorization,
-} from "../../../backend/helpers";
+import { db, authenticate, authorize } from "../../../backend/helpers";
 import { Role } from "../../../shared";
 
 async function Shipper(req, res) {
@@ -18,6 +14,4 @@ async function Shipper(req, res) {
   }
 }
 
-export default isAuthentication(
-  isAuthorization(Shipper, [Role.shipper, Role.admin])
-);
+export default authenticate(authorize(Shipper, [Role.shipper]));

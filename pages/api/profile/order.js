@@ -1,4 +1,4 @@
-import { db, isAuthentication } from "../../../backend/helpers";
+import { db, authenticate } from "../../../backend/helpers";
 import { user } from "../../../backend/controllers";
 
 async function order(req, res) {
@@ -10,4 +10,4 @@ async function order(req, res) {
   }
 }
 
-export default isAuthentication(order);
+export default authenticate(order);

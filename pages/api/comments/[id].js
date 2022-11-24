@@ -1,5 +1,5 @@
 import { comment } from "../../../backend/controllers";
-import { db, isAuthentication } from "../../../backend/helpers";
+import { db, authenticate } from "../../../backend/helpers";
 
 async function commentApi(req, res) {
   await db.connect();
@@ -19,4 +19,4 @@ async function commentApi(req, res) {
   }
 }
 
-export default isAuthentication(commentApi);
+export default authenticate(commentApi);

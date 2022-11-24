@@ -40,15 +40,16 @@ function Shipper() {
     {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
     }
   );
 
-  const { mutate } = useSWRImmutable({ url: `${LocalApi}/shipper` }, fetcher);
+  const { mutate } = useSWRImmutable({ url: `${LocalApi}/shipper` }, fetcher, {
+    onError(err, key, config) {
+      if (err?.response?.status === 403) router.back();
+      else if (err?.response?.status === 401) router.push("/login");
+      else dispatch(addNotification({ message: err.message, type: "error" }));
+    },
+  });
 
   if (!data || error)
     return (

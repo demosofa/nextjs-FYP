@@ -1,4 +1,4 @@
-import { db, isAuthentication } from "../../../backend/helpers";
+import { db, authenticate } from "../../../backend/helpers";
 import { user } from "../../../backend/controllers";
 
 async function profileId(req, res) {
@@ -13,4 +13,4 @@ async function profileId(req, res) {
   }
 }
 
-export default isAuthentication(profileId);
+export default authenticate(profileId);

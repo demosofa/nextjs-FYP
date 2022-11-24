@@ -1,4 +1,4 @@
-import { isAuthentication } from "../../backend/helpers";
+import { authenticate } from "../../backend/helpers";
 import { format } from "date-fns";
 import { sortObject } from "../../shared";
 import NextCors from "nextjs-cors";
@@ -72,4 +72,4 @@ async function createVNPayUrl(req, res) {
   }
 }
 
-export default isAuthentication(createVNPayUrl);
+export default authenticate(createVNPayUrl);

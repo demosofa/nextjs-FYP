@@ -55,6 +55,8 @@ export default function Cart() {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
     try {
+      if (!cart.products.length)
+        throw new Error("There is any products in cart");
       new Validate(address).isEmpty().isAddress();
       await axios.post(
         `${LocalApi}/order`,

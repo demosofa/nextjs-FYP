@@ -1,9 +1,5 @@
 import { admin } from "../../../backend/controllers";
-import {
-  db,
-  isAuthentication,
-  isAuthorization,
-} from "../../../backend/helpers";
+import { db, authenticate, authorize } from "../../../backend/helpers";
 import { Role } from "../../../shared";
 
 async function adminOrder(req, res) {
@@ -18,4 +14,4 @@ async function adminOrder(req, res) {
   }
 }
 
-export default isAuthentication(isAuthorization(adminOrder, Role.admin));
+export default authenticate(authorize(adminOrder, Role.admin));

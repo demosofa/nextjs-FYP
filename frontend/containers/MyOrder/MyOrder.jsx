@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Select from "react-select";
 import { Form, Loading, Search } from "../../components";
-import { currencyFormat, OrderStatus } from "../../../shared";
+import { convertTime, currencyFormat, OrderStatus } from "../../../shared";
 import { ItemsFromOrder, ThSortOrderBy } from "../";
 import Link from "next/link";
 
@@ -43,6 +43,8 @@ export default function MyOrder() {
     },
     fetcher,
     {
+      refreshInterval: convertTime("5s").milisecond,
+      dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
         if (err?.response?.status === 403) router.back();
         else if (err?.response?.status === 401) router.push("/login");

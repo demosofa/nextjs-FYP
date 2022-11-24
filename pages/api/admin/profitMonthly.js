@@ -1,5 +1,5 @@
 import { admin } from "../../../backend/controllers";
-import { isAuthentication, isAuthorization } from "../../../backend/helpers";
+import { authenticate, authorize } from "../../../backend/helpers";
 import Role from "../../../shared/Role";
 
 async function profitMonthly(req, res) {
@@ -10,4 +10,4 @@ async function profitMonthly(req, res) {
   }
 }
 
-export default isAuthentication(isAuthorization(profitMonthly, [Role.admin]));
+export default authenticate(authorize(profitMonthly, [Role.admin]));
