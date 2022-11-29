@@ -1,5 +1,5 @@
 import axios from "axios";
-import useSWRImmutable from "swr/immutable";
+import useSWR from "swr";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import {
@@ -13,7 +13,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import Head from "next/head";
-import { currencyFormat } from "../../shared";
+import { convertTime, currencyFormat } from "../../shared";
 import { ThSortOrderBy } from "../../frontend/containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -38,10 +38,12 @@ function SellerPage() {
   };
   const router = useRouter();
   const dispatch = useDispatch();
-  const { data, error, mutate } = useSWRImmutable(
+  const { data, error, mutate } = useSWR(
     { url: `${LocalApi}/seller`, params: query },
     fetcher,
     {
+      refreshInterval: convertTime("5s").milisecond,
+      dedupingInterval: convertTime("5s").milisecond,
       onError(err, key, config) {
         if (err?.response?.status === 403) router.back();
         else if (err?.response?.status === 401) router.push("/login");
@@ -116,8 +118,15 @@ function SellerPage() {
               <tr>
                 <th>No.</th>
                 <th>Id</th>
+                <ThSortOrderBy
+                  query={query}
+                  setQuery={setQuery}
+                  target="status"
+                >
+                  Status
+                </ThSortOrderBy>
                 <ThSortOrderBy query={query} setQuery={setQuery} target="total">
-                  total
+                  Total
                 </ThSortOrderBy>
                 <ThSortOrderBy
                   query={query}
@@ -135,6 +144,7 @@ function SellerPage() {
                   <tr key={order._id}>
                     <td>{index + 1}</td>
                     <td>{order._id}</td>
+                    <td>{order.status}</td>
                     <td>{currencyFormat(order.total)}</td>
                     <td>
                       {new Date(order.validatedAt).toLocaleString("en-US", {
@@ -155,7 +165,7 @@ function SellerPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5">
+                  <td colSpan="6">
                     <p className="text-center">
                       Currently, seller has yet validated any shipper order
                     </p>

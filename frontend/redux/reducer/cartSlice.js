@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import pushCart from "../async/pushCart";
 
 /**
  * @typedef {({
@@ -71,10 +70,6 @@ const cart = createSlice({
       localStorage.removeItem("cart");
       return initialState;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(pushCart.fulfilled, (state, action) => {});
-    builder.addCase(pushCart.rejected, (state, action) => {});
   },
 });
 

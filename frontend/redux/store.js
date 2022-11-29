@@ -6,7 +6,6 @@ import {
   variation,
   recentlyViewed,
 } from "./reducer";
-import { apiSlice } from "./api";
 import { cartStorage, recentlyViewedStorage } from "./middleware";
 import { expireStorage } from "../utils";
 
@@ -30,11 +29,9 @@ export const store = configureStore({
     variant,
     variation,
     recentlyViewed,
-    [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
-      apiSlice.middleware,
       cartStorage.middleware,
       recentlyViewedStorage.middleware,
     ]),
