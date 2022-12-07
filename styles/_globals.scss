@@ -64,8 +64,14 @@ dl {
   &.pending {
     @apply bg-orange-200 text-orange-700;
   }
-  &.other {
+  &.validated {
     @apply bg-white text-gray-700;
+  }
+  &.progress {
+    @apply bg-yellow-200 text-yellow-700;
+  }
+  &.paid {
+    @apply bg-slate-200 text-slate-700;
   }
 }
 

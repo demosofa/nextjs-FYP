@@ -1,5 +1,6 @@
 import { order } from "../../../backend/controllers";
-import { db, authenticate } from "../../../backend/helpers";
+import { db, authenticate, authorize } from "../../../backend/helpers";
+import { Role } from "../../../shared";
 
 async function orderIndex(req, res) {
   await db.connect();
@@ -8,7 +9,7 @@ async function orderIndex(req, res) {
       await order.lstOrder(req, res);
       break;
     case "post":
-      await order.addOrder(req, res);
+      await authorize(order.addOrder, [Role.customer])(req, res);
   }
 }
 

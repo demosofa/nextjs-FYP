@@ -406,7 +406,7 @@ class ProductController {
         orderItems: getOrderItem._id,
         status: { $ne: OrderStatus.paid },
       });
-      if (!check)
+      if (check)
         return res.status(500).json("There is an order that have this product");
     }
     const { images } = await models.Product.findById(req.query.id)

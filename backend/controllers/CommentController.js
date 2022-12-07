@@ -75,7 +75,7 @@ class CommentController {
     });
     if (!updated)
       return res.status(500).json({ message: "Fail to update comment" });
-    return res.status(200).end();
+    return res.status(200).json(updated);
   };
   delete = async (req, res) => {
     const id = req.query.id;

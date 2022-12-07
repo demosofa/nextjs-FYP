@@ -5,11 +5,11 @@ import { Dropdown, Loading, Pagination } from "../../components";
 import { useAxiosLoad } from "../../hooks";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
+import { expireStorage, retryAxios, timeAgo } from "../../utils";
 import decoder from "jwt-decode";
 import styles from "./comment.module.scss";
 
-const LocalApi = process.env.NEXT_PUBLIC_API + "/comments";
+const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function Comment({ url, maxTree = 3 }) {
   const [params, setParams] = useState({
@@ -122,8 +122,8 @@ function CommentTab({
       retryAxios(axios);
       const accessToken = expireStorage.getItem("accessToken");
       try {
-        await axios.patch(
-          `${LocalApi}/${data._id}`,
+        const res = await axios.patch(
+          `${LocalApi}/comments/${data._id}`,
           { content },
           {
             signal: controller.current.signal,
@@ -132,7 +132,11 @@ function CommentTab({
             },
           }
         );
-        setCurrentComment((prev) => ({ ...prev, content }));
+        setCurrentComment((prev) => ({
+          ...prev,
+          content,
+          updatedAt: res.data.updatedAt,
+        }));
         setToggle((prev) => ({ ...prev, edit: false }));
         controller.current = null;
       } catch (error) {
@@ -148,7 +152,7 @@ function CommentTab({
       retryAxios(axios);
       const accessToken = expireStorage.getItem("accessToken");
       try {
-        await axios.delete(`${LocalApi}/${data._id}`, {
+        await axios.delete(`${LocalApi}/comments/${data._id}`, {
           signal: controller.current.signal,
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -168,7 +172,7 @@ function CommentTab({
         retryAxios(axiosInstance);
         const accessToken = expireStorage.getItem("accessToken");
         const response = await axiosInstance({
-          url: `${LocalApi}/${currentComment._id}`,
+          url: `${LocalApi}/comments/${currentComment._id}`,
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -182,7 +186,15 @@ function CommentTab({
   return (
     <div className={styles.container} {...props}>
       <div className={styles.tab_container}>
-        <label>{currentComment.author.username}</label>
+        <p>
+          <span className="text-base font-bold">
+            {currentComment.author.username}
+          </span>{" "}
+          <span className="text-sm text-gray-500 ">
+            {timeAgo(currentComment.updatedAt)}
+          </span>
+        </p>
+
         {isAuthor && !toggle.edit && (
           <Dropdown component={<BiDotsVertical />} hoverable={true}>
             <Dropdown.Content className="right-0">
@@ -205,7 +217,7 @@ function CommentTab({
         )}
       </div>
       <div className="comment-tab">
-        {(toggle.edit && (
+        {toggle.edit ? (
           <CommentInput
             data={currentComment.content}
             callback={handleEditSave}
@@ -213,11 +225,13 @@ function CommentTab({
               setToggle((prev) => ({ ...prev, edit: boolean }))
             }
           />
-        )) ||
-          currentComment.content}
+        ) : (
+          <p className="text-gray-700">{currentComment.content}</p>
+        )}
       </div>
       <div className="btn-container">
         <button
+          className="background-transparent mr-1 mb-1 px-3 py-1 text-xs font-bold uppercase text-blue-500 outline-none transition-all duration-150 ease-linear hover:underline focus:outline-none"
           onClick={() =>
             setToggle((prev) => {
               if (maxTree > 0)
@@ -230,6 +244,7 @@ function CommentTab({
         </button>
         {maxTree > 0 && (
           <button
+            className="background-transparent mr-1 mb-1 px-3 py-1 text-xs font-bold uppercase text-blue-500 outline-none transition-all duration-150 ease-linear hover:underline focus:outline-none"
             onClick={() => setToggle((prev) => ({ ...prev, more: !prev.more }))}
           >
             More
@@ -265,7 +280,7 @@ function CommentTab({
       {toggle.reply && (
         <CommentReply
           data={currentComment}
-          urlWithParentCommentId={`${LocalApi}/${parentCommentId}`}
+          urlWithParentCommentId={`${LocalApi}/comments/${parentCommentId}`}
           setComments={maxTree > 0 ? setComments : setParentSubComments}
           setToggle={(boolean) =>
             setToggle((prev) => ({ ...prev, reply: boolean }))
@@ -289,9 +304,17 @@ function CommentInput({ data = "", callback, setToggle = undefined }) {
         />
       </div>
 
-      <div className="flex items-center justify-between border-t py-2 px-3">
+      <div className="flex items-center justify-end gap-4 border-t py-2 px-3">
+        {setToggle && (
+          <button
+            className="font-medium text-orange-500 underline hover:text-orange-700"
+            onClick={() => setToggle(false)}
+          >
+            Cancel
+          </button>
+        )}
         <button
-          className="inline-flex items-center rounded-lg bg-orange-700 py-2.5 px-4 text-center text-xs font-medium text-white hover:bg-orange-800 focus:ring-4 focus:ring-orange-200"
+          className="mr-2 mb-2 rounded-lg bg-gradient-to-r from-red-400 via-red-500 to-red-600 px-5 py-2.5 text-center text-sm font-medium text-white shadow-lg shadow-red-500/50 hover:bg-gradient-to-br focus:outline-none focus:ring-4 focus:ring-red-300 dark:shadow-lg dark:shadow-red-800/80 dark:focus:ring-red-800"
           onClick={() => {
             callback(input);
             setInput("");
@@ -299,14 +322,6 @@ function CommentInput({ data = "", callback, setToggle = undefined }) {
         >
           Save
         </button>
-        {setToggle && (
-          <button
-            className="inline-flex items-center rounded-lg bg-orange-700 py-2.5 px-4 text-center text-xs font-medium text-white hover:bg-orange-800 focus:ring-4 focus:ring-orange-200"
-            onClick={() => setToggle(false)}
-          >
-            Cancel
-          </button>
-        )}
       </div>
     </div>
   );
@@ -326,6 +341,7 @@ function CommentReply({
     else {
       controller.current = new AbortController();
       const accessToken = expireStorage.getItem("accessToken");
+      const { username } = decoder(accessToken);
       retryAxios(axios);
       try {
         const response = await axios.put(
@@ -333,6 +349,19 @@ function CommentReply({
           { content: value },
           {
             signal: controller.current.signal,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        await axios.post(
+          `${LocalApi}/notify`,
+          {
+            to: data.author._id,
+            content: `You have an reply from ${username}`,
+            link: window.location.href,
+          },
+          {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -349,7 +378,7 @@ function CommentReply({
 
   return (
     <div className="reply-comment">
-      <label>{data.author.username}</label>
+      <label className="text-sm font-bold">{data.author.username}</label>
       <CommentInput callback={handleReply} setToggle={setToggle} />
     </div>
   );

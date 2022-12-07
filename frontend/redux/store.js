@@ -5,6 +5,7 @@ import {
   variant,
   variation,
   recentlyViewed,
+  modal,
 } from "./reducer";
 import { cartStorage, recentlyViewedStorage } from "./middleware";
 import { expireStorage } from "../utils";
@@ -29,6 +30,7 @@ export const store = configureStore({
     variant,
     variation,
     recentlyViewed,
+    modal,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([

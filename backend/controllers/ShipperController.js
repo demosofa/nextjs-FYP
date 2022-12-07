@@ -40,17 +40,6 @@ class ShipperController {
     const pageCounted = Math.ceil(countMyShipping / limit);
     return res.status(200).json({ lstShipping, pageCounted });
   };
-  checkQR = async (req, res) => {
-    const { id, orderId } = req.query;
-    const order = await models.Order.findOne({
-      shipper: id,
-      _id: orderId,
-    })
-      .populate({ path: "shipper", select: ["username"] })
-      .populate("orderItems")
-      .lean();
-    return res.status(200).json(order);
-  };
   acceptOrder = async (req, res) => {
     const { acceptedOrders } = req.body;
     const { accountId, role } = req.user;

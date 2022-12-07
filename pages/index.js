@@ -10,9 +10,9 @@ import styles from "../styles/Home.module.scss";
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export async function getServerSideProps({ query }) {
-  let products = null;
+  let products = [];
   let pageCounted = 0;
-  let categories = null;
+  let categories = [];
   try {
     const resProducts = await axios.get(`${LocalApi}/product/all`, {
       params: query,
@@ -22,7 +22,9 @@ export async function getServerSideProps({ query }) {
     pageCounted = result.pageCounted.length ? result.pageCounted[0].count : 0;
     const resCategories = await axios.get(`${LocalApi}/category/all`);
     categories = resCategories.data;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
   return {
     props: { products, categories, pageCounted, query },
   };

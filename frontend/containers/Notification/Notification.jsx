@@ -57,7 +57,8 @@ export default function Notification({ className, ...props }) {
     });
   };
 
-  const handleDelete = (index) => {
+  const handleDelete = (e, index) => {
+    e.stopPropagation();
     mutate(async (data) => {
       try {
         await fetcher({
@@ -86,7 +87,7 @@ export default function Notification({ className, ...props }) {
         notifications.map((item, index) => (
           <a
             href={item.link}
-            className="w-full rounded-md p-2 text-gray-700 hover:shadow"
+            className="flex w-full flex-col gap-2 rounded-md p-2 text-gray-700 hover:shadow"
             key={index}
             onClick={(e) => {
               if (!item.link) e.preventDefault();
@@ -94,17 +95,15 @@ export default function Notification({ className, ...props }) {
             }}
             {...props}
           >
-            <label>
-              From <span className="text-base">{item.from.username}</span>
-            </label>
-            <label className="text-gray-400">
-              {" "}
-              at {timeAgo(item.createdAt)}
+            <label className="font-semibold">
+              From{" "}
+              <span className="text-lg font-bold">{item.from.username}</span>
+              <span className="text-gray-400"> {timeAgo(item.createdAt)}</span>
             </label>
             <p>{item.content}</p>
             <button
-              className="mt-1 inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
-              onClick={() => handleDelete(index)}
+              className="rounded border border-solid border-orange-500 bg-transparent px-3 py-2 text-sm font-bold uppercase text-orange-500 outline-none transition-all duration-150 ease-linear hover:bg-orange-500 hover:text-white focus:outline-none active:bg-orange-600"
+              onClick={(e) => handleDelete(e, index)}
             >
               Delete
             </button>

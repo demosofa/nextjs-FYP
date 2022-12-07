@@ -1,5 +1,6 @@
 import { product } from "../../../../backend/controllers";
-import { db, authenticate } from "../../../../backend/helpers";
+import { db, authenticate, authorize } from "../../../../backend/helpers";
+import { Role } from "../../../../shared";
 
 export default async function ProductId(req, res) {
   await db.connect();
@@ -8,10 +9,13 @@ export default async function ProductId(req, res) {
       await product.read(req, res);
       break;
     case "patch":
-      await authenticate(product.patch)(req, res);
+      await authenticate(authorize(product.patch, [Role.admin, Role.seller]))(
+        req,
+        res
+      );
       break;
     case "delete":
-      await authenticate(product.delete)(req, res);
+      await authenticate(authorize(product.delete, [Role.admin]))(req, res);
       break;
   }
 }

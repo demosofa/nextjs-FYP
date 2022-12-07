@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { addNotification } from "../frontend/redux/reducer/notificationSlice";
 import { NotifyToast } from "../frontend/layouts";
 import Head from "next/head";
+import Link from "next/link";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -50,6 +51,19 @@ export default function Register() {
             <FormAccount key={1} info={info} moveTo={() => instance?.prev()} />
           </Slider.Content>
         </Slider>
+
+        <p>
+          Remember Anything?{" "}
+          <Link href="/login">
+            <a className="font-bold hover:text-orange-500">Login</a>
+          </Link>
+        </p>
+        <p>
+          Forgot Password?{" "}
+          <Link href="/forgot_password">
+            <a className="font-bold hover:text-orange-500">Reset Password</a>
+          </Link>
+        </p>
       </div>
       <NotifyToast />
     </div>

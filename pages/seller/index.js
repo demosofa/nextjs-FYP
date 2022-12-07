@@ -14,7 +14,7 @@ import dynamic from "next/dynamic";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import Head from "next/head";
 import { convertTime, currencyFormat } from "../../shared";
-import { ThSortOrderBy } from "../../frontend/containers";
+import { ItemsFromOrder, ThSortOrderBy } from "../../frontend/containers";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -188,57 +188,10 @@ function SellerPage() {
       </Pagination>
 
       {viewOrderItem && (
-        <>
-          <div className="backdrop" onClick={() => setViewOrderItem(null)} />
-          <div className="form_center">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Image</th>
-                  <th>Title</th>
-                  <th>Options</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {viewOrderItem.map((item, index) => (
-                  <tr key={index}>
-                    <td>
-                      <label>No.</label>
-                      {index + 1}
-                    </td>
-                    <td>
-                      <label>Image</label>
-                      <img src={item.image} alt="order-item" />
-                    </td>
-                    <td>
-                      <label>Title</label>
-                      <p className="line-clamp-1 hover:line-clamp-none">
-                        {item.title}
-                      </p>
-                    </td>
-                    <td>
-                      <label>Options</label>
-                      <p className="line-clamp-1 hover:line-clamp-none">
-                        {item.options.join(", ")}
-                      </p>
-                    </td>
-                    <td>
-                      <label>Quantity</label>
-                      {item.quantity}
-                    </td>
-                    <td>
-                      <label>Total</label>
-                      {currencyFormat(item.total)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
+        <ItemsFromOrder
+          viewOrder={viewOrderItem}
+          setViewOrder={setViewOrderItem}
+        />
       )}
       {showScanner && (
         <>
@@ -249,69 +202,76 @@ function SellerPage() {
           />
         </>
       )}
-      {viewOrder && (
-        <Checkbox
-          name="check_item"
-          setChecked={(value) => setCheckOrder(value)}
-        >
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Check</th>
-                <th>No.</th>
-                <th>Id</th>
-                <th>Image</th>
-                <th>Product Title</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {viewOrder.orderItems.map((item, index) => (
-                <tr key={index}>
-                  <td>
-                    <Checkbox.Item value={item._id} />
-                  </td>
-                  <td>
-                    <label>No.</label>
-                    {index + 1}
-                  </td>
-                  <td>
-                    <label>Id</label>
-                    {item._id}
-                  </td>
-                  <td>
-                    <label>Image</label>
-                    <img src={item.image} alt="order-item" />
-                  </td>
-                  <td>
-                    <label>Title</label>
-                    <p className="line-clamp-1 hover:line-clamp-none">
-                      {item.title}
-                    </p>
-                  </td>
-                  <td>
-                    <label>Quantity</label>
-                    {item.quantity}
-                  </td>
-                  <td>
-                    <label>Price</label>
-                    {currencyFormat(item.price)}
-                  </td>
-                  <td>
-                    <label>Total</label>
-                    {currencyFormat(item.total)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <button className="main_btn mt-2" onClick={handleSubmit}>
-            Validate
-          </button>
-        </Checkbox>
-      )}
+      {viewOrder ? (
+        <>
+          <div className="backdrop" onClick={() => setViewOrder(null)} />
+          <div className="form_center">
+            <label>Check all items to validate shipper order</label>
+            <Checkbox
+              className="max-h-full overflow-auto"
+              name="check_item"
+              setChecked={(value) => setCheckOrder(value)}
+            >
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Check</th>
+                    <th>No.</th>
+                    <th>Id</th>
+                    <th>Image</th>
+                    <th>Product Title</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {viewOrder.orderItems.map((item, index) => (
+                    <tr key={index}>
+                      <td>
+                        <Checkbox.Item value={item._id} />
+                      </td>
+                      <td>
+                        <label>No.</label>
+                        {index + 1}
+                      </td>
+                      <td>
+                        <label>Id</label>
+                        {item._id}
+                      </td>
+                      <td>
+                        <label>Image</label>
+                        <img src={item.image} alt="order-item" />
+                      </td>
+                      <td>
+                        <label>Title</label>
+                        <p className="line-clamp-1 hover:line-clamp-none">
+                          {item.title}
+                        </p>
+                      </td>
+                      <td>
+                        <label>Quantity</label>
+                        {item.quantity}
+                      </td>
+                      <td>
+                        <label>Price</label>
+                        {currencyFormat(item.price)}
+                      </td>
+                      <td>
+                        <label>Total</label>
+                        {currencyFormat(item.total)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </Checkbox>
+            <button className="main_btn mt-2" onClick={handleSubmit}>
+              Validate
+            </button>
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }

@@ -3,7 +3,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
-import { Dropdown, Loading, Pagination, Form } from "../../frontend/components";
+import {
+  Dropdown,
+  Loading,
+  Pagination,
+  Form,
+  Search,
+} from "../../frontend/components";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import {
   convertTime,
@@ -20,12 +26,19 @@ import { BiDownArrow } from "react-icons/bi";
 import { IoMdTrash } from "react-icons/io";
 import Head from "next/head";
 import Select from "react-select";
+import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function ManageOrder() {
+  const [search, setSearch] = useState("");
   const [displayDelete, setDisplayDelete] = useState();
-  const [query, setQuery] = useState({ page: 1, sort: "status", status: "" });
+  const [query, setQuery] = useState({
+    search: "",
+    page: 1,
+    sort: "status",
+    status: "",
+  });
   const fetcher = async (config) => {
     retryAxios(axios);
     const accessToken = expireStorage.getItem("accessToken");
@@ -41,7 +54,8 @@ export default function ManageOrder() {
   const router = useRouter();
   const { data, error, mutate } = useSWR(
     {
-      url: `${LocalApi}/admin/order?page=${query.page}&sort=${query.sort}&status=${query.status}`,
+      url: `${LocalApi}/admin/order`,
+      params: query,
     },
     fetcher,
     {
@@ -79,31 +93,45 @@ export default function ManageOrder() {
         <title>My Shipping</title>
         <meta name="description" content="My Shipping" />
       </Head>
-      <Select
-        className="w-32 sm:pl-3"
-        defaultValue={{ value: "", label: "all" }}
-        onChange={({ value }) =>
-          setQuery((prev) => ({ ...prev, status: value }))
-        }
-        options={[
-          { value: "", label: "all" },
-          { value: OrderStatus.pending, label: "Pending" },
-          { value: OrderStatus.progress, label: "Progress" },
-          { value: OrderStatus.shipping, label: "Shipping" },
-          { value: OrderStatus.arrived, label: "Arrived" },
-          { value: OrderStatus.validated, label: "Validated" },
-          { value: OrderStatus.cancel, label: "Cancel" },
-        ]}
-      />
+      <div className="flex flex-wrap gap-4">
+        <Search
+          className="!ml-0"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onClick={() => setQuery((prev) => ({ ...prev, search }))}
+        />
+        <Select
+          className="w-32 sm:pl-3"
+          defaultValue={{ value: "", label: "all" }}
+          onChange={({ value }) =>
+            setQuery((prev) => ({ ...prev, status: value }))
+          }
+          options={[
+            { value: "", label: "all" },
+            { value: OrderStatus.pending, label: "Pending" },
+            { value: OrderStatus.progress, label: "Progress" },
+            { value: OrderStatus.shipping, label: "Shipping" },
+            { value: OrderStatus.arrived, label: "Arrived" },
+            { value: OrderStatus.validated, label: "Validated" },
+            { value: OrderStatus.paid, label: "Paid" },
+            { value: OrderStatus.cancel, label: "Cancel" },
+          ]}
+        />
+      </div>
       {isLoadingInitialData ? (
         <Loading.Text />
       ) : (
         <>
           <div className="flex flex-wrap gap-8 pl-5 sm:justify-center sm:px-3">
-            {data.lstOrder.length ? (
-              data.lstOrder.map((order) => (
+            {data.orders.length ? (
+              data.orders.map((order) => (
                 <div key={order._id} className="card relative mt-2 h-fit">
-                  {order.status === OrderStatus.cancel ? (
+                  {[
+                    OrderStatus.cancel,
+                    OrderStatus.pending,
+                    OrderStatus.progress,
+                    OrderStatus.paid,
+                  ].includes(order.status) ? (
                     <IoMdTrash
                       className="absolute right-4"
                       onClick={() => setDisplayDelete(order._id)}
@@ -115,6 +143,20 @@ export default function ManageOrder() {
                       {order._id}
                     </dd>
 
+                    <dt className="font-bold">Customer</dt>
+                    <dd className="whitespace-pre-line line-clamp-1">
+                      {order.customer}
+                    </dd>
+
+                    {order.shipper ? (
+                      <>
+                        <dt className="font-bold">Shipper</dt>
+                        <dd className="whitespace-pre-line line-clamp-1">
+                          {order.shipper}
+                        </dd>
+                      </>
+                    ) : null}
+
                     <dt className="font-bold">Status:</dt>
                     <dd>
                       <span className={tailwindStatus(order.status)}>
@@ -122,8 +164,8 @@ export default function ManageOrder() {
                       </span>
                     </dd>
 
-                    <dt className="font-bold">Created At:</dt>
-                    <dd>{dateFormat(order.createdAt)}</dd>
+                    <dt className="font-bold">Updated At:</dt>
+                    <dd>{dateFormat(order.updatedAt)}</dd>
                   </dl>
                   <Dropdown component={<BiDownArrow />}>
                     <Dropdown.Content className="!relative">
@@ -132,6 +174,7 @@ export default function ManageOrder() {
                           key={item._id}
                           className="hover:border-2 hover:border-orange-400"
                         >
+                          <Image src={item.image} height="100" width="120" />
                           <dl>
                             <dt className="font-semibold">Name:</dt>
                             <dd className="line-clamp-1">{item.title}</dd>
@@ -153,7 +196,7 @@ export default function ManageOrder() {
             className="mt-5"
             currentPage={query.page}
             setCurrentPage={(page) => setQuery((prev) => ({ ...prev, page }))}
-            totalPageCount={data.pageCounted}
+            totalPageCount={data.pageCounted[0] ? data.pageCounted[0].count : 0}
           >
             <Pagination.Arrow>
               <Pagination.Number />

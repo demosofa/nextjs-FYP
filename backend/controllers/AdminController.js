@@ -4,10 +4,18 @@ import models from "../models";
 class AdminController {
   getAllOrder = async (req, res) => {
     try {
-      let { page, sort, status, limit, orderby } = req.query;
+      let { search, page, sort, status, limit, orderby } = req.query;
       let filterOptions = {};
       if (!sort) sort = "_id";
       if (!orderby) orderby = -1;
+      if (search)
+        filterOptions = {
+          ...filterOptions,
+          $or: [
+            { $expr: { $gt: [{ $indexOfCP: ["$customer", search] }, -1] } },
+            { $expr: { $gt: [{ $indexOfCP: ["$shipper", search] }, -1] } },
+          ],
+        };
       if (status)
         filterOptions = {
           ...filterOptions,
@@ -15,21 +23,77 @@ class AdminController {
         };
       if (!limit) limit = 10;
 
-      const lstOrder = await models.Order.find(filterOptions)
-        .skip((page - 1) * limit)
-        .limit(limit)
-        .sort({
-          [sort]: orderby,
+      const orders = await models.Order.aggregate()
+        .project({
+          customer: 1,
+          shipper: 1,
+          status: 1,
+          orderItems: 1,
+          quanitty: 1,
+          shippingFee: 1,
+          total: 1,
+          updatedAt: 1,
         })
-        .populate("orderItems")
-        .lean();
-      if (!lstOrder) throw new Error("Fail to load profiles");
-      const countOrder = await models.Order.countDocuments(
-        filterOptions
-      ).lean();
-      const pageCounted = Math.ceil(countOrder / limit);
-      return res.status(200).json({ lstOrder, pageCounted });
+        .lookup({
+          from: "accounts",
+          localField: "customer",
+          foreignField: "_id",
+          pipeline: [
+            {
+              $project: {
+                username: 1,
+              },
+            },
+          ],
+          as: "customer",
+        })
+        .lookup({
+          from: "accounts",
+          localField: "shipper",
+          foreignField: "_id",
+          pipeline: [
+            {
+              $project: {
+                username: 1,
+              },
+            },
+          ],
+          as: "shipper",
+        })
+        .unwind("customer")
+        .unwind("shipper")
+        .addFields({
+          customer: "$customer.username",
+          shipper: "$shipper.username",
+        })
+        .match(filterOptions)
+        .sort({ [sort]: orderby })
+        .lookup({
+          from: "orderitems",
+          localField: "orderItems",
+          foreignField: "_id",
+          as: "orderItems",
+        })
+        .facet({
+          orders: [{ $skip: (page - 1) * limit }, { $limit: limit }],
+          pageCounted: [
+            {
+              $count: "count",
+            },
+            {
+              $project: {
+                count: {
+                  $ceil: {
+                    $divide: ["$count", limit],
+                  },
+                },
+              },
+            },
+          ],
+        });
+      return res.status(200).json(...orders);
     } catch (error) {
+      console.log(error);
       return res.status(500).json(error);
     }
   };
@@ -49,7 +113,7 @@ class AdminController {
             OrderStatus.progress,
             OrderStatus.pending,
             OrderStatus.cancel,
-            OrderStatus.validated,
+            OrderStatus.paid,
           ],
         },
       });

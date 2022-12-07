@@ -294,8 +294,18 @@ function Remove({ index, product, setProducts, setRemove }) {
       <div className="form_center">
         <label>{`Are you sure to remove ${product.title}?`}</label>
         <div className="flex gap-3">
-          <button onClick={handleRemove}>Yes</button>
-          <button onClick={() => setRemove(null)}>No</button>
+          <button
+            className="transform rounded border border-blue-600 bg-transparent py-2 px-4 font-semibold text-blue-600 transition duration-200 ease-in hover:-translate-y-1 hover:border-transparent hover:bg-blue-600 hover:text-white active:translate-y-0"
+            onClick={handleRemove}
+          >
+            Yes
+          </button>
+          <button
+            className="transform rounded border border-red-600 bg-transparent py-2 px-4 font-semibold text-red-600 transition duration-200 ease-in hover:-translate-y-1 hover:border-transparent hover:bg-red-600 hover:text-white active:translate-y-0"
+            onClick={() => setRemove(null)}
+          >
+            No
+          </button>
         </div>
       </div>
     </>

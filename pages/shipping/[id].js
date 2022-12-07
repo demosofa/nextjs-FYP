@@ -7,11 +7,10 @@ import { useDispatch } from "react-redux";
 import { expireStorage, retryAxios } from "../../frontend/utils";
 import { convertTime, currencyFormat, Role, OrderStatus } from "../../shared";
 import { Loading, QRreader } from "../../frontend/components";
-import { ProgressBar } from "../../frontend/containers";
+import { Modal, ProgressBar } from "../../frontend/containers";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
-import VnPay from "../../frontend/containers/VnPay/VnPay";
 import { useAblyContext } from "../../frontend/contexts/AblyContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -19,10 +18,9 @@ const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
 
 function ShippingProgress() {
   const { ably } = useAblyContext();
-  const channel = useRef();
+  const [channel, setChannel] = useState();
   const [showQR, setShowQR] = useState(null);
   const [showScanner, setShowScanner] = useState(false);
-  const [showVnPay, setShowVnPay] = useState(false);
   const auth = useState(() => {
     const accessToken = expireStorage.getItem("accessToken");
     if (accessToken) {
@@ -65,13 +63,17 @@ function ShippingProgress() {
     }
   );
 
+  const messageCheckPaid = order
+    ? `Please check if order ${order._id} has been paid by ${order.customer.username}`
+    : "";
+
   useEffect(() => {
     try {
-      if (!channel.current && order) {
+      if (!channel && order) {
         if ([Role.shipper].includes(auth.role))
-          channel.current = ably.channels.get(order.customer._id);
+          setChannel(ably.channels.get(order.customer._id));
         else if ([Role.customer].includes(auth.role))
-          channel.current = ably.channels.get(order.shipper._id);
+          setChannel(ably.channels.get(order.shipper._id));
       }
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
@@ -105,7 +107,7 @@ function ShippingProgress() {
           });
           setShowScanner(false);
           let content = `Customer has scanned QR successfully`;
-          channel.current.publish({
+          channel.publish({
             name: "shipping",
             data: {
               message: content,
@@ -157,7 +159,7 @@ function ShippingProgress() {
           }
           return data;
         });
-        channel.current.publish({
+        channel.publish({
           name: "shipping",
           data: {
             message: content,
@@ -170,9 +172,39 @@ function ShippingProgress() {
     }
   };
 
-  const validatedState = () => {
+  const validatedState = async () => {
     if (auth.role === Role.customer && auth.accountId === order.customer._id) {
-      setShowVnPay(true);
+      // setShowVnPay(true);
+      if (order.status !== OrderStatus.paid) {
+        try {
+          await fetcher({
+            url: `${LocalApi}/notify`,
+            method: "post",
+            data: {
+              to: order.shipper._id,
+              link: window.location.href,
+              content: messageCheckPaid,
+            },
+          });
+          channel.publish({
+            name: "checkPaid",
+            data: {
+              url: `${LocalApi}/order/${order._id}`,
+              title: "Check paid by Shipper",
+              content: messageCheckPaid,
+              data: { status: OrderStatus.paid },
+            },
+          });
+          dispatch(
+            addNotification({
+              message: "Please wait for notification sent by shipper",
+              type: "warning",
+            })
+          );
+        } catch (error) {
+          dispatch(addNotification({ message: error.message, type: "error" }));
+        }
+      }
     }
   };
 
@@ -264,14 +296,7 @@ function ShippingProgress() {
         pass={order.status}
         onResult={handleCheckStep}
       />
-      {auth.accountId === order.customer._id &&
-      order.status === OrderStatus.validated &&
-      showVnPay ? (
-        <>
-          <div className="backdrop" onClick={() => setShowVnPay(false)} />
-          <VnPay className="form_center" order={order} />
-        </>
-      ) : null}
+      <Modal channel={channel} url={`${LocalApi}/order/${order._id}`} />
       {showQR !== null && (
         <>
           <div className="backdrop" onClick={() => setShowQR(null)} />

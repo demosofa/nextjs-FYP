@@ -4,6 +4,7 @@ import parser from "jwt-decode";
 import { Realtime } from "ably/promises";
 import { useDispatch } from "react-redux";
 import { addNotification } from "../redux/reducer/notificationSlice";
+import { showModal } from "../redux/reducer/modalSlice";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const ably = new Realtime.Promise({
@@ -30,6 +31,9 @@ export default function AblyContext({ children }) {
             break;
           case "comment":
             dispatch(addNotification({ ...data }));
+            break;
+          case "checkPaid":
+            dispatch(showModal(data));
             break;
         }
       });

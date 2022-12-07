@@ -1,5 +1,6 @@
 import { product } from "../../../backend/controllers";
-import { db, authenticate } from "../../../backend/helpers";
+import { db, authenticate, authorize } from "../../../backend/helpers";
+import { Role } from "../../../shared";
 
 async function index(req, res) {
   await db.connect();
@@ -8,7 +9,7 @@ async function index(req, res) {
       await product.listManagedProduct(req, res);
       break;
     case "post":
-      await product.create(req, res);
+      await authorize(product.create, [Role.admin])(req, res);
       break;
     case "put":
       await product.update(req, res);
@@ -16,4 +17,4 @@ async function index(req, res) {
   }
 }
 
-export default authenticate(index);
+export default authenticate(authorize(index, [Role.admin, Role.seller]));
