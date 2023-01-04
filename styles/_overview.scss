@@ -7,7 +7,8 @@
   .container-info {
     width: 100%;
     padding: 15px;
-    @include flex(30px, row, true);
+    align-items: stretch;
+    @include flex(30px, row);
     @include mq("tablet") {
       flex-direction: column;
     }

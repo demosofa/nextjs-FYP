@@ -78,14 +78,17 @@ export default function Login() {
           </Form>
           <p>
             Forgot Password?{" "}
-            <Link href="/forgot_password">
-              <a className="font-bold hover:text-orange-500">Reset Password</a>
+            <Link
+              className="font-bold hover:text-orange-500"
+              href="/forgot_password"
+            >
+              Reset Password
             </Link>
           </p>
           <p>
             New here?{" "}
-            <Link href="/register">
-              <a className="font-bold hover:text-orange-500">Register</a>
+            <Link className="font-bold hover:text-orange-500" href="/register">
+              Register
             </Link>
           </p>
         </div>

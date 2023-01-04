@@ -183,10 +183,11 @@ function MyShipping() {
                               Show QR for seller to validate this order
                             </button>
                           ) : null}
-                          <Link href={`/shipping/${order._id}`}>
-                            <a className="mr-5 whitespace-nowrap uppercase text-purple-600 hover:text-purple-900 focus:underline focus:outline-none">
-                              Manage Progress
-                            </a>
+                          <Link
+                            className="mr-5 whitespace-nowrap uppercase text-purple-600 hover:text-purple-900 focus:underline focus:outline-none"
+                            href={`/shipping/${order._id}`}
+                          >
+                            Manage Progress
                           </Link>
                         </div>
                       </td>
@@ -197,10 +198,11 @@ function MyShipping() {
                     <td colSpan="8">
                       <p className="text-center">
                         Go to this{" "}
-                        <Link href="/shipper">
-                          <a className="uppercase text-gray-400 hover:text-orange-500">
-                            page
-                          </a>
+                        <Link
+                          className="uppercase text-gray-400 hover:text-orange-500"
+                          href="/shipper"
+                        >
+                          page
                         </Link>{" "}
                         and accept orders first
                       </p>

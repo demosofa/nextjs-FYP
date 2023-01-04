@@ -58,6 +58,7 @@ export default function Notification({ className, ...props }) {
   };
 
   const handleDelete = (e, index) => {
+    e.preventDefault();
     e.stopPropagation();
     mutate(async (data) => {
       try {
@@ -70,7 +71,7 @@ export default function Notification({ className, ...props }) {
         dispatch(addNotification({ message: error.message, type: "error" }));
       }
       return data;
-    }, false);
+    });
   };
 
   const isLoadingInitialData = (!data && !error) || error;

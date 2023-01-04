@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useState, useRef } from "react";
 import { compareToRange } from "../../utils";
 
@@ -14,12 +15,12 @@ export default function ImageMagnifier({
   const handleMaginfier = ({ pageX, pageY }) => {
     const mag = maginfier.current;
     const left = compareToRange(
-      pageX - mag.offsetWidth / 2 - offset.left,
+      pageX - mag.offsetWidth / 2 - offset.offsetLeft,
       0,
       offset.width - mag.offsetWidth
     );
     const top = compareToRange(
-      pageY - mag.offsetHeight / 2 - offset.top,
+      pageY - mag.offsetHeight / 2 - offset.offsetTop,
       0,
       offset.height - mag.offsetHeight
     );
@@ -33,21 +34,26 @@ export default function ImageMagnifier({
 
   return (
     <div
-      className="relative"
+      className="relative h-full"
       onMouseEnter={(e) => {
-        setOffset(e.currentTarget.getBoundingClientRect());
+        setOffset(e.currentTarget);
       }}
       onMouseMove={(e) => offset && handleMaginfier(e)}
       onMouseLeave={() => setOffset(null)}
     >
-      <img className={` ${className}`} alt="magnifier" src={src} {...props} />
+      <Image
+        className={` ${className}`}
+        alt="magnifier"
+        src={src}
+        priority
+        fill
+        {...props}
+      />
       {offset && (
         <div
           ref={maginfier}
-          className="absolute top-0 h-20 w-20 cursor-none"
+          className="absolute top-0 h-20 w-20 cursor-none rounded-full border border-white"
           style={{
-            border: "1px solid white",
-            borderRadius: "50%",
             backgroundImage: `url(${src})`,
             backgroundRepeat: `no-repeat`,
             backgroundSize: `calc(${offset.width} * ${zoom}px)

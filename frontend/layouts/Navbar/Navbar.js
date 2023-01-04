@@ -21,9 +21,7 @@ export default function Navbar({ arrLink }) {
   return (
     <div className={styles.nav}>
       <div className={styles.bar}>
-        <Link href="/">
-          <a>Home</a>
-        </Link>
+        <Link href="/">Home</Link>
         <Search
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -35,8 +33,8 @@ export default function Navbar({ arrLink }) {
       <div className={styles.bar}>
         {linkNav?.map((link, index) =>
           link.title ? (
-            <Link key={index} href={link.path}>
-              <a className="pl-2 pr-2">{link.title}</a>
+            <Link className="pl-2 pr-2" key={index} href={link.path}>
+              {link.title}
             </Link>
           ) : null
         )}
@@ -46,10 +44,12 @@ export default function Navbar({ arrLink }) {
               {linkDrop?.map(
                 (link, index) =>
                   link.title && (
-                    <Link key={index} href={link.path}>
-                      <a className="whitespace-nowrap text-black hover:bg-orange-400 hover:text-white">
-                        {link.title}
-                      </a>
+                    <Link
+                      className="whitespace-nowrap text-black hover:bg-orange-400 hover:text-white"
+                      key={index}
+                      href={link.path}
+                    >
+                      {link.title}
                     </Link>
                   )
               )}
@@ -58,27 +58,26 @@ export default function Navbar({ arrLink }) {
         ) : null}
       </div>
       <div className={styles.bar}>
-        {typeof window !== "undefined" && localStorage.getItem("accessToken") && (
-          <>
-            <Link href="/profile">My Profile</Link>
-            <Dropdown
-              component={<FaBell color="white" />}
-              hoverable={true}
-              clickable={false}
-            >
-              <Dropdown.Content className="right-0 max-h-[85vh] w-64 overflow-y-auto">
-                <Notification />
-              </Dropdown.Content>
-            </Dropdown>
-          </>
-        )}
+        {typeof window !== "undefined" &&
+          localStorage.getItem("accessToken") && (
+            <>
+              <Link href="/profile">My Profile</Link>
+              <Dropdown
+                component={<FaBell color="white" />}
+                hoverable={true}
+                clickable={false}
+              >
+                <Dropdown.Content className="right-0 max-h-[85vh] w-64 overflow-y-auto">
+                  <Notification />
+                </Dropdown.Content>
+              </Dropdown>
+            </>
+          )}
         <RouterAuth />
         <Link href="/c/cart">
-          <a>
-            <Badge value={cart.products.length}>
-              <AiOutlineShoppingCart />
-            </Badge>
-          </a>
+          <Badge value={cart.products.length}>
+            <AiOutlineShoppingCart />
+          </Badge>
         </Link>
       </div>
     </div>

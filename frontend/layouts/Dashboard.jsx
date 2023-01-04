@@ -30,35 +30,28 @@ function Dashboard({ children, arrLink }) {
         {typeof window !== "undefined" &&
           localStorage.getItem("accessToken") && (
             <>
-              <Link href="/profile">
-                <a onClick={() => setToggle(!toggle)}>
-                  {decoder(localStorage.getItem("accessToken")).username}
-                </a>
+              <Link href="/profile" onClick={() => setToggle(!toggle)}>
+                {decoder(localStorage.getItem("accessToken")).username}
               </Link>
-              <Link href="/notification">
-                <a onClick={() => setToggle(!toggle)}>
-                  <FaBell />
-                </a>
+              <Link href="/notification" onClick={() => setToggle(!toggle)}>
+                <FaBell />
               </Link>
             </>
           )}
         <Link href="/">
-          <a>
-            <Icon>
-              <AiOutlineHome />
-            </Icon>
-          </a>
+          <Icon>
+            <AiOutlineHome />
+          </Icon>
         </Link>
         {arrLink?.map(({ title, path, icon }) => (
-          <Link key={title} href={path}>
-            <Sidebar.Item
-              key={title}
-              className="w-10 group-hover:w-full group-hover:justify-start"
-            >
-              {icon && <Icon>{icon}</Icon>}
-              <span className="hidden group-hover:inline-block">{title}</span>
-            </Sidebar.Item>
-          </Link>
+          <Sidebar.Item
+            key={title}
+            href={path}
+            className="w-10 group-hover:w-full group-hover:justify-start"
+          >
+            {icon && <Icon>{icon}</Icon>}
+            <span className="hidden group-hover:inline-block">{title}</span>
+          </Sidebar.Item>
         ))}
       </Sidebar>
       <main className="body">{children}</main>

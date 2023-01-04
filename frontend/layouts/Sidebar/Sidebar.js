@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { forwardRef } from "react";
 import RouterAuth from "../../containers/RouterAuth/RouterAuth";
 
@@ -22,12 +23,12 @@ Sidebar.Item = forwardRef(function SidebarItem(
   ref
 ) {
   return (
-    <a
+    <Link
       ref={ref}
       className={`flex w-full cursor-pointer items-center justify-center gap-[1em] rounded-lg bg-[#d0d6db40] p-[0.5em] transition-all hover:bg-[#037dff10]  ${className}`}
       {...props}
     >
       {children}
-    </a>
+    </Link>
   );
 });

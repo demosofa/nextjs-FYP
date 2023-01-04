@@ -144,8 +144,8 @@ function Dashboard() {
                       className="h-20 w-28"
                       src={product.image}
                       alt="product"
-                      width="100px"
-                      height="90px"
+                      width={100}
+                      height={90}
                     />
                   </td>
                   <td>{product._id}</td>

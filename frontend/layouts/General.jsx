@@ -31,24 +31,18 @@ export default function General({ children, arrLink }) {
             {typeof window !== "undefined" &&
               localStorage.getItem("accessToken") && (
                 <>
-                  <Link href="/profile">
-                    <a onClick={() => setToggle(!toggle)}>
-                      {decoder(localStorage.getItem("accessToken")).username}
-                    </a>
+                  <Link href="/profile" onClick={() => setToggle(!toggle)}>
+                    {decoder(localStorage.getItem("accessToken")).username}
                   </Link>
-                  <Link href="/notification">
-                    <a onClick={() => setToggle(!toggle)}>
-                      <FaBell />
-                    </a>
+                  <Link onClick={() => setToggle(!toggle)} href="/notification">
+                    <FaBell />
                   </Link>
                 </>
               )}
-            <Link href="/">
-              <a onClick={() => setToggle(!toggle)}>
-                <Icon>
-                  <AiOutlineHome />
-                </Icon>
-              </a>
+            <Link onClick={() => setToggle(!toggle)} href="/">
+              <Icon>
+                <AiOutlineHome />
+              </Icon>
             </Link>
             <Search
               value={search}
@@ -56,27 +50,27 @@ export default function General({ children, arrLink }) {
               onClick={() => router.push({ pathname: "/", query: { search } })}
             />
             {arrLink?.map(({ title, path, icon }) => (
-              <Link key={title} href={path}>
-                <Sidebar.Item
-                  className="!justify-start"
-                  onClick={() => setToggle(!toggle)}
-                >
-                  {icon && <Icon>{icon}</Icon>}
-                  {title}
-                </Sidebar.Item>
-              </Link>
-            ))}
-            <Link href="/c/cart">
               <Sidebar.Item
+                key={title}
+                href={path}
                 className="!justify-start"
                 onClick={() => setToggle(!toggle)}
               >
-                <Icon>
-                  <AiOutlineShoppingCart />
-                </Icon>
-                My Cart
+                {icon && <Icon>{icon}</Icon>}
+                {title}
               </Sidebar.Item>
-            </Link>
+            ))}
+
+            <Sidebar.Item
+              href="/c/cart"
+              className="!justify-start"
+              onClick={() => setToggle(!toggle)}
+            >
+              <Icon>
+                <AiOutlineShoppingCart />
+              </Icon>
+              My Cart
+            </Sidebar.Item>
           </Sidebar>
         </Animation.Move>
       ) : (

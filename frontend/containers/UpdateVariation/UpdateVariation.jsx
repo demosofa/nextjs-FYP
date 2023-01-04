@@ -99,8 +99,8 @@ export default function UpdateVariation({ productId, setToggle }) {
                         <Image
                           alt="product"
                           src={variation.thumbnail.url}
-                          width="160px"
-                          height="140px"
+                          width={160}
+                          height={140}
                         />
                       )}
                     </td>
@@ -205,23 +205,17 @@ export default function UpdateVariation({ productId, setToggle }) {
                   return (
                     <Fragment key={image._id}>
                       <label
-                        className={
+                        className={`relative block h-20 w-28 ${
                           [image].includes(selectedImage)
                             ? styles.checked
                             : styles.unchecked
-                        }
-                        style={{
-                          position: "relative",
-                          display: "block",
-                          width: "100px",
-                          height: "80px",
-                        }}
+                        }`}
                       >
                         <Checkbox.Item
                           value={image}
                           style={{ display: "none" }}
                         />
-                        <Image src={image.url} layout="fill" />
+                        <Image alt="images" src={image.url} fill />
                         {[image].includes(selectedImage) && (
                           <div className="absolute top-0 left-0 h-full w-full bg-white/70">
                             <AiOutlineCheck

@@ -64,10 +64,11 @@ function MyProfile() {
           <dt className="font-semibold">Email:</dt>
           <dd className="line-clamp-1">{data.email}</dd>
         </dl>
-        <Link href="/profile/edit">
-          <a className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white">
-            Edit Profile
-          </a>
+        <Link
+          href="/profile/edit"
+          className="cursor-pointer rounded-lg border-0 bg-gradient-to-r from-orange-300 to-red-500 px-3 py-2 text-center font-semibold text-white"
+        >
+          Edit Profile
         </Link>
       </div>
       <div className="flex flex-col rounded-3xl">

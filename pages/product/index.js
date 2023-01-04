@@ -131,8 +131,8 @@ function ProductCRUD() {
                             className="rounded-lg"
                             alt="product"
                             src={product.images[0].url}
-                            width="100px"
-                            height="90px"
+                            width={100}
+                            height={90}
                           />
                         </td>
                         <td className="group">

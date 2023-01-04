@@ -145,10 +145,11 @@ export default function MyOrder() {
                           {order.status}
                         </label>
                       ) : (
-                        <Link href={`/shipping/${order._id}`}>
-                          <a className={tailwindStatus(order.status)}>
-                            {order.status}
-                          </a>
+                        <Link
+                          className={tailwindStatus(order.status)}
+                          href={`/shipping/${order._id}`}
+                        >
+                          {order.status}
                         </Link>
                       )}
                     </td>

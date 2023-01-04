@@ -124,7 +124,7 @@ export default function SearchProduct({ query, products, pageCounted }) {
                 query: { ...query, keyword: "popular" },
               }}
             >
-              <a>Popular</a>
+              Popular
             </Link>
             <Link
               href={{
@@ -132,7 +132,7 @@ export default function SearchProduct({ query, products, pageCounted }) {
                 query: { ...query, keyword: "latest" },
               }}
             >
-              <a>Latest</a>
+              Latest
             </Link>
           </div>
           <div className="grid grid-cols-fit gap-6 sm:gap-1">

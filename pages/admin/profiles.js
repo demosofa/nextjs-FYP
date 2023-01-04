@@ -131,7 +131,7 @@ export default function ManageProfiles() {
           }
           options={[
             { value: "", label: "all" },
-            { value: "user", label: "User" },
+            { value: "customer", label: "Customer" },
             { value: "shipper", label: "Shipper" },
             { value: "seller", label: "Seller" },
           ]}

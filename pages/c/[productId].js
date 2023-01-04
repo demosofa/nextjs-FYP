@@ -324,8 +324,12 @@ export default function Overview({ product, vid }) {
           <dt className="w-fit text-lg font-medium">Tags: </dt>
           <dd className="ml-2 mt-1">
             {product.tags.map((tag) => (
-              <Link key={tag} href={{ pathname: "/", query: { search: tag } }}>
-                <a className="ml-2">#{tag}</a>
+              <Link
+                className="ml-2"
+                key={tag}
+                href={{ pathname: "/", query: { search: tag } }}
+              >
+                #{tag}
               </Link>
             ))}
           </dd>

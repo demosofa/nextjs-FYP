@@ -71,14 +71,14 @@ export default function ForgotPassword() {
           </Form>
           <p>
             Did you remember?{" "}
-            <Link href="/login">
-              <a className="font-bold hover:text-orange-500">Login</a>
+            <Link className="font-bold hover:text-orange-500" href="/login">
+              Login
             </Link>
           </p>
           <p>
             New here?{" "}
-            <Link href="/register">
-              <a className="font-bold hover:text-orange-500">Register</a>
+            <Link className="font-bold hover:text-orange-500" href="/register">
+              Register
             </Link>
           </p>
         </div>

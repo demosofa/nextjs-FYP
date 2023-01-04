@@ -74,12 +74,13 @@ export default function Home({ products, categories, pageCounted, query }) {
             {categories?.map((category) => (
               <div key={category._id} className="card justify-center">
                 <Link
+                  className="text-center"
                   href={{
                     pathname: "/search",
                     query: { category: category.name },
                   }}
                 >
-                  <a className="text-center">{category.name}</a>
+                  {category.name}
                 </Link>
               </div>
             ))}

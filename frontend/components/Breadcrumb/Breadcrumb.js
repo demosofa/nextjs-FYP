@@ -5,13 +5,14 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 export default function Breadcrumb({ categories, className, ...props }) {
   return (
     <div className={`flex items-center gap-2 ${className}`} {...props}>
-      <Link href="/">
-        <a className="sm:text-xs">Home</a>
+      <Link className="sm:text-xs" href="/">
+        Home
       </Link>
       {categories.map((category) => (
         <Fragment key={category._id}>
           <MdOutlineKeyboardArrowRight />
           <Link
+            className="sm:text-xs"
             href={{
               pathname: "/search",
               query: {
@@ -19,7 +20,7 @@ export default function Breadcrumb({ categories, className, ...props }) {
               },
             }}
           >
-            <a className="sm:text-xs">{category.name}</a>
+            {category.name}
           </Link>
         </Fragment>
       ))}

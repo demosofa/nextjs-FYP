@@ -170,7 +170,7 @@ function StoredImage({
       onMouseLeave={() => setDisplayOpts(false)}
       {...props}
     >
-      <Image alt="product" src={previews[0] || image.url} layout="fill" />
+      <Image alt="product" src={previews[0] || image.url} fill />
       {displayOpts && (
         <div className={styles.img_option}>
           <input

@@ -27,6 +27,7 @@ import { IoMdTrash } from "react-icons/io";
 import Head from "next/head";
 import Select from "react-select";
 import Image from "next/image";
+import Link from "next/link";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -170,11 +171,17 @@ export default function ManageOrder() {
                   <Dropdown component={<BiDownArrow />}>
                     <Dropdown.Content className="!relative">
                       {order.orderItems.map((item) => (
-                        <div
+                        <Link
                           key={item._id}
+                          href={`/c/${item.productId}?vid=${item.variationId}`}
                           className="hover:border-2 hover:border-orange-400"
                         >
-                          <Image src={item.image} height="100" width="120" />
+                          <Image
+                            alt="order item image"
+                            src={item.image}
+                            height={100}
+                            width={120}
+                          />
                           <dl>
                             <dt className="font-semibold">Name:</dt>
                             <dd className="line-clamp-1">{item.title}</dd>
@@ -182,7 +189,7 @@ export default function ManageOrder() {
                             <dt className="font-semibold">Amount:</dt>
                             <dd>{currencyFormat(item.total)}</dd>
                           </dl>
-                        </div>
+                        </Link>
                       ))}
                     </Dropdown.Content>
                   </Dropdown>

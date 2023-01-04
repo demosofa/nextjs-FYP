@@ -54,14 +54,17 @@ export default function Register() {
 
         <p>
           Remember Anything?{" "}
-          <Link href="/login">
-            <a className="font-bold hover:text-orange-500">Login</a>
+          <Link className="font-bold hover:text-orange-500" href="/login">
+            Login
           </Link>
         </p>
         <p>
           Forgot Password?{" "}
-          <Link href="/forgot_password">
-            <a className="font-bold hover:text-orange-500">Reset Password</a>
+          <Link
+            className="font-bold hover:text-orange-500"
+            href="/forgot_password"
+          >
+            Reset Password
           </Link>
         </p>
       </div>
