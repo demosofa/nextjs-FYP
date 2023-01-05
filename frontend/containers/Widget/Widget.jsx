@@ -1,7 +1,5 @@
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { expireStorage, retryAxios } from "../../utils";
 import {
@@ -9,7 +7,6 @@ import {
   HiOutlineArrowNarrowUp,
 } from "react-icons/hi";
 import styles from "./widget.module.scss";
-import { addNotification } from "../../redux/reducer/notificationSlice";
 
 export default function Widget({
   children,
@@ -33,17 +30,10 @@ export default function Widget({
     }
     return response.data;
   };
-  const dispatch = useDispatch();
-  const router = useRouter();
   const { data, error } = useSWR({ url }, fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
-    onError(err, key, config) {
-      if (err?.response?.status === 403) router.back();
-      else if (err?.response?.status === 401) router.push("/login");
-      else dispatch(addNotification({ message: err.message, type: "error" }));
-    },
   });
 
   return (

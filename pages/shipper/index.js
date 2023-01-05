@@ -1,4 +1,3 @@
-import axios from "axios";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -8,27 +7,15 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { Checkbox, Loading, Pagination } from "../../frontend/components";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../frontend/utils";
 import { convertTime, currencyFormat } from "../../shared";
 import { ThSortOrderBy } from "../../frontend/containers";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function Shipper() {
   const [checkOrder, setCheckOrder] = useState([]);
   const [query, setQuery] = useState({ page: 1, sort: "status", orderby: -1 });
-
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
   const dispatch = useDispatch();
   const router = useRouter();
   const { data, error } = useSWR(
@@ -36,20 +23,13 @@ function Shipper() {
       url: `${LocalApi}/order`,
       params: query,
     },
-    fetcher,
     {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
     }
   );
 
-  const { mutate } = useSWRImmutable({ url: `${LocalApi}/shipper` }, fetcher, {
-    onError(err, key, config) {
-      if (err?.response?.status === 403) router.back();
-      else if (err?.response?.status === 401) router.push("/login");
-      else dispatch(addNotification({ message: err.message, type: "error" }));
-    },
-  });
+  const { mutate } = useSWRImmutable({ url: `${LocalApi}/shipper` });
 
   if (!data || error)
     return (

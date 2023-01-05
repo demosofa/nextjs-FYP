@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
@@ -17,17 +15,14 @@ import {
   dateFormat,
   OrderStatus,
 } from "../../shared";
-import {
-  expireStorage,
-  retryAxios,
-  tailwindStatus,
-} from "../../frontend/utils";
+import { tailwindStatus } from "../../frontend/utils";
 import { BiDownArrow } from "react-icons/bi";
 import { IoMdTrash } from "react-icons/io";
 import Head from "next/head";
 import Select from "react-select";
 import Image from "next/image";
 import Link from "next/link";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -40,33 +35,15 @@ export default function ManageOrder() {
     sort: "status",
     status: "",
   });
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
   const dispatch = useDispatch();
-  const router = useRouter();
   const { data, error, mutate } = useSWR(
     {
       url: `${LocalApi}/admin/order`,
       params: query,
     },
-    fetcher,
     {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
     }
   );
 

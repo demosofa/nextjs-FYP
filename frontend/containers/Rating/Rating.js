@@ -1,6 +1,5 @@
 import axios from "axios";
 import useSWRImmutable from "swr/immutable";
-import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { Loading, StarRating } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
@@ -23,14 +22,7 @@ export default function Rating({ url }) {
     return { _id: "", rating: 0 };
   };
   const dispatch = useDispatch();
-  const router = useRouter();
-  const { data, error, mutate } = useSWRImmutable({ url }, fetcher, {
-    onError(err, key, config) {
-      if (err?.response?.status === 403) router.back();
-      else if (err?.response?.status === 401) router.push("/login");
-      else dispatch(addNotification({ message: err.message, type: "error" }));
-    },
-  });
+  const { data, error, mutate } = useSWRImmutable({ url }, fetcher);
 
   const handleRating = async (rating) => {
     mutate(async (data) => {

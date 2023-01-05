@@ -1,15 +1,13 @@
-import axios from "axios";
 import useSWR from "swr";
-import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { Loading, Pagination, Search } from "../../frontend/components";
-import { expireStorage, retryAxios } from "../../frontend/utils";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import Head from "next/head";
 import { useState } from "react";
 import Select from "react-select";
 import { Role } from "../../shared";
 import { ThSortOrderBy } from "../../frontend/containers";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -23,32 +21,10 @@ export default function ManageProfiles() {
     orderby: -1,
   });
   const dispatch = useDispatch();
-  const router = useRouter();
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
-  const { data, error, mutate } = useSWR(
-    {
-      url: `${LocalApi}/admin/profiles`,
-      params: query,
-    },
-    fetcher,
-    {
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
-    }
-  );
+  const { data, error, mutate } = useSWR({
+    url: `${LocalApi}/admin/profiles`,
+    params: query,
+  });
 
   const handleChangeRole = (e, index) => {
     mutate(async (data) => {

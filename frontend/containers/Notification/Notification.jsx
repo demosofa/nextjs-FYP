@@ -1,28 +1,15 @@
-import axios from "axios";
-import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import useSWRInfinite from "swr/infinite";
-import { expireStorage, retryAxios, timeAgo } from "../../utils";
+import { timeAgo } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Loading } from "../../components";
+import { fetcher } from "../../contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const PAGE_SIZE = 10;
 
 export default function Notification({ className, ...props }) {
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
   const dispatch = useDispatch();
-  const router = useRouter();
   const { data, error, size, setSize, mutate } = useSWRInfinite(
     (size) => ({
       url: `${LocalApi}/notify`,
@@ -31,14 +18,7 @@ export default function Notification({ className, ...props }) {
         limit: PAGE_SIZE,
       },
     }),
-    fetcher,
-    {
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
-    }
+    fetcher
   );
 
   const notifications = data ? [].concat(...data) : [];

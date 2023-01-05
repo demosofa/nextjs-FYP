@@ -1,15 +1,14 @@
-import axios from "axios";
 import { useDispatch } from "react-redux";
-import { expireStorage, retryAxios, tailwindStatus } from "../../utils";
+import { tailwindStatus } from "../../utils";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import useSWR from "swr";
 import Select from "react-select";
 import { Form, Loading, Search } from "../../components";
-import { convertTime, currencyFormat, OrderStatus } from "../../../shared";
+import { currencyFormat, OrderStatus } from "../../../shared";
 import { ItemsFromOrder, ThSortOrderBy } from "../";
 import Link from "next/link";
+import { fetcher } from "../../contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -23,33 +22,15 @@ export default function MyOrder() {
   });
   const [displayCancel, setDisplayCancel] = useState(null);
   const [viewOrder, setViewOrder] = useState(null);
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
   const dispatch = useDispatch();
-  const router = useRouter();
   const { data, error, mutate } = useSWR(
     {
       url: `${LocalApi}/profile/order`,
       params,
     },
-    fetcher,
     {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
     }
   );
 

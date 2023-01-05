@@ -1,12 +1,9 @@
 import dynamic from "next/dynamic";
-import axios from "axios";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { Loading } from "../frontend/components";
 import { Widget } from "../frontend/containers";
-import { addNotification } from "../frontend/redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../frontend/utils";
+import { expireStorage } from "../frontend/utils";
 import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
@@ -16,7 +13,6 @@ import { Role } from "../shared";
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 function Dashboard() {
-  const dispatch = useDispatch();
   const router = useRouter();
   const auth = useState(() => {
     const accessToken = expireStorage.getItem("accessToken");
@@ -61,17 +57,6 @@ function Dashboard() {
         desc: "Compare to yesterday",
       },
     ]);
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
 
   const { data, error } = useSWR(
     {
@@ -81,16 +66,10 @@ function Dashboard() {
           : Role.seller
       }/topSellingProduct`,
     },
-    fetcher,
     {
       revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
     }
   );
 

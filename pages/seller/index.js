@@ -1,6 +1,4 @@
-import axios from "axios";
 import useSWR from "swr";
-import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import {
   Checkbox,
@@ -8,13 +6,13 @@ import {
   Pagination,
   QRreader,
 } from "../../frontend/components";
-import { expireStorage, retryAxios } from "../../frontend/utils";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import Head from "next/head";
 import { convertTime, currencyFormat } from "../../shared";
 import { ItemsFromOrder, ThSortOrderBy } from "../../frontend/containers";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -25,30 +23,12 @@ function SellerPage() {
   const [viewOrder, setViewOrder] = useState();
   const [checkOrder, setCheckOrder] = useState([]);
   const [scannedUrl, setScannedUrl] = useState();
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
-  const router = useRouter();
   const dispatch = useDispatch();
   const { data, error, mutate } = useSWR(
     { url: `${LocalApi}/seller`, params: query },
-    fetcher,
     {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
     }
   );
 

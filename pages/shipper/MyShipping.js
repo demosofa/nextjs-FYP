@@ -1,21 +1,16 @@
-import axios from "axios";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import {
-  expireStorage,
-  retryAxios,
-  tailwindStatus,
-} from "../../frontend/utils";
+import { tailwindStatus } from "../../frontend/utils";
 import { Loading, Pagination } from "../../frontend/components";
 import { useState } from "react";
 import Head from "next/head";
 import { convertTime, currencyFormat, OrderStatus } from "../../shared";
 import { ItemsFromOrder, ThSortOrderBy } from "../../frontend/containers";
 import Select from "react-select";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -29,32 +24,14 @@ function MyShipping() {
   });
   const [showQR, setShowQR] = useState(null);
   const dispatch = useDispatch();
-  const router = useRouter();
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
   const { data, error } = useSWR(
     {
       url: `${LocalApi}/shipper`,
       params: query,
     },
-    fetcher,
     {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
     }
   );
 

@@ -1,10 +1,9 @@
-import axios from "axios";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
 import decoder from "jwt-decode";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { expireStorage, retryAxios } from "../../frontend/utils";
+import { expireStorage } from "../../frontend/utils";
 import { convertTime, currencyFormat, Role, OrderStatus } from "../../shared";
 import { Loading, QRreader } from "../../frontend/components";
 import { Modal, ProgressBar } from "../../frontend/containers";
@@ -12,6 +11,7 @@ import { addNotification } from "../../frontend/redux/reducer/notificationSlice"
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useAblyContext } from "../../frontend/contexts/AblyContext";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
@@ -28,17 +28,6 @@ function ShippingProgress() {
       return { role, accountId };
     }
   })[0];
-  const fetcher = async (config) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
-    const response = await axios({
-      ...config,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  };
   const dispatch = useDispatch();
   const router = useRouter();
   const {
@@ -51,15 +40,9 @@ function ShippingProgress() {
           url: `${LocalApi}/order/${router.query.id}`,
         }
       : null,
-    fetcher,
     {
       refreshInterval: convertTime("5s").milisecond,
       dedupingInterval: convertTime("5s").milisecond,
-      onError(err, key, config) {
-        if (err?.response?.status === 403) router.back();
-        else if (err?.response?.status === 401) router.push("/login");
-        else dispatch(addNotification({ message: err.message, type: "error" }));
-      },
     }
   );
 

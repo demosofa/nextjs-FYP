@@ -10,36 +10,34 @@ export default function ImageMagnifier({
   ...props
 }) {
   const maginfier = useRef();
-  const [offset, setOffset] = useState();
+  const [target, setTarget] = useState();
 
   const handleMaginfier = ({ pageX, pageY }) => {
     const mag = maginfier.current;
     const left = compareToRange(
-      pageX - mag.offsetWidth / 2 - offset.offsetLeft,
+      pageX - mag.offsetWidth / 2 - target.offsetLeft,
       0,
-      offset.width - mag.offsetWidth
+      target.offsetWidth - mag.offsetWidth
     );
     const top = compareToRange(
-      pageY - mag.offsetHeight / 2 - offset.offsetTop,
+      pageY - mag.offsetHeight / 2 - target.offsetTop,
       0,
-      offset.height - mag.offsetHeight
+      target.offsetHeight - mag.offsetHeight
     );
     mag.style.left = `${left}px`;
     mag.style.top = `${top}px`;
-    mag.style.backgroundPosition = `-${
-      mag.offsetLeft * zoom + mag.offsetWidth / 2
-    }px
-    -${mag.offsetTop * zoom + mag.offsetHeight / 2}px`;
+    mag.style.backgroundPosition = `-${left * zoom + mag.offsetWidth / 2}px
+                                    -${top * zoom + mag.offsetHeight / 2}px`;
   };
 
   return (
     <div
       className="relative h-full"
       onMouseEnter={(e) => {
-        setOffset(e.currentTarget);
+        setTarget(e.currentTarget);
       }}
-      onMouseMove={(e) => offset && handleMaginfier(e)}
-      onMouseLeave={() => setOffset(null)}
+      onMouseMove={(e) => target && handleMaginfier(e)}
+      onMouseLeave={() => setTarget(null)}
     >
       <Image
         className={` ${className}`}
@@ -49,15 +47,15 @@ export default function ImageMagnifier({
         fill
         {...props}
       />
-      {offset && (
+      {target && (
         <div
           ref={maginfier}
           className="absolute top-0 h-20 w-20 cursor-none rounded-full border border-white"
           style={{
             backgroundImage: `url(${src})`,
             backgroundRepeat: `no-repeat`,
-            backgroundSize: `calc(${offset.width} * ${zoom}px)
-                              calc(${offset.height} * ${zoom}px)`,
+            backgroundSize: `calc(${target.offsetWidth} * ${zoom}px)
+                            calc(${target.offsetHeight} * ${zoom}px)`,
           }}
         />
       )}
