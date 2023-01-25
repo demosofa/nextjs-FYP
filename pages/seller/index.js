@@ -1,22 +1,21 @@
-import useSWR from "swr";
+import Head from "next/head";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
+import useSWR from "swr";
 import {
   Checkbox,
   Loading,
   Pagination,
   QRreader,
 } from "../../frontend/components";
-import { useState } from "react";
-import dynamic from "next/dynamic";
-import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import Head from "next/head";
-import { convertTime, currencyFormat } from "../../shared";
 import { ItemsFromOrder, ThSortOrderBy } from "../../frontend/containers";
 import { fetcher } from "../../frontend/contexts/SWRContext";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { convertTime, currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
-function SellerPage() {
+export default function SellerPage() {
   const [query, setQuery] = useState({ page: 1, sort: "total", orderby: -1 });
   const [viewOrderItem, setViewOrderItem] = useState();
   const [showScanner, setShowScanner] = useState(false);
@@ -255,5 +254,3 @@ function SellerPage() {
     </div>
   );
 }
-
-export default dynamic(() => Promise.resolve(SellerPage), { ssr: false });

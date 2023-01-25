@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useMemo, DependencyList } from "react";
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
+import { DependencyList, useEffect, useMemo, useRef, useState } from "react";
 
 export default function useAxiosLoad({
   config,
@@ -7,7 +7,7 @@ export default function useAxiosLoad({
   deps = [],
   setError,
 }: {
-  config?: AxiosRequestConfig;
+  config?: CreateAxiosDefaults;
   callback: (AxiosInstance: AxiosInstance) => unknown;
   deps: DependencyList;
   setError?: Function;

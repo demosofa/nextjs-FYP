@@ -1,4 +1,4 @@
-import { useRef, useCallback, DependencyList } from "react";
+import { DependencyList, useCallback, useRef } from "react";
 
 export default function useObserver({
   callback,

@@ -1,5 +1,5 @@
-import { authenticate } from "../../../backend/helpers";
 import { notification } from "../../../backend/controllers";
+import { authenticate } from "../../../backend/helpers";
 
 async function notifyId(req, res) {
   switch (req.method.toLowerCase()) {

@@ -1,20 +1,19 @@
 import axios from "axios";
-import dynamic from "next/dynamic";
 import Head from "next/head";
-import Select from "react-select";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { Pagination, Search, Loading } from "../../frontend/components";
-import { expireStorage, retryAxios } from "../../frontend/utils";
-import { useAuthLoad } from "../../frontend/hooks";
-import { useDispatch } from "react-redux";
-import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { Role, currencyFormat } from "../../shared";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import Select from "react-select";
+import { Loading, Pagination, Search } from "../../frontend/components";
+import { useAuthLoad } from "../../frontend/hooks";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { expireStorage, retryAxios } from "../../frontend/utils";
+import { currencyFormat, Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
-function ProductCRUD() {
+export default function ProductCRUD() {
   const [remove, setRemove] = useState(null);
   const [query, setQuery] = useState({
     search: "",
@@ -311,5 +310,3 @@ function Remove({ index, product, setProducts, setRemove }) {
     </>
   );
 }
-
-export default dynamic(() => Promise.resolve(ProductCRUD), { ssr: false });

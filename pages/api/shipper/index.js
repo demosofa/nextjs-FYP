@@ -1,5 +1,5 @@
 import { shipper } from "../../../backend/controllers";
-import { db, authenticate, authorize } from "../../../backend/helpers";
+import { authenticate, authorize, db } from "../../../backend/helpers";
 import { Role } from "../../../shared";
 
 async function Shipper(req, res) {

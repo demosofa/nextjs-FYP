@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../../backend/helpers";
 import { auth } from "../../../backend/controllers";
+import { db } from "../../../backend/helpers";
 
 export default async function refreshToken(
   req: NextApiRequest,

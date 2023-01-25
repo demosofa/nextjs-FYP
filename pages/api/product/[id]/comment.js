@@ -1,5 +1,5 @@
 import { comment } from "../../../../backend/controllers";
-import { db, authenticate } from "../../../../backend/helpers";
+import { authenticate, db } from "../../../../backend/helpers";
 
 export default async function productComment(req, res) {
   await db.connect();

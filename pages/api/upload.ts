@@ -1,6 +1,6 @@
-import { Cloudinary, parseForm } from "../../backend/helpers";
 import { UploadApiOptions } from "cloudinary";
 import { NextApiRequest, NextApiResponse } from "next";
+import { Cloudinary, parseForm } from "../../backend/helpers";
 
 export const config = {
   api: {

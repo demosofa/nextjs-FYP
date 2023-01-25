@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -6,14 +5,14 @@ import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { Checkbox, Loading, Pagination } from "../../frontend/components";
-import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { convertTime, currencyFormat } from "../../shared";
 import { ThSortOrderBy } from "../../frontend/containers";
 import { fetcher } from "../../frontend/contexts/SWRContext";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { convertTime, currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
-function Shipper() {
+export default function Shipper() {
   const [checkOrder, setCheckOrder] = useState([]);
   const [query, setQuery] = useState({ page: 1, sort: "status", orderby: -1 });
   const dispatch = useDispatch();
@@ -141,5 +140,3 @@ function Shipper() {
     </div>
   );
 }
-
-export default dynamic(() => Promise.resolve(Shipper), { ssr: false });

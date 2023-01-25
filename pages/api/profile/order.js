@@ -1,5 +1,5 @@
-import { db, authenticate } from "../../../backend/helpers";
 import { user } from "../../../backend/controllers";
+import { authenticate, db } from "../../../backend/helpers";
 
 async function order(req, res) {
   await db.connect();

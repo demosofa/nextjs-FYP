@@ -1,9 +1,9 @@
+import Head from "next/head";
 import { Provider } from "react-redux";
+import { AblyContext, MediaContext, SWRContext } from "../frontend/contexts";
+import Layout from "../frontend/layouts";
 import { store } from "../frontend/redux/store";
 import "../styles/_globals.scss";
-import Layout from "../frontend/layouts";
-import Head from "next/head";
-import { MediaContext, AblyContext, SWRContext } from "../frontend/contexts";
 
 function MyApp({ Component, pageProps, ...appProps }) {
   return (

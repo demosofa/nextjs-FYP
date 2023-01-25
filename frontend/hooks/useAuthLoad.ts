@@ -1,6 +1,6 @@
-import { AxiosInstance, AxiosRequestConfig } from "axios";
-import { useState, DependencyList } from "react";
+import { AxiosInstance, CreateAxiosDefaults } from "axios";
 import decoder from "jwt-decode";
+import { DependencyList, useState } from "react";
 import { useAxiosLoad } from ".";
 import { expireStorage, retryAxios } from "../utils";
 
@@ -12,7 +12,7 @@ export default function useAuthLoad({
   roles,
   deps = [],
 }: {
-  config?: AxiosRequestConfig;
+  config?: CreateAxiosDefaults;
   cb?: (AxiosInstance: AxiosInstance) => unknown;
   roles: string[];
   deps?: DependencyList;

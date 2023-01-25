@@ -1,14 +1,16 @@
 import axios from "axios";
 import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
-  ImageMagnifier,
-  Checkbox,
-  ReadMoreLess,
-  Increment,
-  Slider,
   Breadcrumb,
+  Checkbox,
+  ImageMagnifier,
+  Increment,
+  ReadMoreLess,
+  Slider,
   StarRating,
 } from "../../frontend/components";
 import {
@@ -18,13 +20,11 @@ import {
   Rating,
   ReceivingAddress,
 } from "../../frontend/containers";
-import { expireStorage, retryAxios, Validate } from "../../frontend/utils";
 import { useMediaContext } from "../../frontend/contexts/MediaContext";
 import { addCart } from "../../frontend/redux/reducer/cartSlice";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { addViewed } from "../../frontend/redux/reducer/recentlyViewedSlice";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { expireStorage, retryAxios, Validate } from "../../frontend/utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

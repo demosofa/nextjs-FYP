@@ -1,18 +1,17 @@
-import dynamic from "next/dynamic";
+import decoder from "jwt-decode";
+import Head from "next/head";
+import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import useSWR from "swr";
 import { Loading } from "../frontend/components";
 import { Widget } from "../frontend/containers";
 import { expireStorage } from "../frontend/utils";
-import Head from "next/head";
-import Image from "next/image";
-import { useState } from "react";
-import decoder from "jwt-decode";
 import { Role } from "../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
-function Dashboard() {
+export default function Dashboard() {
   const router = useRouter();
   const auth = useState(() => {
     const accessToken = expireStorage.getItem("accessToken");
@@ -151,5 +150,3 @@ function Dashboard() {
     </div>
   );
 }
-
-export default dynamic(() => Promise.resolve(Dashboard), { ssr: false });

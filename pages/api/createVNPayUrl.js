@@ -1,7 +1,7 @@
-import { authenticate } from "../../backend/helpers";
 import { format } from "date-fns";
-import { sortObject } from "../../shared";
 import NextCors from "nextjs-cors";
+import { authenticate } from "../../backend/helpers";
+import { sortObject } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

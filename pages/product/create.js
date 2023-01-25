@@ -1,35 +1,34 @@
 import axios from "axios";
 import Head from "next/head";
-import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import Select from "react-select";
 import {
   FileUpload,
-  TagsInput,
   Form,
   Loading,
+  TagsInput,
 } from "../../frontend/components";
-import { Variation, Variant, SelectCategory } from "../../frontend/containers";
+import { SelectCategory, Variant, Variation } from "../../frontend/containers";
+import { useMediaContext } from "../../frontend/contexts/MediaContext";
+import { useAuthLoad } from "../../frontend/hooks";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { deleteAllVariant } from "../../frontend/redux/reducer/variantSlice";
+import { editAllVariations } from "../../frontend/redux/reducer/variationSlice";
 import {
-  retryAxios,
-  Validate,
-  uploadApi,
   expireStorage,
+  retryAxios,
+  uploadApi,
+  Validate,
   validateVariations,
 } from "../../frontend/utils";
-import { useSelector, useDispatch } from "react-redux";
-import { editAllVariations } from "../../frontend/redux/reducer/variationSlice";
-import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import Select from "react-select";
-import dynamic from "next/dynamic";
-import { deleteAllVariant } from "../../frontend/redux/reducer/variantSlice";
-import { useMediaContext } from "../../frontend/contexts/MediaContext";
 import { currencyFormat, Role } from "../../shared";
-import { useAuthLoad } from "../../frontend/hooks";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
-function CreateForm() {
+export default function CreateForm() {
   const [waitForCreate, setWaitForCreate] = useState(false);
   const variants = useSelector((state) => state.variant);
   const variations = useSelector((state) => state.variation);
@@ -399,5 +398,3 @@ function CreateForm() {
     </>
   );
 }
-
-export default dynamic(() => Promise.resolve(CreateForm), { ssr: false });

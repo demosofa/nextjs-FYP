@@ -1,5 +1,5 @@
 import { product } from "../../../../backend/controllers";
-import { db, authenticate, authorize } from "../../../../backend/helpers";
+import { authenticate, authorize, db } from "../../../../backend/helpers";
 import { Role } from "../../../../shared";
 
 export default async function ProductId(req, res) {

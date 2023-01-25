@@ -1,19 +1,18 @@
-import { useRouter } from "next/router";
+import axios from "axios";
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Form, Loading, TagsInput } from "../../../frontend/components";
 import { UpdateImage, UpdateVariation } from "../../../frontend/containers";
-import dynamic from "next/dynamic";
 import { useAuthLoad } from "../../../frontend/hooks";
-import { expireStorage, retryAxios, Validate } from "../../../frontend/utils";
-import axios from "axios";
-import { useDispatch } from "react-redux";
 import { addNotification } from "../../../frontend/redux/reducer/notificationSlice";
+import { expireStorage, retryAxios, Validate } from "../../../frontend/utils";
 import { Role } from "../../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
-function UpdateProduct() {
+export default function UpdateProduct() {
   const [product, setProduct] = useState();
   const [toggle, setToggle] = useState(null);
   const router = useRouter();
@@ -145,5 +144,3 @@ function UpdateProduct() {
     </Form>
   );
 }
-
-export default dynamic(() => Promise.resolve(UpdateProduct), { ssr: false });

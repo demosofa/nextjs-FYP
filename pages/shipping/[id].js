@@ -1,17 +1,17 @@
-import useSWR from "swr";
-import dynamic from "next/dynamic";
 import decoder from "jwt-decode";
+import dynamic from "next/dynamic";
+import Head from "next/head";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { expireStorage } from "../../frontend/utils";
-import { convertTime, currencyFormat, Role, OrderStatus } from "../../shared";
+import useSWR from "swr";
 import { Loading, QRreader } from "../../frontend/components";
 import { Modal, ProgressBar } from "../../frontend/containers";
-import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { useEffect, useState } from "react";
-import Head from "next/head";
 import { useAblyContext } from "../../frontend/contexts/AblyContext";
 import { fetcher } from "../../frontend/contexts/SWRContext";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { expireStorage } from "../../frontend/utils";
+import { convertTime, currencyFormat, OrderStatus, Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;

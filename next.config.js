@@ -4,6 +4,11 @@ const nextConfig = {
   images: {
     domains: ["res.cloudinary.com"],
   },
+  modularizeImports: {
+    axios: {
+      transform: "axios/{{member}}",
+    },
+  },
 };
 
 const runtimeCaching = require("next-pwa/cache");
