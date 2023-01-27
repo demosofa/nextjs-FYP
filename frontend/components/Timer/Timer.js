@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useInterval } from "../../hooks";
 import { convertTime } from "../../../shared";
+import { useInterval } from "../../hooks";
 import styles from "./timer.module.scss";
 
 export default function Timer({ value, setExpire, className, ...props }) {

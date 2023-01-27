@@ -1,5 +1,5 @@
-import { NextApiHandler } from "next";
 import Cookies from "cookies";
+import { NextApiHandler } from "next";
 import { Token } from ".";
 import { convertTime } from "../../shared";
 

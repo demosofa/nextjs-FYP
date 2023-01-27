@@ -1,8 +1,8 @@
 import {
   Html5Qrcode,
   Html5QrcodeCameraScanConfig,
-  Html5QrcodeResult,
   Html5QrcodeError,
+  Html5QrcodeResult,
 } from "html5-qrcode";
 import { useEffect } from "react";
 

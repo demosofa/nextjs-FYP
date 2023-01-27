@@ -1,14 +1,14 @@
-import Navbar from "./Navbar/Navbar";
-import Sidebar from "./Sidebar/Sidebar";
-import Footer from "./Footer/Footer";
-import NotifyToast from "./NotifyToast/NotifyToast";
-import Dashboard from "./Dashboard";
-import General from "./General";
-import { useMemo } from "react";
-import { AdminRole, ShipperRole, SellerRole } from "./routes";
-import { expireStorage } from "../utils";
 import parser from "jwt-decode";
+import { useMemo } from "react";
 import { isStringStartWith, Role } from "../../shared";
+import { expireStorage } from "../utils";
+import Dashboard from "./Dashboard";
+import Footer from "./Footer/Footer";
+import General from "./General";
+import Navbar from "./Navbar/Navbar";
+import NotifyToast from "./NotifyToast/NotifyToast";
+import { AdminRole, SellerRole, ShipperRole } from "./routes";
+import Sidebar from "./Sidebar/Sidebar";
 
 export default function Layout({ children, routerPath }) {
   const { role } = useMemo(() => {

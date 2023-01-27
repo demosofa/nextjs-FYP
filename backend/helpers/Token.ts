@@ -1,4 +1,4 @@
-import { sign, verify, SignOptions, VerifyOptions } from "jsonwebtoken";
+import { sign, SignOptions, verify, VerifyOptions } from "jsonwebtoken";
 
 export default class Token {
   accessToken: string;

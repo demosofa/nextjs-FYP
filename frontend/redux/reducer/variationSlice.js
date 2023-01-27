@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-/** @type {({ types: string[], price: number, cost: number, quantity: number, length:number, width:number, height:number }[])} */
+/** @type {{ types: string[], price: number, cost: number, quantity: number, length:number, width:number, height:number }[]} */
 const initialState = [];
 
 const variation = createSlice({

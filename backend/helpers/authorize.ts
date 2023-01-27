@@ -1,4 +1,4 @@
-import type { NextApiResponse, NextApiHandler } from "next";
+import type { NextApiHandler, NextApiResponse } from "next";
 import Request from "./type";
 
 export default function authorize(

@@ -1,16 +1,16 @@
 import axios from "axios";
+import Image from "next/image";
 import { useMemo, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
+import { BiUpload } from "react-icons/bi";
+import { BsTrash } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { Role } from "../../../shared";
 import { Animation, FileUpload, Icon, Loading } from "../../components";
 import { useAuthLoad, useUpload } from "../../hooks";
-import { AiOutlinePlus } from "react-icons/ai";
-import { BsTrash } from "react-icons/bs";
-import { BiUpload } from "react-icons/bi";
-import { retryAxios, uploadApi } from "../../utils";
-import { useDispatch } from "react-redux";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { Role } from "../../../shared";
+import { retryAxios, uploadApi } from "../../utils";
 import styles from "./updateimage.module.scss";
-import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

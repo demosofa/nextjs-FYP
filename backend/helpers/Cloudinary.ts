@@ -1,10 +1,10 @@
 import {
-  v2 as cloudinary,
-  UploadApiOptions,
+  AdminAndResourceOptions,
   AdminApiOptions,
   ArchiveApiOptions,
   ConfigAndUrlOptions,
-  AdminAndResourceOptions,
+  UploadApiOptions,
+  v2 as cloudinary,
 } from "cloudinary";
 
 cloudinary.config({

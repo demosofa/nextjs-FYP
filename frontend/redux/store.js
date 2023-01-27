@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { expireStorage } from "../utils";
+import { cartStorage, recentlyViewedStorage } from "./middleware";
 import {
   cart,
+  modal,
   notification,
+  recentlyViewed,
   variant,
   variation,
-  recentlyViewed,
-  modal,
 } from "./reducer";
-import { cartStorage, recentlyViewedStorage } from "./middleware";
-import { expireStorage } from "../utils";
 
 function loadState(name) {
   try {

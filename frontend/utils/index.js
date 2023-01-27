@@ -1,11 +1,11 @@
 export { default as compareToRange } from "./compareToRange";
+export { default as expireStorage } from "./expireStorage";
 export { default as getUnique } from "./getUnique";
 export { default as getURL } from "./getURL";
 export { default as markdown } from "./markdown";
 export { default as retryAxios } from "./retryAxios";
-export { default as uploadApi } from "./uploadApi";
-export { default as timeAgo } from "./timeAgo";
 export { default as tailwindStatus } from "./tailwindStatus";
-export { default as validateVariations } from "./validateVariations";
+export { default as timeAgo } from "./timeAgo";
+export { default as uploadApi } from "./uploadApi";
 export { default as Validate } from "./Validate";
-export { default as expireStorage } from "./expireStorage";
+export { default as validateVariations } from "./validateVariations";

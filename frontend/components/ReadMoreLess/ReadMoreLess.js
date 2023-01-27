@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useResize } from "../../hooks";
 import styles from "./_readmoreless.module.scss";
 

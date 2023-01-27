@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { Icon } from "../";
 import styles from "./increment.module.scss";
 

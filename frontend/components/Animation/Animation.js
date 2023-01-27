@@ -1,5 +1,4 @@
-import React from "react";
-import { useSpring, useTransition, animated, config } from "react-spring";
+import { animated, useSpring, useTransition } from "react-spring";
 
 export default function Animation() {
   return;

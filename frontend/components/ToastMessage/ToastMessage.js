@@ -1,16 +1,16 @@
-import { useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { removeNotification } from "../../redux/reducer/notificationSlice";
-import Icon from "../Icon/Icon";
+import { useEffect, useRef } from "react";
 import {
   BsCheckCircleFill,
-  BsFillExclamationTriangleFill,
   BsExclamationOctagonFill,
+  BsFillExclamationTriangleFill,
 } from "react-icons/bs";
 import { FaExternalLinkSquareAlt } from "react-icons/fa";
 import { RiCloseFill } from "react-icons/ri";
-import styles from "./ToastMessage.module.css";
+import { useDispatch } from "react-redux";
 import { convertTime } from "../../../shared";
+import { removeNotification } from "../../redux/reducer/notificationSlice";
+import Icon from "../Icon/Icon";
+import styles from "./ToastMessage.module.css";
 
 export default function ToastMessage({
   id,

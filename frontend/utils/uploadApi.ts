@@ -1,4 +1,4 @@
-import { AxiosStatic, AxiosInstance } from "axios";
+import { AxiosInstance, AxiosStatic } from "axios";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

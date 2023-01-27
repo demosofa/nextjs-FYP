@@ -1,11 +1,11 @@
-import { useSelector, useDispatch } from "react-redux";
-import { TagsInput, Icon } from "../../components";
+import { GiTrashCan } from "react-icons/gi";
+import { useDispatch, useSelector } from "react-redux";
+import { Icon, TagsInput } from "../../components";
 import {
   addVariant,
-  editVariant,
   deleteVariant,
+  editVariant,
 } from "../../redux/reducer/variantSlice";
-import { GiTrashCan } from "react-icons/gi";
 import styles from "./variant.module.scss";
 
 export default function Variants() {

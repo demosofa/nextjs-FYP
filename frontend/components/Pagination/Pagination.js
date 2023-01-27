@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, createContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { usePagination } from "../../hooks";
 import styles from "./Pagination.module.css";
 

@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import Cookies from "cookies";
-import { setCookieToken, Token } from "../helpers";
-import { convertTime } from "../../shared";
 import { createTransport } from "nodemailer";
+import { convertTime } from "../../shared";
+import { setCookieToken, Token } from "../helpers";
 import models from "../models";
 
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;

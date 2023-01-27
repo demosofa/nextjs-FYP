@@ -1,11 +1,11 @@
+import { AiOutlineProfile } from "react-icons/ai";
+import { BsBoxSeam, BsCartPlus } from "react-icons/bs";
 import {
-  MdOutlineDashboard,
   MdOutlineCategory,
+  MdOutlineDashboard,
   MdOutlineLocalShipping,
   MdOutlineSell,
 } from "react-icons/md";
-import { AiOutlineProfile } from "react-icons/ai";
-import { BsBoxSeam, BsCartPlus } from "react-icons/bs";
 import { TbShoppingCartDiscount } from "react-icons/tb";
 
 const ShipperRole = [

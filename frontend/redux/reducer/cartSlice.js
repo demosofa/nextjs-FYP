@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 /**
- * @typedef {({
+ * @typedef {{
  *  productId: string,
  *  variationId: string,
  *  title: string,
@@ -11,10 +11,10 @@ import { createSlice } from "@reduxjs/toolkit";
  *  quantity: number,
  *  price: number,
  *  total: number,
- *})} Product
+ *}} Product
  */
 
-/** @type {({ products: Product[], total: number, quantity: number })} */
+/** @type {{ products: Product[], total: number, quantity: number }} */
 const initialState = {
   products: [],
   total: 0,

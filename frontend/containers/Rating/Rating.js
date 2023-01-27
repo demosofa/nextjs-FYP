@@ -1,6 +1,6 @@
 import axios from "axios";
-import useSWRImmutable from "swr/immutable";
 import { useDispatch } from "react-redux";
+import useSWRImmutable from "swr/immutable";
 import { Loading, StarRating } from "../../components";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../../utils";

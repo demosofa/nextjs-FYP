@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "../../components";
 import styles from "./progressbar.module.scss";
 export default function ProgressBar({

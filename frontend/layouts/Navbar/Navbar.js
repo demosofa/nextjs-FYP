@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Badge, Dropdown, Search } from "../../components";
-import { Notification } from "../../containers";
+import { useMemo, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaBell } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import styles from "./Navbar.module.css";
-import { useMemo, useState } from "react";
+import { Badge, Dropdown, Search } from "../../components";
+import { Notification } from "../../containers";
 import RouterAuth from "../../containers/RouterAuth/RouterAuth";
+import styles from "./Navbar.module.css";
 
 export default function Navbar({ arrLink }) {
   const [linkNav, linkDrop] = useMemo(() => {

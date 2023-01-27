@@ -1,4 +1,4 @@
-import { IncomingForm, Fields, Files, Options } from "formidable";
+import { Fields, Files, IncomingForm, Options } from "formidable";
 import { NextApiRequest } from "next";
 
 export default function parseForm(

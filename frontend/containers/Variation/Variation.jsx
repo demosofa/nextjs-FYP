@@ -1,11 +1,11 @@
 import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { GiTrashCan } from "react-icons/gi";
+import { useDispatch, useSelector } from "react-redux";
 import { useVariantPermutation } from "../../hooks";
 import {
   addVariation,
-  editVariation,
   deleteVariation,
+  editVariation,
 } from "../../redux/reducer/variationSlice";
 
 export default function Variation() {

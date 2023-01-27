@@ -1,14 +1,14 @@
 import axios from "axios";
+import Image from "next/image";
 import { Fragment, useState } from "react";
+import { AiOutlineCheck } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { Loading, Checkbox, Animation } from "../../components";
+import { Role } from "../../../shared";
+import { Animation, Checkbox, Loading } from "../../components";
 import { useAuthLoad } from "../../hooks";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 import { retryAxios, validateVariations } from "../../utils";
-import { AiOutlineCheck } from "react-icons/ai";
-import { Role } from "../../../shared";
 import styles from "./updatevariation.module.scss";
-import Image from "next/image";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

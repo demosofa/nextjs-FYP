@@ -1,11 +1,11 @@
-import { NotifyToast, Sidebar } from ".";
-import Link from "next/link";
-import { Animation, Icon } from "../components";
-import { AiOutlineHome, AiOutlineArrowRight } from "react-icons/ai";
-import dynamic from "next/dynamic";
-import { useState } from "react";
-import { FaBell } from "react-icons/fa";
 import decoder from "jwt-decode";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useState } from "react";
+import { AiOutlineArrowRight, AiOutlineHome } from "react-icons/ai";
+import { FaBell } from "react-icons/fa";
+import { NotifyToast, Sidebar } from ".";
+import { Animation, Icon } from "../components";
 
 function Dashboard({ children, arrLink }) {
   const [toggle, setToggle] = useState(false);

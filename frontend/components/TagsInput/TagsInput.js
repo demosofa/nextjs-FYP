@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GrFormClose } from "react-icons/gr";
 import style from "./TagsInput.module.css";
 

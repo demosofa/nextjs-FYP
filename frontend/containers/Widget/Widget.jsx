@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
-import useSWR from "swr";
-import { expireStorage, retryAxios } from "../../utils";
 import {
   HiOutlineArrowNarrowDown,
   HiOutlineArrowNarrowUp,
 } from "react-icons/hi";
+import useSWR from "swr";
+import { expireStorage, retryAxios } from "../../utils";
 import styles from "./widget.module.scss";
 
 export default function Widget({

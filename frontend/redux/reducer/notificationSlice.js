@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-/** @type {({ id: string, message: string, type: string, href: string }[])} */
+/** @type {{ id: string, message: string, type: string, href: string }[]} */
 const initialState = [];
 
 const notification = createSlice({

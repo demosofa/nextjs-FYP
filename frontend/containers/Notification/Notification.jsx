@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
 import useSWRInfinite from "swr/infinite";
-import { timeAgo } from "../../utils";
-import { addNotification } from "../../redux/reducer/notificationSlice";
 import { Loading } from "../../components";
 import { fetcher } from "../../contexts/SWRContext";
+import { addNotification } from "../../redux/reducer/notificationSlice";
+import { timeAgo } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const PAGE_SIZE = 10;

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { compareToRange } from "../../utils";
 
 export default function ImageMagnifier({

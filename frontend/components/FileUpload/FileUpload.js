@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, Children } from "react";
+import { Children, createContext, useContext, useRef } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { Animation, Loading } from "../";
 import { useUpload } from "../../hooks";

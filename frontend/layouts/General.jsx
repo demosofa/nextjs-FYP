@@ -1,16 +1,16 @@
+import decoder from "jwt-decode";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
-import { Navbar, Sidebar, Footer, NotifyToast } from ".";
-import { Animation, Icon, Search } from "../components";
 import {
+  AiOutlineHome,
   AiOutlineMenuFold,
   AiOutlineShoppingCart,
-  AiOutlineHome,
 } from "react-icons/ai";
-import Link from "next/link";
-import { useMediaContext } from "../contexts/MediaContext";
-import { useRouter } from "next/router";
 import { FaBell } from "react-icons/fa";
-import decoder from "jwt-decode";
+import { Footer, Navbar, NotifyToast, Sidebar } from ".";
+import { Animation, Icon, Search } from "../components";
+import { useMediaContext } from "../contexts/MediaContext";
 
 export default function General({ children, arrLink }) {
   const { device, Devices } = useMediaContext();
