@@ -10,16 +10,13 @@ const PAGE_SIZE = 10;
 
 export default function Notification({ className, ...props }) {
   const dispatch = useDispatch();
-  const { data, error, size, setSize, mutate } = useSWRInfinite(
-    (size) => ({
-      url: `${LocalApi}/notify`,
-      params: {
-        page: size + 1,
-        limit: PAGE_SIZE,
-      },
-    }),
-    fetcher
-  );
+  const { data, error, size, setSize, mutate } = useSWRInfinite((size) => ({
+    url: `${LocalApi}/notify`,
+    params: {
+      page: size + 1,
+      limit: PAGE_SIZE,
+    },
+  }));
 
   const notifications = data ? [].concat(...data) : [];
   const handleRead = (Id) => {

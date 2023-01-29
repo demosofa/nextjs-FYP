@@ -14,7 +14,7 @@ function Dashboard({ children, arrLink }) {
       <Icon
         className={`fixed ${
           toggle ? "left-20" : "left-4"
-        } hidden !h-[auto] !w-[auto] bg-[#f0f2f5] p-2 sm:visible`}
+        } !h-[auto] !w-[auto] bg-[#f0f2f5] p-2 sm:visible`}
         onClick={() => setToggle(!toggle)}
       >
         <Animation.Rotate state={toggle} deg={180}>
