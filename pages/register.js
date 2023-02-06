@@ -30,6 +30,7 @@ export default function Register() {
     <div className="login-page">
       <Head>
         <title>Register</title>
+        <meta name="description" content="Register" />
       </Head>
       <div className="background" />
       <div className="login-container">

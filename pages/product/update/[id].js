@@ -87,6 +87,7 @@ export default function UpdateProduct() {
     >
       <Head>
         <title>Update Product</title>
+        <meta name="description" content="Update Product" />
       </Head>
       <Form.Title style={{ fontSize: "20px" }}>Update Product</Form.Title>
       <Form.Item style={{ flexDirection: "column" }}>

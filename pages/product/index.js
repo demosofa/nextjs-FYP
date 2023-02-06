@@ -73,6 +73,7 @@ export default function ProductCRUD() {
     <div className="product-crud__container">
       <Head>
         <title>Manage Product</title>
+        <meta name="description" content="Manage Product" />
       </Head>
       <div className="flex flex-wrap gap-4">
         {authorized === Role.admin ? (

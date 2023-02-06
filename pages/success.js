@@ -19,6 +19,7 @@ export default function Success() {
     <div className="form_center">
       <Head>
         <title>Checkout Order</title>
+        <meta name="description" content="Checkout Order" />
       </Head>
       <span>Success checkout Order</span>
       <dl>

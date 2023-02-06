@@ -82,6 +82,7 @@ export default function Cart() {
     <div className="cart__container">
       <Head>
         <title>Shopping Cart</title>
+        <meta name="description" content="Shopping Cart" />
       </Head>
       <div className="cart__lst">
         {cart.products.length ? (

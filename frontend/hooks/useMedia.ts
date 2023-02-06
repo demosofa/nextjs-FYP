@@ -69,7 +69,7 @@ export default function useMedia(screens: { [screen: string]: QueryObj }) {
 
     return () => {
       arrMedia.forEach((media) => {
-        media.addEventListener("change", handleSetDevice);
+        media.removeEventListener("change", handleSetDevice);
       });
     };
   }, [arrMedia]);

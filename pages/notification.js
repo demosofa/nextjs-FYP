@@ -6,7 +6,7 @@ export default function notification() {
     <>
       <Head>
         <title>Notification</title>
-        <meta name="notification" content="Notification" />
+        <meta name="description" content="Notification" />
       </Head>
       <Notification className="my-3 mx-auto max-w-3xl px-2" />
     </>

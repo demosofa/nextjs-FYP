@@ -41,7 +41,8 @@ export default function ForgotPassword() {
     <>
       <div className="login-page">
         <Head>
-          <title>Login</title>
+          <title>Forgot Password</title>
+          <meta name="description" content="Forgot Password" />
         </Head>
         <div className="background" />
         <div className="login-container">

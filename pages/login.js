@@ -49,6 +49,7 @@ export default function Login() {
       <div className="login-page">
         <Head>
           <title>Login</title>
+          <meta name="description" content="Login" />
         </Head>
         <div className="background" />
         <div className="login-container">

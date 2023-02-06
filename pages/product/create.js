@@ -149,6 +149,7 @@ export default function CreateForm() {
     <>
       <Head>
         <title>Create Product</title>
+        <meta name="description" content="Create Product" />
       </Head>
       {waitForCreate ? (
         <>
