@@ -1,7 +1,7 @@
 import { createContext, useContext, useRef } from "react";
-import { useMedia } from "../hooks";
+import useMedia, { MediaObj } from "../hooks/useMedia";
 
-const Media = createContext();
+const Media = createContext<MediaObj>({ device: "", Devices: {} });
 
 export default function MediaContext({ children }) {
   const screens = useRef({
@@ -19,7 +19,7 @@ export default function MediaContext({ children }) {
 
     "2xl": { min: "1536px" },
   });
-  const [device, Devices] = useMedia(screens.current);
+  const { device, Devices } = useMedia(screens.current);
   return (
     <Media.Provider value={{ device, Devices }}>{children}</Media.Provider>
   );

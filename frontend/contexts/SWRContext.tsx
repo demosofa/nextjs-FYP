@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { SWRConfig } from "swr";
 import { addNotification } from "../redux/reducer/notificationSlice";
 import { expireStorage, retryAxios } from "../utils";
 
-export const fetcher = async (config) => {
+export const fetcher = async (config: AxiosRequestConfig) => {
   retryAxios(axios);
-  const accessToken = expireStorage.getItem("accessToken");
+  const accessToken: string = expireStorage.getItem("accessToken");
   const response = await axios({
     ...config,
     headers: {

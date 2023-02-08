@@ -1,7 +1,7 @@
-export default function sortObject(obj) {
-  var sorted = {};
-  var str = [];
-  var key;
+export default function sortObject(obj: Object): Object {
+  let sorted: Object;
+  let str: string[];
+  let key: PropertyKey;
   for (key in obj) {
     if (obj.hasOwnProperty(key)) {
       str.push(encodeURIComponent(key));

@@ -64,7 +64,7 @@ export default function Notification({ className, ...props }) {
       {!isLoadingInitialData ? (
         notifications.map((item, index) => (
           <a
-            href={item.link}
+            href={item.link ?? ""}
             className="flex w-full flex-col gap-2 rounded-md p-2 text-gray-700 hover:shadow"
             key={index}
             onClick={(e) => {

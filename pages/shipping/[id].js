@@ -17,7 +17,7 @@ const LocalApi = process.env.NEXT_PUBLIC_API;
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;
 
 function ShippingProgress() {
-  const { ably } = useAblyContext();
+  const ably = useAblyContext();
   const [channel, setChannel] = useState();
   const [showQR, setShowQR] = useState(null);
   const [showScanner, setShowScanner] = useState(false);

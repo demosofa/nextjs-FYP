@@ -1,12 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-type QueryObj = {
-  min: string;
-  max: string;
+export type QueryObj = {
+  min?: string;
+  max?: string;
   screen?: boolean;
 };
 
-export default function useMedia(screens: { [screen: string]: QueryObj }) {
+export type MediaObj = {
+  device: string;
+  Devices: {
+    [key: string]: string;
+  };
+};
+
+export default function useMedia(screens: {
+  [screen: string]: QueryObj;
+}): MediaObj {
   const [device, setDevice] = useState<string>();
 
   const Devices = useMemo(() => {
@@ -74,5 +83,5 @@ export default function useMedia(screens: { [screen: string]: QueryObj }) {
     };
   }, [arrMedia]);
 
-  return [device, Devices];
+  return { device, Devices };
 }

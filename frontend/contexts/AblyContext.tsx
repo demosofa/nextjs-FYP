@@ -16,7 +16,7 @@ export default function AblyContext({ children }) {
   const { role, accountId } = useMemo(() => {
     if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
       let decoded = parser(expireStorage.getItem("accessToken"));
-      if (decoded) return decoded;
+      if (decoded) return decoded as { role: string; accountId: string };
     }
     return { accountId: "", role: "" };
   }, []);
@@ -39,7 +39,7 @@ export default function AblyContext({ children }) {
       });
     }
   }, [ably, accountId]);
-  return <AblyFe.Provider value={{ ably }}>{children}</AblyFe.Provider>;
+  return <AblyFe.Provider value={ably}>{children}</AblyFe.Provider>;
 }
 
 export function useAblyContext() {
