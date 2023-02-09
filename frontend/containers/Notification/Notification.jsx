@@ -10,7 +10,7 @@ const PAGE_SIZE = 10;
 
 export default function Notification({ className, ...props }) {
   const dispatch = useDispatch();
-  const { data, error, size, setSize, mutate } = useSWRInfinite((size) => ({
+  const { isLoading, data, size, setSize, mutate } = useSWRInfinite((size) => ({
     url: `${LocalApi}/notify`,
     params: {
       page: size + 1,
@@ -18,7 +18,7 @@ export default function Notification({ className, ...props }) {
     },
   }));
 
-  const notifications = data ? [].concat(...data) : [];
+  const notifications = data ? data.flat() : [];
   const handleRead = (Id) => {
     mutate(async (data) => {
       try {
@@ -50,18 +50,15 @@ export default function Notification({ className, ...props }) {
       return data;
     });
   };
-
-  const isLoadingInitialData = (!data && !error) || error;
   const isLoadingMore =
-    isLoadingInitialData ||
-    (size > 0 && data && typeof data[size - 1] === "undefined");
+    isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
   const isEmpty = data?.[0]?.length === 0;
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.length < PAGE_SIZE);
 
   return (
     <div className={`flex flex-col items-center gap-2 ${className}`}>
-      {!isLoadingInitialData ? (
+      {!isLoading ? (
         notifications.map((item, index) => (
           <a
             href={item.link ?? ""}
