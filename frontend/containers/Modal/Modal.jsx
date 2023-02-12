@@ -1,8 +1,7 @@
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { fetcher } from "../../contexts/SWRContext";
 import { closeModal } from "../../redux/reducer/modalSlice";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
 
 export default function Modal({ channel, url }) {
   const modal = useSelector((state) => state.modal);
@@ -10,12 +9,7 @@ export default function Modal({ channel, url }) {
   const handleOk = async (e) => {
     e.stopPropagation();
     try {
-      retryAxios(axios);
-      await axios.patch(modal.url, modal.data, {
-        headers: {
-          Authorization: `Bearer ${expireStorage.getItem("accessToken")}`,
-        },
-      });
+      await fetcher({ url: modal.url, method: "patch", data: modal.data });
       channel.publish({
         name: "shipping",
         data: {

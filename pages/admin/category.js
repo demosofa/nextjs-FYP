@@ -1,15 +1,15 @@
 import Head from "next/head";
-import axios from "axios";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useAuthLoad, useAxiosLoad } from "../../frontend/hooks";
-import { Dropdown, Loading } from "../../frontend/components";
-import { expireStorage, retryAxios, Validate } from "../../frontend/utils";
-import { useDispatch } from "react-redux";
-import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { BiDotsVertical } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { Dropdown, Loading } from "../../frontend/components";
+import { fetcher } from "../../frontend/contexts/SWRContext";
+import { useAuthLoad } from "../../frontend/hooks";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { Validate } from "../../frontend/utils";
 import { Role } from "../../shared";
 import styles from "../../styles/crudcategory.module.scss";
-import { useRouter } from "next/router";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -44,20 +44,14 @@ export default function CrudCategory({ maxTree = 3 }) {
     );
 
   const handleAddCategory = async ({ name }) => {
-    const accessToken = expireStorage.getItem("accessToken");
-    retryAxios(axios);
     try {
       new Validate(name).isEmpty().isNotSpecial();
-      const response = await axios.post(
-        `${LocalApi}/category`,
-        { name, isFirstLevel: true },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setCategories((prev) => [response.data, ...prev]);
+      const data = await fetcher({
+        url: `${LocalApi}/category`,
+        method: "post",
+        data: { name, isFirstLevel: true },
+      });
+      setCategories((prev) => [data, ...prev]);
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
     }
@@ -78,7 +72,6 @@ export default function CrudCategory({ maxTree = 3 }) {
               <SubCategory
                 key={category.updatedAt}
                 index={index}
-                unique={category.name + "-"}
                 data={category}
                 maxTree={maxTree}
                 setDelete={() =>
@@ -102,7 +95,6 @@ function SubCategory({
   setDelete,
   ...props
 }) {
-  const accessToken = expireStorage.getItem("accessToken");
   const [toggle, setToggle] = useState({
     edit: false,
     add: false,
@@ -111,35 +103,27 @@ function SubCategory({
   const [currentCategory, setCurrentCategory] = useState(data);
   const [categories, setCategories] = useState([]);
   const dispatch = useDispatch();
-  const { loading } = useAxiosLoad({
-    async callback(axiosInstance) {
+  const { loading } = useAuthLoad({
+    async cb(axiosInstance) {
       if (toggle.more) {
-        retryAxios(axiosInstance);
         const response = await axiosInstance({
           url: `${LocalApi}/category/${currentCategory._id}`,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
         });
         setCategories(response.data);
       }
     },
+    roles: [Role.admin],
     deps: [toggle.more],
   });
 
   const handleEditSave = async ({ name }) => {
-    retryAxios(axios);
     try {
       new Validate(name).isEmpty().isNotSpecial();
-      await axios.patch(
-        `${LocalApi}/category/${currentCategory._id}`,
-        { name: unique + name },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await fetcher({
+        url: `${LocalApi}/category/${currentCategory._id}`,
+        method: "patch",
+        data: { name: unique + name },
+      });
       setCurrentCategory((prev) => ({ ...prev, name: unique + name }));
       setToggle((prev) => ({ ...prev, edit: false }));
     } catch (error) {
@@ -148,12 +132,10 @@ function SubCategory({
   };
 
   const handleDelete = async () => {
-    retryAxios(axios);
     try {
-      await axios.delete(`${LocalApi}/category/${currentCategory._id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+      await fetcher({
+        url: `${LocalApi}/category/${currentCategory._id}`,
+        method: "delete",
       });
       setDelete();
     } catch (error) {
@@ -162,19 +144,14 @@ function SubCategory({
   };
 
   const handleAddSubCategory = async ({ name }) => {
-    retryAxios(axios);
     try {
       new Validate(name).isEmpty().isNotSpecial();
-      const response = await axios.put(
-        `${LocalApi}/category/${currentCategory._id}`,
-        { name: unique + name },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      setCategories((prev) => [...prev, response.data]);
+      const data = await fetcher({
+        method: "put",
+        url: `${LocalApi}/category/${currentCategory._id}`,
+        data: { name: unique + name },
+      });
+      setCategories((prev) => [...prev, data]);
       setToggle((prev) => ({ ...prev, add: false }));
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
@@ -256,7 +233,7 @@ function SubCategory({
             <SubCategory
               key={category.updatedAt}
               index={index}
-              unique={unique}
+              unique={unique + "-" + categories.name}
               data={category}
               maxTree={maxTree - 1}
               setDelete={() =>

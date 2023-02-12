@@ -1,4 +1,3 @@
-import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -6,9 +5,9 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
 import { Loading, Pagination, Search } from "../../frontend/components";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 import { useAuthLoad } from "../../frontend/hooks";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../frontend/utils";
 import { currencyFormat, Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -42,16 +41,14 @@ export default function ProductCRUD() {
   });
 
   const handleStatus = async (e, index) => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
     try {
-      await axios.patch(
-        `${LocalApi}/product/${products[index]._id}`,
-        {
+      await fetcher({
+        url: `${LocalApi}/product/${products[index]._id}`,
+        method: "patch",
+        data: {
           status: e.target.value,
         },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
+      });
       setProducts((prev) => {
         const clone = JSON.parse(JSON.stringify(prev));
         clone[index].status = e.target.value;
@@ -274,13 +271,10 @@ export default function ProductCRUD() {
 function Remove({ index, product, setProducts, setRemove }) {
   const dispatch = useDispatch();
   const handleRemove = async () => {
-    const accessToken = expireStorage.getItem("accessToken");
-    retryAxios(axios);
     try {
-      await axios.delete(`${LocalApi}/product/${product._id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+      await fetcher({
+        url: `${LocalApi}/product/${product._id}`,
+        method: "delete",
       });
       setProducts((prev) => prev.filter((_, i) => i !== index));
       setRemove(null);

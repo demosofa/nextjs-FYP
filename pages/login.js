@@ -54,7 +54,7 @@ export default function Login() {
         <div className="background" />
         <div className="login-container">
           <Form onSubmit={handleSubmit}>
-            <Form.Title style={{ fontSize: "large", fontWeight: "600" }}>
+            <Form.Title style={{ fontSize: "x-large", fontWeight: "600" }}>
               Login
             </Form.Title>
             <Form.Item>

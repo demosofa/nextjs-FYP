@@ -102,7 +102,7 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
   };
   return (
     <Form onSubmit={handleContinue} {...props}>
-      <Form.Title style={{ fontSize: "large", fontWeight: "600" }}>
+      <Form.Title style={{ fontSize: "x-large", fontWeight: "600" }}>
         Register
       </Form.Title>
 
@@ -219,7 +219,7 @@ function FormAccount({ info, moveTo, ...props }) {
   };
   return (
     <Form onSubmit={handleSubmit} {...props}>
-      <Form.Title style={{ fontSize: "large", fontWeight: "600" }}>
+      <Form.Title style={{ fontSize: "x-large", fontWeight: "600" }}>
         Register
       </Form.Title>
       <Form.Item>

@@ -1,13 +1,13 @@
-import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Loading, TagsInput } from "../../../frontend/components";
 import { UpdateImage, UpdateVariation } from "../../../frontend/containers";
+import { fetcher } from "../../../frontend/contexts/SWRContext";
 import { useAuthLoad } from "../../../frontend/hooks";
 import { addNotification } from "../../../frontend/redux/reducer/notificationSlice";
-import { expireStorage, retryAxios, Validate } from "../../../frontend/utils";
+import { Validate } from "../../../frontend/utils";
 import { Role } from "../../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -44,19 +44,13 @@ export default function UpdateProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { _id, description, tags } = product;
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
     try {
       validateInput();
-      await axios.put(
-        `${LocalApi}/product`,
-        { _id, description, tags },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await fetcher({
+        url: `${LocalApi}/product`,
+        method: "put",
+        data: { _id, description, tags },
+      });
       router.back();
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));

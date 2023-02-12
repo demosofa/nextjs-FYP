@@ -33,6 +33,10 @@ body {
   background-color: #f6f7fb;
 }
 
+::-ms-reveal {
+  display: none;
+}
+
 dl {
   dt,
   dd {

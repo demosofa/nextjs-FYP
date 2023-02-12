@@ -1,12 +1,13 @@
-import axios from "axios";
 import decoder from "jwt-decode";
 import { useRef, useState } from "react";
 import { BiDotsVertical } from "react-icons/bi";
 import { useDispatch } from "react-redux";
+import { Role } from "../../../shared";
 import { Dropdown, Loading, Pagination } from "../../components";
-import { useAxiosLoad } from "../../hooks";
+import { fetcher } from "../../contexts/SWRContext";
+import { useAuthLoad, useAxiosLoad } from "../../hooks";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios, timeAgo } from "../../utils";
+import { expireStorage, timeAgo } from "../../utils";
 import styles from "./comment.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -37,20 +38,14 @@ export default function Comment({ url, maxTree = 3 }) {
     if (controller.current) controller.current.abort();
     else {
       controller.current = new AbortController();
-      const accessToken = expireStorage.getItem("accessToken");
-      retryAxios(axios);
       try {
-        const response = await axios.post(
+        const data = await fetcher({
           url,
-          { content },
-          {
-            signal: controller.current.signal,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setComments((prev) => [response.data, ...prev]);
+          method: "post",
+          data: { content },
+          signal: controller.current.signal,
+        });
+        setComments((prev) => [data, ...prev]);
         controller.current = null;
       } catch (error) {
         dispatch(addNotification({ message: error.message, type: "error" }));
@@ -119,23 +114,17 @@ function CommentTab({
     if (controller.current) controller.current.abort();
     else {
       controller.current = new AbortController();
-      retryAxios(axios);
-      const accessToken = expireStorage.getItem("accessToken");
       try {
-        const res = await axios.patch(
-          `${LocalApi}/comments/${data._id}`,
-          { content },
-          {
-            signal: controller.current.signal,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const data = await fetcher({
+          url: `${LocalApi}/comments/${data._id}`,
+          method: "patch",
+          data: { content },
+          signal: controller.current.signal,
+        });
         setCurrentComment((prev) => ({
           ...prev,
           content,
-          updatedAt: res.data.updatedAt,
+          updatedAt: data.updatedAt,
         }));
         setToggle((prev) => ({ ...prev, edit: false }));
         controller.current = null;
@@ -149,14 +138,11 @@ function CommentTab({
     if (controller.current) controller.current.abort();
     else {
       controller.current = new AbortController();
-      retryAxios(axios);
-      const accessToken = expireStorage.getItem("accessToken");
       try {
-        await axios.delete(`${LocalApi}/comments/${data._id}`, {
+        await fetcher({
+          url: `${LocalApi}/comments/${data._id}`,
+          method: "delete",
           signal: controller.current.signal,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
         });
         setDelete();
         controller.current = null;
@@ -166,20 +152,16 @@ function CommentTab({
     }
   };
 
-  const { loading } = useAxiosLoad({
+  const { loading } = useAuthLoad({
     async callback(axiosInstance) {
       if (toggle.more) {
-        retryAxios(axiosInstance);
-        const accessToken = expireStorage.getItem("accessToken");
         const response = await axiosInstance({
           url: `${LocalApi}/comments/${currentComment._id}`,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
         });
         setComments(response.data);
       }
     },
+    roles: [Role.admin, Role.customer, Role.manager, Role.seller, Role.shipper],
     deps: [toggle.more],
   });
 
@@ -342,32 +324,23 @@ function CommentReply({
       controller.current = new AbortController();
       const accessToken = expireStorage.getItem("accessToken");
       const { username } = decoder(accessToken);
-      retryAxios(axios);
       try {
-        const response = await axios.put(
-          urlWithParentCommentId,
-          { content: value },
-          {
-            signal: controller.current.signal,
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        await axios.post(
-          `${LocalApi}/notify`,
-          {
+        const data = await fetcher({
+          url: urlWithParentCommentId,
+          method: "put",
+          data: { content: value },
+          signal: controller.current.signal,
+        });
+        await fetcher({
+          url: `${LocalApi}/notify`,
+          method: "post",
+          data: {
             to: data.author._id,
             content: `You have an reply from ${username}`,
             link: window.location.href,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setComments((prev) => [response.data, ...prev]);
+        });
+        setComments((prev) => [data, ...prev]);
         setToggle(false);
         controller.current = null;
       } catch (error) {

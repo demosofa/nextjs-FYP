@@ -34,16 +34,29 @@ export default function General({ children, arrLink }) {
                   <Link href="/profile" onClick={() => setToggle(!toggle)}>
                     {decoder(localStorage.getItem("accessToken")).username}
                   </Link>
-                  <Link onClick={() => setToggle(!toggle)} href="/notification">
-                    <FaBell />
-                  </Link>
+                  <Sidebar.Item
+                    href="/notification"
+                    className="w-10 group-hover:w-full group-hover:justify-start"
+                    onClick={() => setToggle(!toggle)}
+                  >
+                    <Icon>
+                      <FaBell />
+                    </Icon>
+                    <span className="hidden group-hover:inline-block">
+                      Notification
+                    </span>
+                  </Sidebar.Item>
                 </>
               )}
-            <Link onClick={() => setToggle(!toggle)} href="/">
+            <Sidebar.Item
+              href="/"
+              className="w-10 group-hover:w-full group-hover:justify-start"
+            >
               <Icon>
                 <AiOutlineHome />
               </Icon>
-            </Link>
+              <span className="hidden group-hover:inline-block">Home</span>
+            </Sidebar.Item>
             <Search
               value={search}
               onChange={(e) => setSearch(e.target.value)}

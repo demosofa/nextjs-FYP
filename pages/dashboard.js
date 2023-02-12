@@ -57,7 +57,7 @@ export default function Dashboard() {
       },
     ]);
 
-  const { data, error } = useSWR(
+  const { isLoading, data } = useSWR(
     {
       url: `${LocalApi}/${
         auth.role === Role.admin || auth.role === Role.seller
@@ -72,7 +72,7 @@ export default function Dashboard() {
     }
   );
 
-  if (!data || error)
+  if (isLoading)
     return (
       <Loading
         style={{

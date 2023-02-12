@@ -33,16 +33,29 @@ function Dashboard({ children, arrLink }) {
               <Link href="/profile" onClick={() => setToggle(!toggle)}>
                 {decoder(localStorage.getItem("accessToken")).username}
               </Link>
-              <Link href="/notification" onClick={() => setToggle(!toggle)}>
-                <FaBell />
-              </Link>
+              <Sidebar.Item
+                href="/notification"
+                className="w-10 group-hover:w-full group-hover:justify-start"
+                onClick={() => setToggle(!toggle)}
+              >
+                <Icon>
+                  <FaBell />
+                </Icon>
+                <span className="hidden group-hover:inline-block">
+                  Notification
+                </span>
+              </Sidebar.Item>
             </>
           )}
-        <Link href="/">
+        <Sidebar.Item
+          href="/"
+          className="w-10 group-hover:w-full group-hover:justify-start"
+        >
           <Icon>
             <AiOutlineHome />
           </Icon>
-        </Link>
+          <span className="hidden group-hover:inline-block">Home</span>
+        </Sidebar.Item>
         {arrLink?.map(({ title, path, icon }) => (
           <Sidebar.Item
             key={title}

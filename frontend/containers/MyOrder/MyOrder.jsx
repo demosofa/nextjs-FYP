@@ -23,7 +23,7 @@ export default function MyOrder() {
   const [displayCancel, setDisplayCancel] = useState(null);
   const [viewOrder, setViewOrder] = useState(null);
   const dispatch = useDispatch();
-  const { data, error, mutate } = useSWR(
+  const { isLoading, data, mutate } = useSWR(
     {
       url: `${LocalApi}/profile/order`,
       params,
@@ -81,7 +81,7 @@ export default function MyOrder() {
         />
       </div>
       <div className="manage_table min-h-max w-full overflow-x-auto">
-        {!data || error ? (
+        {isLoading ? (
           <Loading.Spinner className="mx-auto" />
         ) : (
           <table>

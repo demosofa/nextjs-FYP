@@ -21,10 +21,11 @@ import {
   ReceivingAddress,
 } from "../../frontend/containers";
 import { useMediaContext } from "../../frontend/contexts/MediaContext";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 import { addCart } from "../../frontend/redux/reducer/cartSlice";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { addViewed } from "../../frontend/redux/reducer/recentlyViewedSlice";
-import { expireStorage, retryAxios, Validate } from "../../frontend/utils";
+import { Validate } from "../../frontend/utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -122,29 +123,23 @@ export default function Overview({ product, vid }) {
 
   const handleOrder = async (e, address) => {
     e.preventDefault();
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
     try {
-      let products = [generateCart()];
       new Validate(address).isEmpty().isAddress();
+      const products = [generateCart()];
       const shippingFee = products.reduce((prev, curr) => {
         return prev + curr.quantity * curr.extraCostPerItem;
       }, 0);
-      await axios.post(
-        `${LocalApi}/order`,
-        {
+      await fetcher({
+        url: `${LocalApi}/order`,
+        method: "post",
+        data: {
           products,
           shippingFee,
           total: products[0].total,
           quantity: products[0].quantity,
           address,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      });
       setDisplay(false);
       dispatch(
         addNotification({ message: "Success order product", type: "success" })

@@ -1,4 +1,3 @@
-import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,13 +6,14 @@ import { RiCloseFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Animation, Icon, Increment } from "../../frontend/components";
 import { ReceivingAddress } from "../../frontend/containers";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 import {
   addCart,
   clearCart,
   removeCart,
 } from "../../frontend/redux/reducer/cartSlice";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { expireStorage, retryAxios, Validate } from "../../frontend/utils";
+import { Validate } from "../../frontend/utils";
 import { currencyFormat } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -52,21 +52,15 @@ export default function Cart() {
 
   const handleSubmit = async (e, address) => {
     e.preventDefault();
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
     try {
       if (!cart.products.length)
         throw new Error("There is any products in cart");
       new Validate(address).isEmpty().isAddress();
-      await axios.post(
-        `${LocalApi}/order`,
-        { ...cart, shippingFee, address },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      await fetcher({
+        url: `${LocalApi}/order`,
+        method: "post",
+        data: { ...cart, shippingFee, address },
+      });
       dispatch(clearCart());
       dispatch(
         addNotification({ message: "Success order your cart", type: "success" })

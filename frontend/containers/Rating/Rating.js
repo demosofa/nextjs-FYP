@@ -22,7 +22,7 @@ export default function Rating({ url }) {
     return { _id: "", rating: 0 };
   };
   const dispatch = useDispatch();
-  const { data, error, mutate } = useSWRImmutable({ url }, fetcher);
+  const { isLoading, data, mutate } = useSWRImmutable({ url }, fetcher);
 
   const handleRating = async (rating) => {
     mutate(async (data) => {
@@ -36,7 +36,7 @@ export default function Rating({ url }) {
     }, false);
   };
 
-  if (!data || error) return <Loading.Text />;
+  if (isLoading) return <Loading.Text />;
   return (
     <StarRating value={data.rating} handleRating={handleRating} size="2rem" />
   );

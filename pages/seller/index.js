@@ -23,7 +23,7 @@ export default function SellerPage() {
   const [checkOrder, setCheckOrder] = useState([]);
   const [scannedUrl, setScannedUrl] = useState();
   const dispatch = useDispatch();
-  const { data, error, mutate } = useSWR(
+  const { isLoading, data, mutate } = useSWR(
     { url: `${LocalApi}/seller`, params: query },
     {
       refreshInterval: convertTime("5s").milisecond,
@@ -64,7 +64,7 @@ export default function SellerPage() {
     });
   };
 
-  if (!data || error)
+  if (isLoading)
     return (
       <Loading
         style={{

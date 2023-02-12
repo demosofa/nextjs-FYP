@@ -1,9 +1,8 @@
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
+import { fetcher } from "../../contexts/SWRContext";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -11,14 +10,8 @@ export default function RouterAuth() {
   const router = useRouter();
   const dispatch = useDispatch();
   const handleLogout = async () => {
-    retryAxios(axios);
-    const accessToken = expireStorage.getItem("accessToken");
     try {
-      await axios.post(`${LocalApi}/auth/logout`, "", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      await fetcher({ url: `${LocalApi}/auth/logout`, method: "post" });
       localStorage.clear();
       router.reload();
     } catch (error) {

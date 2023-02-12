@@ -17,7 +17,7 @@ export default function Shipper() {
   const [query, setQuery] = useState({ page: 1, sort: "status", orderby: -1 });
   const dispatch = useDispatch();
   const router = useRouter();
-  const { data, error } = useSWR(
+  const { isLoading, data } = useSWR(
     {
       url: `${LocalApi}/order`,
       params: query,
@@ -30,7 +30,7 @@ export default function Shipper() {
 
   const { mutate } = useSWRImmutable({ url: `${LocalApi}/shipper` });
 
-  if (!data || error)
+  if (isLoading)
     return (
       <Loading
         style={{
