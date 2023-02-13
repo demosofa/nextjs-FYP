@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineArrowRight, AiOutlineHome } from "react-icons/ai";
-import { FaBell } from "react-icons/fa";
+import { HiOutlineBell } from "react-icons/hi2";
 import { NotifyToast, Sidebar } from ".";
 import { Animation, Icon } from "../components";
 
@@ -39,7 +39,7 @@ function Dashboard({ children, arrLink }) {
                 onClick={() => setToggle(!toggle)}
               >
                 <Icon>
-                  <FaBell />
+                  <HiOutlineBell />
                 </Icon>
                 <span className="hidden group-hover:inline-block">
                   Notification

@@ -1,9 +1,14 @@
 import convertTime from "../../shared/convertTime";
 import getUnique from "./getUnique";
 
+type ExpireData = {
+  payload: any;
+  expire: string;
+};
+
 export default class expireStorage {
-  static setItem(key, value, expire = "") {
-    let newValue;
+  static setItem(key: string, value: any, expire = ""): void {
+    let newValue: ExpireData;
     let exist = this.getItem(key);
     if (exist) {
       let isUnique = getUnique([exist, value], true);
@@ -12,13 +17,15 @@ export default class expireStorage {
     if (expire)
       newValue = {
         payload: value,
-        expire: new Date(Date.now() + convertTime(expire).milisecond),
+        expire: new Date(
+          Date.now() + convertTime(expire).milisecond
+        ).toLocaleString("en-GB"),
       };
     else newValue = value;
     localStorage.setItem(key, JSON.stringify(newValue));
   }
-  static getItem(key) {
-    let data = JSON.parse(localStorage.getItem(key));
+  static getItem(key: string): any {
+    let data: ExpireData = JSON.parse(localStorage.getItem(key));
     if (data) {
       if (data.expire) {
         if (Date.now() >= new Date(data.expire).getTime()) {

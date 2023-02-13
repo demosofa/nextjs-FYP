@@ -7,7 +7,7 @@ import {
   AiOutlineMenuFold,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { FaBell } from "react-icons/fa";
+import { HiOutlineBell } from "react-icons/hi2";
 import { Footer, Navbar, NotifyToast, Sidebar } from ".";
 import { Animation, Icon, Search } from "../components";
 import { useMediaContext } from "../contexts/MediaContext";
@@ -28,6 +28,12 @@ export default function General({ children, arrLink }) {
               className="absolute top-0 right-0 cursor-pointer"
               onClick={() => setToggle((prev) => !prev)}
             />
+            <Search
+              className="ml-0"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onClick={() => router.push({ pathname: "/", query: { search } })}
+            />
             {typeof window !== "undefined" &&
               localStorage.getItem("accessToken") && (
                 <>
@@ -36,32 +42,22 @@ export default function General({ children, arrLink }) {
                   </Link>
                   <Sidebar.Item
                     href="/notification"
-                    className="w-10 group-hover:w-full group-hover:justify-start"
+                    className="!justify-start"
                     onClick={() => setToggle(!toggle)}
                   >
                     <Icon>
-                      <FaBell />
+                      <HiOutlineBell />
                     </Icon>
-                    <span className="hidden group-hover:inline-block">
-                      Notification
-                    </span>
+                    <span>Notification</span>
                   </Sidebar.Item>
                 </>
               )}
-            <Sidebar.Item
-              href="/"
-              className="w-10 group-hover:w-full group-hover:justify-start"
-            >
+            <Sidebar.Item href="/" className="!justify-start">
               <Icon>
                 <AiOutlineHome />
               </Icon>
-              <span className="hidden group-hover:inline-block">Home</span>
+              <span>Home</span>
             </Sidebar.Item>
-            <Search
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onClick={() => router.push({ pathname: "/", query: { search } })}
-            />
             {arrLink?.map(({ title, path, icon }) => (
               <Sidebar.Item
                 key={title}
