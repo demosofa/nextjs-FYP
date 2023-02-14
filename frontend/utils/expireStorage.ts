@@ -7,7 +7,7 @@ type ExpireData = {
 };
 
 export default class expireStorage {
-  static setItem(key: string, value: any, expire = ""): void {
+  static setItem(key: string, value: any, expire?: string): void {
     let newValue: ExpireData;
     let exist = this.getItem(key);
     if (exist) {

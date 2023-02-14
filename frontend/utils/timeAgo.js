@@ -13,6 +13,13 @@ const MONTH_NAMES = [
   "December",
 ];
 
+/**
+ * return string about time ago which includes date based on parameters
+ * @param {string | number | Date} date
+ * @param {string | boolean} prefomattedDate
+ * @param {boolean} hideYear
+ * @returns {string}
+ */
 function getFormattedDate(date, prefomattedDate = false, hideYear = false) {
   let day = date.getDate();
   const month = MONTH_NAMES[date.getMonth()];
@@ -39,6 +46,11 @@ function getFormattedDate(date, prefomattedDate = false, hideYear = false) {
   return `from ${day}, ${month} ${year} at ${hours}:${minutes}`;
 }
 
+/**
+ * return string about time ago based on dateParam
+ * @param {string | number | Date} dateParam
+ * @returns {string}
+ */
 // --- Main function
 export default function timeAgo(dateParam) {
   if (!dateParam) {
