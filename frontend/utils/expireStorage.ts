@@ -19,7 +19,7 @@ export default class expireStorage {
         payload: value,
         expire: new Date(
           Date.now() + convertTime(expire).milisecond
-        ).toLocaleString("en-GB"),
+        ).toISOString(),
       };
     else newValue = value;
     localStorage.setItem(key, JSON.stringify(newValue));

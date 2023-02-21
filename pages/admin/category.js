@@ -159,10 +159,7 @@ function SubCategory({
   };
 
   return (
-    <div
-      {...props}
-      className="mb-4 w-full rounded-lg border border-gray-500 bg-gray-200 p-2 shadow-md"
-    >
+    <div {...props} className="mb-4 w-full rounded-lg bg-gray-200 p-2">
       <div className={styles.container}>
         {(toggle.edit && (
           <CategoryInput
@@ -229,11 +226,11 @@ function SubCategory({
       {loading && <Loading.Text />}
       {toggle.more && (
         <div className={styles.sub_categories_container}>
-          {categories.map((category) => (
+          {categories.map((category, idx) => (
             <SubCategory
               key={category.updatedAt}
-              index={index}
-              unique={unique + "-" + categories.name}
+              index={idx}
+              unique={unique + "-" + category.name}
               data={category}
               maxTree={maxTree - 1}
               setDelete={() =>

@@ -1,5 +1,5 @@
 import decoder from "jwt-decode";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { BiDotsVertical } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { Role } from "../../../shared";
@@ -317,15 +317,17 @@ function CommentReply({
 }) {
   const controller = useRef();
   const dispatch = useDispatch();
+  const { username } = useMemo(() => {
+    const accessToken = expireStorage.getItem("accessToken");
+    return decoder(accessToken);
+  }, []);
 
   const handleReply = async (value) => {
     if (controller.current) controller.current.abort();
     else {
       controller.current = new AbortController();
-      const accessToken = expireStorage.getItem("accessToken");
-      const { username } = decoder(accessToken);
       try {
-        const data = await fetcher({
+        const result = await fetcher({
           url: urlWithParentCommentId,
           method: "put",
           data: { content: value },
@@ -340,7 +342,7 @@ function CommentReply({
             link: window.location.href,
           },
         });
-        setComments((prev) => [data, ...prev]);
+        setComments((prev) => [result, ...prev]);
         setToggle(false);
         controller.current = null;
       } catch (error) {
@@ -351,7 +353,7 @@ function CommentReply({
 
   return (
     <div className="reply-comment">
-      <label className="text-sm font-bold">{data.author.username}</label>
+      <label className="text-sm font-bold">{username}</label>
       <CommentInput callback={handleReply} setToggle={setToggle} />
     </div>
   );

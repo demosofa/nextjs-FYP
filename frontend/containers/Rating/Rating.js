@@ -8,18 +8,21 @@ import { expireStorage, retryAxios } from "../../utils";
 export default function Rating({ url }) {
   const fetcher = async (config) => {
     const accessToken = expireStorage.getItem("accessToken");
-    if (accessToken) {
-      retryAxios(axios);
-      const response = await axios({
-        ...config,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      if (!response.data) return { _id: "", rating: 0 };
-      return response.data;
+    try {
+      if (accessToken) {
+        retryAxios(axios);
+        const response = await axios({
+          ...config,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        if (!response.data) throw Error();
+        return response.data;
+      } else throw Error();
+    } catch (error) {
+      return { _id: "", rating: 0 };
     }
-    return { _id: "", rating: 0 };
   };
   const dispatch = useDispatch();
   const { isLoading, data, mutate } = useSWRImmutable({ url }, fetcher);
