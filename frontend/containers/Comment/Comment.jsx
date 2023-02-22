@@ -115,7 +115,7 @@ function CommentTab({
     else {
       controller.current = new AbortController();
       try {
-        const data = await fetcher({
+        const result = await fetcher({
           url: `${LocalApi}/comments/${data._id}`,
           method: "patch",
           data: { content },
@@ -124,7 +124,7 @@ function CommentTab({
         setCurrentComment((prev) => ({
           ...prev,
           content,
-          updatedAt: data.updatedAt,
+          updatedAt: result.updatedAt,
         }));
         setToggle((prev) => ({ ...prev, edit: false }));
         controller.current = null;

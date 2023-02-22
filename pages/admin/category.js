@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BiDotsVertical } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { Dropdown, Loading } from "../../frontend/components";
@@ -15,6 +15,10 @@ const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function CrudCategory({ maxTree = 3 }) {
   const [categories, setCategories] = useState([]);
+  const lstNames = useMemo(() => {
+    if (!categories.length) return [];
+    return categories.map((item) => item.name);
+  }, [categories]);
   const { loading, isLoggined, authorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({ url: `${LocalApi}/category` });
@@ -43,9 +47,11 @@ export default function CrudCategory({ maxTree = 3 }) {
       />
     );
 
-  const handleAddCategory = async ({ name }) => {
+  const handleAddCategory = async (name) => {
     try {
       new Validate(name).isEmpty().isNotSpecial();
+      if (lstNames.indexOf(name) !== -1)
+        throw new Error("This name already exists in this directory tree");
       const data = await fetcher({
         url: `${LocalApi}/category`,
         method: "post",
@@ -72,8 +78,9 @@ export default function CrudCategory({ maxTree = 3 }) {
               <SubCategory
                 key={category.updatedAt}
                 index={index}
+                arrTree={lstNames}
                 data={category}
-                maxTree={maxTree}
+                maxTree={maxTree - 1}
                 setDelete={() =>
                   setCategories((prev) =>
                     prev.filter((item) => item._id !== category._id)
@@ -90,7 +97,7 @@ export default function CrudCategory({ maxTree = 3 }) {
 function SubCategory({
   data,
   index,
-  unique = "",
+  arrTree = [],
   maxTree,
   setDelete,
   ...props
@@ -102,6 +109,10 @@ function SubCategory({
   });
   const [currentCategory, setCurrentCategory] = useState(data);
   const [categories, setCategories] = useState([]);
+  const lstNames = useMemo(() => {
+    if (!categories.length) return [];
+    return categories.map((item) => item.name);
+  }, [categories]);
   const dispatch = useDispatch();
   const { loading } = useAuthLoad({
     async cb(axiosInstance) {
@@ -116,15 +127,17 @@ function SubCategory({
     deps: [toggle.more],
   });
 
-  const handleEditSave = async ({ name }) => {
+  const handleEditSave = async (name) => {
     try {
       new Validate(name).isEmpty().isNotSpecial();
+      if (arrTree.indexOf(name) !== -1)
+        throw new Error("This name already exists in this directory tree");
       await fetcher({
         url: `${LocalApi}/category/${currentCategory._id}`,
         method: "patch",
-        data: { name: unique + name },
+        data: { name },
       });
-      setCurrentCategory((prev) => ({ ...prev, name: unique + name }));
+      setCurrentCategory((prev) => ({ ...prev, name }));
       setToggle((prev) => ({ ...prev, edit: false }));
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
@@ -143,13 +156,15 @@ function SubCategory({
     }
   };
 
-  const handleAddSubCategory = async ({ name }) => {
+  const handleAddSubCategory = async (name) => {
     try {
       new Validate(name).isEmpty().isNotSpecial();
+      if (arrTree.indexOf(name) !== -1)
+        throw new Error("This name already exists in this directory tree");
       const data = await fetcher({
         method: "put",
         url: `${LocalApi}/category/${currentCategory._id}`,
-        data: { name: unique + name },
+        data: { name },
       });
       setCategories((prev) => [...prev, data]);
       setToggle((prev) => ({ ...prev, add: false }));
@@ -163,7 +178,7 @@ function SubCategory({
       <div className={styles.container}>
         {(toggle.edit && (
           <CategoryInput
-            data={{ ...currentCategory, unique }}
+            name={currentCategory.name}
             callback={handleEditSave}
             setToggle={(boolean) =>
               setToggle((prev) => ({ ...prev, edit: boolean }))
@@ -173,7 +188,7 @@ function SubCategory({
           <div className={styles.tab_container}>
             <label>
               <span>{index + 1}. </span>
-              {currentCategory.name.replace(unique, "")}
+              {currentCategory.name}
             </label>
             {!toggle.edit && (
               <Dropdown component={<BiDotsVertical />} hoverable={true}>
@@ -230,8 +245,8 @@ function SubCategory({
             <SubCategory
               key={category.updatedAt}
               index={idx}
-              unique={unique + "-" + category.name}
               data={category}
+              arrTree={[currentCategory.name, ...lstNames]}
               maxTree={maxTree - 1}
               setDelete={() =>
                 setCategories((prev) =>
@@ -246,28 +261,21 @@ function SubCategory({
   );
 }
 
-function CategoryInput({
-  data = { name: "", unique: "" },
-  callback,
-  setToggle = undefined,
-}) {
-  const [input, setInput] = useState(data);
-
+function CategoryInput({ name = "", callback, setToggle = undefined }) {
+  const [input, setInput] = useState(name);
   return (
     <div className="relative mb-4 inline-flex w-full flex-wrap justify-between rounded-lg border border-gray-500 bg-white">
       <input
         className="flex-2 rounded-lg border-0 bg-white p-2.5 text-sm text-gray-900 focus:outline-none"
-        value={input.name.replace(input.unique, "") || " "}
-        onChange={(e) =>
-          setInput((prev) => ({ ...prev, name: e.target.value.trim() }))
-        }
+        value={input}
+        onChange={(e) => setInput(e.target.value.trim())}
       />
       <div className="flex items-center gap-3 border-t py-2 px-3 sm:gap-1">
         <button
           className="rounded-lg border-b-4 border-indigo-700 bg-indigo-600 py-1 px-3 text-indigo-100 transition duration-300 hover:border-indigo-800 hover:bg-indigo-700"
           onClick={() => {
             callback(input);
-            setInput((prev) => ({ ...prev, name: "" }));
+            setInput("");
           }}
         >
           Save
