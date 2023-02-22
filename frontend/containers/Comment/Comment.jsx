@@ -153,7 +153,7 @@ function CommentTab({
   };
 
   const { loading } = useAuthLoad({
-    async callback(axiosInstance) {
+    async cb(axiosInstance) {
       if (toggle.more) {
         const response = await axiosInstance({
           url: `${LocalApi}/comments/${currentComment._id}`,

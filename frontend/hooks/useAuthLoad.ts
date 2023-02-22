@@ -31,7 +31,7 @@ export default function useAuthLoad({
           role: string;
           exp: number;
         };
-        if (Date.now() >= exp * 1000) throw new Error();
+        if (Date.now() >= exp * 1000) throw new Error("token was expired");
 
         if (!role) {
           setLoading(false);

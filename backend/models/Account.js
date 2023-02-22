@@ -1,5 +1,5 @@
-import Role from "../../shared/Role";
 import mongoose from "mongoose";
+import Role from "../../shared/Role";
 const Schema = mongoose.Schema;
 
 const Account = new Schema(
@@ -38,6 +38,10 @@ Account.post(
       doc.orders.map((order) =>
         mongoose.models.Order.findByIdAndDelete(order._id)
       )
+    );
+    const comments = await mongoose.models.Comment.find({ author: doc._id });
+    await Promise.all(
+      comments.map(({ _id }) => mongoose.models.Comment.findByIdAndDelete(_id))
     );
   }
 );
