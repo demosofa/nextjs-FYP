@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
@@ -5,12 +6,16 @@ import { useDispatch } from "react-redux";
 import Select from "react-select";
 import useSWR from "swr";
 import { Loading, Pagination } from "../../frontend/components";
-import { ItemsFromOrder, ThSortOrderBy } from "../../frontend/containers";
+import { ThSortOrderBy } from "../../frontend/containers";
 import { fetcher } from "../../frontend/contexts/SWRContext";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { tailwindStatus } from "../../frontend/utils";
 import { convertTime, currencyFormat, OrderStatus } from "../../shared";
 
+const ItemsFromOrder = dynamic(
+  () => import("../../frontend/containers/ItemsFromOrder/ItemsFromOrder"),
+  { loading: () => <Loading.Dots /> }
+);
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function MyShipping() {

@@ -51,6 +51,7 @@ export default function Layout({ children, routerPath }) {
             (role === Role.customer && [])
           : []
       }
+      role={role}
     >
       {children}
     </TargetLayout>

@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -8,11 +9,15 @@ import {
   Pagination,
   QRreader,
 } from "../../frontend/components";
-import { ItemsFromOrder, ThSortOrderBy } from "../../frontend/containers";
+import { ThSortOrderBy } from "../../frontend/containers";
 import { fetcher } from "../../frontend/contexts/SWRContext";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { convertTime, currencyFormat } from "../../shared";
 
+const ItemsFromOrder = dynamic(
+  () => import("../../frontend/containers/ItemsFromOrder/ItemsFromOrder"),
+  { loading: () => <Loading.Dots /> }
+);
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function SellerPage() {

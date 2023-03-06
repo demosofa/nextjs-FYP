@@ -5,9 +5,17 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Loading } from "../../frontend/components";
-import { MyOrder, ProductSlider } from "../../frontend/containers";
 import { useAuthLoad } from "../../frontend/hooks";
 import { dateFormat, Role } from "../../shared";
+
+const ProductSlider = dynamic(
+  () => import("../../frontend/containers/ProductSlider/ProductSlider"),
+  { loading: () => <Loading.Dots /> }
+);
+const MyOrder = dynamic(
+  () => import("../../frontend/containers/MyOrder/MyOrder"),
+  { loading: () => <Loading.Dots /> }
+);
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

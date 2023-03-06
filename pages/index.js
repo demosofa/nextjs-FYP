@@ -60,7 +60,7 @@ export default function Home({ products, categories, pageCounted, query }) {
         <title>HomePage</title>
         <meta name="description" content="Homepage" />
       </Head>
-      <div className="trending"></div>
+      {/* <div className="trending"></div> */}
       <div className="px-2">
         <Slider
           config={{

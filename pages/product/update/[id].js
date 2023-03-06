@@ -1,14 +1,23 @@
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form, Loading, TagsInput } from "../../../frontend/components";
-import { UpdateImage, UpdateVariation } from "../../../frontend/containers";
 import { fetcher } from "../../../frontend/contexts/SWRContext";
 import { useAuthLoad } from "../../../frontend/hooks";
 import { addNotification } from "../../../frontend/redux/reducer/notificationSlice";
 import { Validate } from "../../../frontend/utils";
 import { Role } from "../../../shared";
+
+const UpdateImage = dynamic(
+  () => import("../../../frontend/containers/UpdateImage/UpdateImage"),
+  { loading: () => <Loading.Dots /> }
+);
+const UpdateVariation = dynamic(
+  () => import("../../../frontend/containers/UpdateVariation/UpdateVariation"),
+  { loading: () => <Loading.Dots /> }
+);
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

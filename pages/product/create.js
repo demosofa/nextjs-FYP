@@ -1,4 +1,5 @@
 import axios from "axios";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -11,7 +12,7 @@ import {
   Loading,
   TagsInput,
 } from "../../frontend/components";
-import { SelectCategory, Variant, Variation } from "../../frontend/containers";
+import { Variant, Variation } from "../../frontend/containers";
 import { useMediaContext } from "../../frontend/contexts/MediaContext";
 import { useAuthLoad } from "../../frontend/hooks";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
@@ -25,6 +26,11 @@ import {
   validateVariations,
 } from "../../frontend/utils";
 import { currencyFormat, Role } from "../../shared";
+
+const SelectCategory = dynamic(
+  () => import("../../frontend/containers/SelectCategory/SelectCategory"),
+  { loading: () => <Loading.Dots /> }
+);
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

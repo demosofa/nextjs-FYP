@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   images: {
     domains: ["res.cloudinary.com"],
   },
@@ -19,6 +19,7 @@ const withPWA = require("next-pwa")({
   skipWaiting: true,
   disable: process.env.NODE_ENV === "development",
   runtimeCaching,
+  // buildExcludes: ["/chunks/.*$/"],
 });
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

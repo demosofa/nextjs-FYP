@@ -1,4 +1,5 @@
 import decoder from "jwt-decode";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -8,11 +9,13 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { HiOutlineBell } from "react-icons/hi2";
-import { Footer, Navbar, NotifyToast, Sidebar } from ".";
+import { Footer, Navbar, Sidebar } from ".";
 import { Animation, Icon, Search } from "../components";
 import { useMediaContext } from "../contexts/MediaContext";
 
-export default function General({ children, arrLink }) {
+const NotifyToast = dynamic(() => import("./NotifyToast/NotifyToast"));
+
+export default function General({ children, arrLink, role }) {
   const { device, Devices } = useMediaContext();
   const [search, setSearch] = useState("");
   const [toggle, setToggle] = useState(false);
@@ -34,24 +37,23 @@ export default function General({ children, arrLink }) {
               onChange={(e) => setSearch(e.target.value)}
               onClick={() => router.push({ pathname: "/", query: { search } })}
             />
-            {typeof window !== "undefined" &&
-              localStorage.getItem("accessToken") && (
-                <>
-                  <Link href="/profile" onClick={() => setToggle(!toggle)}>
-                    {decoder(localStorage.getItem("accessToken")).username}
-                  </Link>
-                  <Sidebar.Item
-                    href="/notification"
-                    className="!justify-start"
-                    onClick={() => setToggle(!toggle)}
-                  >
-                    <Icon>
-                      <HiOutlineBell />
-                    </Icon>
-                    <span>Notification</span>
-                  </Sidebar.Item>
-                </>
-              )}
+            {role && (
+              <>
+                <Link href="/profile" onClick={() => setToggle(!toggle)}>
+                  {decoder(localStorage.getItem("accessToken")).username}
+                </Link>
+                <Sidebar.Item
+                  href="/notification"
+                  className="!justify-start"
+                  onClick={() => setToggle(!toggle)}
+                >
+                  <Icon>
+                    <HiOutlineBell />
+                  </Icon>
+                  <span>Notification</span>
+                </Sidebar.Item>
+              </>
+            )}
             <Sidebar.Item href="/" className="!justify-start">
               <Icon>
                 <AiOutlineHome />

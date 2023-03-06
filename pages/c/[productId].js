@@ -1,4 +1,5 @@
 import axios from "axios";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,23 +10,35 @@ import {
   Checkbox,
   ImageMagnifier,
   Increment,
+  Loading,
   ReadMoreLess,
   Slider,
   StarRating,
 } from "../../frontend/components";
-import {
-  Comment,
-  PriceInfo,
-  ProductSlider,
-  Rating,
-  ReceivingAddress,
-} from "../../frontend/containers";
+import { PriceInfo } from "../../frontend/containers";
 import { useMediaContext } from "../../frontend/contexts/MediaContext";
 import { fetcher } from "../../frontend/contexts/SWRContext";
 import { addCart } from "../../frontend/redux/reducer/cartSlice";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { addViewed } from "../../frontend/redux/reducer/recentlyViewedSlice";
 import { Validate } from "../../frontend/utils";
+
+const Rating = dynamic(
+  () => import("../../frontend/containers/Rating/Rating"),
+  { loading: () => <Loading.Dots />, ssr: false }
+);
+const Comment = dynamic(
+  () => import("../../frontend/containers/Comment/Comment"),
+  { loading: () => <Loading.Dots />, ssr: false }
+);
+const ProductSlider = dynamic(
+  () => import("../../frontend/containers/ProductSlider/ProductSlider"),
+  { loading: () => <Loading.Dots />, ssr: false }
+);
+const ReceivingAddress = dynamic(
+  () => import("../../frontend/containers/ReceivingAddress/ReceivingAddress"),
+  { loading: () => <Loading.Dots />, ssr: false }
+);
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

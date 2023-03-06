@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { AiOutlineArrowRight, AiOutlineHome } from "react-icons/ai";
 import { HiOutlineBell } from "react-icons/hi2";
-import { NotifyToast, Sidebar } from ".";
+import { Sidebar } from ".";
 import { Animation, Icon } from "../components";
 
-function Dashboard({ children, arrLink }) {
+const NotifyToast = dynamic(() => import("./NotifyToast/NotifyToast"));
+
+function Dashboard({ children, arrLink, role }) {
   const [toggle, setToggle] = useState(false);
   return (
     <>
@@ -27,26 +29,25 @@ function Dashboard({ children, arrLink }) {
           toggle ? "sm:left-0" : "sm:left-[-10rem]"
         }`}
       >
-        {typeof window !== "undefined" &&
-          localStorage.getItem("accessToken") && (
-            <>
-              <Link href="/profile" onClick={() => setToggle(!toggle)}>
-                {decoder(localStorage.getItem("accessToken")).username}
-              </Link>
-              <Sidebar.Item
-                href="/notification"
-                className="w-10 group-hover:w-full group-hover:justify-start"
-                onClick={() => setToggle(!toggle)}
-              >
-                <Icon>
-                  <HiOutlineBell />
-                </Icon>
-                <span className="hidden group-hover:inline-block">
-                  Notification
-                </span>
-              </Sidebar.Item>
-            </>
-          )}
+        {role && (
+          <>
+            <Link href="/profile" onClick={() => setToggle(!toggle)}>
+              {decoder(localStorage.getItem("accessToken")).username}
+            </Link>
+            <Sidebar.Item
+              href="/notification"
+              className="w-10 group-hover:w-full group-hover:justify-start"
+              onClick={() => setToggle(!toggle)}
+            >
+              <Icon>
+                <HiOutlineBell />
+              </Icon>
+              <span className="hidden group-hover:inline-block">
+                Notification
+              </span>
+            </Sidebar.Item>
+          </>
+        )}
         <Sidebar.Item
           href="/"
           className="w-10 group-hover:w-full group-hover:justify-start"

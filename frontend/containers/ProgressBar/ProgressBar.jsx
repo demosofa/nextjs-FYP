@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Icon } from "../../components";
 import styles from "./progressbar.module.scss";
+
 export default function ProgressBar({
   pass = "",
   steps = [{ title: "", icon: null, allowed: false }],
