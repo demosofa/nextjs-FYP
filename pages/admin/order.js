@@ -1,28 +1,27 @@
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
+import { BiDownArrow } from "react-icons/bi";
+import { IoMdTrash } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import useSWR from "swr";
 import {
   Dropdown,
+  Form,
   Loading,
   Pagination,
-  Form,
   Search,
 } from "../../frontend/components";
+import { fetcher } from "../../frontend/contexts/SWRContext";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { capitalize, tailwindStatus } from "../../frontend/utils";
 import {
   convertTime,
   currencyFormat,
   dateFormat,
   OrderStatus,
 } from "../../shared";
-import { tailwindStatus } from "../../frontend/utils";
-import { BiDownArrow } from "react-icons/bi";
-import { IoMdTrash } from "react-icons/io";
-import Head from "next/head";
-import Select from "react-select";
-import Image from "next/image";
-import Link from "next/link";
-import { fetcher } from "../../frontend/contexts/SWRContext";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -78,23 +77,20 @@ export default function ManageOrder() {
           onChange={(e) => setSearch(e.target.value)}
           onClick={() => setQuery((prev) => ({ ...prev, search }))}
         />
-        <Select
+        <select
           className="w-32 sm:pl-3"
-          defaultValue={{ value: "", label: "all" }}
-          onChange={({ value }) =>
-            setQuery((prev) => ({ ...prev, status: value }))
+          defaultValue=""
+          onChange={(e) =>
+            setQuery((prev) => ({ ...prev, status: e.target.value }))
           }
-          options={[
-            { value: "", label: "all" },
-            { value: OrderStatus.pending, label: "Pending" },
-            { value: OrderStatus.progress, label: "Progress" },
-            { value: OrderStatus.shipping, label: "Shipping" },
-            { value: OrderStatus.arrived, label: "Arrived" },
-            { value: OrderStatus.validated, label: "Validated" },
-            { value: OrderStatus.paid, label: "Paid" },
-            { value: OrderStatus.cancel, label: "Cancel" },
-          ]}
-        />
+        >
+          <option value="">All</option>
+          {Object.values(OrderStatus).map((value) => (
+            <option key={value} value={value}>
+              {capitalize(value)}
+            </option>
+          ))}
+        </select>
       </div>
       {isLoadingInitialData ? (
         <Loading.Text />

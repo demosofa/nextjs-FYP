@@ -3,12 +3,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Select from "react-select";
 import { Loading, Pagination, Search } from "../../frontend/components";
 import { fetcher } from "../../frontend/contexts/SWRContext";
 import { useAuthLoad } from "../../frontend/hooks";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { currencyFormat, Role } from "../../shared";
+import { capitalize } from "../../frontend/utils";
+import { currencyFormat, ProductStatus, Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -75,10 +75,10 @@ export default function ProductCRUD() {
       <div className="flex flex-wrap gap-4">
         {authorized === Role.admin ? (
           <button
-            className="main_btn"
+            className="z-90 fixed bottom-10 right-8 flex h-16 w-16 items-center justify-center rounded-full bg-orange-600 text-4xl text-white drop-shadow-lg duration-300 hover:animate-bounce hover:bg-orange-700 hover:drop-shadow-2xl"
             onClick={() => router.push(`product/create`)}
           >
-            Create
+            +
           </button>
         ) : null}
         <Search
@@ -87,18 +87,19 @@ export default function ProductCRUD() {
           onChange={(e) => setSearch(e.target.value)}
           onClick={() => setQuery((prev) => ({ ...prev, search }))}
         />
-        <Select
-          defaultValue={{ value: "", label: "All" }}
-          onChange={({ value }) =>
-            setQuery((prev) => ({ ...prev, filter: value }))
+        <select
+          defaultValue=""
+          onChange={(e) =>
+            setQuery((prev) => ({ ...prev, filter: e.target.value }))
           }
-          options={[
-            { value: "", label: "All" },
-            { value: "active", label: "Active" },
-            { value: "non-active", label: "Non Active" },
-            { value: "out", label: "Out of stock" },
-          ]}
-        />
+        >
+          <option value="">All</option>
+          {Object.values(ProductStatus).map((value) => (
+            <option key={value} value={value}>
+              {capitalize(value)}
+            </option>
+          ))}
+        </select>
       </div>
       {isLoadingInitialData ? (
         <Loading.Dots />
@@ -139,11 +140,17 @@ export default function ProductCRUD() {
                         </td>
                         <td>
                           <select
-                            defaultValue={product.status}
+                            value={product.status}
                             onChange={(e) => handleStatus(e, index)}
                           >
-                            <option value="active">active</option>
-                            <option value="non-active">non-active</option>
+                            {[
+                              ProductStatus.active,
+                              ProductStatus["non-active"],
+                            ].map((value) => (
+                              <option key={value} value={value}>
+                                {capitalize(value)}
+                              </option>
+                            ))}
                           </select>
                         </td>
                         <td>

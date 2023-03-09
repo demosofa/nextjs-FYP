@@ -8,13 +8,11 @@ import { Loading } from "../../frontend/components";
 import { useAuthLoad } from "../../frontend/hooks";
 import { dateFormat, Role } from "../../shared";
 
-const ProductSlider = dynamic(
-  () => import("../../frontend/containers/ProductSlider/ProductSlider"),
-  { loading: () => <Loading.Dots /> }
+const ProductSlider = dynamic(() =>
+  import("../../frontend/containers/ProductSlider/ProductSlider")
 );
-const MyOrder = dynamic(
-  () => import("../../frontend/containers/MyOrder/MyOrder"),
-  { loading: () => <Loading.Dots /> }
+const MyOrder = dynamic(() =>
+  import("../../frontend/containers/MyOrder/MyOrder")
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

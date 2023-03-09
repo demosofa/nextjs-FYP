@@ -14,9 +14,8 @@ import { fetcher } from "../../frontend/contexts/SWRContext";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { convertTime, currencyFormat } from "../../shared";
 
-const ItemsFromOrder = dynamic(
-  () => import("../../frontend/containers/ItemsFromOrder/ItemsFromOrder"),
-  { loading: () => <Loading.Dots /> }
+const ItemsFromOrder = dynamic(() =>
+  import("../../frontend/containers/ItemsFromOrder/ItemsFromOrder")
 );
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

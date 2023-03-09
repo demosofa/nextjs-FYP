@@ -9,6 +9,7 @@ export { default as ProductSlider } from "./ProductSlider/ProductSlider";
 export { default as ProgressBar } from "./ProgressBar/ProgressBar";
 export { default as Rating } from "./Rating/Rating";
 export { default as ReceivingAddress } from "./ReceivingAddress/ReceivingAddress";
+export { default as RouterAuth } from "./RouterAuth/RouterAuth";
 export { default as SelectCategory } from "./SelectCategory/SelectCategory";
 export { default as ThSortOrderBy } from "./ThSortOrderBy/ThSortOrderBy";
 export { default as UpdateImage } from "./UpdateImage/UpdateImage";

@@ -10,7 +10,6 @@ import {
   Checkbox,
   ImageMagnifier,
   Increment,
-  Loading,
   ReadMoreLess,
   Slider,
   StarRating,
@@ -25,19 +24,19 @@ import { Validate } from "../../frontend/utils";
 
 const Rating = dynamic(
   () => import("../../frontend/containers/Rating/Rating"),
-  { loading: () => <Loading.Dots />, ssr: false }
+  { ssr: false }
 );
 const Comment = dynamic(
   () => import("../../frontend/containers/Comment/Comment"),
-  { loading: () => <Loading.Dots />, ssr: false }
+  { ssr: false }
 );
 const ProductSlider = dynamic(
   () => import("../../frontend/containers/ProductSlider/ProductSlider"),
-  { loading: () => <Loading.Dots />, ssr: false }
+  { ssr: false }
 );
 const ReceivingAddress = dynamic(
   () => import("../../frontend/containers/ReceivingAddress/ReceivingAddress"),
-  { loading: () => <Loading.Dots />, ssr: false }
+  { ssr: false }
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

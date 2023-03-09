@@ -1,6 +1,6 @@
 {
   "name": "nextjs-practice",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_OPTIONS='--inspect' next dev",
@@ -38,7 +38,6 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.3.1",
     "react-redux": "^8.0.2",
-    "react-select": "^5.4.0",
     "react-spring": "^9.4.5",
     "sharp": "^0.31.1",
     "swr": "^2.0.0",

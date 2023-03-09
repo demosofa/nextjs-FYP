@@ -5,8 +5,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaBell } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Badge, Dropdown, Search } from "../../components";
-import { Notification } from "../../containers";
-import RouterAuth from "../../containers/RouterAuth/RouterAuth";
+import { Notification, RouterAuth } from "../../containers";
 import styles from "./Navbar.module.css";
 
 export default function Navbar({ arrLink }) {

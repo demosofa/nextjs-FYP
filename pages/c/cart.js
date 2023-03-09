@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { RiCloseFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { Animation, Icon, Increment, Loading } from "../../frontend/components";
+import { Animation, Icon, Increment } from "../../frontend/components";
 import { fetcher } from "../../frontend/contexts/SWRContext";
 import {
   addCart,
@@ -16,9 +16,8 @@ import { addNotification } from "../../frontend/redux/reducer/notificationSlice"
 import { Validate } from "../../frontend/utils";
 import { currencyFormat } from "../../shared";
 
-const ReceivingAddress = dynamic(
-  () => import("../../frontend/containers/ReceivingAddress/ReceivingAddress"),
-  { loadin: () => <Loading.Dots /> }
+const ReceivingAddress = dynamic(() =>
+  import("../../frontend/containers/ReceivingAddress/ReceivingAddress")
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

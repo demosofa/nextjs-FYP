@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
 import {
   FileUpload,
   Form,
@@ -19,17 +18,17 @@ import { addNotification } from "../../frontend/redux/reducer/notificationSlice"
 import { deleteAllVariant } from "../../frontend/redux/reducer/variantSlice";
 import { editAllVariations } from "../../frontend/redux/reducer/variationSlice";
 import {
+  capitalize,
   expireStorage,
   retryAxios,
   uploadApi,
   Validate,
   validateVariations,
 } from "../../frontend/utils";
-import { currencyFormat, Role } from "../../shared";
+import { currencyFormat, ProductStatus, Role } from "../../shared";
 
-const SelectCategory = dynamic(
-  () => import("../../frontend/containers/SelectCategory/SelectCategory"),
-  { loading: () => <Loading.Dots /> }
+const SelectCategory = dynamic(() =>
+  import("../../frontend/containers/SelectCategory/SelectCategory")
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -199,16 +198,21 @@ export default function CreateForm() {
             </Form.Item>
             <Form.Item>
               <Form.Title>Status</Form.Title>
-              <Select
-                defaultValue={{ value: "active", label: "active" }}
-                onChange={({ value }) =>
-                  setInput((prev) => ({ ...prev, status: value }))
+              <select
+                defaultValue=""
+                onChange={(e) =>
+                  setInput((prev) => ({ ...prev, status: e.target.value }))
                 }
-                options={[
-                  { value: "active", label: "active" },
-                  { value: "non-active", label: "non-active" },
-                ]}
-              />
+              >
+                <option value="">None</option>
+                {[ProductStatus.active, ProductStatus["non-active"]].map(
+                  (value) => (
+                    <option key={value} value={value}>
+                      {capitalize(value)}
+                    </option>
+                  )
+                )}
+              </select>
             </Form.Item>
           </div>
 

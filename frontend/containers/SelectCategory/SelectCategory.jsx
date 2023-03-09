@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import Select from "react-select";
 import { Loading } from "../../components";
 import { useAxiosLoad } from "../../hooks";
 
@@ -10,6 +9,7 @@ export default function SelectCategory({
   index = 0,
   parentId = undefined,
   setSelectedCategories,
+  ...props
 }) {
   const [selected, setSelected] = useState();
   const [categories, setCategories] = useState();
@@ -28,30 +28,31 @@ export default function SelectCategory({
     },
     deps: [parentId],
   });
-  const handleSelected = ({ value }) => {
-    setSelected({ index, ...value });
-    setSelectedCategories(index, value._id);
+  const handleSelected = (e) => {
+    if (e.target.value < 0) {
+      setSelected(null);
+      setSelectedCategories(index, null);
+      return;
+    }
+    const { _id, subCategories } = categories[e.target.value];
+    setSelected({ index, _id, subCategories, i: e.target.value });
+    setSelectedCategories(index, _id);
   };
 
   if (loading || categories === undefined) return <Loading.Text />;
   return (
-    <div className="flex flex-wrap gap-2">
-      <Select
-        defaultValue={{
-          value: {
-            _id: categories[0]._id,
-            subCategories: categories[0].subCategories,
-          },
-          label: categories[0].name,
-        }}
-        onChange={handleSelected}
-        options={categories.map((category) => ({
-          value: { _id: category._id, subCategories: category.subCategories },
-          label: category.name,
-        }))}
-      />
+    <div className="flex flex-wrap gap-2" {...props}>
+      <select defaultValue={-1} onChange={handleSelected}>
+        <option value={-1}>None</option>
+        {categories.map((category, i) => (
+          <option key={category._id} value={i}>
+            {category.name}
+          </option>
+        ))}
+      </select>
       {selected && selected.subCategories.length ? (
         <SelectCategory
+          key={selected._id}
           index={index + 1}
           parentId={selected._id}
           setSelectedCategories={setSelectedCategories}

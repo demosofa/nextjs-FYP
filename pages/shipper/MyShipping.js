@@ -3,18 +3,16 @@ import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import Select from "react-select";
 import useSWR from "swr";
 import { Loading, Pagination } from "../../frontend/components";
 import { ThSortOrderBy } from "../../frontend/containers";
 import { fetcher } from "../../frontend/contexts/SWRContext";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
-import { tailwindStatus } from "../../frontend/utils";
+import { capitalize, tailwindStatus } from "../../frontend/utils";
 import { convertTime, currencyFormat, OrderStatus } from "../../shared";
 
-const ItemsFromOrder = dynamic(
-  () => import("../../frontend/containers/ItemsFromOrder/ItemsFromOrder"),
-  { loading: () => <Loading.Dots /> }
+const ItemsFromOrder = dynamic(() =>
+  import("../../frontend/containers/ItemsFromOrder/ItemsFromOrder")
 );
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -59,22 +57,20 @@ export default function MyShipping() {
         <title>My Shipping</title>
         <meta name="description" content="My Shipping" />
       </Head>
-      <Select
+      <select
         className="w-32"
-        defaultValue={{ value: "", label: "all" }}
-        onChange={({ value }) =>
-          setQuery((prev) => ({ ...prev, status: value }))
+        defaultValue=""
+        onChange={(e) =>
+          setQuery((prev) => ({ ...prev, status: e.target.value }))
         }
-        options={[
-          { value: "", label: "all" },
-          { value: OrderStatus.progress, label: "Progress" },
-          { value: OrderStatus.shipping, label: "Shipping" },
-          { value: OrderStatus.arrived, label: "Arrived" },
-          { value: OrderStatus.validated, label: "Validated" },
-          { value: OrderStatus.paid, label: "Paid" },
-          { value: OrderStatus.cancel, label: "Cancel" },
-        ]}
-      />
+      >
+        <option value="">All</option>
+        {Object.keys(OrderStatus).map((value) => (
+          <option key={value} value={value}>
+            {capitalize(value)}
+          </option>
+        ))}
+      </select>
       {isLoadingInitialData ? (
         <Loading.Dots />
       ) : (

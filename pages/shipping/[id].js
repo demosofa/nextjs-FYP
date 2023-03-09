@@ -13,9 +13,7 @@ import { addNotification } from "../../frontend/redux/reducer/notificationSlice"
 import { expireStorage } from "../../frontend/utils";
 import { convertTime, currencyFormat, OrderStatus, Role } from "../../shared";
 
-const Modal = dynamic(() => import("../../frontend/containers/Modal/Modal"), {
-  loading: () => <Loading.Dots />,
-});
+const Modal = dynamic(() => import("../../frontend/containers/Modal/Modal"));
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 const LocalUrl = process.env.NEXT_PUBLIC_DOMAIN;

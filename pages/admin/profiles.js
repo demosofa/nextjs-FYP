@@ -1,13 +1,13 @@
-import useSWR from "swr";
-import { useDispatch } from "react-redux";
-import { Loading, Pagination, Search } from "../../frontend/components";
-import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import Head from "next/head";
 import { useState } from "react";
-import Select from "react-select";
-import { Role } from "../../shared";
+import { useDispatch } from "react-redux";
+import useSWR from "swr";
+import { Loading, Pagination, Search } from "../../frontend/components";
 import { ThSortOrderBy } from "../../frontend/containers";
 import { fetcher } from "../../frontend/contexts/SWRContext";
+import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
+import { capitalize } from "../../frontend/utils";
+import { Role } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -99,19 +99,20 @@ export default function ManageProfiles() {
           onChange={(e) => setSearch(e.target.value)}
           onClick={() => setQuery((prev) => ({ ...prev, search }))}
         />
-        <Select
+        <select
           className="mb-3 w-32 sm:pl-3"
-          defaultValue={{ value: "", label: "all" }}
-          onChange={({ value }) =>
-            setQuery((prev) => ({ ...prev, role: value }))
+          defaultValue=""
+          onChange={(e) =>
+            setQuery((prev) => ({ ...prev, role: e.target.value }))
           }
-          options={[
-            { value: "", label: "all" },
-            { value: "customer", label: "Customer" },
-            { value: "shipper", label: "Shipper" },
-            { value: "seller", label: "Seller" },
-          ]}
-        />
+        >
+          <option value="">All</option>
+          {[Role.customer, Role.shipper, Role.seller].map((value) => (
+            <option key={value} value={value}>
+              {capitalize(value)}
+            </option>
+          ))}
+        </select>
       </div>
       {isLoadingInitialData ? (
         <Loading.Dots />
@@ -150,7 +151,7 @@ export default function ManageProfiles() {
                       <td>{profile.username}</td>
                       <td>
                         <select
-                          defaultValue={profile.role}
+                          value={profile.role}
                           onChange={(e) => handleChangeRole(e, index)}
                         >
                           {[Role.customer, Role.shipper, Role.seller].map(

@@ -10,13 +10,11 @@ import { addNotification } from "../../../frontend/redux/reducer/notificationSli
 import { Validate } from "../../../frontend/utils";
 import { Role } from "../../../shared";
 
-const UpdateImage = dynamic(
-  () => import("../../../frontend/containers/UpdateImage/UpdateImage"),
-  { loading: () => <Loading.Dots /> }
+const UpdateImage = dynamic(() =>
+  import("../../../frontend/containers/UpdateImage/UpdateImage")
 );
-const UpdateVariation = dynamic(
-  () => import("../../../frontend/containers/UpdateVariation/UpdateVariation"),
-  { loading: () => <Loading.Dots /> }
+const UpdateVariation = dynamic(() =>
+  import("../../../frontend/containers/UpdateVariation/UpdateVariation")
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

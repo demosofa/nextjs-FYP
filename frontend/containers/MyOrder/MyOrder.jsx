@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import Select from "react-select";
 import useSWR from "swr";
 import { ItemsFromOrder, ThSortOrderBy } from "../";
 import { convertTime, currencyFormat, OrderStatus } from "../../../shared";
 import { Form, Loading, Search } from "../../components";
 import { fetcher } from "../../contexts/SWRContext";
 import { addNotification } from "../../redux/reducer/notificationSlice";
-import { tailwindStatus } from "../../utils";
+import { capitalize, tailwindStatus } from "../../utils";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -62,23 +61,20 @@ export default function MyOrder() {
           onChange={(e) => setSearch(e.target.value)}
           onClick={() => setParams((prev) => ({ ...prev, search }))}
         />
-        <Select
+        <select
           className="w-32"
-          defaultValue={{ value: "", label: "all" }}
-          onChange={({ value }) =>
-            setParams((prev) => ({ ...prev, status: value }))
+          defaultValue=""
+          onChange={(e) =>
+            setParams((prev) => ({ ...prev, status: e.target.value }))
           }
-          options={[
-            { value: "", label: "all" },
-            { value: OrderStatus.pending, label: "Pending" },
-            { value: OrderStatus.progress, label: "Progress" },
-            { value: OrderStatus.shipping, label: "Shipping" },
-            { value: OrderStatus.arrived, label: "Arrived" },
-            { value: OrderStatus.validated, label: "Validated" },
-            { value: OrderStatus.paid, label: "Paid" },
-            { value: OrderStatus.cancel, label: "Cancel" },
-          ]}
-        />
+        >
+          <option value="">All</option>
+          {Object.values(OrderStatus).map((value) => (
+            <option key={value} value={value}>
+              {capitalize(value)}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="manage_table min-h-max w-full overflow-x-auto">
         {isLoading ? (

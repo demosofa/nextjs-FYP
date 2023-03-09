@@ -1,3 +1,4 @@
+export { default as capitalize } from "./capitalize";
 export { default as compareToRange } from "./compareToRange";
 export { default as expireStorage } from "./expireStorage";
 export { default as getUnique } from "./getUnique";
