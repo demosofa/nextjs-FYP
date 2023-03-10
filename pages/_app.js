@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { AblyContext, MediaContext, SWRContext } from "../frontend/contexts";
 import Layout from "../frontend/layouts";
 import { store } from "../frontend/redux/store";
-import "../styles/_globals.scss";
+import "../sass/style.scss";
 
 function MyApp({ Component, pageProps, ...appProps }) {
   return (

@@ -1,4 +1,5 @@
-@import "./mixin.scss";
+@use "../mixins" as *;
+
 .cart__container {
   margin-top: 20px;
   width: 100%;

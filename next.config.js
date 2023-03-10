@@ -1,8 +1,12 @@
+const path = require("path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ["res.cloudinary.com"],
+  },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "sass")],
   },
   // modularizeImports: {
   //   "react-icons/?(((\\w*)?/?)*)": {

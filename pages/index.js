@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Loading, Slider } from "../frontend/components";
 import { ProductCard } from "../frontend/containers";
 import { useAxiosLoad } from "../frontend/hooks";
-import styles from "../styles/Home.module.scss";
+import styles from "../sass/Home.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

@@ -1,4 +1,4 @@
-@import "./mixin.scss";
+@use "../mixins" as *;
 
 .homepage {
   @include block(100%, 100%);

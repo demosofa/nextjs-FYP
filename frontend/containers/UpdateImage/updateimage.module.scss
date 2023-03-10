@@ -1,4 +1,4 @@
-@import "../../../styles/mixin.scss";
+@use "../../../sass/mixins" as *;
 
 .img_animated {
   width: 25%;

@@ -8,8 +8,8 @@ import { fetcher } from "../../frontend/contexts/SWRContext";
 import { useAuthLoad } from "../../frontend/hooks";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
 import { Validate } from "../../frontend/utils";
+import styles from "../../sass/_crudcategory.module.scss";
 import { Role } from "../../shared";
-import styles from "../../styles/crudcategory.module.scss";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

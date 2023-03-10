@@ -1,11 +1,6 @@
-@import "./productcrud";
-@import "./layout";
-@import "./cart";
-@import "./home";
-@import "./overview";
-@import "./login.scss";
-@import "./crudcategory.module.scss";
-@import "./mixin.scss";
+@use "components";
+@use "_crudcategory.module.scss";
+@use "Home.module.scss";
 
 @tailwind base;
 @tailwind components;

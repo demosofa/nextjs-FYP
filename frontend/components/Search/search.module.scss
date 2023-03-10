@@ -1,4 +1,4 @@
-@import "../../../styles/mixin.scss";
+@use "../../../sass/mixins" as *;
 
 .search_wrapper {
   border: 1px solid lightgray;
