@@ -26,7 +26,7 @@ export default function ToastMessage({
     const timeOut = setTimeout(() => {
       clearTimeout(timeOut);
       dispatch(removeNotification(id));
-    }, convertTime(timeout).milisecond);
+    }, convertTime(timeout).millisecond);
     return () => {
       clearTimeout(timeOut);
     };

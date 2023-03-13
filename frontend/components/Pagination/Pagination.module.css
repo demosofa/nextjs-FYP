@@ -30,7 +30,7 @@
   font-size: 13px;
   width: 32px;
   border: none;
-  @apply shadow-md
+  box-shadow: theme(boxShadow.md);
 }
 
 .item.dots:hover {

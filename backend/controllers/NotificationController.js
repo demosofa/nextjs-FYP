@@ -13,10 +13,10 @@ class NotificationController {
         .limit(limit)
         .populate({ path: "from", select: "username" })
         .lean();
-      // const notfifyCounted = await models.Notification.countData(
+      // const notifyCounted = await models.Notification.countData(
       //   filterOptions
       // ).lean();
-      // const pageCounted = Math.ceil(notfifyCounted / limit);
+      // const pageCounted = Math.ceil(notifyCounted / limit);
       return res.status(200).json(notifications);
     } catch (error) {
       return res.status(500).json(error);

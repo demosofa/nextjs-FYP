@@ -1,11 +1,11 @@
 @use "../../../sass/mixins" as *;
 
 .set_quantity {
-  @include flex(0, row, center);
+  @include flex($center: both);
   & > .quantity {
     width: 60px;
     padding: 10px 0;
-    @include flex(0, row, center);
+    @include flex($center: both);
     background-color: white;
     text-align: center;
     border-radius: 8px;

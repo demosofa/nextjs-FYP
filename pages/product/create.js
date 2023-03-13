@@ -141,14 +141,14 @@ export default function CreateForm() {
     });
   }, []);
 
-  const { loading, isLoggined, authorized, error } = useAuthLoad({
+  const { loading, isLogged, authorized, error } = useAuthLoad({
     roles: [Role.admin],
   });
   useEffect(() => {
-    if (!loading && !isLoggined) router.push("/login");
-    else if (!loading && isLoggined && !authorized) router.back();
+    if (!loading && !isLogged) router.push("/login");
+    else if (!loading && isLogged && !authorized) router.back();
     else if (error) router.push("/register");
-  }, [loading, isLoggined, authorized, error]);
+  }, [loading, isLogged, authorized, error]);
 
   return (
     <>

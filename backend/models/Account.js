@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const Account = new Schema(
   {
-    username: { type: String, required: true, unique: true, maxlength: 50 },
-    hashPassword: { type: String, required: true, maxlength: 500 },
+    username: { type: String, required: true, unique: true, maxLength: 50 },
+    hashPassword: { type: String, required: true, maxLength: 500 },
     avatar: { type: String, default: "avatar" },
     role: {
       type: String,

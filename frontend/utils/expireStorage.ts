@@ -18,7 +18,7 @@ export default class expireStorage {
       newValue = {
         payload: value,
         expire: new Date(
-          Date.now() + convertTime(expire).milisecond
+          Date.now() + convertTime(expire).millisecond
         ).toISOString(),
       };
     else newValue = value;

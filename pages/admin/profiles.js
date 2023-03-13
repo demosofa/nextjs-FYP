@@ -92,7 +92,7 @@ export default function ManageProfiles() {
         <title>Manage Profiles</title>
         <meta name="description" content="Manage Profiles" />
       </Head>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap justify-end gap-4">
         <Search
           className="!ml-0"
           value={search}
@@ -189,7 +189,7 @@ export default function ManageProfiles() {
                   <tr>
                     <td colSpan="6">
                       <p className="text-center">
-                        No customer has resgitered our page
+                        No customer has registered our page
                       </p>
                     </td>
                   </tr>

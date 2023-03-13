@@ -2,10 +2,11 @@
 
 .homepage {
   @include block(100%, 100%);
-  @include flex(10px, column, center);
+  @include flex(column, both);
   > .trending {
-    @include block(100%, 100%, 0, 15px);
-    @include flex(10px, row);
+    @include block(100%, 100%, 15px);
+    gap: 10px;
+    display: flex;
   }
   .category__lst {
     width: 80%;
@@ -13,7 +14,8 @@
   }
   > .grid_list__product {
     width: 100%;
-    @include grid(15px);
+    gap: 15px;
+    @include grid();
 
     & > .product {
       transition: all 0.3s cubic-bezier(0.47, 0, 0.745, 0.715);

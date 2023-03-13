@@ -19,7 +19,7 @@ export default function CrudCategory({ maxTree = 3 }) {
     if (!categories.length) return [];
     return categories.map((item) => item.name);
   }, [categories]);
-  const { loading, isLoggined, authorized } = useAuthLoad({
+  const { loading, isLogged, authorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({ url: `${LocalApi}/category` });
       setCategories(res.data);
@@ -31,11 +31,11 @@ export default function CrudCategory({ maxTree = 3 }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!loading && !isLoggined && !authorized) router.push("/login");
+    if (!loading && !isLogged && !authorized) router.push("/login");
     else if (!loading && !authorized) router.back();
-  }, [loading, isLoggined, authorized]);
+  }, [loading, isLogged, authorized]);
 
-  if (loading || !isLoggined || !authorized)
+  if (loading || !isLogged || !authorized)
     return (
       <Loading
         style={{

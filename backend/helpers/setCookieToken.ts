@@ -15,7 +15,7 @@ const setCookieToken: NextApiHandler = (req, res) => {
       role,
     });
     new Cookies(req, res).set("refreshToken", refreshToken, {
-      maxAge: convertTime("1d").milisecond,
+      maxAge: convertTime("1d").millisecond,
       overwrite: true,
     });
     return accessToken;

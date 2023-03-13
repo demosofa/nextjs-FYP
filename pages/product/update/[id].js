@@ -23,7 +23,7 @@ export default function UpdateProduct() {
   const [product, setProduct] = useState();
   const [toggle, setToggle] = useState(null);
   const router = useRouter();
-  const { loading, isLoggined, authorized } = useAuthLoad({
+  const { loading, isLogged, authorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({
         url: `${LocalApi}/product/${router.query?.id}`,
@@ -65,11 +65,11 @@ export default function UpdateProduct() {
   };
 
   useEffect(() => {
-    if (!loading && !isLoggined && !authorized) router.push("/login");
+    if (!loading && !isLogged && !authorized) router.push("/login");
     else if (!loading && !authorized) router.back();
-  }, [loading, isLoggined, authorized]);
+  }, [loading, isLogged, authorized]);
 
-  if (loading || !isLoggined || !authorized)
+  if (loading || !isLogged || !authorized)
     return (
       <Loading
         style={{

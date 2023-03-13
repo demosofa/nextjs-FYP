@@ -34,7 +34,7 @@ export default function Increment({
     <div className={styles.set_quantity} {...props}>
       <Icon style={{ width: "50px", height: "50px" }}>
         <AiOutlineMinus
-          className={`${styles.btn} ${styles.descrease}`}
+          className={`${styles.btn} ${styles.decrease}`}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

@@ -29,7 +29,7 @@ class AdminController {
           shipper: 1,
           status: 1,
           orderItems: 1,
-          quanitty: 1,
+          quantity: 1,
           shippingFee: 1,
           total: 1,
           updatedAt: 1,
@@ -69,7 +69,7 @@ class AdminController {
         .match(filterOptions)
         .sort({ [sort]: orderby })
         .lookup({
-          from: "orderitems",
+          from: "orderItems",
           localField: "orderItems",
           foreignField: "_id",
           as: "orderItems",

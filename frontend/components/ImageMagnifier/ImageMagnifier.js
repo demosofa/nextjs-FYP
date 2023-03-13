@@ -9,11 +9,11 @@ export default function ImageMagnifier({
   className,
   ...props
 }) {
-  const maginfier = useRef();
+  const magnifier = useRef();
   const [target, setTarget] = useState();
 
-  const handleMaginfier = ({ pageX, pageY }) => {
-    const mag = maginfier.current;
+  const handleMagnifier = ({ pageX, pageY }) => {
+    const mag = magnifier.current;
     const left = compareToRange(
       pageX - mag.offsetWidth / 2 - target.offsetLeft,
       0,
@@ -36,7 +36,7 @@ export default function ImageMagnifier({
       onMouseEnter={(e) => {
         setTarget(e.currentTarget);
       }}
-      onMouseMove={(e) => target && handleMaginfier(e)}
+      onMouseMove={(e) => target && handleMagnifier(e)}
       onMouseLeave={() => setTarget(null)}
     >
       <Image
@@ -49,7 +49,7 @@ export default function ImageMagnifier({
       />
       {target && (
         <div
-          ref={maginfier}
+          ref={magnifier}
           className="absolute top-0 h-20 w-20 cursor-none rounded-full border border-white"
           style={{
             backgroundImage: `url(${src})`,

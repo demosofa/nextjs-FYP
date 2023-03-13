@@ -48,7 +48,7 @@ export default function ForgotPassword() {
         <div className="login-container">
           <Form onSubmit={handleSubmitSendEmail}>
             <Form.Title style={{ fontSize: "large", fontWeight: "600" }}>
-              Dont Worry! Just provide your email and we can do the rest
+              Don&apos; t Worry! Just provide your email and we can do the rest
             </Form.Title>
             <Form.Item>
               <Form.Title>Username</Form.Title>

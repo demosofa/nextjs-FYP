@@ -9,7 +9,7 @@
   gap: 20px;
 
   .create-edit {
-    @include mq("phone-wide") {
+    @include mq(phone-wide) {
       gap: 10px;
       .form__title {
         font-size: 12px;
@@ -20,12 +20,35 @@
       }
     }
   }
+  .create_btn {
+    z-index: 90;
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    color: white;
+    background-color: orangered;
+
+    &:hover {
+      background-color: var(--light-orange);
+    }
+
+    > svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
 }
 .manage_table {
   overflow-x: auto;
 }
 .manage_table > table {
-  @apply min-w-full leading-normal;
+  min-width: 100%;
+  line-height: 1.5;
   text-align: left;
   border-collapse: collapse;
 
@@ -36,8 +59,9 @@
 
   th,
   td {
-    @apply border-b-2 border-gray-200 bg-gray-100 px-5 py-3 text-left text-xs font-semibold tracking-wider text-gray-700;
-    @include mq("phone-wide") {
+    @apply border-b-2 border-gray-200 bg-gray-100 px-5 py-3 text-left 
+    text-xs font-semibold tracking-wider text-gray-700;
+    @include mq(phone-wide) {
       font-size: 12px;
     }
   }

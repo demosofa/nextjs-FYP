@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const Product = new Schema(
   {
-    title: { type: String, required: true, unique: true, maxlength: 225 },
-    description: { type: String, required: true, maxlength: 1000 },
+    title: { type: String, required: true, unique: true, maxLength: 225 },
+    description: { type: String, required: true, maxLength: 1000 },
     status: { type: String, required: true },
     images: [{ type: Schema.Types.ObjectId, ref: "File", required: true }],
     tags: [{ type: String }],
@@ -44,7 +44,7 @@ Product.post(
       doc.variants.map((Id) => mongoose.models.Variant.findByIdAndDelete(Id))
     );
     await mongoose.models.Rate.deleteMany({ product: doc._id });
-    await mongoose.models.Comment.find({ produtId: doc._id }).then((arr) => {
+    await mongoose.models.Comment.find({ productId: doc._id }).then((arr) => {
       Promise.all(
         arr.map((comment) =>
           mongoose.models.Comment.findByIdAndDelete(comment._id)

@@ -21,18 +21,18 @@ class CommentController {
   };
   getSubComment = async (req, res) => {
     const id = req.query.id;
-    const { replys } = await models.Comment.findById(id)
-      .select("replys")
+    const { replies } = await models.Comment.findById(id)
+      .select("replies")
       .populate({
-        path: "replys",
+        path: "replies",
         options: {
           sort: { updatedAt: -1 },
         },
         populate: { path: "author", select: ["username"] },
       })
       .lean();
-    if (!replys) return res.status(500).json({ message: "Cannot get reply" });
-    return res.status(200).json(replys);
+    if (!replies) return res.status(500).json({ message: "Cannot get reply" });
+    return res.status(200).json(replies);
   };
   addCommentToProduct = async (req, res) => {
     const id = req.query.id;
@@ -60,7 +60,7 @@ class CommentController {
     if (!comment)
       return res.status(500).json({ message: "Fail to create comment" });
     const updated = await models.Comment.findByIdAndUpdate(id, {
-      $push: { replys: comment._id },
+      $push: { replies: comment._id },
     });
     if (!updated)
       return res

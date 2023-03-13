@@ -32,8 +32,8 @@ export default function MyShipping() {
       params: query,
     },
     {
-      refreshInterval: convertTime("5s").milisecond,
-      dedupingInterval: convertTime("5s").milisecond,
+      refreshInterval: convertTime("5s").millisecond,
+      dedupingInterval: convertTime("5s").millisecond,
     }
   );
 
@@ -137,7 +137,7 @@ export default function MyShipping() {
                         )) ||
                           (order.status === OrderStatus.paid ? (
                             <p className="text-[#9F6000]">
-                              This information is now hindden
+                              This information is now hidden
                             </p>
                           ) : (
                             order.customer.user.phoneNumber

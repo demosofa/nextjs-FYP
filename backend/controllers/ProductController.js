@@ -35,7 +35,7 @@ class ProductController {
       category,
       limit,
       filter,
-      keywork,
+      keyword,
       rating,
       pricing,
       orderby,
@@ -44,8 +44,8 @@ class ProductController {
     if (!sort) sort = "title";
     if (!orderby) orderby = -1;
     if (!page) page = 1;
-    if (keywork) {
-      switch (keywork) {
+    if (keyword) {
+      switch (keyword) {
         case "latest":
           filterOptions = { ...filterOptions, createdAt: -1 };
           break;
@@ -87,7 +87,7 @@ class ProductController {
         title: 1,
         price: 1,
         compare: 1,
-        quanitty: 1,
+        quantity: 1,
         thumbnail: 1,
         productId: 1,
       })

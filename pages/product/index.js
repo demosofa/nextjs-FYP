@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { BiPlus } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { Loading, Pagination, Search } from "../../frontend/components";
 import { fetcher } from "../../frontend/contexts/SWRContext";
@@ -26,7 +27,7 @@ export default function ProductCRUD() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { loading, isLoggined, authorized } = useAuthLoad({
+  const { loading, isLogged, authorized } = useAuthLoad({
     async cb(axiosInstance) {
       const res = await axiosInstance({
         url: `${LocalApi}/product`,
@@ -60,11 +61,11 @@ export default function ProductCRUD() {
   };
 
   useEffect(() => {
-    if (!loading && !isLoggined && !authorized) router.push("/login");
+    if (!loading && !isLogged && !authorized) router.push("/login");
     else if (!loading && !authorized) router.back();
-  }, [loading, isLoggined, authorized]);
+  }, [loading, isLogged, authorized]);
 
-  const isLoadingInitialData = loading || !isLoggined || !authorized;
+  const isLoadingInitialData = loading || !isLogged || !authorized;
 
   return (
     <div className="product-crud__container">
@@ -72,15 +73,15 @@ export default function ProductCRUD() {
         <title>Manage Product</title>
         <meta name="description" content="Manage Product" />
       </Head>
-      <div className="flex flex-wrap gap-4">
-        {authorized === Role.admin ? (
-          <button
-            className="z-90 fixed bottom-10 right-8 flex h-16 w-16 items-center justify-center rounded-full bg-orange-600 text-4xl text-white drop-shadow-lg duration-300 hover:animate-bounce hover:bg-orange-700 hover:drop-shadow-2xl"
-            onClick={() => router.push(`product/create`)}
-          >
-            +
-          </button>
-        ) : null}
+      {authorized === Role.admin ? (
+        <button
+          className="create_btn"
+          onClick={() => router.push(`product/create`)}
+        >
+          <BiPlus />
+        </button>
+      ) : null}
+      <div className="flex flex-wrap justify-end gap-4">
         <Search
           className="!ml-0"
           value={search}
@@ -140,7 +141,7 @@ export default function ProductCRUD() {
                         </td>
                         <td>
                           <select
-                            value={product.status}
+                            defaultValue={product.status}
                             onChange={(e) => handleStatus(e, index)}
                           >
                             {[

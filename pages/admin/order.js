@@ -11,7 +11,7 @@ import {
   Form,
   Loading,
   Pagination,
-  Search,
+  Search
 } from "../../frontend/components";
 import { fetcher } from "../../frontend/contexts/SWRContext";
 import { addNotification } from "../../frontend/redux/reducer/notificationSlice";
@@ -20,7 +20,7 @@ import {
   convertTime,
   currencyFormat,
   dateFormat,
-  OrderStatus,
+  OrderStatus
 } from "../../shared";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -41,8 +41,8 @@ export default function ManageOrder() {
       params: query,
     },
     {
-      refreshInterval: convertTime("5s").milisecond,
-      dedupingInterval: convertTime("5s").milisecond,
+      refreshInterval: convertTime("5s").millisecond,
+      dedupingInterval: convertTime("5s").millisecond,
     }
   );
 
@@ -70,7 +70,7 @@ export default function ManageOrder() {
         <title>My Shipping</title>
         <meta name="description" content="My Shipping" />
       </Head>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap justify-end gap-4">
         <Search
           className="!ml-0"
           value={search}

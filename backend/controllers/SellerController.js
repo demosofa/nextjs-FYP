@@ -29,7 +29,7 @@ class SellerController {
       const orders = await models.Order.aggregate()
         .match({ createdAt: { $gte: yesterday } })
         .project({
-          day: { $dayOfMonth: "$createddAt" },
+          day: { $dayOfMonth: "$createdAt" },
         })
         .group({ _id: "$day", total: { $sum: 1 } })
         .sort({ _id: 1 });

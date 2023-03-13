@@ -30,8 +30,8 @@ export default function SellerPage() {
   const { isLoading, data, mutate } = useSWR(
     { url: `${LocalApi}/seller`, params: query },
     {
-      refreshInterval: convertTime("5s").milisecond,
-      dedupingInterval: convertTime("5s").milisecond,
+      refreshInterval: convertTime("5s").millisecond,
+      dedupingInterval: convertTime("5s").millisecond,
     }
   );
 

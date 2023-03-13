@@ -1,23 +1,32 @@
 .toast_message {
   transition: opacity 0.5s ease-in;
   opacity: 0;
-  @apply flex w-full max-w-xs items-center justify-between rounded-lg bg-white p-4 text-gray-500 shadow-md;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 20rem;
+  background-color: white;
+  color: rgb(107 114 128 / 1);
+  box-shadow: theme(boxShadow.md);
+  border-radius: 0.5rem;
+  padding: 1rem;
 }
 
 .success {
-  @apply bg-green-500;
+  background-color: rgb(34 197 94 /1);
 }
 
 .link {
-  @apply bg-blue-600;
+  background-color: rgb(37 99 235 / 1);
 }
 
 .warning {
-  @apply bg-yellow-500;
+  background-color: rgb(234 179 8 / 1);
 }
 
 .error {
-  @apply bg-red-600;
+  background-color: rgb(220 38 38 / 1);
 }
 
 .toast_message > div {

@@ -73,10 +73,10 @@ class CategoryController {
     return res.status(200).json(updated);
   };
   delete = async (req, res) => {
-    const coutedExist = await models.Product.countDocuments({
+    const countedExist = await models.Product.countDocuments({
       categories: req.query.id,
     }).lean();
-    if (coutedExist)
+    if (countedExist)
       return res.status(500).json("There is product having this category");
     const deleted = await models.Category.findByIdAndDelete(req.query.id);
     if (!deleted) return res.status(500).send("<p>fail<p>");

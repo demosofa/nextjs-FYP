@@ -16,11 +16,11 @@ const MONTH_NAMES = [
 /**
  * return string about time ago which includes date based on parameters
  * @param {string | number | Date} date
- * @param {string | boolean} prefomattedDate
+ * @param {string | boolean} preformattedDate
  * @param {boolean} hideYear
  * @returns {string}
  */
-function getFormattedDate(date, prefomattedDate = false, hideYear = false) {
+function getFormattedDate(date, preformattedDate = false, hideYear = false) {
   let day = date.getDate();
   const month = MONTH_NAMES[date.getMonth()];
   const year = date.getFullYear();
@@ -31,10 +31,10 @@ function getFormattedDate(date, prefomattedDate = false, hideYear = false) {
   if (hours < 10) hours = `0${hours}`;
   if (day < 10) day = `0${day}`;
 
-  if (prefomattedDate) {
+  if (preformattedDate) {
     // Today at 10:20
     // Yesterday at 10:20
-    return `${prefomattedDate} at ${hours}:${minutes}`;
+    return `${preformattedDate} at ${hours}:${minutes}`;
   }
 
   if (hideYear) {

@@ -42,15 +42,15 @@ export default function Timer({ value, setExpire, className, ...props }) {
       <div className={styles.unit + ` day`}>
         {(counter.day < 10 ? "0" : "") + counter.day}
       </div>
-      <div className={styles.seperate}>:</div>
+      <div className={styles.separate}>:</div>
       <div className={styles.unit + ` hour`}>
         {(counter.hour < 10 ? "0" : "") + counter.hour}
       </div>
-      <div className={styles.seperate}>:</div>
+      <div className={styles.separate}>:</div>
       <div className={styles.unit + " minute"}>
         {(counter.minute < 10 ? "0" : "") + counter.minute}
       </div>
-      <div className={styles.seperate}>:</div>
+      <div className={styles.separate}>:</div>
       <div className={styles.unit + " second"}>
         {(counter.second < 10 ? "0" : "") + counter.second}
       </div>

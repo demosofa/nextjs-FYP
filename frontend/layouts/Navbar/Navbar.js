@@ -18,7 +18,7 @@ export default function Navbar({ arrLink }) {
   const cart = useSelector((state) => state.cart);
   const router = useRouter();
   return (
-    <div className={styles.nav}>
+    <nav className={styles.nav}>
       <div className={styles.bar}>
         <Link href="/">Home</Link>
         <Search
@@ -79,6 +79,6 @@ export default function Navbar({ arrLink }) {
           </Badge>
         </Link>
       </div>
-    </div>
+    </nav>
   );
 }

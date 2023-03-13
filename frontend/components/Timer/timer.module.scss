@@ -1,4 +1,4 @@
-.wrapper{
+.wrapper {
   display: flex;
   gap: 6px;
   background: var(--linear-orange-red);
@@ -7,11 +7,11 @@
   color: whitesmoke;
   font-size: larger;
   padding: 2px 8px;
-  > .unit{
+  > .unit {
     padding: 4px;
     border-radius: 6px;
   }
-  > .seperate{
+  > .separate {
     padding: 3px;
     border-radius: 6px;
   }

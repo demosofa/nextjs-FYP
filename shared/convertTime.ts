@@ -1,5 +1,5 @@
 type TimeObject = {
-  milisecond: number;
+  millisecond: number;
   second: number;
   minute: number;
   hour: number;
@@ -13,22 +13,24 @@ export default function convertTime(
   let time = value instanceof String ? value : String(value);
   const unit = time.replace(/^[\s\d]+/, "").toLowerCase();
   const trueValue = parseInt(time.replace(unit, "").trim());
-  let milisecond = trueValue;
+  let millisecond = trueValue;
   const toSecond = 1000,
     toMinute = toSecond * 60,
     toHour = toMinute * 60,
     toDay = toHour * 24;
-  if (unit.startsWith("s", 0)) milisecond = trueValue * toSecond;
-  else if (unit.startsWith("m", 0)) milisecond = trueValue * toMinute;
-  else if (unit.startsWith("h", 0)) milisecond = trueValue * toHour;
-  else if (unit.startsWith("d", 0)) milisecond = trueValue * toDay;
+  if (unit.startsWith("s", 0)) millisecond = trueValue * toSecond;
+  else if (unit.startsWith("m", 0)) millisecond = trueValue * toMinute;
+  else if (unit.startsWith("h", 0)) millisecond = trueValue * toHour;
+  else if (unit.startsWith("d", 0)) millisecond = trueValue * toDay;
   return {
-    milisecond,
+    millisecond,
     second: Math.floor(
-      (isCount ? milisecond % toMinute : milisecond) / toSecond
+      (isCount ? millisecond % toMinute : millisecond) / toSecond
     ),
-    minute: Math.floor((isCount ? milisecond % toHour : milisecond) / toMinute),
-    hour: Math.floor((isCount ? milisecond % toDay : milisecond) / toHour),
-    day: Math.floor(milisecond / toDay),
+    minute: Math.floor(
+      (isCount ? millisecond % toHour : millisecond) / toMinute
+    ),
+    hour: Math.floor((isCount ? millisecond % toDay : millisecond) / toHour),
+    day: Math.floor(millisecond / toDay),
   };
 }

@@ -235,7 +235,7 @@ function CommentTab({
       </div>
       {loading && <Loading.Text />}
       {comments.length > 0 && toggle.more && (
-        <div className={styles.replys_container}>
+        <div className={styles.replies_container}>
           {comments.map((comment) => (
             <CommentTab
               key={comment.updatedAt}

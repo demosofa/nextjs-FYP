@@ -17,7 +17,7 @@ export default function useAuthLoad({
   roles: string[];
   deps?: DependencyList;
 }) {
-  const [isLoggined, setLoggined] = useState(false);
+  const [isLogged, setLogged] = useState(false);
   const [authorized, setAuthorized] = useState(null);
   const [error, setError] = useState();
   const { loading, setLoading, axiosInstance } = useAxiosLoad({
@@ -35,10 +35,10 @@ export default function useAuthLoad({
 
         if (!role) {
           setLoading(false);
-          setLoggined(false);
+          setLogged(false);
           setAuthorized(null);
           return;
-        } else setLoggined(true);
+        } else setLogged(true);
 
         if (!roles.includes(role)) {
           setLoading(false);
@@ -68,5 +68,5 @@ export default function useAuthLoad({
       }
     },
   });
-  return { loading, isLoggined, authorized, error, axiosInstance };
+  return { loading, isLogged, authorized, error, axiosInstance };
 }

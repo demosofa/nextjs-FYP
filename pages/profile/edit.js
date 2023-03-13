@@ -18,7 +18,7 @@ function EditProfile() {
   const dispatch = useDispatch();
   const {
     loading,
-    isLoggined,
+    isLogged,
     authorized,
     axiosInstance: axios,
   } = useAuthLoad({
@@ -65,11 +65,11 @@ function EditProfile() {
   };
 
   useEffect(() => {
-    if (!loading && !isLoggined && !authorized) router.push("/login");
+    if (!loading && !isLogged && !authorized) router.push("/login");
     else if (!loading && !authorized) router.back();
-  }, [loading, isLoggined, authorized]);
+  }, [loading, isLogged, authorized]);
 
-  if (loading || !isLoggined || !authorized)
+  if (loading || !isLogged || !authorized)
     return (
       <Loading
         style={{
