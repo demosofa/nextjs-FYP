@@ -59,7 +59,7 @@ export default function Overview({ product, vid }) {
   const [quantity, setQuantity] = useState(1);
   const [display, setDisplay] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [similiarProducts, setSimiliarProducts] = useState([]);
+  const [similarProducts, setSimilarProducts] = useState([]);
   const [options, setOptions] = useState([]);
 
   const dispatch = useDispatch();
@@ -96,7 +96,7 @@ export default function Overview({ product, vid }) {
         },
       })
       .then((res) => {
-        setSimiliarProducts(res.data.products);
+        setSimilarProducts(res.data.products);
         setLoading(false);
       });
   }, [product.title]);
@@ -346,10 +346,10 @@ export default function Overview({ product, vid }) {
 
         <Comment url={`${LocalApi}/product/${product._id}/comment`} />
 
-        {!loading && similiarProducts?.length ? (
+        {!loading && similarProducts?.length ? (
           <div className="w-full">
-            <p className="my-5">Similiar product you may want to check</p>
-            <ProductSlider products={similiarProducts} />
+            <p className="my-5">Similar product you may want to check</p>
+            <ProductSlider products={similarProducts} />
           </div>
         ) : null}
 

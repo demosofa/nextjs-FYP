@@ -2,8 +2,8 @@ import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
 import { expireStorage } from "../../utils";
 import { addViewed, removeAll } from "../reducer/recentlyViewedSlice";
 
-const recentlyViewedListerner = createListenerMiddleware();
-recentlyViewedListerner.startListening({
+const recentlyViewedListener = createListenerMiddleware();
+recentlyViewedListener.startListening({
   matcher: isAnyOf(addViewed, removeAll),
   effect: async (action, listenerApi) => {
     const recentlyViewedState = listenerApi.getState().recentlyViewed;
@@ -11,4 +11,4 @@ recentlyViewedListerner.startListening({
   },
 });
 
-export default recentlyViewedListerner;
+export default recentlyViewedListener;
