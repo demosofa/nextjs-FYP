@@ -1,7 +1,6 @@
-import parser from "jwt-decode";
 import { useMemo } from "react";
+import { useSelector } from "react-redux";
 import { isStringStartWith, Role } from "../../shared";
-import { expireStorage } from "../utils";
 import Dashboard from "./Dashboard";
 import Footer from "./Footer/Footer";
 import General from "./General";
@@ -11,14 +10,7 @@ import { AdminRole, SellerRole, ShipperRole } from "./routes";
 import Sidebar from "./Sidebar/Sidebar";
 
 export default function Layout({ children, routerPath }) {
-  const { role } = useMemo(() => {
-    if (typeof window !== "undefined" && localStorage.getItem("accessToken")) {
-      let decoded = parser(expireStorage.getItem("accessToken"));
-      return decoded;
-    }
-    return { accountId: "", role: "" };
-  }, [routerPath]);
-
+  const { role } = useSelector((state) => state.auth);
   const TargetLayout = useMemo(() => {
     if (
       isStringStartWith(routerPath, [

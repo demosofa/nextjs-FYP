@@ -26,45 +26,41 @@ const cart = createSlice({
   initialState,
   reducers: {
     addCart(state, { payload }) {
-      const clone = JSON.parse(JSON.stringify(state));
-      const result = clone.products.filter(
+      const result = state.products.filter(
         (item) => item.title === payload.title
       );
-      if (result.length === 0) clone.products.push(payload);
+      if (result.length === 0) state.products.push(payload);
       else {
-        const index = clone.products.findIndex(
+        const index = state.products.findIndex(
           (item) => item.variationId === payload.variationId
         );
-        if (index === -1) clone.products.push(payload);
-        else clone.products[index] = payload;
+        if (index === -1) state.products.push(payload);
+        else state.products[index] = payload;
       }
-      clone.quantity = clone.products.reduce(
+      state.quantity = state.products.reduce(
         (prev, curr) => prev + curr.quantity,
         0
       );
-      clone.total = Math.round(
-        clone.products.reduce((prev, curr) => prev + curr.total, 0)
+      state.total = Math.round(
+        state.products.reduce((prev, curr) => prev + curr.total, 0)
       );
-      return clone;
     },
     removeCart(state, { payload }) {
-      const clone = JSON.parse(JSON.stringify(state));
       if (payload.variationId)
-        clone.products = clone.products.filter(
+        state.products = state.products.filter(
           (item) => item.variationId !== payload.variationId
         );
       else
-        clone.products = clone.products.filter(
+        state.products = state.products.filter(
           (item) => item.title !== payload.title
         );
-      clone.quantity = clone.products.reduce(
+      state.quantity = state.products.reduce(
         (prev, curr) => prev + curr.quantity,
         0
       );
-      clone.total = Math.round(
-        clone.products.reduce((prev, curr) => prev + curr.total, 0)
+      state.total = Math.round(
+        state.products.reduce((prev, curr) => prev + curr.total, 0)
       );
-      return clone;
     },
     clearCart() {
       localStorage.removeItem("cart");
@@ -74,5 +70,4 @@ const cart = createSlice({
 });
 
 export const { addCart, editCart, removeCart, clearCart } = cart.actions;
-
 export default cart.reducer;

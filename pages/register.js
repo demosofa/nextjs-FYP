@@ -1,4 +1,3 @@
-import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -6,10 +5,9 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Checkbox, Form, Slider } from "../frontend/components";
 import { NotifyToast } from "../frontend/layouts";
+import { useRegisterMutation } from "../frontend/redux/api/publicApi";
 import { addNotification } from "../frontend/redux/reducer/notificationSlice";
 import { expireStorage, Validate } from "../frontend/utils";
-
-const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function Register() {
   const [info, setInfo] = useState({
@@ -188,6 +186,7 @@ function FormAccount({ info, moveTo, ...props }) {
   });
   const dispatch = useDispatch();
   const router = useRouter();
+  const [register] = useRegisterMutation();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -204,12 +203,10 @@ function FormAccount({ info, moveTo, ...props }) {
             throw new Error("please input the same password");
         }
       });
-      const accessToken = await axios
-        .post(`${LocalApi}/auth/register`, {
-          account: input,
-          userInfo: info,
-        })
-        .then((response) => response.data);
+      const accessToken = await register({
+        account: input,
+        userInfo: info,
+      }).unwrap();
       expireStorage.setItem("accessToken", accessToken);
       dispatch(addNotification({ message: "Success Register" }));
       router.push("/");

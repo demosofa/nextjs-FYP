@@ -93,7 +93,6 @@ class AdminController {
         });
       return res.status(200).json(...orders);
     } catch (error) {
-      console.log(error);
       return res.status(500).json(error);
     }
   };

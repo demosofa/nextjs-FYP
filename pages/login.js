@@ -1,4 +1,3 @@
-import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -6,16 +5,16 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form } from "../frontend/components";
 import { NotifyToast } from "../frontend/layouts";
+import { useLoginMutation } from "../frontend/redux/api/publicApi";
 import { addNotification } from "../frontend/redux/reducer/notificationSlice";
 import { expireStorage, Validate } from "../frontend/utils";
-
-const LocalApi = process.env.NEXT_PUBLIC_API;
 
 export default function Login() {
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
+  const [login] = useLoginMutation();
   const dispatch = useDispatch();
   const router = useRouter();
   const handleSubmit = async (e) => {
@@ -31,9 +30,7 @@ export default function Login() {
             break;
         }
       });
-      const accessToken = await axios
-        .post(`${LocalApi}/auth/login`, input)
-        .then((response) => response.data);
+      const accessToken = await login(input).unwrap();
       expireStorage.setItem("accessToken", accessToken);
       router.back();
     } catch (error) {

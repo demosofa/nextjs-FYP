@@ -8,15 +8,13 @@ const recentlyViewed = createSlice({
   name: "recentlyViewed",
   reducers: {
     addViewed(state, { payload }) {
-      const clone = JSON.parse(JSON.stringify(state));
-      const index = clone.findIndex((item) => item._id === payload._id);
+      const index = state.findIndex((item) => item._id === payload._id);
       if (index === -1) {
-        if (clone.length >= 10) clone.shift();
-        clone.push(payload);
+        if (state.length >= 10) state.shift();
+        state.push(payload);
       } else {
-        clone[index] = payload;
+        state[index] = payload;
       }
-      return clone;
     },
     removeAll() {
       localStorage.removeItem("recentlyViewed");

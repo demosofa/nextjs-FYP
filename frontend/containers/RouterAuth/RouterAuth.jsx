@@ -1,17 +1,16 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { fetcher } from "../../contexts/SWRContext";
+import { useLogoutMutation } from "../../redux/api/publicApi";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 
-const LocalApi = process.env.NEXT_PUBLIC_API;
-
 export default function RouterAuth() {
+  const [logout] = useLogoutMutation();
   const router = useRouter();
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
-      await fetcher({ url: `${LocalApi}/auth/logout`, method: "post" });
+      await logout();
       localStorage.clear();
       router.reload();
     } catch (error) {
