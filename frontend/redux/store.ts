@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import parser from "jwt-decode";
 import { expireStorage } from "../utils";
-import { publicApi } from "./api/publicApi";
+import { authApi } from "./api/authApi";
 import { cartStorage, recentlyViewedStorage } from "./middleware";
 import {
   auth,
@@ -39,13 +39,13 @@ export const store = configureStore({
     recentlyViewed,
     modal,
     auth,
-    [publicApi.reducerPath]: publicApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
       cartStorage.middleware,
       recentlyViewedStorage.middleware,
-      publicApi.middleware,
+      authApi.middleware,
     ]),
   preloadedState: {
     cart: loadState("cart"),

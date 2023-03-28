@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import parser from "jwt-decode";
-import { publicApi } from "../api/publicApi";
+import { authApi } from "../api/authApi";
 
 const initialState = { accountId: null, username: null, role: null };
 
@@ -10,7 +10,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(
-        publicApi.endpoints.login.matchFulfilled,
+        authApi.endpoints.login.matchFulfilled,
         (state, { payload }) => {
           const { role, username, accountId } = parser(payload);
           state.accountId = accountId;
@@ -19,7 +19,7 @@ const authSlice = createSlice({
         }
       )
       .addMatcher(
-        publicApi.endpoints.register.matchFulfilled,
+        authApi.endpoints.register.matchFulfilled,
         (state, { payload }) => {
           const { role, username, accountId } = parser(payload);
           state.accountId = accountId;

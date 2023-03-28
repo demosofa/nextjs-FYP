@@ -1,4 +1,3 @@
-import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -6,13 +5,13 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form } from "../frontend/components";
 import { NotifyToast } from "../frontend/layouts";
+import { useForgotMutation } from "../frontend/redux/api/authApi";
 import { addNotification } from "../frontend/redux/reducer/notificationSlice";
 import { Validate } from "../frontend/utils";
 
-const LocalApi = process.env.NEXT_PUBLIC_API;
-
 export default function ForgotPassword() {
   const [input, setInput] = useState({ username: "", email: "" });
+  const [forgot] = useForgotMutation();
   const dispatch = useDispatch();
   const router = useRouter();
   useEffect(() => {
@@ -31,8 +30,8 @@ export default function ForgotPassword() {
             break;
         }
       });
-      const res = await axios.post(`${LocalApi}/auth/forgotPwd`, input);
-      dispatch(addNotification({ message: res.data, type: "success" }));
+      const data = await forgot(input).unwrap();
+      dispatch(addNotification({ message: data, type: "success" }));
     } catch (error) {
       dispatch(addNotification({ message: error.message, type: "error" }));
     }

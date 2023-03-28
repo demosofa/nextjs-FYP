@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Form } from "../frontend/components";
 import { NotifyToast } from "../frontend/layouts";
-import { useLoginMutation } from "../frontend/redux/api/publicApi";
+import { useLoginMutation } from "../frontend/redux/api/authApi";
 import { addNotification } from "../frontend/redux/reducer/notificationSlice";
 import { expireStorage, Validate } from "../frontend/utils";
 

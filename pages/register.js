@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Checkbox, Form, Slider } from "../frontend/components";
 import { NotifyToast } from "../frontend/layouts";
-import { useRegisterMutation } from "../frontend/redux/api/publicApi";
+import { useRegisterMutation } from "../frontend/redux/api/authApi";
 import { addNotification } from "../frontend/redux/reducer/notificationSlice";
 import { expireStorage, Validate } from "../frontend/utils";
 

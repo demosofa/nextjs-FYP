@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { useLogoutMutation } from "../../redux/api/publicApi";
+import { useLogoutMutation } from "../../redux/api/authApi";
 import { addNotification } from "../../redux/reducer/notificationSlice";
 
 export default function RouterAuth() {
