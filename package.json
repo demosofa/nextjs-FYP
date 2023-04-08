@@ -13,7 +13,6 @@
   "dependencies": {
     "@next/bundle-analyzer": "^13.0.7",
     "@reduxjs/toolkit": "^1.8.2",
-    "@tailwindcss/line-clamp": "^0.4.2",
     "ably": "^1.2.5-beta.1",
     "axios": "^1.2.4",
     "bcrypt": "^5.0.1",
