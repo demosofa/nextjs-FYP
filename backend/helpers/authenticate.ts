@@ -1,6 +1,6 @@
 import type { NextApiHandler, NextApiResponse } from "next";
 import { Token } from ".";
-import { auth } from "../controllers";
+import { auth } from "@controllers/index";
 import Request from "./type";
 
 export default function authenticate(handler: NextApiHandler): NextApiHandler {

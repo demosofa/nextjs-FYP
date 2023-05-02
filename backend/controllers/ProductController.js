@@ -1,7 +1,7 @@
 import axios from "axios";
 import { startSession } from "mongoose";
-import { OrderStatus } from "../../shared";
-import models from "../models";
+import { OrderStatus } from "@shared/index";
+import models from "@models/index";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

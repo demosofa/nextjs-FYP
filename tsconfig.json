@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": [
-      "dom", "dom.iterable", "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -15,14 +13,21 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["frontend/components/*"],
+      "@containers/*": ["frontend/containers/*"],
+      "@contexts/*": ["frontend/contexts/*"],
+      "@hooks/*": ["frontend/hooks/*"],
+      "@redux/*": ["frontend/redux/*"],
+      "@utils/*": ["frontend/utils/*"],
+      "@controllers/*": ["backend/controllers/*"],
+      "@helpers/*": ["backend/helpers/*"],
+      "@models/*": ["backend/models/*"],
+      "@shared/*": ["shared/*"]
+    }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

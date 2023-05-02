@@ -8,7 +8,7 @@ export default function retryAxios(
   maxRetry = 2
 ) {
   let counter = 0;
-  axiosInstance.interceptors.response.use(undefined, async (error) => {
+  return axiosInstance.interceptors.response.use(undefined, async (error) => {
     if (
       error.response.status === 401 &&
       error.response.data.message === "Token is expired" &&

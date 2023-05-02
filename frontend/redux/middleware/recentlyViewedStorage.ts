@@ -1,5 +1,5 @@
 import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
-import { expireStorage } from "../../utils";
+import { expireStorage } from "@utils/index";
 import { addViewed, removeAll } from "../reducer/recentlyViewedSlice";
 import { RootState } from "../store";
 

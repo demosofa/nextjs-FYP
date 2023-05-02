@@ -1,7 +1,7 @@
 import { Children, createContext, useContext, useRef } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { Animation, Loading } from "../";
-import { useUpload } from "../../hooks";
+import { useUpload } from "@hooks/index";
 import styles from "./FileUpload.module.css";
 
 const Kits = createContext();

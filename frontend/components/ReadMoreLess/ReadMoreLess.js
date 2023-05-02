@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useResize } from "../../hooks";
+import { useResize } from "@hooks/index";
 import styles from "./_readmoreless.module.scss";
 
 export default function ReadMoreLess({ children, style, ...props }) {

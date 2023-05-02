@@ -1,4 +1,4 @@
-import convertTime from "../../shared/convertTime";
+import convertTime from "@shared/convertTime";
 import getUnique from "./getUnique";
 
 type ExpireData = {

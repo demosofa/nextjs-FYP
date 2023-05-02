@@ -1,5 +1,5 @@
 import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
-import { expireStorage } from "../../utils";
+import { expireStorage } from "@utils/index";
 import { addCart, removeCart } from "../reducer/cartSlice";
 import { RootState } from "../store";
 

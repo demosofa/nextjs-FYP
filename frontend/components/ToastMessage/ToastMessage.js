@@ -7,8 +7,8 @@ import {
 import { FaExternalLinkSquareAlt } from "react-icons/fa";
 import { RiCloseFill } from "react-icons/ri";
 import { useDispatch } from "react-redux";
-import { convertTime } from "../../../shared";
-import { removeNotification } from "../../redux/reducer/notificationSlice";
+import { convertTime } from "@shared/index";
+import { removeNotification } from "@redux/reducer/notificationSlice";
 import Icon from "../Icon/Icon";
 import styles from "./ToastMessage.module.css";
 

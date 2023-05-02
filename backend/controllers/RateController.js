@@ -1,4 +1,4 @@
-import models from "../models";
+import models from "@models/index";
 
 class RateController {
   getRating = async (req, res) => {

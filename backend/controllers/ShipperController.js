@@ -1,5 +1,5 @@
-import { OrderStatus } from "../../shared";
-import models from "../models";
+import { OrderStatus } from "@shared/index";
+import models from "@models/index";
 
 class ShipperController {
   MyShipping = async (req, res) => {

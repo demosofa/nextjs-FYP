@@ -1,12 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { SWRConfig } from "swr";
-import { addNotification } from "../redux/reducer/notificationSlice";
-import { expireStorage, retryAxios } from "../utils";
+import { addNotification } from "@redux/reducer/notificationSlice";
+import { expireStorage, retryAxios } from "@utils/index";
 
 export const fetcher = async (config: AxiosRequestConfig) => {
-  retryAxios(axios);
   const accessToken: string = expireStorage.getItem("accessToken");
   const response = await axios({
     ...config,
@@ -20,6 +20,10 @@ export const fetcher = async (config: AxiosRequestConfig) => {
 export default function SWRContext({ children }) {
   const dispatch = useDispatch();
   const router = useRouter();
+  useEffect(() => {
+    const interceptor = retryAxios(axios);
+    return () => axios.interceptors.response.eject(interceptor);
+  }, []);
   return (
     <SWRConfig
       value={{

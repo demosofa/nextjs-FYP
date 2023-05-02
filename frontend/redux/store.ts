@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import parser from "jwt-decode";
-import { expireStorage } from "../utils";
+import { expireStorage } from "@utils/index";
 import { authApi } from "./api/authApi";
 import { cartStorage, recentlyViewedStorage } from "./middleware";
 import {

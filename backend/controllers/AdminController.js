@@ -1,5 +1,5 @@
-import { OrderStatus, Role } from "../../shared";
-import models from "../models";
+import { OrderStatus, Role } from "@shared/index";
+import models from "@models/index";
 
 class AdminController {
   getAllOrder = async (req, res) => {

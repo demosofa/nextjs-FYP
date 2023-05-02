@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { usePagination } from "../../hooks";
+import { usePagination } from "@hooks/index";
 import styles from "./Pagination.module.css";
 
 const Kits = createContext();

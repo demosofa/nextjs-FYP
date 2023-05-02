@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Role from "../../shared/Role";
+import Role from "@shared/Role";
 const Schema = mongoose.Schema;
 
 const Account = new Schema(

@@ -1,6 +1,6 @@
 import { toDataURL } from "qrcode";
-import { OrderStatus } from "../../shared";
-import models from "../models";
+import { OrderStatus } from "@shared/index";
+import models from "@models/index";
 
 class OrderController {
   getOrder = async (req, res) => {

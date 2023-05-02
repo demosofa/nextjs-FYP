@@ -6,7 +6,7 @@ import {
   FetchBaseQueryError,
   retry,
 } from "@reduxjs/toolkit/query/react";
-import { expireStorage } from "../../utils";
+import { expireStorage } from "@utils/index";
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API,

@@ -2,7 +2,7 @@ import { AxiosInstance, CreateAxiosDefaults } from "axios";
 import decoder from "jwt-decode";
 import { DependencyList, useState } from "react";
 import { useAxiosLoad } from ".";
-import { expireStorage, retryAxios } from "../utils";
+import { expireStorage, retryAxios } from "@utils/index";
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
