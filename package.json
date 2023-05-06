@@ -44,6 +44,8 @@
 		"xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
 	},
 	"devDependencies": {
+		"@commitlint/cli": "^17.6.3",
+		"@commitlint/config-conventional": "^17.6.3",
 		"@types/bcrypt": "^5.0.0",
 		"@types/cookies": "^0.7.7",
 		"@types/formidable": "^2.0.5",
@@ -51,7 +53,9 @@
 		"@types/nodemailer": "^6.4.6",
 		"@types/qrcode": "^1.5.0",
 		"autoprefixer": "^10.4.8",
+		"commitizen": "^4.3.0",
 		"cross-env": "^7.0.3",
+		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.34.0",
 		"eslint-config-next": "^13.0.7",
 		"eslint-config-prettier": "^8.8.0",
@@ -64,13 +68,9 @@
 		"tailwindcss": "^3.1.8",
 		"typescript": "^5.0.2"
 	},
-	"lint-staged": {
-		"**/*.{js,jsx,ts,tsx}": [
-			"eslint --fix",
-			"prettier --config ./.prettierrc.json --write"
-		],
-		"**/*.{css,scss,md,html,json}": [
-			"prettier --config ./.prettierrc.json --write"
-		]
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog"
+		}
 	}
 }
