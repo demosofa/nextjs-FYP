@@ -41,7 +41,3 @@ yarn-error.log*
 
 # mongodb replica
 /data
-
-# draw.io
-/**/*.drawio
-/**/*.dio
