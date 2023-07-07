@@ -22,7 +22,7 @@ class AdminController {
 					status
 				};
 			if (!limit) limit = 10;
-
+			if (!page) page = 1;
 			const orders = await models.Order.aggregate()
 				.project({
 					customer: 1,
@@ -93,6 +93,7 @@ class AdminController {
 				});
 			return res.status(200).json(...orders);
 		} catch (error) {
+			console.log(error);
 			return res.status(500).json(error);
 		}
 	};
@@ -139,6 +140,7 @@ class AdminController {
 					role
 				};
 			if (!limit) limit = 10;
+			if (!page) page = 1;
 			const lstProfile = await models.Account.find(filterOptions)
 				.skip((page - 1) * limit)
 				.limit(limit)
