@@ -1,4 +1,5 @@
 import { OrderStatus, Role } from '@shared/index';
+
 import models from '@models/index';
 
 class AdminController {
@@ -150,9 +151,8 @@ class AdminController {
 				.populate({ path: 'user', select: ['email', 'phoneNumber'] })
 				.lean();
 			if (!lstProfile) throw new Error('Fail to load profiles');
-			const countProfiles = await models.Account.countDocuments(
-				filterOptions
-			).lean();
+			const countProfiles =
+				await models.Account.countDocuments(filterOptions).lean();
 			const pageCounted = Math.ceil(countProfiles / limit);
 			return res.status(200).json({ lstProfile, pageCounted });
 		} catch (error) {
@@ -304,4 +304,4 @@ class AdminController {
 	};
 }
 
-export default new AdminController();
+export const admin = new AdminController();

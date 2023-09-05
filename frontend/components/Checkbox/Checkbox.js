@@ -1,66 +1,72 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useState
+} from 'react';
 
 const Kits = createContext();
 
 export default function Checkbox({
-  children,
-  checked = [],
-  setChecked = null,
-  type = "checkbox",
-  name = "",
-  ...props
+	children,
+	checked = [],
+	setChecked = null,
+	type = 'checkbox',
+	name = '',
+	...props
 }) {
-  const [checks, setChecks] = useState(checked);
+	const [checks, setChecks] = useState(checked);
 
-  useEffect(() => {
-    if (typeof setChecked === "function") setChecked(checks);
-  }, [checks]);
+	useEffect(() => {
+		if (typeof setChecked === 'function') setChecked(checks);
+	}, [checks, setChecked]);
 
-  return (
-    <Kits.Provider value={{ checks, setChecks, type, name }}>
-      <fieldset className="border-none" {...props}>
-        {children}
-      </fieldset>
-    </Kits.Provider>
-  );
+	return (
+		<Kits.Provider value={{ checks, setChecks, type, name }}>
+			<fieldset className='border-none' {...props}>
+				{children}
+			</fieldset>
+		</Kits.Provider>
+	);
 }
 
 Checkbox.Item = function Item({
-  children,
-  value = children,
-  defaultChecked = false,
-  onChange,
-  ...props
+	children,
+	value = children,
+	defaultChecked = false,
+	onChange,
+	...props
 }) {
-  const { checks, setChecks, type, name } = useContext(Kits);
-  const handleCheck = () => {
-    if (type === "checkbox")
-      setChecks((prev) =>
-        prev.includes(value)
-          ? prev.filter((i) => i !== value)
-          : [...prev, value]
-      );
-    else if (type === "radio") setChecks([value]);
-  };
+	const { checks, setChecks, type, name } = useContext(Kits);
+	const handleCheck = useCallback(() => {
+		if (type === 'checkbox')
+			setChecks((prev) =>
+				prev.includes(value)
+					? prev.filter((i) => i !== value)
+					: [...prev, value]
+			);
+		else if (type === 'radio') setChecks([value]);
+	}, [setChecks, type, value]);
 
-  useEffect(() => {
-    if (defaultChecked) handleCheck();
-  }, [defaultChecked]);
+	useEffect(() => {
+		if (defaultChecked) handleCheck();
+	}, [defaultChecked, handleCheck]);
 
-  return (
-    <>
-      <input
-        {...props}
-        type={type}
-        name={name}
-        value={value}
-        onChange={(e) => {
-          if (typeof onChange === "function") onChange(e);
-          handleCheck();
-        }}
-        checked={checks.includes(value)}
-      />
-      {children}
-    </>
-  );
+	return (
+		<>
+			<input
+				{...props}
+				type={type}
+				name={name}
+				value={value}
+				onChange={(e) => {
+					if (typeof onChange === 'function') onChange(e);
+					handleCheck();
+				}}
+				checked={checks.includes(value)}
+			/>
+			{children}
+		</>
+	);
 };

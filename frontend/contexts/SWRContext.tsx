@@ -8,22 +8,27 @@ import { expireStorage, retryAxios } from '@utils/index';
 
 export const fetcher = async (config: AxiosRequestConfig) => {
 	const accessToken: string = expireStorage.getItem('accessToken');
+
 	const response = await axios({
 		...config,
 		headers: {
 			Authorization: `Bearer ${accessToken}`
 		}
 	});
+
 	return response.data;
 };
 
 export default function SWRContext({ children }) {
 	const dispatch = useDispatch();
 	const router = useRouter();
+
 	useEffect(() => {
 		const interceptor = retryAxios(axios);
+
 		return () => axios.interceptors.request.eject(interceptor);
 	}, []);
+
 	return (
 		<SWRConfig
 			value={{
@@ -36,7 +41,9 @@ export default function SWRContext({ children }) {
 				},
 				onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
 					if (error.status === 404 || error.status === 500) return;
+
 					if (retryCount >= 3) return;
+
 					setTimeout(() => revalidate({ retryCount }), 5000);
 				}
 			}}

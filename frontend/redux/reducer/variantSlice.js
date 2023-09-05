@@ -1,34 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 /** @type {{ id: string, name: string, options: string[] }[]} */
-export const initialState = []
+export const initialState = [];
 
 const variant = createSlice({
 	initialState,
 	name: 'variant',
 	reducers: {
 		addVariant(state) {
-			let check = false
-			let unique = { ...initialState.concat()[0] }
-			while (!check) {
-				unique.id = Math.random()
-				let existed = state.filter((item) => item.id === unique.id)
-				if (existed.length === 0) check = true
-			}
-			return [...state, unique]
+			const unique = { ...initialState.concat()[0] };
+			unique.id = nanoid();
+
+			return [...state, unique];
 		},
 		editVariant(state, { payload }) {
-			const { index, ...props } = payload
-			state[index] = { ...state[index], ...props }
+			const { index, ...props } = payload;
+			state[index] = { ...state[index], ...props };
 		},
 		deleteVariant(state, { payload }) {
-			return state.filter((_, index) => index !== payload)
+			return state.filter((_, index) => index !== payload);
 		},
 		deleteAllVariant() {
-			return []
+			return [];
 		}
 	}
-})
+});
 
-export default variant.reducer
-export const { addVariant, editVariant, deleteVariant, deleteAllVariant } = variant.actions
+export default variant.reducer;
+export const { addVariant, editVariant, deleteVariant, deleteAllVariant } =
+	variant.actions;

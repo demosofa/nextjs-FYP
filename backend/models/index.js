@@ -1,18 +1,18 @@
 import Account from './Account';
-import User from './User';
-import Notification from './Notification';
-import Product from './Product';
-import File from './File';
 import Category from './Category';
-import Variant from './Variant';
-import Variation from './Variation';
-import Option from './VariantOption';
 import Comment from './Comment';
-import Rate from './Rate';
+import File from './File';
+import Notification from './Notification';
 import Order from './Order';
 import OrderItem from './OrderItem';
+import Product from './Product';
+import Rate from './Rate';
+import User from './User';
+import Variant from './Variant';
+import Option from './VariantOption';
+import Variation from './Variation';
 
-export default {
+const models = {
 	Account,
 	User,
 	Notification,
@@ -27,3 +27,5 @@ export default {
 	Order,
 	OrderItem
 };
+
+export default models;

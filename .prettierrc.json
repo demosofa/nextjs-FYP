@@ -10,5 +10,21 @@
 	"bracketSpacing": true,
 	"quoteProps": "as-needed",
 	"proseWrap": "preserve",
-	"endOfLine": "auto"
+	"endOfLine": "auto",
+	"importOrder": [
+		"^@shared/(.*)$",
+		"^@components/(.*)$",
+		"^@containers/(.*)$",
+		"^@contexts/(.*)$",
+		"^@hooks/(.*)$",
+		"^@redux/(.*)$",
+		"^@utils/(.*)$",
+		"^@controllers/(.*)$",
+		"^@helpers/(.*)$",
+		"^@models/(.*)$",
+		"^[./]"
+	],
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true,
+	"plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

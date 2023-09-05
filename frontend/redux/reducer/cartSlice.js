@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 /**
  * @typedef {{
@@ -16,57 +16,61 @@ import { createSlice } from "@reduxjs/toolkit";
 
 /** @type {{ products: Product[], total: number, quantity: number }} */
 const initialState = {
-  products: [],
-  total: 0,
-  quantity: 0,
+	products: [],
+	total: 0,
+	quantity: 0
 };
 
 const cart = createSlice({
-  name: "cart",
-  initialState,
-  reducers: {
-    addCart(state, { payload }) {
-      const result = state.products.filter(
-        (item) => item.title === payload.title
-      );
-      if (result.length === 0) state.products.push(payload);
-      else {
-        const index = state.products.findIndex(
-          (item) => item.variationId === payload.variationId
-        );
-        if (index === -1) state.products.push(payload);
-        else state.products[index] = payload;
-      }
-      state.quantity = state.products.reduce(
-        (prev, curr) => prev + curr.quantity,
-        0
-      );
-      state.total = Math.round(
-        state.products.reduce((prev, curr) => prev + curr.total, 0)
-      );
-    },
-    removeCart(state, { payload }) {
-      if (payload.variationId)
-        state.products = state.products.filter(
-          (item) => item.variationId !== payload.variationId
-        );
-      else
-        state.products = state.products.filter(
-          (item) => item.title !== payload.title
-        );
-      state.quantity = state.products.reduce(
-        (prev, curr) => prev + curr.quantity,
-        0
-      );
-      state.total = Math.round(
-        state.products.reduce((prev, curr) => prev + curr.total, 0)
-      );
-    },
-    clearCart() {
-      localStorage.removeItem("cart");
-      return initialState;
-    },
-  },
+	name: 'cart',
+	initialState,
+	reducers: {
+		addCart(state, { payload }) {
+			const result = state.products.filter(
+				(item) => item.title === payload.title
+			);
+
+			if (result.length === 0) state.products.push(payload);
+			else {
+				const index = state.products.findIndex(
+					(item) => item.variationId === payload.variationId
+				);
+
+				if (index === -1) state.products.push(payload);
+				else state.products[index] = payload;
+			}
+
+			state.quantity = state.products.reduce(
+				(prev, curr) => prev + curr.quantity,
+				0
+			);
+			state.total = Math.round(
+				state.products.reduce((prev, curr) => prev + curr.total, 0)
+			);
+		},
+		removeCart(state, { payload }) {
+			if (payload.variationId)
+				state.products = state.products.filter(
+					(item) => item.variationId !== payload.variationId
+				);
+			else
+				state.products = state.products.filter(
+					(item) => item.title !== payload.title
+				);
+
+			state.quantity = state.products.reduce(
+				(prev, curr) => prev + curr.quantity,
+				0
+			);
+			state.total = Math.round(
+				state.products.reduce((prev, curr) => prev + curr.total, 0)
+			);
+		},
+		clearCart() {
+			localStorage.removeItem('cart');
+			return initialState;
+		}
+	}
 });
 
 export const { addCart, editCart, removeCart, clearCart } = cart.actions;
