@@ -12,6 +12,7 @@
 	"proseWrap": "preserve",
 	"endOfLine": "auto",
 	"importOrder": [
+		"<THIRD_PARTY_MODULES>",
 		"^@shared/(.*)$",
 		"^@components/(.*)$",
 		"^@containers/(.*)$",
@@ -25,6 +26,5 @@
 		"^[./]"
 	],
 	"importOrderSeparation": true,
-	"importOrderSortSpecifiers": true,
 	"plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

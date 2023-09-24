@@ -1,14 +1,14 @@
+import { Form } from '@components';
+import { NotifyToast } from '@layouts';
+import { Validate } from '@utils';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Form } from '../frontend/components';
-import { NotifyToast } from '../frontend/layouts';
-import { useForgotMutation } from '../frontend/redux/api/authApi';
-import { addNotification } from '../frontend/redux/reducer/notificationSlice';
-import { Validate } from '../frontend/utils';
+import { useForgotMutation } from '@redux/api/authApi';
+import { addNotification } from '@redux/reducer/notificationSlice';
 
 export default function ForgotPassword() {
 	const [input, setInput] = useState({ username: '', email: '' });

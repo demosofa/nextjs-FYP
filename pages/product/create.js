@@ -1,3 +1,15 @@
+import { FileUpload, Form, Loading, TagsInput } from '@components';
+import { Variant, Variation } from '@containers';
+import { useAuthLoad } from '@hooks';
+import { ProductStatus, Role, currencyFormat } from '@shared';
+import {
+	Validate,
+	capitalize,
+	expireStorage,
+	retryAxios,
+	uploadApi,
+	validateVariations
+} from '@utils';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -6,30 +18,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-	FileUpload,
-	Form,
-	Loading,
-	TagsInput
-} from '../../frontend/components';
-import { Variant, Variation } from '../../frontend/containers';
-import { useMediaContext } from '../../frontend/contexts/MediaContext';
-import { useAuthLoad } from '../../frontend/hooks';
-import { addNotification } from '../../frontend/redux/reducer/notificationSlice';
-import { deleteAllVariant } from '../../frontend/redux/reducer/variantSlice';
-import { editAllVariations } from '../../frontend/redux/reducer/variationSlice';
-import {
-	Validate,
-	capitalize,
-	expireStorage,
-	retryAxios,
-	uploadApi,
-	validateVariations
-} from '../../frontend/utils';
-import { ProductStatus, Role, currencyFormat } from '../../shared';
+import { useMediaContext } from '@contexts/MediaContext';
+
+import { addNotification } from '@redux/reducer/notificationSlice';
+import { deleteAllVariant } from '@redux/reducer/variantSlice';
+import { editAllVariations } from '@redux/reducer/variationSlice';
 
 const SelectCategory = dynamic(() =>
-	import('../../frontend/containers/SelectCategory/SelectCategory')
+	import('@containers/SelectCategory/SelectCategory')
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

@@ -1,3 +1,7 @@
+import { Loading, Pagination, Search } from '@components';
+import { useAuthLoad } from '@hooks';
+import { ProductStatus, Role, currencyFormat } from '@shared';
+import { capitalize } from '@utils';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -5,12 +9,9 @@ import { useEffect, useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
 
-import { Loading, Pagination, Search } from '../../frontend/components';
-import { fetcher } from '../../frontend/contexts/SWRContext';
-import { useAuthLoad } from '../../frontend/hooks';
-import { addNotification } from '../../frontend/redux/reducer/notificationSlice';
-import { capitalize } from '../../frontend/utils';
-import { ProductStatus, Role, currencyFormat } from '../../shared';
+import { fetcher } from '@contexts/SWRContext';
+
+import { addNotification } from '@redux/reducer/notificationSlice';
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

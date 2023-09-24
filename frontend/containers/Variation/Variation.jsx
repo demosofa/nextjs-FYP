@@ -1,13 +1,13 @@
+import { useVariantPermutation } from '@hooks';
 import { useEffect, useMemo } from 'react';
 import { GiTrashCan } from 'react-icons/gi';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useVariantPermutation } from '../../hooks';
 import {
 	addVariation,
 	deleteVariation,
 	editVariation
-} from '../../redux/reducer/variationSlice';
+} from '@redux/reducer/variationSlice';
 
 export default function Variation() {
 	const variants = useSelector((state) => state.variant);

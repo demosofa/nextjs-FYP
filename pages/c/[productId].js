@@ -1,11 +1,3 @@
-import axios from 'axios';
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
-
 import {
 	Breadcrumb,
 	Checkbox,
@@ -14,29 +6,36 @@ import {
 	ReadMoreLess,
 	Slider,
 	StarRating
-} from '../../frontend/components';
-import { PriceInfo } from '../../frontend/containers';
-import { useMediaContext } from '../../frontend/contexts/MediaContext';
-import { fetcher } from '../../frontend/contexts/SWRContext';
-import { addCart } from '../../frontend/redux/reducer/cartSlice';
-import { addNotification } from '../../frontend/redux/reducer/notificationSlice';
-import { addViewed } from '../../frontend/redux/reducer/recentlyViewedSlice';
-import { Validate } from '../../frontend/utils';
+} from '@components';
+import { PriceInfo } from '@containers';
+import { Validate } from '@utils';
+import axios from 'axios';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-const Rating = dynamic(
-	() => import('../../frontend/containers/Rating/Rating'),
-	{ ssr: false }
-);
-const Comment = dynamic(
-	() => import('../../frontend/containers/Comment/Comment'),
-	{ ssr: false }
-);
+import { useMediaContext } from '@contexts/MediaContext';
+import { fetcher } from '@contexts/SWRContext';
+
+import { addCart } from '@redux/reducer/cartSlice';
+import { addNotification } from '@redux/reducer/notificationSlice';
+import { addViewed } from '@redux/reducer/recentlyViewedSlice';
+
+const Rating = dynamic(() => import('@containers/Rating/Rating'), {
+	ssr: false
+});
+const Comment = dynamic(() => import('@containers/Comment/Comment'), {
+	ssr: false
+});
 const ProductSlider = dynamic(
-	() => import('../../frontend/containers/ProductSlider/ProductSlider'),
+	() => import('@containers/ProductSlider/ProductSlider'),
 	{ ssr: false }
 );
 const ReceivingAddress = dynamic(
-	() => import('../../frontend/containers/ReceivingAddress/ReceivingAddress'),
+	() => import('@containers/ReceivingAddress/ReceivingAddress'),
 	{ ssr: false }
 );
 

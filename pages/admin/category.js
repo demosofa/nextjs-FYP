@@ -1,16 +1,18 @@
+import { Dropdown, Loading } from '@components';
+import { useAuthLoad } from '@hooks';
+import { Role } from '@shared';
+import { Validate } from '@utils';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { BiDotsVertical } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
 
-import { Dropdown, Loading } from '../../frontend/components';
-import { fetcher } from '../../frontend/contexts/SWRContext';
-import { useAuthLoad } from '../../frontend/hooks';
-import { addNotification } from '../../frontend/redux/reducer/notificationSlice';
-import { Validate } from '../../frontend/utils';
+import { fetcher } from '@contexts/SWRContext';
+
+import { addNotification } from '@redux/reducer/notificationSlice';
+
 import styles from '../../sass/_crudcategory.module.scss';
-import { Role } from '../../shared';
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 

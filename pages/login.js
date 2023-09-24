@@ -1,14 +1,14 @@
+import { Form } from '@components';
+import { NotifyToast } from '@layouts';
+import { Validate, expireStorage } from '@utils';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Form } from '../frontend/components';
-import { NotifyToast } from '../frontend/layouts';
-import { useLoginMutation } from '../frontend/redux/api/authApi';
-import { addNotification } from '../frontend/redux/reducer/notificationSlice';
-import { Validate, expireStorage } from '../frontend/utils';
+import { useLoginMutation } from '@redux/api/authApi';
+import { addNotification } from '@redux/reducer/notificationSlice';
 
 export default function Login() {
 	const [input, setInput] = useState({

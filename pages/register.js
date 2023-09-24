@@ -1,13 +1,14 @@
+import { Checkbox, Form, Slider } from '@components';
+import { NotifyToast } from '@layouts';
+import { expireStorage, Validate } from '@utils';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Checkbox, Form, Slider } from '../frontend/components';
-import { NotifyToast } from '../frontend/layouts';
-import { useRegisterMutation } from '../frontend/redux/api/authApi';
-import { addNotification } from '../frontend/redux/reducer/notificationSlice';
-import { expireStorage, Validate } from '../frontend/utils';
+
+import { useRegisterMutation } from '@redux/api/authApi';
+import { addNotification } from '@redux/reducer/notificationSlice';
 
 export default function Register() {
 	const [info, setInfo] = useState({
@@ -24,7 +25,7 @@ export default function Register() {
 	useEffect(() => {
 		const isAuth = expireStorage.getItem('accessToken');
 		if (isAuth) router.back();
-	}, []);
+	}, [router]);
 
 	return (
 		<div className='login-page'>
