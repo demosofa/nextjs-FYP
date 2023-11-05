@@ -2,7 +2,7 @@ import { Loading, QRreader } from '@components';
 import { ProgressBar } from '@containers';
 import { convertTime, currencyFormat, OrderStatus, Role } from '@shared';
 import { expireStorage } from '@utils';
-import decoder from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -28,7 +28,7 @@ function ShippingProgress() {
 	const auth = useState(() => {
 		const accessToken = expireStorage.getItem('accessToken');
 		if (accessToken) {
-			const { role, accountId } = decoder(accessToken);
+			const { role, accountId } = jwtDecode(accessToken);
 			return { role, accountId };
 		}
 	})[0];

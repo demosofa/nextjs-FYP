@@ -1,9 +1,11 @@
 import { Realtime } from 'ably/promises';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { createContext, useContext, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+
 import { showModal } from '@redux/reducer/modalSlice';
 import { addNotification } from '@redux/reducer/notificationSlice';
+
 import { expireStorage } from '@utils/index';
 
 const LocalApi = process.env.NEXT_PUBLIC_API;

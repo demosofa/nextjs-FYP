@@ -60,7 +60,7 @@ export default function useUpload({
 				return currentFiles;
 			});
 		},
-		[files, limit, isOverSize]
+		[files.length, limit.total, isOverSize]
 	);
 
 	const handleDelete = useCallback((index?: number, e?: MouseEvent) => {

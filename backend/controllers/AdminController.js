@@ -146,7 +146,7 @@ class AdminController {
 				.skip((page - 1) * limit)
 				.limit(limit)
 				.sort({
-					[sort]: orderby
+					[sort]: parseInt(orderby)
 				})
 				.populate({ path: 'user', select: ['email', 'phoneNumber'] })
 				.lean();
@@ -156,7 +156,7 @@ class AdminController {
 			const pageCounted = Math.ceil(countProfiles / limit);
 			return res.status(200).json({ lstProfile, pageCounted });
 		} catch (error) {
-			return res.status(500).json({ message: error });
+			return res.status(500).json({ message: error.message });
 		}
 	};
 

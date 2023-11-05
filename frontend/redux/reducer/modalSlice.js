@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-/** @type {{title:string, content:string, url:string, data:object}}*/
+/** @type {{ title: string; content: string; url: string; data: object }} */
 const initialState = {};
 
 const modal = createSlice({

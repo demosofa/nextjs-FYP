@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
+
 import { authApi } from '../api/authApi';
 
 const initialState = { accountId: null, username: null, role: null };

@@ -1,13 +1,15 @@
-import { DependencyList, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-export default function useResize(
-	callback: (...arg0: any[]) => any,
-	deps: DependencyList = []
-) {
+export default function useResize(callback: (...arg0: any[]) => unknown) {
+	const callbackRef = useRef(callback);
+
 	useEffect(() => {
-		const resize = callback;
-		window.addEventListener('resize', resize);
+		callbackRef.current = callback;
+	}, [callback]);
 
-		return () => window.removeEventListener('resize', resize);
-	}, [callback, deps]);
+	useEffect(() => {
+		window.addEventListener('resize', callbackRef.current);
+
+		return () => window.removeEventListener('resize', callbackRef.current);
+	}, []);
 }

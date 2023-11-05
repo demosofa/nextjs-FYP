@@ -2,7 +2,7 @@ import { Dropdown, Loading, Pagination } from '@components';
 import { useAuthLoad, useAxiosLoad } from '@hooks';
 import { Role } from '@shared';
 import { expireStorage, timeAgo } from '@utils';
-import decoder from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useMemo, useRef, useState } from 'react';
 import { BiDotsVertical } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
@@ -106,7 +106,7 @@ function CommentTab({
 	const isAuthor = useState(() => {
 		const accessToken = expireStorage.getItem('accessToken');
 		if (!accessToken) return false;
-		const { accountId } = decoder(accessToken);
+		const { accountId } = jwtDecode(accessToken);
 		return accountId === data.author._id;
 	})[0];
 	const [comments, setComments] = useState([]);
@@ -322,7 +322,7 @@ function CommentReply({
 	const dispatch = useDispatch();
 	const { username } = useMemo(() => {
 		const accessToken = expireStorage.getItem('accessToken');
-		return decoder(accessToken);
+		return jwtDecode(accessToken);
 	}, []);
 
 	const handleReply = async (value) => {

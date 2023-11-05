@@ -1,5 +1,18 @@
 import axios, { AxiosInstance, CreateAxiosDefaults } from 'axios';
-import { DependencyList, useEffect, useMemo, useRef, useState } from 'react';
+import {
+	DependencyList,
+	Dispatch,
+	SetStateAction,
+	useEffect,
+	useMemo,
+	useRef,
+	useState
+} from 'react';
+
+export type AxiosLoadCallback = (
+	AxiosInstance: AxiosInstance,
+	setLoading: Dispatch<SetStateAction<boolean>>
+) => unknown;
 
 export default function useAxiosLoad({
 	config,
@@ -8,12 +21,13 @@ export default function useAxiosLoad({
 	setError
 }: {
 	config?: CreateAxiosDefaults;
-	callback: (AxiosInstance: AxiosInstance) => unknown;
+	callback: AxiosLoadCallback;
 	deps: DependencyList;
-	setError?: Function;
+	setError?: (error: Error) => unknown;
 }) {
 	const controller = useRef<AbortController>(null);
 	const axiosInstance = useMemo(() => axios.create(config), [config]);
+
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -24,18 +38,18 @@ export default function useAxiosLoad({
 				setLoading(true);
 
 				axiosInstance.defaults.signal = controller.current.signal;
-				await callback(axiosInstance);
+				await callback(axiosInstance, setLoading);
 
 				setLoading(false);
 			} catch (err) {
-				setError && setError(err);
+				setError?.(err);
 			}
 		};
 
 		loadingData();
 
 		return () => controller.current?.abort();
-	}, [deps, axiosInstance, callback, setError]);
+	}, deps);
 
-	return { loading, axiosInstance, setLoading, controller };
+	return { loading, axiosInstance, controller };
 }

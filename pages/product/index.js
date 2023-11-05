@@ -1,11 +1,11 @@
 import { Loading, Pagination, Search } from '@components';
-import { useAuthLoad } from '@hooks';
+import { useAuthLoad, AxiosLoadCallback } from '@hooks';
 import { ProductStatus, Role, currencyFormat } from '@shared';
 import { capitalize } from '@utils';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
 
@@ -29,8 +29,8 @@ export default function ProductCRUD() {
 	const router = useRouter();
 	const dispatch = useDispatch();
 
-	const { loading, isLogged, authorized } = useAuthLoad({
-		async cb(axiosInstance) {
+	const memoCallback = useCallback(
+		async (axiosInstance) => {
 			const res = await axiosInstance({
 				url: `${LocalApi}/product`,
 				params: query
@@ -39,6 +39,11 @@ export default function ProductCRUD() {
 			setTotalPageCount(res.data.pageCounted);
 			return;
 		},
+		[query]
+	);
+
+	const { loading, isLogged, authorized } = useAuthLoad({
+		cb: memoCallback,
 		roles: [Role.admin, Role.seller],
 		deps: [query]
 	});

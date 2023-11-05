@@ -1,8 +1,10 @@
-import { AxiosInstance, CreateAxiosDefaults } from 'axios';
-import decoder from 'jwt-decode';
-import { DependencyList, useState } from 'react';
-import { useAxiosLoad } from '.';
+import { CreateAxiosDefaults } from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import { DependencyList, useCallback, useState } from 'react';
+
 import { expireStorage, retryAxios } from '@utils/index';
+
+import { useAxiosLoad, AxiosLoadCallback } from '.';
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -13,22 +15,23 @@ export default function useAuthLoad({
 	deps = []
 }: {
 	config?: CreateAxiosDefaults;
-	cb?: (AxiosInstance: AxiosInstance) => unknown;
+	cb?: AxiosLoadCallback;
 	roles: string[];
 	deps?: DependencyList;
 }) {
 	const [isLogged, setLogged] = useState(false);
 	const [authorized, setAuthorized] = useState(null);
 	const [error, setError] = useState();
-	const { loading, setLoading, axiosInstance } = useAxiosLoad({
+
+	const { loading, axiosInstance } = useAxiosLoad({
 		config,
 		deps,
-		callback: async (axiosInstance) => {
+		callback: async (axiosInstance, setLoading) => {
 			let accessToken = expireStorage.getItem('accessToken');
 			retryAxios(axiosInstance);
 
 			try {
-				const { role, exp } = decoder(accessToken) as {
+				const { role, exp } = jwtDecode(accessToken) as {
 					role: string;
 					exp: number;
 				};
@@ -54,7 +57,7 @@ export default function useAuthLoad({
 						accessToken = res.data;
 						expireStorage.setItem('accessToken', accessToken);
 
-						const { role } = decoder(accessToken) as { role: string };
+						const { role } = jwtDecode(accessToken) as { role: string };
 						setAuthorized(role);
 					})
 					.catch(({ response }) => {
@@ -67,7 +70,7 @@ export default function useAuthLoad({
 
 			if (cb) {
 				axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-				await cb(axiosInstance);
+				await cb(axiosInstance, setLoading);
 			}
 		}
 	});

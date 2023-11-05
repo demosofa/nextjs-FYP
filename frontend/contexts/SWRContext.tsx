@@ -3,7 +3,9 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { SWRConfig } from 'swr';
+
 import { addNotification } from '@redux/reducer/notificationSlice';
+
 import { expireStorage, retryAxios } from '@utils/index';
 
 export const fetcher = async (config: AxiosRequestConfig) => {

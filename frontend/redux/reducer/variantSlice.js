@@ -1,6 +1,6 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
-/** @type {{ id: string, name: string, options: string[] }[]} */
+/** @type {{ id: string; name: string; options: string[] }[]} */
 export const initialState = [];
 
 const variant = createSlice({

@@ -3,9 +3,19 @@ import { GrFormClose } from 'react-icons/gr';
 
 import style from './TagsInput.module.css';
 
+/**
+ * @param {{
+ * 	prevTags: string[];
+ * 	setPrevTags: (tags: string[]) => unknown;
+ * 	filter: string[];
+ * 	className: string;
+ * 	[key: string]: any;
+ * }} param0
+ * @returns
+ */
 export default function TagsInput({
 	prevTags = [],
-	setPrevTags = new Function(),
+	setPrevTags,
 	filter = [],
 	className,
 	...props
@@ -16,7 +26,13 @@ export default function TagsInput({
 	const filtered = useRef([...filter]);
 	let inputDiv;
 
-	useEffect(() => setPrevTags(tags), [tags, setPrevTags]);
+	const setPrevTagsRef = useRef(setPrevTags);
+
+	useEffect(() => {
+		setPrevTagsRef.current = setPrevTags;
+	}, [setPrevTags]);
+
+	useEffect(() => setPrevTagsRef.current(tags), [tags]);
 
 	const handleDelete = (index) => {
 		setTags((prev) => prev.filter((tag) => tag !== tags[index]));

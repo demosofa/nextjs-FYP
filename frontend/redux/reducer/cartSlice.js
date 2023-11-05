@@ -2,19 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 /**
  * @typedef {{
- *  productId: string,
- *  variationId: string,
- *  title: string,
- *  image: string,
- *  options: string[],
- *  extraCostPerItem: number,
- *  quantity: number,
- *  price: number,
- *  total: number,
- *}} Product
+ * 	productId: string;
+ * 	variationId: string;
+ * 	title: string;
+ * 	image: string;
+ * 	options: string[];
+ * 	extraCostPerItem: number;
+ * 	quantity: number;
+ * 	price: number;
+ * 	total: number;
+ * }} Product
  */
 
-/** @type {{ products: Product[], total: number, quantity: number }} */
+/** @type {{ products: Product[]; total: number; quantity: number }} */
 const initialState = {
 	products: [],
 	total: 0,

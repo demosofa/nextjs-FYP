@@ -1,5 +1,5 @@
 import { Animation, Icon, Search } from '@components';
-import decoder from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -42,7 +42,7 @@ export default function General({ children, arrLink, role }) {
 						{role && (
 							<>
 								<Link href='/profile' onClick={() => setToggle(!toggle)}>
-									{decoder(localStorage.getItem('accessToken')).username}
+									{jwtDecode(localStorage.getItem('accessToken')).username}
 								</Link>
 								<Sidebar.Item
 									href='/notification'

@@ -14,7 +14,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useMediaContext } from '@contexts/MediaContext';
@@ -170,10 +170,16 @@ export default function Overview({ product, vid }) {
 		}
 	};
 
+	const routerRef = useRef(router);
+
+	useEffect(() => {
+		routerRef.current = router;
+	}, [router]);
+
 	useEffect(() => {
 		if (targetVariation && targetVariation.thumbnail?.url) {
-			router.replace(
-				router.asPath,
+			routerRef.current.replace(
+				routerRef.current.asPath,
 				{
 					pathname: `/c/${targetVariation.productId}`,
 					query: { vid: targetVariation._id }
@@ -182,7 +188,7 @@ export default function Overview({ product, vid }) {
 			);
 			setTargetImage(targetVariation.thumbnail.url);
 		}
-	}, [targetVariation, router]);
+	}, [targetVariation]);
 
 	useEffect(() => {
 		const { title, avgRating, images } = product;

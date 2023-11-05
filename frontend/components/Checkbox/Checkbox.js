@@ -3,24 +3,42 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
+	useRef,
 	useState
 } from 'react';
 
 const Kits = createContext();
 
+/**
+ * @param {{
+ * 	children: React.Children;
+ * 	checked: string[];
+ * 	setChecked?: (checks: string[]) => unknown;
+ * 	type: 'checkbox' | 'radio';
+ * 	name: string;
+ * 	[key: string]: any;
+ * }} param0
+ * @returns
+ */
 export default function Checkbox({
 	children,
 	checked = [],
-	setChecked = null,
+	setChecked,
 	type = 'checkbox',
 	name = '',
 	...props
 }) {
 	const [checks, setChecks] = useState(checked);
 
+	const setCheckedRef = useRef(setChecked);
+
 	useEffect(() => {
-		if (typeof setChecked === 'function') setChecked(checks);
-	}, [checks, setChecked]);
+		setCheckedRef.current = setChecked;
+	}, [setChecked]);
+
+	useEffect(() => {
+		setCheckedRef.current?.(checks);
+	}, [checks]);
 
 	return (
 		<Kits.Provider value={{ checks, setChecks, type, name }}>

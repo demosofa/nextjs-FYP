@@ -1,12 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 
 import { Icon } from '../';
 import styles from './increment.module.scss';
 
+/**
+ * @param {{
+ * 	value: number;
+ * 	setValue: (value: number) => any;
+ * 	plus: number;
+ * 	minus: number;
+ * 	min: number;
+ * 	max: number;
+ * 	[key: string]: any;
+ * }} param0
+ * @returns {React.JSX.Element}
+ */
 export default function Increment({
 	value = 1,
-	setValue = new Function(),
+	setValue,
 	plus = 1,
 	minus = 1,
 	min = 1,
@@ -16,20 +28,26 @@ export default function Increment({
 	const [quantity, setQuantity] = useState(value);
 	const [input, setInput] = useState(value);
 
+	const setValueRef = useRef(setValue);
+
+	useEffect(() => {
+		setValueRef.current = setValue;
+	}, [setValue]);
+
 	useEffect(() => {
 		if (quantity > max) {
 			setQuantity(max);
-			setInput(max);
+			setValueRef.current(max);
 		} else if (quantity < min) {
 			setQuantity(min);
-			setInput(min);
+			setValueRef.current(min);
 		}
 	}, [min, max, quantity]);
 
 	useEffect(() => {
 		setInput(quantity);
-		setValue(quantity);
-	}, [quantity, setValue]);
+		setValueRef.current(quantity);
+	}, [quantity]);
 
 	return (
 		<div className={styles.set_quantity} {...props}>

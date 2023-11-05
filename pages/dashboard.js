@@ -2,7 +2,7 @@ import { Loading } from '@components';
 import { Widget } from '@containers';
 import { Role } from '@shared';
 import { expireStorage } from '@utils';
-import decoder from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ export default function Dashboard() {
 	const auth = useState(() => {
 		const accessToken = expireStorage.getItem('accessToken');
 		if (accessToken) {
-			const { role, accountId } = decoder(accessToken);
+			const { role, accountId } = jwtDecode(accessToken);
 			return { role, accountId };
 		} else router.push('/login');
 	})[0];

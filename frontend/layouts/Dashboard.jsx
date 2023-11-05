@@ -1,5 +1,5 @@
 import { Animation, Icon } from '@components';
-import decoder from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -33,7 +33,7 @@ function Dashboard({ children, arrLink, role }) {
 				{role && (
 					<>
 						<Link href='/profile' onClick={() => setToggle(!toggle)}>
-							{decoder(localStorage.getItem('accessToken')).username}
+							{jwtDecode(localStorage.getItem('accessToken')).username}
 						</Link>
 						<Sidebar.Item
 							href='/notification'

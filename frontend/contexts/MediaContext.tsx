@@ -1,4 +1,5 @@
 import { createContext, useContext, useRef } from 'react';
+
 import useMedia, { MediaObj } from '@hooks/useMedia';
 
 const Media = createContext<MediaObj>({ device: '', Devices: {} });
