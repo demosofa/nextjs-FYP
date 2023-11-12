@@ -1,6 +1,6 @@
 import { CreateAxiosDefaults } from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { DependencyList, useCallback, useState } from 'react';
+import { DependencyList, useState } from 'react';
 
 import { expireStorage, retryAxios } from '@utils/index';
 
