@@ -7,7 +7,7 @@ import styles from './_readmoreless.module.scss';
 export default function ReadMoreLess({ children, style, ...props }) {
 	const [isMore, setIsMore] = useState(true);
 	const [display, setDisplay] = useState(true);
-	const [resize, setResize] = useState(false);
+	const [_resize, setResize] = useState(false);
 	const Container = useCallback(
 		(node) => {
 			if (!node) return;

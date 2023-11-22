@@ -3,13 +3,7 @@ import { useRef, useState } from 'react';
 
 import { compareToRange } from '@utils/index';
 
-export default function ImageMagnifier({
-	zoom = 2,
-	src,
-	style,
-	className,
-	...props
-}) {
+export default function ImageMagnifier({ zoom = 2, src, className, ...props }) {
 	const magnifier = useRef();
 	const [target, setTarget] = useState();
 

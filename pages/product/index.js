@@ -1,5 +1,5 @@
 import { Loading, Pagination, Search } from '@components';
-import { useAuthLoad, AxiosLoadCallback } from '@hooks';
+import { useAuthLoad } from '@hooks';
 import { ProductStatus, Role, currencyFormat } from '@shared';
 import { capitalize } from '@utils';
 import Head from 'next/head';
@@ -299,7 +299,7 @@ function Remove({ index, product, setProducts, setRemove }) {
 	};
 	return (
 		<>
-			<div className='backdrop' onClick={(e) => setRemove(null)} />
+			<div className='backdrop' onClick={() => setRemove(null)} />
 			<div className='form_center'>
 				<label>{`Are you sure to remove ${product.title}?`}</label>
 				<div className='flex gap-3'>

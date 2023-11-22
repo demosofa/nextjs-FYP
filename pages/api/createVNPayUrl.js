@@ -53,9 +53,9 @@ async function createVNPayUrl(req, res) {
 
 			vnp_Params = sortObject(vnp_Params);
 
-			var querystring = require('qs');
+			var querystring = await import('qs');
 			var signData = querystring.stringify(vnp_Params, { encode: false });
-			var crypto = require('crypto');
+			var crypto = await import('crypto');
 			var hmac = crypto.createHmac('sha512', secretKey);
 			var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 			vnp_Params['vnp_SecureHash'] = signed;

@@ -31,7 +31,7 @@ export default function Widget({
 		}
 		return response.data;
 	};
-	const { data, error } = useSWR({ url }, fetcher, {
+	const { data } = useSWR({ url }, fetcher, {
 		revalidateIfStale: false,
 		revalidateOnFocus: false,
 		revalidateOnReconnect: false

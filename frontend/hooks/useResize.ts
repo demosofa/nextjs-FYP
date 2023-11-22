@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export default function useResize(callback: (...arg0: any[]) => unknown) {
+export default function useResize(callback: (...arg0: unknown[]) => unknown) {
 	const callbackRef = useRef(callback);
 
 	useEffect(() => {

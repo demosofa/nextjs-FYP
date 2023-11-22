@@ -11,7 +11,7 @@ export const config = {
 async function upload(req: NextApiRequest, res: NextApiResponse) {
 	try {
 		const result = await parseForm(req);
-		let { path, public_id } = result.fields;
+		const { path, public_id } = result.fields;
 		const file = result.files[Object.keys(result.files)[0]][0];
 		const folder = await Cloudinary.createFolder(`CMS/${path}`);
 		let options: UploadApiOptions = {

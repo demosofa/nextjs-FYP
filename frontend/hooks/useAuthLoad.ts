@@ -27,7 +27,7 @@ export default function useAuthLoad({
 		config,
 		deps,
 		callback: async (axiosInstance, setLoading) => {
-			let accessToken = expireStorage.getItem('accessToken');
+			let accessToken = expireStorage.getItem('accessToken') as string;
 			retryAxios(axiosInstance);
 
 			try {

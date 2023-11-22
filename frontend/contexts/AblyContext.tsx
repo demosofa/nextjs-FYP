@@ -15,9 +15,9 @@ const ably = new Realtime.Promise({
 const AblyFe = createContext(ably);
 
 export default function AblyContext({ children }) {
-	const { role, accountId } = useMemo(() => {
+	const { accountId } = useMemo(() => {
 		if (typeof window !== 'undefined' && localStorage.getItem('accessToken')) {
-			let decoded = jwtDecode(expireStorage.getItem('accessToken'));
+			const decoded = jwtDecode(expireStorage.getItem('accessToken') as string);
 
 			if (decoded) return decoded as { role: string; accountId: string };
 		}

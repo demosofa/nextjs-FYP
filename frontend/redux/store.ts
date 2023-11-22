@@ -17,6 +17,7 @@ import {
 
 function loadState(name: string) {
 	try {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		let serializedState: any = expireStorage.getItem(name);
 		if (serializedState === null) return undefined;
 		if (name === 'accessToken') {
