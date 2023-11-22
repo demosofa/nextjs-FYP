@@ -11,12 +11,11 @@ export default async function VNPayReturn(req, res) {
 
 	vnp_Params = sortObject(vnp_Params);
 
-	var tmnCode = process.env.vnp_TmnCode;
 	var secretKey = process.env.vnp_HashSecret;
 
-	var querystring = require('qs');
+	var querystring = await import('qs');
 	var signData = querystring.stringify(vnp_Params, { encode: false });
-	var crypto = require('crypto');
+	var crypto = await import('crypto');
 	var hmac = crypto.createHmac('sha512', secretKey);
 	var signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex');
 

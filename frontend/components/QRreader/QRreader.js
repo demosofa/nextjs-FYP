@@ -1,10 +1,9 @@
-import {
-	Html5Qrcode,
-	Html5QrcodeCameraScanConfig,
-	Html5QrcodeError,
-	Html5QrcodeResult
-} from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 import { useEffect, useRef } from 'react';
+
+/** @typedef {import('html5-qrcode').Html5QrcodeCameraScanConfig} Html5QrcodeCameraScanConfig */
+/** @typedef {import('html5-qrcode').Html5QrcodeResult} Html5QrcodeResult */
+/** @typedef {import('html5-qrcode').Html5QrcodeError} Html5QrcodeError */
 
 const qrcodeRegionId = 'html5qr-code-full-region';
 

@@ -42,7 +42,7 @@ class ShipperController {
 	};
 	acceptOrder = async (req, res) => {
 		const { acceptedOrders } = req.body;
-		const { accountId, role } = req.user;
+		const { accountId } = req.user;
 		try {
 			await models.Order.updateMany(
 				{

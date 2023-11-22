@@ -9,7 +9,7 @@ import { addNotification } from '@redux/reducer/notificationSlice';
 import { expireStorage, retryAxios } from '@utils/index';
 
 export const fetcher = async (config: AxiosRequestConfig) => {
-	const accessToken: string = expireStorage.getItem('accessToken');
+	const accessToken = expireStorage.getItem('accessToken');
 
 	const response = await axios({
 		...config,
@@ -35,7 +35,7 @@ export default function SWRContext({ children }) {
 		<SWRConfig
 			value={{
 				fetcher,
-				onError(err, key, config) {
+				onError(err, _key, _config) {
 					if (err?.response?.status === 403) router.back();
 					else if (err?.response?.status === 401) router.push('/login');
 					else

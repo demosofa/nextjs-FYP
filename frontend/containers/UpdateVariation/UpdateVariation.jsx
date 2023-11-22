@@ -31,7 +31,7 @@ export default function UpdateVariation({ productId, setToggle }) {
 		roles: [Role.admin]
 	});
 
-	const { loading: loadingImages } = useAuthLoad({
+	const { loading: _loadingImages } = useAuthLoad({
 		async cb(axiosInstance) {
 			const res = await axiosInstance({
 				url: `${LocalApi}/product/${productId}/image`
@@ -95,7 +95,7 @@ export default function UpdateVariation({ productId, setToggle }) {
 											<label>No.: </label>
 											{index + 1}
 										</td>
-										<td onClick={(e) => setVariationImage(index)}>
+										<td onClick={() => setVariationImage(index)}>
 											<label>Image: </label>
 											{variation.thumbnail && (
 												<Image

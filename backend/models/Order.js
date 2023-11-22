@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
-const { convertTime, OrderStatus } = require('@shared/index');
+import { OrderStatus } from '@shared/index';
+
 const Schema = mongoose.Schema;
 
 const Order = new Schema(

@@ -37,7 +37,8 @@
 			"@controllers/*": ["backend/controllers/*"],
 			"@helpers/*": ["backend/helpers/*"],
 			"@models/*": ["backend/models/*"],
-			"@shared/*": ["shared/*"]
+			"@shared/*": ["shared/*"],
+			"@types/*": ["types/*"]
 		}
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

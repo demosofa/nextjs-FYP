@@ -14,6 +14,7 @@ export default function SelectCategory({
 	const [selected, setSelected] = useState();
 	const [categories, setCategories] = useState();
 	const router = useRouter();
+
 	const { loading } = useAxiosLoad({
 		async callback(axiosInstance) {
 			const url = parentId
@@ -28,6 +29,7 @@ export default function SelectCategory({
 		},
 		deps: [parentId]
 	});
+
 	const handleSelected = (e) => {
 		if (e.target.value < 0) {
 			setSelected(null);

@@ -1,8 +1,12 @@
 import { useCallback, useMemo } from 'react';
 
-export default function useVariantPermutation(arrVariant: any[]): any[] {
+import { AnyFunction } from '@shared/types';
+
+export default function useVariantPermutation(
+	arrVariant: unknown[]
+): unknown[] {
 	const permute = useCallback(
-		(arr = [], callback: Function, prefix = []): any => {
+		(arr = [], callback: AnyFunction, prefix = []): unknown => {
 			if (!arr.length || !arr[0]?.length) return callback(prefix);
 
 			for (let i = 0; i < arr[0]?.length; i++)
@@ -15,7 +19,7 @@ export default function useVariantPermutation(arrVariant: any[]): any[] {
 		const permutations = [];
 
 		if (arrVariant.length > 0)
-			permute(arrVariant, (variants: any) => {
+			permute(arrVariant, (variants: unknown) => {
 				permutations.push(variants);
 			});
 

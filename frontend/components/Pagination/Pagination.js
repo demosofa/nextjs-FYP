@@ -56,7 +56,7 @@ Pagination.Arrow = function ArrowPagination({ children, ...props }) {
 	);
 };
 
-Pagination.Input = function InputPagination({ children, ...props }) {
+Pagination.Input = function InputPagination({ ...props }) {
 	const { currentPage, setCurrentPage, totalPageCount } = useContext(Kits);
 	const [inputPage, setInputPage] = useState('1');
 
@@ -83,11 +83,7 @@ Pagination.Input = function InputPagination({ children, ...props }) {
 	);
 };
 
-Pagination.Number = function NumberPagination({
-	children,
-	siblingCount = 2,
-	...props
-}) {
+Pagination.Number = function NumberPagination({ siblingCount = 2, ...props }) {
 	const { currentPage, setCurrentPage, totalPageCount } = useContext(Kits);
 	const paginationRange = usePagination({
 		currentPage,

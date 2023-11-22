@@ -1,14 +1,13 @@
 import 'keen-slider/keen-slider.min.css';
-import {
-	KeenSliderHooks,
-	KeenSliderOptions,
-	useKeenSlider
-} from 'keen-slider/react';
+import { useKeenSlider } from 'keen-slider/react';
 import { cloneElement, createContext, useContext, useState } from 'react';
 
 import styles from './slider.module.scss';
 
 const Kits = createContext();
+
+/** @typedef {import('keen-slider/react').KeenSliderOptions} KeenSliderOptions */
+/** @typedef {import('keen-slider/react').KeenSliderHooks} KeenSliderHooks */
 
 /**
  * @param {Object} prop

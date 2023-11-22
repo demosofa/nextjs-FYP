@@ -6,12 +6,13 @@ import {
 	FetchBaseQueryError,
 	retry
 } from '@reduxjs/toolkit/query/react';
+
 import { expireStorage } from '@utils/index';
 
 export const baseQuery = fetchBaseQuery({
 	baseUrl: process.env.NEXT_PUBLIC_API,
-	prepareHeaders: (headers, api) => {
-		const token = expireStorage.getItem('accessToken');
+	prepareHeaders: (headers, _api) => {
+		const token = expireStorage.getItem('accessToken') as string;
 
 		if (token) {
 			headers.set('Authorization', token);
@@ -29,13 +30,13 @@ const baseQueryReAuth: BaseQueryFn<
 
 	if (
 		result.error.status === 401 &&
-		(result.error.data as any).message === 'Token is expired'
+		(result.error.data as { message: string }).message === 'Token is expired'
 	) {
 		const token = await baseQuery('/auth/refreshToken', api, extraOptions);
 
 		if (
 			token.error.status === 401 &&
-			(<any>token.error.data).message === undefined
+			(token.error.data as { message: string }).message === undefined
 		) {
 			localStorage.clear();
 		} else {

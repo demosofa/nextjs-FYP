@@ -8,9 +8,9 @@ export default function useUpload({
 	},
 	callback
 }: {
-	init?: any[];
+	init?: File[];
 	limit?: { size: number; total: number };
-	callback?: (Files: File[], Previews: (string | ArrayBuffer)[]) => any;
+	callback?: (Files: File[], Previews: (string | ArrayBuffer)[]) => unknown;
 }) {
 	const [files, setFiles] = useState<Array<File>>(init);
 	const run = useRef(true);
@@ -20,7 +20,7 @@ export default function useUpload({
 	const isOverSize = useCallback(
 		(currentFiles: File[], newFile: File) => {
 			const maxMB = limit.size * 1024 * 1024;
-			let futureSize = currentFiles.reduce(
+			const futureSize = currentFiles.reduce(
 				(prev, curr) => prev + curr.size,
 				newFile.size
 			);
@@ -40,7 +40,7 @@ export default function useUpload({
 
 	const getFiles = useCallback(
 		(newFiles: FileList, overwriteStartAt?: number) => {
-			let length = Math.min(limit.total - files.length, newFiles.length);
+			const length = Math.min(limit.total - files.length, newFiles.length);
 
 			setFiles((prev) => {
 				let currentFiles =
@@ -49,7 +49,7 @@ export default function useUpload({
 						: prev;
 
 				for (let i = 0; i < length; i++) {
-					let newFile = newFiles[i];
+					const newFile = newFiles[i];
 					if (
 						!isOverSize(currentFiles, newFile) &&
 						!isExist(currentFiles, newFile)

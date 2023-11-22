@@ -19,7 +19,7 @@ export default function useMedia(screens: {
 	const [device, setDevice] = useState<string>();
 
 	const Devices = useMemo(() => {
-		let objDevices: { [key: string]: string } = {};
+		const objDevices: { [key: string]: string } = {};
 
 		Object.keys(screens).forEach((key) => {
 			objDevices[key] = key;
