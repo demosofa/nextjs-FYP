@@ -24,8 +24,8 @@ import { addNotification } from '@redux/reducer/notificationSlice';
 import { deleteAllVariant } from '@redux/reducer/variantSlice';
 import { editAllVariations } from '@redux/reducer/variationSlice';
 
-const SelectCategory = dynamic(() =>
-	import('@containers/SelectCategory/SelectCategory')
+const SelectCategory = dynamic(
+	() => import('@containers/SelectCategory/SelectCategory')
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -216,9 +216,11 @@ export default function CreateForm() {
 					<div className='flex flex-wrap justify-between'>
 						<Form.Item>
 							<Form.Title>Category</Form.Title>
-							<SelectCategory
-								setSelectedCategories={handleSelectedCategories}
-							/>
+							<div className='flex flex-wrap gap-2'>
+								<SelectCategory
+									setSelectedCategories={handleSelectedCategories}
+								/>
+							</div>
 						</Form.Item>
 
 						<Form.Item style={{ justifyContent: 'flex-start' }}>

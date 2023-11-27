@@ -105,16 +105,23 @@ export default function useUpload({
 		});
 	};
 
+	const callbackRef = useRef(callback);
+
+	useEffect(() => {
+		callbackRef.current = callback;
+	}, [callback]);
+
 	useEffect(() => {
 		setLoading(true);
 		Promise.all(files.map((item) => handleFile(item)))
 			.then(async (previewsResult) => {
 				if (run.current) setPreviews(previewsResult);
-				if (previewsResult.length) await callback(files, previewsResult);
+				if (previewsResult.length)
+					await callbackRef.current(files, previewsResult);
 			})
 			.then(() => (run.current = true))
 			.then(() => setLoading(false));
-	}, [files, callback]);
+	}, [files]);
 
 	return {
 		loading,

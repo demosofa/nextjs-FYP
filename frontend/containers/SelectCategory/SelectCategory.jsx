@@ -43,8 +43,8 @@ export default function SelectCategory({
 
 	if (loading || categories === undefined) return <Loading.Text />;
 	return (
-		<div className='flex flex-wrap gap-2' {...props}>
-			<select defaultValue={-1} onChange={handleSelected}>
+		<>
+			<select defaultValue={-1} onChange={handleSelected} {...props}>
 				<option value={-1}>None</option>
 				{categories.map((category, i) => (
 					<option key={category._id} value={i}>
@@ -60,6 +60,6 @@ export default function SelectCategory({
 					setSelectedCategories={setSelectedCategories}
 				/>
 			) : null}
-		</div>
+		</>
 	);
 }
