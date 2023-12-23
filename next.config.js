@@ -14,7 +14,8 @@ const nextConfig = {
 	},
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'sass')]
-	}
+	},
+	transpilePackages: ['crypto-js']
 	// modularizeImports: {
 	//   "react-icons/?(((\\w*)?/?)*)": {
 	//     transform: "react-icons/{{matches.[1]}}",
