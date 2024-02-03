@@ -1,7 +1,7 @@
 import { Form, Loading, TagsInput } from '@components';
 import { useAuthLoad } from '@hooks';
 import { Role } from '@shared';
-import { Validate } from '@utils';
+import { Validator } from '@utils';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -12,11 +12,11 @@ import { fetcher } from '@contexts/SWRContext';
 
 import { addNotification } from '@redux/reducer/notificationSlice';
 
-const UpdateImage = dynamic(() =>
-	import('@containers/UpdateImage/UpdateImage')
+const UpdateImage = dynamic(
+	() => import('@containers/UpdateImage/UpdateImage')
 );
-const UpdateVariation = dynamic(() =>
-	import('@containers/UpdateVariation/UpdateVariation')
+const UpdateVariation = dynamic(
+	() => import('@containers/UpdateVariation/UpdateVariation')
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -42,10 +42,13 @@ export default function UpdateProduct() {
 		Object.entries({ description, manufacturer }).forEach((entry) => {
 			switch (entry[0]) {
 				case 'description':
-					new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
+					new Validator(entry[1])
+						.isEmpty()
+						.isEnoughLength({ max: 1000 })
+						.throwErrors();
 					break;
 				case 'manufacturer':
-					new Validate(entry[1]).isEmpty().isNotSpecial();
+					new Validator(entry[1]).isEmpty().isNotSpecial().throwErrors();
 					break;
 			}
 		});

@@ -1,6 +1,6 @@
 import { Form } from '@components';
 import { NotifyToast } from '@layouts';
-import { Validate } from '@utils';
+import { Validator } from '@utils';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -26,10 +26,10 @@ export default function ForgotPassword() {
 			Object.entries(input).forEach((entry) => {
 				switch (entry[0]) {
 					case 'username':
-						new Validate(entry[1]).isEmpty();
+						new Validator(entry[1]).isEmpty().throwErrors();
 						break;
 					case 'email':
-						new Validate(entry[1]).isEmpty().isEmail();
+						new Validator(entry[1]).isEmpty().isEmail().throwErrors();
 						break;
 				}
 			});

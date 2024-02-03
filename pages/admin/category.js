@@ -1,7 +1,7 @@
 import { Dropdown, Loading } from '@components';
 import { useAuthLoad } from '@hooks';
 import { Role } from '@shared';
-import { Validate } from '@utils';
+import { Validator } from '@utils';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
@@ -54,7 +54,7 @@ export default function CrudCategory({ maxTree = 3 }) {
 
 	const handleAddCategory = async (name) => {
 		try {
-			new Validate(name).isEmpty().isNotSpecial();
+			new Validator(name).isEmpty().isNotSpecial().throwErrors();
 
 			if (lstNames.indexOf(name) !== -1)
 				throw new Error('This name already exists in this directory tree');
@@ -95,7 +95,7 @@ export default function CrudCategory({ maxTree = 3 }) {
 									)
 								}
 							/>
-					  ))
+						))
 					: null}
 			</div>
 		</div>
@@ -137,7 +137,7 @@ function SubCategory({
 
 	const handleEditSave = async (name) => {
 		try {
-			new Validate(name).isEmpty().isNotSpecial();
+			new Validator(name).isEmpty().isNotSpecial().throwErrors();
 			if (arrTree.indexOf(name) !== -1)
 				throw new Error('This name already exists in this directory tree');
 			await fetcher({
@@ -166,7 +166,7 @@ function SubCategory({
 
 	const handleAddSubCategory = async (name) => {
 		try {
-			new Validate(name).isEmpty().isNotSpecial();
+			new Validator(name).isEmpty().isNotSpecial().throwErrors();
 			if (arrTree.indexOf(name) !== -1)
 				throw new Error('This name already exists in this directory tree');
 			const data = await fetcher({

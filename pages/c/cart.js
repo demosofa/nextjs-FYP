@@ -1,6 +1,6 @@
 import { Animation, Icon, Increment } from '@components';
 import { currencyFormat } from '@shared';
-import { Validate } from '@utils';
+import { Validator } from '@utils';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -14,8 +14,8 @@ import { fetcher } from '@contexts/SWRContext';
 import { addCart, clearCart, removeCart } from '@redux/reducer/cartSlice';
 import { addNotification } from '@redux/reducer/notificationSlice';
 
-const ReceivingAddress = dynamic(() =>
-	import('@containers/ReceivingAddress/ReceivingAddress')
+const ReceivingAddress = dynamic(
+	() => import('@containers/ReceivingAddress/ReceivingAddress')
 );
 
 const LocalApi = process.env.NEXT_PUBLIC_API;
@@ -57,7 +57,7 @@ export default function Cart() {
 		try {
 			if (!cart.products.length)
 				throw new Error('There is any products in cart');
-			new Validate(address).isEmpty().isAddress();
+			new Validator(address).isEmpty().isAddress().throwErrors();
 			await fetcher({
 				url: `${LocalApi}/order`,
 				method: 'post',

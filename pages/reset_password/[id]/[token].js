@@ -1,5 +1,5 @@
 import { Form } from '@components';
-import { Validate } from '@utils';
+import { Validator } from '@utils';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -42,7 +42,7 @@ export default function ResetPassword({ id, email, token }) {
 				switch (entry[0]) {
 					case 'pwd':
 					case 'repeatPwd':
-						new Validate(entry[1]).isEmpty().isPassWord();
+						new Validator(entry[1]).isEmpty().isPassWord().throwErrors();
 						break;
 				}
 			});

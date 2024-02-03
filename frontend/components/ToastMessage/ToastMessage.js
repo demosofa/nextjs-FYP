@@ -28,13 +28,12 @@ export default function ToastMessage({
 	useEffect(() => {
 		ToastRef.current.style.opacity = 1;
 
-		const timeOut = setTimeout(() => {
-			clearTimeout(timeOut);
+		const timeoutId = setTimeout(() => {
 			dispatch(removeNotification(id));
 		}, convertTime(timeout).millisecond);
 
 		return () => {
-			clearTimeout(timeOut);
+			clearTimeout(timeoutId);
 		};
 	}, [timeout, id, dispatch]);
 

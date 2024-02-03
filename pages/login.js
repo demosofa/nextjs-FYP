@@ -1,6 +1,6 @@
 import { Form } from '@components';
 import { NotifyToast } from '@layouts';
-import { Validate, expireStorage } from '@utils';
+import { Validator, expireStorage } from '@utils';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -24,10 +24,10 @@ export default function Login() {
 			Object.entries(input).forEach((entry) => {
 				switch (entry[0]) {
 					case 'username':
-						new Validate(entry[1]).isEmpty();
+						new Validator(entry[1]).isEmpty().throwErrors();
 						break;
 					case 'password':
-						new Validate(entry[1]).isEmpty().isPassWord();
+						new Validator(entry[1]).isEmpty().isPassWord().throwErrors();
 						break;
 				}
 			});
@@ -35,7 +35,8 @@ export default function Login() {
 			expireStorage.setItem('accessToken', accessToken);
 			router.back();
 		} catch (error) {
-			dispatch(addNotification({ message: error.data.message, type: 'error' }));
+			const message = error.data?.message ?? error.message;
+			dispatch(addNotification({ message, type: 'error' }));
 		}
 	};
 

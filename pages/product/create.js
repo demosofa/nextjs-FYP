@@ -3,7 +3,7 @@ import { Variant, Variation } from '@containers';
 import { useAuthLoad } from '@hooks';
 import { ProductStatus, Role, currencyFormat } from '@shared';
 import {
-	Validate,
+	Validator,
 	capitalize,
 	expireStorage,
 	retryAxios,
@@ -74,14 +74,20 @@ export default function CreateForm() {
 		Object.entries(validate).forEach((entry) => {
 			switch (entry[0]) {
 				case 'title':
-					new Validate(entry[1]).isEmpty().isEnoughLength({ max: 255 });
+					new Validator(entry[1])
+						.isEmpty()
+						.isEnoughLength({ max: 255 })
+						.throwErrors();
 					break;
 				case 'description':
-					new Validate(entry[1]).isEmpty().isEnoughLength({ max: 1000 });
+					new Validator(entry[1])
+						.isEmpty()
+						.isEnoughLength({ max: 1000 })
+						.throwErrors();
 					break;
 				case 'status':
 				case 'manufacturer':
-					new Validate(entry[1]).isEmpty();
+					new Validator(entry[1]).isEmpty().throwErrors();
 					break;
 			}
 		});

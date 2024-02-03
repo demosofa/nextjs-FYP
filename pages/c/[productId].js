@@ -8,7 +8,7 @@ import {
 	StarRating
 } from '@components';
 import { PriceInfo } from '@containers';
-import { Validate } from '@utils';
+import { Validator } from '@utils';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -140,7 +140,7 @@ export default function Overview({ product, vid }) {
 	const handleOrder = async (e, address) => {
 		e.preventDefault();
 		try {
-			new Validate(address).isEmpty().isAddress();
+			new Validator(address).isEmpty().isAddress().throwErrors();
 			const products = [generateCart()];
 
 			const shippingFee = products.reduce((prev, curr) => {

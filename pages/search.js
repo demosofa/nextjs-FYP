@@ -28,8 +28,10 @@ export async function getServerSideProps({ query }) {
 export default function SearchProduct({ query, products, pageCounted }) {
 	const [pricing, setPricing] = useState({ from: 1000, to: 1000000 });
 	const [rating, setRating] = useState({ from: 0, to: 5 });
+
 	const dispatch = useDispatch();
 	const router = useRouter();
+
 	const applyPricing = () => {
 		if (
 			pricing.from > 0 &&
@@ -49,6 +51,7 @@ export default function SearchProduct({ query, products, pageCounted }) {
 				})
 			);
 	};
+
 	return (
 		<>
 			<div className='flex gap-3'>

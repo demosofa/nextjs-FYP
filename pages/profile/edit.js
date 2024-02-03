@@ -1,7 +1,7 @@
 import { Checkbox, Form, Loading } from '@components';
 import { useAuthLoad } from '@hooks';
 import { Role } from '@shared';
-import { retryAxios, Validate } from '@utils';
+import { retryAxios, Validator } from '@utils';
 import { format } from 'date-fns';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -41,13 +41,13 @@ function EditProfile() {
 		}).forEach((entry) => {
 			switch (entry[0]) {
 				case 'dateOfBirth':
-					new Validate(entry[1]).isEmpty();
+					new Validator(entry[1]).isEmpty().throwErrors();
 					break;
 				case 'phoneNumber':
-					new Validate(entry[1]).isEmpty().isPhone();
+					new Validator(entry[1]).isEmpty().isPhone().throwErrors();
 					break;
 				case 'email':
-					new Validate(entry[1]).isEmpty().isEmail();
+					new Validator(entry[1]).isEmpty().isEmail().throwErrors();
 					break;
 			}
 		});

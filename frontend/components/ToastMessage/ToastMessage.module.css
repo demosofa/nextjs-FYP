@@ -1,78 +1,79 @@
 .toast_message {
-  transition: opacity 0.5s ease-in;
-  opacity: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 20rem;
-  background-color: white;
-  color: rgb(107 114 128 / 1);
-  box-shadow: theme(boxShadow.md);
-  border-radius: 0.5rem;
-  padding: 1rem;
+	transition: opacity 0.5s ease-in;
+	opacity: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	max-width: 20rem;
+	background-color: white;
+	color: rgb(107 114 128 / 1);
+	border-radius: 0.5rem;
+	padding: 1rem;
+	box-shadow: theme(boxShadow.md);
 }
 
 .success {
-  background-color: rgb(34 197 94 /1);
+	background-color: rgb(34 197 94 /1);
 }
 
 .link {
-  background-color: rgb(37 99 235 / 1);
+	background-color: rgb(37 99 235 / 1);
 }
 
 .warning {
-  background-color: rgb(234 179 8 / 1);
+	background-color: rgb(234 179 8 / 1);
 }
 
 .error {
-  background-color: rgb(220 38 38 / 1);
+	background-color: rgb(220 38 38 / 1);
 }
 
 .toast_message > div {
-  display: flex;
-  gap: 20px;
+	display: flex;
+	gap: 20px;
 }
 
 .toast_message span {
-  flex: 2;
-  font-size: 12px;
-  font-weight: 500;
-  font-style: italic;
-  margin: 2px auto;
+	flex: 2;
+	font-size: 12px;
+	font-weight: 500;
+	font-style: italic;
+	margin: 2px auto;
+	white-space: pre-wrap;
 }
 
 .toast_message > .loader {
-  flex: 8;
-  height: 25px;
-  border-radius: 20px;
-  background-color: var(--grey-two);
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
+	flex: 8;
+	height: 25px;
+	border-radius: 20px;
+	background-color: var(--grey-two);
+	display: flex;
+	align-items: center;
+	padding-left: 8px;
 }
 
 .Loader > .bar {
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  animation-name: loading;
-  animation-duration: var(--timeout);
-  animation-timing-function: linear;
+	width: 100%;
+	height: 100%;
+	border-radius: 20px;
+	animation-name: loading;
+	animation-duration: var(--timeout);
+	animation-timing-function: linear;
 }
 
 @media (min-width: 480px) {
-  .toast_message {
-    bottom: 20px;
-    right: 20px;
-  }
+	.toast_message {
+		bottom: 20px;
+		right: 20px;
+	}
 }
 
 @keyframes loading {
-  from {
-    width: 100%;
-  }
-  to {
-    width: 0;
-  }
+	from {
+		width: 100%;
+	}
+	to {
+		width: 0;
+	}
 }

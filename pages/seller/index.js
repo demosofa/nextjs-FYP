@@ -11,8 +11,8 @@ import { fetcher } from '@contexts/SWRContext';
 
 import { addNotification } from '@redux/reducer/notificationSlice';
 
-const ItemsFromOrder = dynamic(() =>
-	import('@containers/ItemsFromOrder/ItemsFromOrder')
+const ItemsFromOrder = dynamic(
+	() => import('@containers/ItemsFromOrder/ItemsFromOrder')
 );
 const LocalApi = process.env.NEXT_PUBLIC_API;
 
@@ -247,7 +247,7 @@ export default function SellerPage() {
 							</table>
 						</Checkbox>
 						<button className='main_btn mt-2' onClick={handleSubmit}>
-							Validate
+							Validator
 						</button>
 					</div>
 				</>

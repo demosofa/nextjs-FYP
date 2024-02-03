@@ -1,6 +1,6 @@
 import { Checkbox, Form, Slider } from '@components';
 import { NotifyToast } from '@layouts';
-import { expireStorage, Validate } from '@utils';
+import { expireStorage, Validator } from '@utils';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -83,16 +83,16 @@ function FormInfo({ info, setInfo, moveTo, ...props }) {
 			Object.entries(info).forEach((entry) => {
 				switch (entry[0]) {
 					case 'fullname':
-						new Validate(entry[1]).isEmpty().isNotSpecial();
+						new Validator(entry[1]).isEmpty().isNotSpecial().throwErrors();
 						break;
 					case 'dateOfBirth':
-						new Validate(entry[1]).isEmpty();
+						new Validator(entry[1]).isEmpty().throwErrors();
 						break;
 					case 'email':
-						new Validate(entry[1]).isEmpty().isEmail();
+						new Validator(entry[1]).isEmpty().isEmail().throwErrors();
 						break;
 					case 'phoneNumber':
-						new Validate(entry[1]).isEmpty().isPhone();
+						new Validator(entry[1]).isEmpty().isPhone().throwErrors();
 						break;
 				}
 			});
@@ -196,10 +196,10 @@ function FormAccount({ info, moveTo, ...props }) {
 			Object.entries(input).forEach((entry) => {
 				switch (entry[0]) {
 					case 'username':
-						new Validate(entry[1]).isEmpty();
+						new Validator(entry[1]).isEmpty().throwErrors();
 						break;
 					case 'password':
-						new Validate(entry[1]).isEmpty().isPassWord();
+						new Validator(entry[1]).isEmpty().isPassWord().throwErrors();
 						break;
 					case 'passwordAgain':
 						if (input.password === entry[1]) break;
@@ -214,7 +214,8 @@ function FormAccount({ info, moveTo, ...props }) {
 			dispatch(addNotification({ message: 'Success Register' }));
 			router.push('/');
 		} catch (error) {
-			dispatch(addNotification({ message: error.data.message, type: 'error' }));
+			const message = error.data?.message ?? error.message;
+			dispatch(addNotification({ message, type: 'error' }));
 		}
 	};
 
