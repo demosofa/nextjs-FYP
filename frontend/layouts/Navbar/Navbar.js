@@ -1,8 +1,7 @@
-import { Badge, Dropdown, Search } from '@components';
-import { Notification, RouterAuth } from '@containers';
+import { Badge, Dropdown } from '@components';
+import { Notification, RouterAuth, SearchDebounce } from '@containers';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { FaBell } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
@@ -15,20 +14,21 @@ export default function Navbar({ arrLink }) {
 		let linkInDrop = arrLink.slice(4);
 		return [linkInNav, linkInDrop];
 	}, [arrLink]);
-	const [search, setSearch] = useState('');
 	const cart = useSelector((state) => state.cart);
-	const router = useRouter();
 	return (
 		<nav className={styles.nav}>
 			<div className={styles.bar}>
 				<Link href='/'>Home</Link>
-				<Search
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					onClick={() =>
-						router.push({ pathname: '/', query: { ...router.query, search } })
-					}
-				/>
+				<SearchDebounce fetchUrl='/api/product/all' redirectUrl='/'>
+					{({ _id, thumbnail, title }) => {
+						return (
+							<Link href={`/c/${_id}`}>
+								<span>{title}</span>
+								<img src={thumbnail}></img>
+							</Link>
+						);
+					}}
+				</SearchDebounce>
 			</div>
 			<div className={styles.bar}>
 				{linkNav?.map((link, index) =>

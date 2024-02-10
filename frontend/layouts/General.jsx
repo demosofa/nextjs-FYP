@@ -1,8 +1,8 @@
-import { Animation, Icon, Search } from '@components';
+import { Animation, Icon } from '@components';
+import { SearchDebounce } from '@containers';
 import { jwtDecode } from 'jwt-decode';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {
 	AiOutlineHome,
@@ -19,9 +19,8 @@ const NotifyToast = dynamic(() => import('./NotifyToast/NotifyToast'));
 
 export default function General({ children, arrLink, role }) {
 	const { device, Devices } = useMediaContext();
-	const [search, setSearch] = useState('');
 	const [toggle, setToggle] = useState(false);
-	const router = useRouter();
+
 	return (
 		<>
 			{[Devices.lg, Devices['2xl']].includes(device) ? (
@@ -33,12 +32,20 @@ export default function General({ children, arrLink, role }) {
 							className='absolute top-0 right-0 cursor-pointer'
 							onClick={() => setToggle((prev) => !prev)}
 						/>
-						<Search
+						<SearchDebounce
 							className='ml-0'
-							value={search}
-							onChange={(e) => setSearch(e.target.value)}
-							onClick={() => router.push({ pathname: '/', query: { search } })}
-						/>
+							fetchUrl='/api/product/all'
+							redirectUrl='/'
+						>
+							{({ _id, thumbnail, title }) => {
+								return (
+									<Link href={`/c/${_id}`}>
+										<span>{title}</span>
+										<img src={thumbnail}></img>
+									</Link>
+								);
+							}}
+						</SearchDebounce>
 						{role && (
 							<>
 								<Link href='/profile' onClick={() => setToggle(!toggle)}>

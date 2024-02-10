@@ -2,7 +2,6 @@ export { default as capitalize } from './capitalize';
 export { default as compareToRange } from './compareToRange';
 export { default as expireStorage } from './expireStorage';
 export { default as getUnique } from './getUnique';
-export { default as getURL } from './getURL';
 export { default as markdown } from './markdown';
 export { default as retryAxios } from './retryAxios';
 export { default as tailwindStatus } from './tailwindStatus';

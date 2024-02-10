@@ -1,4 +1,4 @@
-import { Loading, Pagination, Search } from '@components';
+import { Loading, Pagination, SearchInput } from '@components';
 import { ThSortOrderBy } from '@containers';
 import { Role } from '@shared';
 import { capitalize } from '@utils';
@@ -95,7 +95,7 @@ export default function ManageProfiles() {
 				<meta name='description' content='Manage Profiles' />
 			</Head>
 			<div className='flex flex-wrap justify-end gap-4'>
-				<Search
+				<SearchInput
 					className='!ml-0'
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}

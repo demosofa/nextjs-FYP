@@ -1,4 +1,4 @@
-import { Loading, Pagination, Search } from '@components';
+import { Loading, Pagination, SearchInput } from '@components';
 import { useAuthLoad } from '@hooks';
 import { ProductStatus, Role, currencyFormat } from '@shared';
 import { capitalize } from '@utils';
@@ -89,7 +89,7 @@ export default function ProductCRUD() {
 				</button>
 			) : null}
 			<div className='flex flex-wrap justify-end gap-4'>
-				<Search
+				<SearchInput
 					className='!ml-0'
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
@@ -172,13 +172,13 @@ export default function ProductCRUD() {
 																				(item) => item.price
 																			)
 																		)
-																  )} - ${currencyFormat(
+																	)} - ${currencyFormat(
 																		Math.max(
 																			...product.variations.map(
 																				(item) => item.price
 																			)
 																		)
-																  )}`
+																	)}`
 																: currencyFormat(product.variations[0].price)}
 														</dd>
 														<dt>Quantity</dt>
@@ -188,11 +188,11 @@ export default function ProductCRUD() {
 																		...product.variations.map(
 																			(item) => item.quantity
 																		)
-																  )} - ${Math.max(
+																	)} - ${Math.max(
 																		...product.variations.map(
 																			(item) => item.quantity
 																		)
-																  )}`
+																	)}`
 																: product.variations[0].quantity}
 														</dd>
 													</dl>

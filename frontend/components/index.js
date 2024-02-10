@@ -17,7 +17,7 @@ export { default as Increment } from './Increment/Increment';
 export { default as Loading } from './Loading/Loading';
 export { default as QRreader } from './QRreader/QRreader';
 export { default as ReadMoreLess } from './ReadMoreLess/ReadMoreLess';
-export { default as Search } from './Search/Search';
+export { default as SearchInput } from './SearchInput/SearchInput';
 export { default as Slider } from './Slider/Slider';
 export { default as StarRating } from './StarRating/StarRating';
 export { default as Timer } from './Timer/Timer';

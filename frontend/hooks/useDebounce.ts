@@ -1,23 +1,13 @@
-import { useRef, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { AnyFunction } from '@shared/types';
 
-export default function useDebounce(
-	state: unknown,
-	callback: AnyFunction,
-	delay = 200
-) {
-	const callBackRef = useRef(callback);
-
+export default function useDebounce(callback: AnyFunction, delay = 275) {
 	useEffect(() => {
-		callBackRef.current = callback;
-	}, [callback]);
-
-	useEffect(() => {
-		const timeoutId = setTimeout(() => {
-			callBackRef.current();
+		const timeoutId = setTimeout(async () => {
+			await callback?.();
 		}, delay);
 
 		return () => clearTimeout(timeoutId);
-	}, [state, delay]);
+	}, [callback, delay]);
 }

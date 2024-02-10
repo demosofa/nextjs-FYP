@@ -1,4 +1,4 @@
-import { Dropdown, Form, Loading, Pagination, Search } from '@components';
+import { Dropdown, Form, Loading, Pagination, SearchInput } from '@components';
 import { OrderStatus, convertTime, currencyFormat, dateFormat } from '@shared';
 import { capitalize, tailwindStatus } from '@utils';
 import Head from 'next/head';
@@ -62,7 +62,7 @@ export default function ManageOrder() {
 				<meta name='description' content='My Shipping' />
 			</Head>
 			<div className='flex flex-wrap justify-end gap-4'>
-				<Search
+				<SearchInput
 					className='!ml-0'
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}

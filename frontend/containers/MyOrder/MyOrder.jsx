@@ -1,4 +1,4 @@
-import { Form, Loading, Search } from '@components';
+import { Form, Loading, SearchInput } from '@components';
 import { convertTime, currencyFormat, OrderStatus } from '@shared';
 import { capitalize, tailwindStatus } from '@utils';
 import Link from 'next/link';
@@ -56,7 +56,7 @@ export default function MyOrder() {
 	return (
 		<div className='w-full'>
 			<div className='mb-3 flex justify-between'>
-				<Search
+				<SearchInput
 					className='!m-0 max-w-fit'
 					style={{ width: '100%' }}
 					placeholder='search shipper'

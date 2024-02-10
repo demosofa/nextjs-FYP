@@ -7,5 +7,6 @@ export { default as useInterval } from './useInterval';
 export { default as useResize } from './useResize';
 export { default as useUpload } from './useUpload';
 export { default as useVariantPermutation } from './useVariantPermutation';
+export { default as useDebounce } from './useDebounce';
 export { useAxiosLoad, useMedia, usePagination };
 export type { AxiosLoadCallback };
