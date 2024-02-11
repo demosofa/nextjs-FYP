@@ -37,9 +37,9 @@ export default function General({ children, arrLink, role }) {
 							fetchUrl='/api/product/all'
 							redirectUrl='/'
 						>
-							{({ _id, thumbnail, title }) => {
+							{({ productId, _id, thumbnail, title }) => {
 								return (
-									<Link href={`/c/${_id}`}>
+									<Link href={`/c/${productId}?vid=${_id}`}>
 										<span>{title}</span>
 										<img src={thumbnail}></img>
 									</Link>

@@ -31,8 +31,10 @@ export default function Dropdown({
 					if (clickable) setToggle((prev) => !prev);
 				}}
 				onBlur={(e) => {
-					if (typeof onBlur === 'function') onBlur(e);
-					setToggle(false);
+					if (!e.currentTarget.contains(e.relatedTarget)) {
+						if (typeof onBlur === 'function') onBlur(e);
+						setToggle(false);
+					}
 				}}
 				onMouseEnter={(e) => {
 					if (typeof onMouseEnter === 'function') onMouseEnter(e);
