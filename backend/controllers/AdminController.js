@@ -68,7 +68,7 @@ class AdminController {
 					shipper: '$shipper.username'
 				})
 				.match(filterOptions)
-				.sort({ [sort]: orderby })
+				.sort({ [sort]: parseInt(orderby) })
 				.lookup({
 					from: 'orderItems',
 					localField: 'orderItems',

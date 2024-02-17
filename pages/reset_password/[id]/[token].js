@@ -53,7 +53,7 @@ export default function ResetPassword({ id, email, token }) {
 		}
 	};
 	return (
-		<Form onSubmit={handleSubmitChangePwd} className='form_center'>
+		<Form className='form_center' onSubmit={handleSubmitChangePwd}>
 			<Form.Title>{`Reset Password for ${email}`}</Form.Title>
 			<Form.Item>
 				<Form.Title>New Password</Form.Title>

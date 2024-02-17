@@ -22,7 +22,7 @@ class ShipperController {
 			.skip((page - 1) * limit)
 			.limit(limit)
 			.sort({
-				[sort]: orderby
+				[sort]: parseInt(orderby)
 			})
 			.populate({
 				path: 'customer',

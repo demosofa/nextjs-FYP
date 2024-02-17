@@ -87,7 +87,7 @@ class SellerController {
 				.skip((page - 1) * limit)
 				.limit(limit)
 				.sort({
-					[sort]: orderby
+					[sort]: parseInt(orderby)
 				})
 				.populate('orderItems')
 				.populate({ path: 'shipper', select: 'username' })

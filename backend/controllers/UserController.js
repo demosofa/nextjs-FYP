@@ -28,7 +28,7 @@ class UserController {
 					skip: (page - 1) * 10,
 					limit: 10,
 					sort: {
-						[sort]: orderby
+						[sort]: parseInt(orderby)
 					}
 				},
 				match: {

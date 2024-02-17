@@ -35,7 +35,7 @@ class OrderController {
 				select: ['username']
 			})
 			.sort({
-				[sort]: orderby
+				[sort]: parseInt(orderby)
 			})
 			.lean();
 		const orderCounted = await models.Order.countDocuments({

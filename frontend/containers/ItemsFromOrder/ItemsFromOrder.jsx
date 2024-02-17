@@ -4,7 +4,7 @@ export default function ItemsFromOrder({ viewOrder, setViewOrder }) {
 	return (
 		<>
 			<div className='backdrop' onClick={() => setViewOrder(null)} />
-			<div className='form_center max-h-[500px] overflow-y-auto !p-0'>
+			<div className='form_center !p-0'>
 				<table className='table'>
 					<thead>
 						<tr>

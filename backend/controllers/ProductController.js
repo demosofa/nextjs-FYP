@@ -123,7 +123,7 @@ class ProductController {
 			})
 			.project({ product: 0 })
 			.match({ status: 'active', ...filterOptions })
-			.sort({ [sort]: orderby })
+			.sort({ [sort]: parseInt(orderby) })
 			.lookup({
 				from: 'files',
 				localField: 'thumbnail',
@@ -199,7 +199,7 @@ class ProductController {
 			.skip((page - 1) * limit)
 			.limit(limit)
 			.sort({
-				[sort]: orderby
+				[sort]: parseInt(orderby)
 			})
 			.select(['-comments'])
 			.populate('categories', 'name')

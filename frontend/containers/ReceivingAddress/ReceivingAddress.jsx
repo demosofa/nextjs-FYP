@@ -11,7 +11,7 @@ export default function ReceivingAddress({ setDisplay, handleOrder }) {
 					setAddress(''), setDisplay(false);
 				}}
 			/>
-			<Form onSubmit={(e) => handleOrder(e, address)} className='form_center'>
+			<Form className='form_center' onSubmit={(e) => handleOrder(e, address)}>
 				<Form.Title className='!text-lg'>
 					Please set form for your checkout
 				</Form.Title>
