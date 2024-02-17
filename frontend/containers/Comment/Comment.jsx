@@ -216,7 +216,7 @@ function CommentTab({
 			</div>
 			<div className='btn-container'>
 				<button
-					className='background-transparent mr-1 mb-1 px-3 py-1 text-xs font-bold uppercase text-blue-500 outline-none transition-all duration-150 ease-linear hover:underline focus:outline-none'
+					className='background-transparent mb-1 mr-1 px-3 py-1 text-xs font-bold uppercase text-blue-500 outline-none transition-all duration-150 ease-linear hover:underline focus:outline-none'
 					onClick={() =>
 						setToggle((prev) => {
 							if (maxTree > 0)
@@ -229,7 +229,7 @@ function CommentTab({
 				</button>
 				{maxTree > 0 && (
 					<button
-						className='background-transparent mr-1 mb-1 px-3 py-1 text-xs font-bold uppercase text-blue-500 outline-none transition-all duration-150 ease-linear hover:underline focus:outline-none'
+						className='background-transparent mb-1 mr-1 px-3 py-1 text-xs font-bold uppercase text-blue-500 outline-none transition-all duration-150 ease-linear hover:underline focus:outline-none'
 						onClick={() => setToggle((prev) => ({ ...prev, more: !prev.more }))}
 					>
 						More
@@ -281,7 +281,7 @@ function CommentInput({ data = '', callback, setToggle = undefined }) {
 
 	return (
 		<div className='mb-4 w-full rounded-lg border border-gray-200 bg-gray-50'>
-			<div className='rounded-t-lg bg-white py-2 px-4'>
+			<div className='rounded-t-lg bg-white px-4 py-2'>
 				<textarea
 					className='w-full resize-none border-0 bg-white px-0 text-sm text-gray-900 focus:ring-0'
 					value={input}
@@ -289,7 +289,7 @@ function CommentInput({ data = '', callback, setToggle = undefined }) {
 				/>
 			</div>
 
-			<div className='flex items-center justify-end gap-4 border-t py-2 px-3'>
+			<div className='flex items-center justify-end gap-4 border-t px-3 py-2'>
 				{setToggle && (
 					<button
 						className='font-medium text-orange-500 underline hover:text-orange-700'
@@ -299,7 +299,7 @@ function CommentInput({ data = '', callback, setToggle = undefined }) {
 					</button>
 				)}
 				<button
-					className='mr-2 mb-2 rounded-lg bg-gradient-to-r from-red-400 via-red-500 to-red-600 px-5 py-2.5 text-center text-sm font-medium text-white shadow-lg shadow-red-500/50 hover:bg-gradient-to-br focus:outline-none focus:ring-4 focus:ring-red-300 dark:shadow-lg dark:shadow-red-800/80 dark:focus:ring-red-800'
+					className='mb-2 mr-2 rounded-lg bg-gradient-to-r from-red-400 via-red-500 to-red-600 px-5 py-2.5 text-center text-sm font-medium text-white shadow-lg shadow-red-500/50 hover:bg-gradient-to-br focus:outline-none focus:ring-4 focus:ring-red-300 dark:shadow-lg dark:shadow-red-800/80 dark:focus:ring-red-800'
 					onClick={() => {
 						callback(input);
 						setInput('');
